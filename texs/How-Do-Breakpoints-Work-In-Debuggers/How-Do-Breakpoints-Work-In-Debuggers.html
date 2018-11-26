@@ -1,4 +1,8 @@
-﻿=====================================
+﻿<!DOCTYPE html>
+<html>
+    <body>
+        <pre>
+=====================================
 How do breakpoints work in debuggers?
 =====================================
 Vineel Kovvuri
@@ -46,10 +50,10 @@ line/instruction, the debugger makes  a note of the location/address of the
 instruction and it simply gives us below visual feedback but no change is made to
 debuggee
 
-img:{1.Breakpoints-in-Debuggers.png}
+<img src="1.Breakpoints-in-Debuggers.png"/>
 Breakpoints in debuggers
 
-img:{2.Breakpoints-in-Debuggers.png}
+<img src="2.Breakpoints-in-Debuggers.png"/>
 Breakpoints in debuggers
 
 After this, when you jump from debug mode to running mode by hitting the go command
@@ -95,10 +99,10 @@ int main ()
      return 0;
 }
 
-img:{3.Breakpoints-in-Debuggers.png}
+<img src="3.Breakpoints-in-Debuggers.png"/>
 Breakpoints in debuggers
 
-img:{4.Breakpoints-in-Debuggers.png}
+<img src="4.Breakpoints-in-Debuggers.png"/>
 Breakpoints in debuggers
 
 After the initial for loop is done executing  and just before hitting the second
@@ -108,7 +112,7 @@ to put the debuggee in debug mode. Now debugger does the opposite of restoring
 the mnemonics from CC600e2900 to 68600e2900 so that the programmer can examine
 the content of the function as if nothing has happened before! Pretty neat HACK!
 
-img:{5.Breakpoints-in-Debuggers.png}
+<img src="5.Breakpoints-in-Debuggers.png"/>
 Breakpoints in debuggers
 
 I am stopping here and let this content sink in your brain. There's more to it,
@@ -117,3 +121,6 @@ hitting toolbar break button or ctrl+break etc then debuggers in Windows uses
 CreateRemoteThread|https://msdn.microsoft.com/en-us/library/windows/desktop/ms682437(v=vs.85).aspx
 Win32 API to create a new remote thread in the debuggee and calls the ntdll!DbgBreakPoint.
 
+        </pre>
+    </body>
+</html>

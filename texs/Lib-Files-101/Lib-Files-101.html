@@ -1,4 +1,8 @@
-﻿=============
+﻿<!DOCTYPE html>
+<html>
+    <body>
+        <pre>
+=============
 Lib Files 101
 =============
 Vineel Kovvuri
@@ -33,7 +37,7 @@ or
 
 use 7-Zip to extract it
 
-img:{6.VSProjectDialog.png}
+<img src="6.VSProjectDialog.png"/>
 Visual Studio New Project dialog for 'Static Library' and 'Dynamic Linked Library'
 
 Static Library
@@ -61,10 +65,10 @@ dumpbin /exports StaticLib.lib  <-- shows nothing because .lib itself does not
 export anything
 dumpbin /symbols StaticLib.lib  <-- shows all the symbols present
 
-img:{1.StaticLib.png}
+<img src="1.StaticLib.png"/>
 Workflow for Static Library creation and consumption
 
-img:{2.StructureStaticLib.png}
+<img src="2.StructureStaticLib.png"/>
 Concluded based on HxD view of the file
 
 Dynamic Linked Library
@@ -88,10 +92,10 @@ __declspec(dllexport) int add(int a)
 
 dumpbin /exports Dll1.lib <-- shows all the exported functions
 
-img:{3.Dll.png}
+<img src="3.Dll.png"/>
 Workflow for Dynamic Linked Library creation and consumption
 
-img:{4.StructureDll.png}
+<img src="4.StructureDll.png"/>
 Concluded based on HxD view of the file
 
 NOTE: The functions inside a Dynamic Linked Library need to be declared
@@ -108,7 +112,7 @@ binary! Below is a screenshot of Consumer.exe which is exporting sub2 function
 because sub2 is actually declared with __declspec(dllexport) in the
 original static library.
 
-img:{5.StaticLibWithDeclSpec(DllExport).png}
+<img src="5.StaticLibWithDeclSpec(DllExport).png"/>
 sub2 function got exported from the final consumer binary
 
 The takeaway here is Static Libraries are just a convenient archive format
@@ -118,3 +122,6 @@ cautious of how the functions are declared.
 References
 ==========
 - PE Format|https://docs.microsoft.com/en-us/windows/desktop/debug/pe-format
+        </pre>
+    </body>
+</html>

@@ -1,4 +1,4 @@
-#powershell -Command .\gen.ps1 -InFile infilepath
+#powershell -Command .\gen.ps1 infilepath
 
 param ($InFile)
 
@@ -20,3 +20,71 @@ $HtmlFooter = @"
 
 $OutFile = $InFile -replace ".txt", ".html"
 Set-Content -Encoding UTF8 -Path $OutFile -Value "$HtmlHeader$InFileContent$HtmlFooter"
+
+
+<#
+$x | % { if ($_ -eq "===") { "=" * $prev.Length } else {$_; $prev = $_}}
+
+
+Function LineBreak
+{
+    param ($Line)
+    Write-Host "`t $Line"
+    if ($Line.StartsWith(" ") -or 
+        $Line.StartsWith("|") -or
+        $Line.StartsWith("+") -or
+        $Line.StartsWith("-"))
+         {
+        return $Line;
+    }
+
+    $newLine = "";
+    while ($Line.Length -gt 80) {
+        $count = 80;
+        $count1 = 80;
+        $count2 = 80;
+
+        while ($Line[$count1] -ne ' ' -and $count1 -gt 0) { $count1--;} #Write-Host "Count1 : $count1 $($Line[$count1])";
+        while ($Line[$count2] -ne ' ' -and $count2 -lt $Line.Length) { $count2++; } #Write-Host "Count2 : $count2 $($Line[$count2])";
+        if ($count - $count1 -gt $count2 - $count) {
+            $count = $count2;
+        } else {
+            $count = $count1;
+        }
+        if ($count -gt 0 -and $count -lt $Line.Length) {
+            $newLine += $Line.SubString(0, $count) + "`n";
+            $Line = $Line.SubString($count + 1);
+        } else {
+            break;
+        }
+    }
+    $newLine += $Line;
+    return $newLine;
+}
+
+
+dir -Recurse *.txt | % { 
+
+$filename = $_.FullName;
+Write-Host $filename
+$con = Get-Content $filename;
+$mcon = $con | % { LineBreak -Line $_ }
+
+$mcon = $mcon -join "`n"
+
+Set-Content -Encoding UTF8 -Path "$filename" -Value $mcon
+}
+
+
+
+dir -Recurse *.txt | % { 
+
+$filename = $_.FullName;
+$con = Get-Content $filename;
+$mcon = $con | % { if ($_ -eq "===") { "=" * $prev.Length } else {$_; $prev = $_}}
+
+$mcon = $mcon -join "`n"
+
+Set-Content -Encoding UTF8 -Path "$filename" -Value $mcon
+}
+#>

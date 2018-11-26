@@ -2,12 +2,12 @@
 <html>
     <body>
         <pre>
+=======================================
 Signed/Unsigned Integer Arithmetic in C
 =======================================
 
 Vineel Kovvuri
 http://vineelkovvuri.com
-
 
 Contents
 1 - Introduction
@@ -26,7 +26,6 @@ Contents
 7 - Binary representation
 7.1 - unsigned numbers
 7.2 - signed numbers
-
 
 1 Introduction
 ==============
@@ -175,7 +174,6 @@ be not equal to OF
 That is why jl is defined as SF != OF, When this is true it means var1 <var2
 even if var1 and var2 are signed(meaning -ve numbers)
 
-
 4 Signed vs Unsigned integers in C
 ==================================
 Signed numbers are the way -ve numbers are represented and unsigned numbers are
@@ -225,11 +223,11 @@ Every integer type has an integer conversion rank defined as follows:
     short) < Rank(signed int) == Rank(unsigned int) < Rank(signed long) ==
     Rank(unsigned long) < Rank(signed long long) == Rank(unsigned long long)
 
-
 5.2 Integer Promotions
 ======================
 
-The following may be used in an expression wherever an int or unsigned int may be used:
+The following may be used in an expression wherever an int or unsigned int may be
+used:
 
     *   An object or expression with an integer type whose integer conversion rank
         is less than or equal to the rank of int and unsigned int.
@@ -377,7 +375,6 @@ For example:
         ret 0
     main ENDP
 
-
     Fragment of clang's AST for above program
     |-BinaryOperator <line:7:9, col:23> 'bool' '<'
     | |-BinaryOperator <col:9, col:16> 'long long' '+'
@@ -390,7 +387,6 @@ For example:
             , 'long long'
     | `-ImplicitCastExpr <col:23> 'long long' <IntegralCast>
     | `-IntegerLiteral <col:23> 'int' 0
-
 
 5.3.3 Rule 2e interpretation
 ============================
@@ -405,7 +401,6 @@ unlike other rules. For example:
     if (var1 + var2 < 0) {   // resulting type is unsigned long
         printf("This will not be printed");
     }
-
 
         sub rsp, 56 ; 00000038H
         mov DWORD PTR var1$[rsp], 100 ; 00000064H
@@ -424,7 +419,6 @@ unlike other rules. For example:
         ret 0
     main ENDP
 
-
     Fragment of clang's AST for above program
     |-BinaryOperator <line:7:9, col:23> 'bool' '<'
     | |-BinaryOperator <col:9, col:16> 'long' '+'
@@ -436,7 +430,6 @@ unlike other rules. For example:
     | | `-DeclRefExpr <col:16> 'long' lvalue Var 0x564cedbd01c8 'var2' 'long'
     | `-ImplicitCastExpr <col:23> 'long' <IntegralCast>
     | `-IntegerLiteral <col:23> 'int' 0
-
 
 5.4 Integer conversion matrix on LLP64 Programming Model
 ========================================================
