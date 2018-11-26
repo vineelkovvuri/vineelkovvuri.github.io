@@ -55,7 +55,7 @@ but with a slight twist.
     - Let's assume during KD, when the debugger broke, the processor is
       executing a process named mulithasher.exe(see note below)
     - When you switch the windbg's view to a different process(fscapture.exe) by
-      .process /r /p <fscapture address>, you are not changing the underlying
+      .process /r /p fscaptureaddress, you are not changing the underlying
       execution of the processor. !process -1 0 still shows multihasher.exe
     - With /r /p you now have read/write access to the fscapture process. This
       confirms the first part of the question
@@ -77,13 +77,13 @@ but with a slight twist.
 
     - This means, "g" command used to resume the target is the culprit(may be it
       is by design). This answers the second part of the question
-    - So by using .process /i <address>;g; windbg will break under your process
+    - So by using .process /i address;g; windbg will break under your process
       context(how?). After which setting a break point and hitting "g" will
       cause the debugger to actually put int 3 in your process not somewhere
       else
 
 NOTE: I initially made multihasher.exe the process context by using .process /i
-      <multihasher address>;g;
+      multihasher address;g;
 
 4. Setting breakpoints in system dlls
 =====================================
