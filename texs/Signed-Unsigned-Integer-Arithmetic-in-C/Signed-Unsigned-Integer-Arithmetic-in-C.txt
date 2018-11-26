@@ -1,4 +1,6 @@
 Signed/Unsigned Integer Arithmetic in C
+=======================================
+
 Vineel Kovvuri
 http://vineelkovvuri.com
 
@@ -23,6 +25,7 @@ Contents
 
 
 1 Introduction
+==============
 This article is about understanding how integer conversions happen in C
 language. C standard defines the integer conversion rules not specific to any
 architecture. It makes things more complicated for the programmers to try and
@@ -44,18 +47,20 @@ size of these basic types. Windows x64 follows LLP64(meaning only 'long long'
 and pointer size is 64 bit wide), So below are the sizes of the standard types
 that we are sticking to in this article.
 
-                    Type                Size
-                    ---------------------------
-                    signed char         1 bytes
-                    unsigned char       1 bytes
-                    signed short        2 bytes
-                    unsigned short      2 bytes
-                    signed int          4 bytes
-                    unsigned int        4 bytes
-                    signed long         4 bytes
-                    unsigned long       4 bytes
-                    signed long long    8 bytes
-                    unsigned long long  8 bytes
+        =================== ========
+        Type                 Size
+        =================== ========
+        signed char          1 bytes
+        unsigned char        1 bytes
+        signed short         2 bytes
+        unsigned short       2 bytes
+        signed int           4 bytes
+        unsigned int         4 bytes
+        signed long          4 bytes
+        unsigned long        4 bytes
+        signed long long     8 bytes
+        unsigned long long   8 bytes
+        =================== ========
 
 Also, The specification leaves other aspects of C language definition undefined
 and this made room for optimization for the compilers. For example, the result
@@ -67,6 +72,7 @@ result of unsigned overflow/underflow is well defined but not signed
 overflow/underflow!
 
 2 How signed-ness is represented in the hardware?
+=================================================
 Processors do have the concept of signed/unsigned, but unlike in C language,
 where this information is baked into the variable type definition, processor
 registers do not hold the type/signed/unsigned information. After all, registers
@@ -84,6 +90,7 @@ instructions themselves are not affected by signed and unsigned numbers because
 of modulo arithmetic.
 
 3 How signed-ness is interpreted in assembly?
+=============================================
 In one of the above paragraphs, we said, processor registers does not hold any
 signed/unsigned type information with them and it's up to the instructions to
 interpret the data as either signed or unsigned. But the interesting thing about
@@ -92,7 +99,6 @@ bits are called Status Flags. These bits represent the status of what happened
 with the previous instruction.
 
 The most important flags of these for our discussion are
-
     1.  Carry flag - Set if an arithmetic operation generates a carry or a
         borrow out of the most significant bit of the result; cleared otherwise.
         This flag indicates an overflow condition for unsigned-integer
@@ -167,6 +173,7 @@ even if var1 and var2 are signed(meaning -ve numbers)
 
 
 4 Signed vs Unsigned integers in C
+==================================
 Signed numbers are the way -ve numbers are represented and unsigned numbers are
 the way in which +ve numbers are represented. If let's say a data type has 1
 byte of storage then the possible bit representation will be from 0b00000000
@@ -180,9 +187,11 @@ number in the 255 slots then we will represent from -128 to 127. According to
 represented as 0b01111111 (0x7F).
 
 5 Integer Arithmetic Conversions in C
+=====================================
 C language defines below set of rules to convert the arguments in an expression.
 
 5.1 Rank
+========
 Every integer type has an integer conversion rank defined as follows:
     1.  No two signed integer types shall have the same rank, even if they have
         the same representation.
@@ -214,7 +223,10 @@ Every integer type has an integer conversion rank defined as follows:
 
 
 5.2 Integer Promotions
+======================
+
 The following may be used in an expression wherever an int or unsigned int may be used:
+
     *   An object or expression with an integer type whose integer conversion rank
         is less than or equal to the rank of int and unsigned int.
     *   A bit-field of type Bool, int, signed int, or unsigned int.
@@ -225,6 +237,8 @@ The following may be used in an expression wherever an int or unsigned int may b
         promotions.
 
 5.3 Usual arithmetic conversions
+================================
+
     *   2a) If both operands have the same type, then no further conversion is
         needed.
     *   2b) Otherwise, if both operands have signed integer types or both have
@@ -243,6 +257,8 @@ The following may be used in an expression wherever an int or unsigned int may b
         corresponding to the type of the operand with signed integer type.
 
 5.3.1 Rule 2c interpretation
+============================
+
 The gist of 2c is to make sense of expressions like z = a+b where a is singed
 number and b is unsigned number. Now a 4 byte signed int is added to 8 byte
 unsigned long long, according to this rule 4 byte signed int will become 8 byte
@@ -317,6 +333,8 @@ interacts with exp1. exp2*exp3's new type may not gel well with exp1 and might
 result in an unexpected result.
 
 5.3.2 Rule 2d interpretation
+============================
+
 Rule 2d tries to make sense when you have two variables with small the unsigned
 number and signed number are present in an expression and the singed storage can
 hold the unsigned number entirely, then by this rule, the unsigned number gets
@@ -371,7 +389,7 @@ For example:
 
 
 5.3.3 Rule 2e interpretation
-
+============================
 And finally, Rule 2e is applied only between unsigned int and signed long
 because neither 2c,2d fits these type on LLP64 model. One interesting thing we
 can observe if read between the lines is, the resultant type has unsignedness
@@ -417,6 +435,7 @@ unlike other rules. For example:
 
 
 5.4 Integer conversion matrix on LLP64 Programming Model
+========================================================
 Below table summaries the rules applied for each expression combination
 
 +------------------------+---------------------+------------------------------------------------------------------------------------+
@@ -486,6 +505,7 @@ Below table summaries the resulting data type of the expression
 Figure 4: Resulting type of the expression
 
 6 References
+============
     1. INT02-C. Understand integer conversion rules - https://wiki.sei.cmu.edu/confluence/display/c/INT02-C.+Understand+integer+conversion+rules
     2. C99 Standard - http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf
     3. Should I use Signed or Unsigned Ints In C? (Part 1) - http://blog.robertelder.org/signed-or-unsigned/
@@ -498,8 +518,10 @@ Figure 4: Resulting type of the expression
     10. Abstract Data Models - https://docs.microsoft.com/en-us/windows/desktop/winprog64/abstract-data-models
 
 7 Binary representation
+=======================
 
 7.1 unsigned numbers
+====================
 000|0x0 |00000000 # 064|0x40|01000000 # 128|0x80|10000000 # 192|0xc0|11000000
 001|0x1 |00000001 # 065|0x41|01000001 # 129|0x81|10000001 # 193|0xc1|11000001
 002|0x2 |00000010 # 066|0x42|01000010 # 130|0x82|10000010 # 194|0xc2|11000010
@@ -566,6 +588,7 @@ Figure 4: Resulting type of the expression
 063|0x3f|00111111 # 127|0x7f|01111111 # 191|0xbf|10111111 # 255|0xff|11111111
 
 7.2 signed numbers
+==================
 -128|0x80|10000000 # -064|0xc0|11000000 # 0000|0x0 |00000000 # 0064|0x40|01000000
 -127|0x81|10000001 # -063|0xc1|11000001 # 0001|0x1 |00000001 # 0065|0x41|01000001
 -126|0x82|10000010 # -062|0xc2|11000010 # 0002|0x2 |00000010 # 0066|0x42|01000010
