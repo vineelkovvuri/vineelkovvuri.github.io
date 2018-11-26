@@ -36,7 +36,8 @@ Since .lib and .obj files follow Unix COFF format Unix binutil's
 
 
 Lib StaticLib1.lib /list
-Lib StaticLib1.lib /EXTRACT:Debug\sub.obj /out:sub.obj <-- Extracts one file at a time!
+Lib StaticLib1.lib /EXTRACT:Debug\sub.obj /out:sub.obj <-- Extracts one file at
+a time!
 
 or
 
@@ -50,7 +51,8 @@ use 7-Zip to extract it
 
 
 img:{6.VSProjectDialog.png}
-Visual Studio New Project dialog for 'Static Library' and 'Dynamic Linked Library' 
+Visual Studio New Project dialog for 'Static Library' and 'Dynamic Linked Library'
+
 
 
 Static Library
@@ -76,7 +78,8 @@ NOTE: The functions inside a Static Library is not declared with
 library are meant to be consumed/included by others directly.
 
 
-dumpbin /exports StaticLib.lib  <-- shows nothing because .lib itself does not export anything
+dumpbin /exports StaticLib.lib  <-- shows nothing because .lib itself does not
+export anything
 dumpbin /symbols StaticLib.lib  <-- shows all the symbols present
 
 

@@ -19,11 +19,26 @@
 
 Introduction
 ============
-Have you ever wondered how a debugger magically gets you to the correct pdb and correct sources when debugging an application? This article talks exactly that in the context of Windbg.
+Have you ever wondered how a debugger magically gets you to the correct pdb and
+correct sources when debugging an application? This article talks exactly that in
+the context of Windbg.
 
-As you might be aware of, PDB files(also called as symbol files) is the glue between your application binary and the source code. There are two key Environment variables which configures Windbg about where to look for symbols and sources. They are \_NT\_SYMBOL\_PATH and \_NT\_SOURCE\_PATH. The \_NT\_SYMBOL\_PATH points to the directory containing your PDBs(also called as symbol files) or to a symbol server. \_NT\_SOURCE\_PATH points to the directory of your sources or to a source server which indexes the soruce files. One important point to remember here is one or more source files make up one or more binary files. But each binary will have a single PDB unless the source code is modified. This is important because Windbg has to perform lot of book keeping to map binary symbols with their source locations.
+As you might be aware of, PDB files(also called as symbol files) is the glue
+between your application binary and the source code. There are two key Environment
+variables which configures Windbg about where to look for symbols and sources.
+They are \_NT\_SYMBOL\_PATH and \_NT\_SOURCE\_PATH. The \_NT\_SYMBOL\_PATH points
+to the directory containing your PDBs(also called as symbol files) or to a symbol
+server. \_NT\_SOURCE\_PATH points to the directory of your sources or to a source
+server which indexes the soruce files. One important point to remember here is
+one or more source files make up one or more binary files. But each binary will
+have a single PDB unless the source code is modified. This is important because
+Windbg has to perform lot of book keeping to map binary symbols with their source
+locations.
 
-In this article we would like to understand how Windbg brings the right symbols and sources from both Symbol Server and Source Server even when the binary changes across the debugging sessions. Below are the three topics that we are going to understand.
+In this article we would like to understand how Windbg brings the right symbols
+and sources from both Symbol Server and Source Server even when the binary changes
+across the debugging sessions. Below are the three topics that we are going to
+understand.
 
 
     - How do Windbg identify the correct symbol file?
@@ -33,11 +48,27 @@ In this article we would like to understand how Windbg brings the right symbols 
 
 How do Windbg identify the correct symbol file?
 ===============================================
-Whenever an application is compiled the compiler will generate a pdb file associated with it. These pdbs comes in two variants one containing public symbols and other contianing private symbols. Public symbols does not contain all the information related to the binary and sources. Where as private symbols have every possible information (like line number/local variables/parameters info) related to the binary and sources. Every company who tries protect their intellectual property does not publish their private symbols because they contains way too much information which facilites reverse engineering the binaries much easier. Ofcourse, I should mention nothing really stop a skillful reverse engineer. That said, public symbols only gives the customer basic information about the components shipped by these companies. Since we are dealing with our own application we can assume we have access to private symbols which are much more helpful.
+Whenever an application is compiled the compiler will generate a pdb file associated
+with it. These pdbs comes in two variants one containing public symbols and other
+contianing private symbols. Public symbols does not contain all the information
+related to the binary and sources. Where as private symbols have every possible
+information (like line number/local variables/parameters info) related to the
+binary and sources. Every company who tries protect their intellectual property
+does not publish their private symbols because they contains way too much information
+which facilites reverse engineering the binaries much easier. Ofcourse, I should
+mention nothing really stop a skillful reverse engineer. That said, public symbols
+only gives the customer basic information about the components shipped by these
+companies. Since we are dealing with our own application we can assume we have
+access to private symbols which are much more helpful.
 
-When application is being built the compiler embeds a GUID and the absolute path to the pdb in to binary. Also, it embeds the same GUID in to the generated PDB. This GUID acts as a hash for windbg to check whether the pdb located by the embedded path or via \_NT\_SYMBOL\_PATH matches or not. In cases where we are using symbol server it queries the symbol server for the appropriate pdb based on the guid.
+When application is being built the compiler embeds a GUID and the absolute path
+to the pdb in to binary. Also, it embeds the same GUID in to the generated PDB.
+This GUID acts as a hash for windbg to check whether the pdb located by the embedded
+path or via \_NT\_SYMBOL\_PATH matches or not. In cases where we are using symbol
+server it queries the symbol server for the appropriate pdb based on the guid.
 
-We can get this information either through dumpbin /headers module.exe or using !lmi module as shown below respectively
+We can get this information either through dumpbin /headers module.exe or using
+!lmi module as shown below respectively
 
 ...
  Debug Directories
@@ -67,7 +98,9 @@ Debug Data Dirs: Type  Size     VA  Pointer
     Load Report: no symbols loaded
 
 
-If the GUID in pdb does not match with embedded GUID in binary it does not load the PDB file and throws following error *** ERROR: Module load completed but symbols could not be loaded for Win32Sample.exe.
+If the GUID in pdb does not match with embedded GUID in binary it does not load
+the PDB file and throws following error *** ERROR: Module load completed but
+symbols could not be loaded for Win32Sample.exe.
 
 
 0:000> .sympath E:\temp\Testing\x64\Release\ <-- Incorrect pdb
@@ -83,7 +116,17 @@ OK                                             E:\temp\Testing\x64\Release\
 
 How do Windbg identify the correct source file?
 ===============================================
-PDB files contain not only information about symbols like functions/structures/classes etc but also about the artifacts(like .obj) involved in generating your application binary. Unfortunately examining this information from PDB is little complicated because the PDB format is not documented by Microsoft. But the good news is Microsoft has provided an API to query the information about any given PDB. This API is called Debug Interface Access SDK|https://docs.microsoft.com/en-us/visualstudio/debugger/debug-interface-access/debug-interface-access-sdk. Luckly, every installation of Visual Studio ships with a sample project aptly named as Dia2Dump at C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\DIA SDK\Samples\DIA2Dump. When you build this project in Visual Studio we get Dia2Dump.exe, Using this we can solve the second puzzle.
+PDB files contain not only information about symbols like functions/structures/classes
+etc but also about the artifacts(like .obj) involved in generating your application
+binary. Unfortunately examining this information from PDB is little complicated
+because the PDB format is not documented by Microsoft. But the good news is
+Microsoft has provided an API to query the information about any given PDB. This
+API is called Debug Interface Access
+SDK|https://docs.microsoft.com/en-us/visualstudio/debugger/debug-interface-access/debug-interface-access-sdk.
+Luckly, every installation of Visual Studio ships with a sample project aptly
+named as Dia2Dump at C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\DIA
+SDK\Samples\DIA2Dump. When you build this project in Visual Studio we get
+Dia2Dump.exe, Using this we can solve the second puzzle.
 
 usage: Dia2Dump.exe [ options ] <filename>
   -?                : print this help
@@ -117,7 +160,9 @@ usage: Dia2Dump.exe [ options ] <filename>
   -mapfromsrc <RVA> : dump image RVA for src RVA
 
 
-The most important of all these flags is -sf which will dump out all the source files used to create an obj(object file). A sample output form this command Dia2Dump.exe -sf <path of pdb file> with a PDB will be as shown below
+The most important of all these flags is -sf which will dump out all the source
+files used to create an obj(object file). A sample output form this command
+Dia2Dump.exe -sf <path of pdb file> with a PDB will be as shown below
 
 ....
 Compiland = C:\..<snipped>..\Win32Sample\x64\Release\Win32Sample.obj
@@ -143,7 +188,13 @@ Compiland = C:\..<snipped>..\Win32Sample\x64\Release\Win32Sample.obj
 ....
 
 
-The above information clearly suggests that PDB also contains hash of all the files needed to create a obj. This hash could be MD5 or SHA256(which is often denoted with 0x3), This can be verified using simple get-filehash commandlet on our source file(Win32Sample.cpp) as shown below. Similar to GUID which binds a binary with PDB file this file checksum will bind the binary with its appropriate source file. But the checking of source files against its checksum is somewhat relax(more on this later).
+The above information clearly suggests that PDB also contains hash of all the
+files needed to create a obj. This hash could be MD5 or SHA256(which is often
+denoted with 0x3), This can be verified using simple get-filehash commandlet on
+our source file(Win32Sample.cpp) as shown below. Similar to GUID which binds a
+binary with PDB file this file checksum will bind the binary with its appropriate
+source file. But the checking of source files against its checksum is somewhat
+relax(more on this later).
 
 
 PS> get-filehash -Algorithm MD5 "c:\<snipped>\win32sample\win32sample.cpp"
@@ -155,29 +206,46 @@ MD5       BBB7EE64784A7C2A96B1439310EEF84A  C:\<snipped>\win32sample\win32sample
 
 This confirms the PDB is indeed storing the MD5 Hash of the file content.
 
-Because each PDB contains symbol and line number information it can open the appropriate source file and at the correct line number.
+Because each PDB contains symbol and line number information it can open the
+appropriate source file and at the correct line number.
 
-Whenever windbg tries to open a source file associated with a symbol it tries to check for this checksum of the source file.
+Whenever windbg tries to open a source file associated with a symbol it tries to
+check for this checksum of the source file.
 
 Windbg Symbols and Sources search heuristics
 ============================================
-If the absolute paths embeded in the PDB file is all we have then debugging in Windbg would not be any interesting and fun. Practically we cannot have the pdbs and sources available at the embedded paths(for example a program being debugged at the client machine). So how does Windbg figures out the right PDB even when the symbol paths set via .sympath+ or \_NT\_SYMBOL\_PATH and the source path set via .srcpath+ or \_NT\_SOURCE\_PATH are different from the actual embeded paths in the PDB?
+If the absolute paths embeded in the PDB file is all we have then debugging in
+Windbg would not be any interesting and fun. Practically we cannot have the pdbs
+and sources available at the embedded paths(for example a program being debugged
+at the client machine). So how does Windbg figures out the right PDB even when
+the symbol paths set via .sympath+ or \_NT\_SYMBOL\_PATH and the source path set
+via .srcpath+ or \_NT\_SOURCE\_PATH are different from the actual embeded paths
+in the PDB?
 
-To understand this we need to enable !sym noisy and .srcnoisy 3 when debugging. As an example I have my original source code built from C:\users\vineelko\documents\visual studio 2017\projects\win32sample which generated below files
+To understand this we need to enable !sym noisy and .srcnoisy 3 when debugging.
+As an example I have my original source code built from C:\users\vineelko\documents\visual
+studio 2017\projects\win32sample which generated below files
 
     - Sources: C:\<snipped>\Win32Sample\Win32Sample.c
     - Binary:  C:\<snipped>\Win32Sample\x64\Release\Win32Sample.exe
     - PDB:     C:\<snipped>\Win32Sample\x64\Release\Win32Sample.pdb
 
 
-Lets say we moved the folder from C:\Users\vineelko\Documents\Visual Studio 2017\Projects\ to E:\Temp\  like below
+Lets say we moved the folder from C:\Users\vineelko\Documents\Visual Studio
+2017\Projects\ to E:\Temp\  like below
 
     - Sources: E:\Temp\Win32Sample\Win32Sample.c
     - Binary:  E:\Temp\Win32Sample\x64\Release\Win32Sample.exe
     - PDB:     E:\Temp\Win32Sample\x64\Release\Win32Sample.pdb
 
 
-Now when we start debugging session windbg.exe E:\Temp\Win32Sample\x64\Release\Win32Sample.exe Windbg tries to find the .c and .pdb from C:\Users\vineelko\Documents\Visual Studio 2017\Projects\Win32Sample but will not find them as they are moved. This is where we have to make use of .sympath+ E:\Temp\Win32Sample\x64\Release and .srcpath+ E:\Temp\Win32Sample. Also running !sym noisy and .srcnoisy 3 commands will enable tracing of debugger when it is searching for the symbol files and source files respectively.
+Now when we start debugging session windbg.exe E:\Temp\Win32Sample\x64\Release\Win32Sample.exe
+Windbg tries to find the .c and .pdb from C:\Users\vineelko\Documents\Visual Studio
+2017\Projects\Win32Sample but will not find them as they are moved. This is where
+we have to make use of .sympath+ E:\Temp\Win32Sample\x64\Release and .srcpath+
+E:\Temp\Win32Sample. Also running !sym noisy and .srcnoisy 3 commands will enable
+tracing of debugger when it is searching for the symbol files and source files
+respectively.
 
 Below is the output of !lmi which dumps the GUID and the PDB location.
 
@@ -219,7 +287,8 @@ Try reloading the binary PDB
 DBGHELP: e:\temp\testing\Win32Sample.pdb - file not found
 DBGHELP: e:\temp\testing\exe\Win32Sample.pdb - file not found
 DBGHELP: e:\temp\testing\symbols\exe\Win32Sample.pdb - file not found
-DBGHELP: C:\Users\vineelko\Documents\Visual Studio 2017\Projects\Win32Sample\x64\Release\Win32Sample.pdb - file not found
+DBGHELP: C:\Users\vineelko\Documents\Visual Studio 2017\Projects\Win32Sample\x64\Release\Win32Sample.pdb
+- file not found
 *** WARNING: Unable to verify checksum for Win32Sample.exe
 *** ERROR: Module load completed but symbols could not be loaded for Win32Sample.exe
 DBGHELP: Win32Sample - no symbols loaded
@@ -231,15 +300,21 @@ DBGHELP: Win32Sample - private symbols & lines
         e:\temp\testing\x64\release\Win32Sample.pdb
 0:000> lm
 start             end                 module name
-00007ff6`2d2f0000 00007ff6`2d2f7000   Win32Sample C (private pdb symbols)  e:\temp\testing\x64\release\Win32Sample.pdb
+00007ff6`2d2f0000 00007ff6`2d2f7000   Win32Sample C (private pdb symbols) 
+e:\temp\testing\x64\release\Win32Sample.pdb
 00007ff9`0c5e0000 00007ff9`0c5f6000   VCRUNTIME140   (deferred)
 00007ff9`2c110000 00007ff9`2c206000   ucrtbase   (deferred)
 00007ff9`2c430000 00007ff9`2c696000   KERNELBASE   (deferred)
 00007ff9`2f160000 00007ff9`2f20e000   KERNEL32   (deferred)
-00007ff9`2f400000 00007ff9`2f5e0000   ntdll      (export symbols)       C:\WINDOWS\SYSTEM32\ntdll.dll
+00007ff9`2f400000 00007ff9`2f5e0000   ntdll      (export symbols)      
+C:\WINDOWS\SYSTEM32\ntdll.dll
 
 
-Looking at the .reload command output we can say Windbg expects symbol files to be present inside the same directory as the application or the folder named 'exe' inside .sympath directory or the folder named 'dll' inside the .sympath directory or at the actual embedded path. Running lm confirms that symbols are recognized for Win32Sample.exe
+Looking at the .reload command output we can say Windbg expects symbol files to
+be present inside the same directory as the application or the folder named 'exe'
+inside .sympath directory or the folder named 'dll' inside the .sympath directory
+or at the actual embedded path. Running lm confirms that symbols are recognized
+for Win32Sample.exe
 
 Turn on verbose source logging
 
@@ -264,19 +339,23 @@ Win32Sample!main:
 DBGENG:  Scan paths for partial path match:
 DBGENG:    prefix 'c:\users\vineelko\documents\visual studio 2017\projects\win32sample'
 DBGENG:    suffix 'win32sample.cpp'
-DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko\documents\visual studio 2017\projects\win32sample': 66 (match '')
+DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko\documents\visual
+studio 2017\projects\win32sample': 66 (match '')
 DBGENG:  Scan paths for partial path match:
 DBGENG:    prefix 'c:\users\vineelko\documents\visual studio 2017\projects'
 DBGENG:    suffix 'win32sample\win32sample.cpp'
-DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko\documents\visual studio 2017\projects': 54 (match '')
+DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko\documents\visual
+studio 2017\projects': 54 (match '')
 DBGENG:  Scan paths for partial path match:
 DBGENG:    prefix 'c:\users\vineelko\documents\visual studio 2017'
 DBGENG:    suffix 'projects\win32sample\win32sample.cpp'
-DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko\documents\visual studio 2017': 45 (match '')
+DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko\documents\visual
+studio 2017': 45 (match '')
 DBGENG:  Scan paths for partial path match:
 DBGENG:    prefix 'c:\users\vineelko\documents'
 DBGENG:    suffix 'visual studio 2017\projects\win32sample\win32sample.cpp'
-DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko\documents': 26 (match '')
+DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko\documents': 26
+(match '')
 DBGENG:  Scan paths for partial path match:
 DBGENG:    prefix 'c:\users\vineelko'
 DBGENG:    suffix 'documents\visual studio 2017\projects\win32sample\win32sample.cpp'
@@ -291,16 +370,20 @@ DBGENG:    suffix 'users\vineelko\documents\visual studio 2017\projects\win32sam
 DBGENG:      match 'e:\temp\Testing' against 'c:': 1 (match '')
 DBGENG:  Scan all paths for:
 DBGENG:    'c:\users\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
-DBGENG:      check 'e:\temp\Testing\c:\users\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
+DBGENG:      check 'e:\temp\Testing\c:\users\vineelko\documents\visual studio
+2017\projects\win32sample\win32sample.cpp'
 DBGENG:  Scan all paths for:
 DBGENG:    'users\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
-DBGENG:      check 'e:\temp\Testing\users\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
+DBGENG:      check 'e:\temp\Testing\users\vineelko\documents\visual studio
+2017\projects\win32sample\win32sample.cpp'
 DBGENG:  Scan all paths for:
 DBGENG:    'vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
-DBGENG:      check 'e:\temp\Testing\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
+DBGENG:      check 'e:\temp\Testing\vineelko\documents\visual studio
+2017\projects\win32sample\win32sample.cpp'
 DBGENG:  Scan all paths for:
 DBGENG:    'documents\visual studio 2017\projects\win32sample\win32sample.cpp'
-DBGENG:      check 'e:\temp\Testing\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
+DBGENG:      check 'e:\temp\Testing\documents\visual studio
+2017\projects\win32sample\win32sample.cpp'
 DBGENG:  Scan all paths for:
 DBGENG:    'visual studio 2017\projects\win32sample\win32sample.cpp'
 DBGENG:      check 'e:\temp\Testing\visual studio 2017\projects\win32sample\win32sample.cpp'
@@ -316,13 +399,20 @@ DBGENG:      check 'e:\temp\Testing\win32sample.cpp'
 DBGENG:      found file 'e:\temp\Testing\win32sample.cpp'
 
 
-Source path heuristics to match a source file is much more involved, It is done by prefix and suffix matches by joining the file path and .srcpath directory. If the checksum of the file present in PDB does does not match with the file checksum then you should see a warning like below(Which is very important). Unlike symbol files, Eventhough Windbg throws a warning it opens the source file in code window. But we should be vigilient about it.
+Source path heuristics to match a source file is much more involved, It is done
+by prefix and suffix matches by joining the file path and .srcpath directory. If
+the checksum of the file present in PDB does does not match with the file checksum
+then you should see a warning like below(Which is very important). Unlike symbol
+files, Eventhough Windbg throws a warning it opens the source file in code window.
+But we should be vigilient about it.
 
 windbg> .open -a Win32Sample!main
-WARNING: Unable to find source file with matching checksum.  Found 'c:\<snipped>\win32sample\win32sample.cpp' with mismatch!
+WARNING: Unable to find source file with matching checksum.  Found
+'c:\<snipped>\win32sample\win32sample.cpp' with mismatch!
 
 
-In any case, Understanding these details will help us solve unresolved source and symbol files issue with much more confidence!
+In any case, Understanding these details will help us solve unresolved source and
+symbol files issue with much more confidence!
 
 References
 ==========

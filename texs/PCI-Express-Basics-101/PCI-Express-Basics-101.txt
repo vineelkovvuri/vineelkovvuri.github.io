@@ -61,7 +61,8 @@ is what matters and how the motherboard takes advantage of these lanes.
 
 
 img:{Motherboard-Manual.png}
-Gigabyte Motherboard manual description of on board PCIE connectors and their configurations
+Gigabyte Motherboard manual description of on board PCIE connectors and their
+configurations
 
 
 

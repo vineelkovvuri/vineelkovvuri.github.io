@@ -65,8 +65,10 @@ Technically, an emulator can be written in any language. I have chosen Java for
 its included batteries/libraries. I have organized the source code of my
 implementation into below 5 Objects.
 
-1. CPU(Chip8Cpu.java) - This is the core module which implements the instruction set of Chip 8 and its decode logic
-2. Memory(Chip8Memory.java) - This emulates the RAM and associated constraint to interact with Chip 8 CPU
+1. CPU(Chip8Cpu.java) - This is the core module which implements the instruction
+set of Chip 8 and its decode logic
+2. Memory(Chip8Memory.java) - This emulates the RAM and associated constraint to
+interact with Chip 8 CPU
 3. Display(Chip8Display.java) - This emulates the Dxyn - DRW Vx, Vy, nibble
 4. instruction to capture the output on to the display
 5. Keyboard(Chip8Keyboard.java) - This emulates the keyboard input
@@ -173,7 +175,8 @@ bit of ith byte is 1 then the pixel at display[Vx + j][Vy + i] XOR with its
 previous value. This mechanism is also called  Stripping in the reference. The
 Display object simulates each pixel as a 12Ã—12 size JPanel. The entire display
 contains 64Ã—32 such pixels or JPanels. These JPanels are initially added to
-JFrame window and these will be set to black for â€˜offâ€™ state and green for â€˜onâ€™
+JFrame window and these will be set to black for â€˜offâ€™ state and green for
+â€˜onâ€™
 state by setPixel() method.
 
 Keyboard

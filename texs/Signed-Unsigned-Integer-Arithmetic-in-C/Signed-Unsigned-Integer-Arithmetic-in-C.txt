@@ -225,7 +225,8 @@ Every integer type has an integer conversion rank defined as follows:
 5.2 Integer Promotions
 ======================
 
-The following may be used in an expression wherever an int or unsigned int may be used:
+The following may be used in an expression wherever an int or unsigned int may be
+used:
 
     *   An object or expression with an integer type whose integer conversion rank
         is less than or equal to the rank of int and unsigned int.
