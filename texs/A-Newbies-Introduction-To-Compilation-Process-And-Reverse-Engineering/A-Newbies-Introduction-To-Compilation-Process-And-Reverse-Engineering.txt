@@ -1,21 +1,9 @@
 ﻿
 
-
-
-
-
-
-
       A newbie's introduction to Compilation Process and Reverse Engineering
 
       Vineel Kovvuri
       http://vineelkovvuri.com
-
-
-
-
-
-
 
 Introduction
 ============
@@ -31,10 +19,8 @@ provides an excellent set of tools for dissecting the compilation process and to
 understand the working of bits and bytes in the final executable. For this tutorial
 I am using the following tools and considers C language to illustrate the examples.
 
-
     - Dev-Cpp|''http://orwelldevcpp.blogspot.com/'' is a IDE with GNU C compiler collection(Mingw) as backend
     - OllyDbg|''http://www.ollydbg.de/'' An excellent debugger/reverse engineering tool
-
 
 Many people don't know that the powerful programmer tools that are available for
 Linux environment are also available for Windows(thanks to Cygwin/Mingw). Dev-Cpp
@@ -63,7 +49,6 @@ main()
     f = PI*2;
 }
 
-
 Assuming this code is saved as test.c, issue the following command(remember compiler
 options are case-sensitive) {gcc -E test.c}. '-E' switch stops the compilation
 process after preprocessing. Now gcc.exe will produce the following output.
@@ -79,19 +64,15 @@ main()
     f = 3.14156*2; // Preprocessor macro substituted
 }
 
-
 The preprocessing phase of the compiler replaced all preprocessor directives like
 PI e.t.c in the output. To keep the output simple I have not included any header
 files. By observing the output we can conclude few points.
 
-
     - Preprocessor will not compute the expression values. For example in the above output the preprocessor just replaced PI with its macro definition and the expression 3.14156*2 is left as it is
     - Preprocessor don't check for syntax errors because the above output contains no compiler errors even though we used a variable f without declaring it
 
-
 With this information, what will be the value printed by printf in the following
 example?
-
 
 #define Add(x,y) x+y
 #define Sub(x,y) x-y
@@ -100,7 +81,6 @@ main()
 {
     printf("%d",AddMulSub(10,2));
 }
-
 
 Many of us will try to solve the above snippet as Add(10,2)*Sub(10,2) =$>$ 12*8
 =$>$ 72 (because Add(10,2) = 10 + 2 = 12 and Sub(10,2) = 10 â€“ 2 = 8) but this
@@ -188,11 +168,8 @@ like assembly syntax. This is exactly what -masm=intel (Machines Assembly) optio
 do. The above command automatically generates a file named test.s. This is a text
 file and can be viewed in text editor.
 
-
-
 img:{Compliation1.png}
 Assembly listing
-
 
 Observe the above code, in line 14 even though test.s contains no definition for
 printf, a call is made to printf function. How can the compiler produce the final
@@ -212,7 +189,6 @@ is assumed at Zero, this is because, the compilation phase has no idea on exactl
 from where these extern variables are referenced. You can observe this in the
 following illustration.
 
-
 main()
 {
     //Referring an external variable
@@ -220,9 +196,6 @@ main()
     extern int x;
     x = 5;
 }
-
-
-
 
 img:{Compilation2.png}
 Assembly listing
@@ -255,9 +228,6 @@ main()
 {
     printf("if");
 }
-
-
-
 
 img:{Compilation3.png}
 Assembly listing (gcc -S -masm=intel test.c)
@@ -349,8 +319,6 @@ displays the opcode information(binary information) of each instruction.
 {objdump -d test.o}. -d informs the object dumper to perform disassembling on the
 file test.o. Once this is executed we get the following information.
 
-
-
 img:{Assembling1.png}
 Opcodes listing
 
@@ -366,7 +334,6 @@ files(*.obj or *.o) and library files(*.lib) in to a single exe or a dll file.
 But the real crux of linking lies in relocating. Consider two programs test1.c
 test2.c whose contents are shown below.
 
-
 //test1.c                            //test2.c
 main()                                test2()
 {                                     {
@@ -379,10 +346,8 @@ test1.o and test2.o. Now disassemble these two files using objdump.exe using the
 command {objdump -d test1.o test2.o $>$ outfile} and open outfile in Vim(any editor
 you like but Vim is colorful).
 
-
 img:{Linking1.png}
 Opcodes listing
-
 
 From the above picture it is clear that instructions in every object file starts
 with memory location Zero no matter how many functions it may contain. From the
@@ -414,7 +379,6 @@ value of main() as argument. This function causes the current process to termina
 From the disassembly of a.exe we can understand that the linker also includes
 other functions which are necessary for running the program beside test(),main()
 
-
 img:{Linking2.png}
 Opcodes listing
 
@@ -442,16 +406,11 @@ the size of statically linked files will be large. The advantage of static linki
 is, a.out requires no external libraries for running. But the biggest disadvantage
 is
 
-
 - Increase in the size of final executable
 - Duplication of common library routines in each and very static executable
 
-
-
-
 img:{Linking3.png}
 disassembled output of a.out
-
 
 Dynamic Linking
 ===============
@@ -477,7 +436,6 @@ external sources like existence of valid license/registry key/config. Also let's
 pretend this application will run with its complete features enabled if it is
 registered and it will be terminated if it is not registered.
 
-
 main()
 {
     //if reg == 1 the application is registered and not registered otherwise
@@ -502,7 +460,6 @@ path and will run as a registered application forever!
 Assume the final exe name is EthCrack.exe. Open this exe in OllyDBG(File $>$ Open
 or Press F3)
 
-
 img:{EthicalCracking1.png}
 Finding all text strings  in OllyDBG
 
@@ -511,19 +468,16 @@ is difficult, so what I will do is trying to find the string name "Not Registere
 so that, I may be closer to the if control path. We can find the string "Not
 Registered" using OllyDBG's "All referenced Text strings" feature.
 
-
 img:{EthicalCracking2.png}
 Identifying the right code location
 
 After doing that, OllyDBG will show all the locations where strings are referred
-
 
 img:{EthicalCracking3.png}
 All string references
 
 Double clicking on it will take you to the instruction where "Not Registered"
 string is used.
-
 
 img:{EthicalCracking4.png}
 Exact code to patch
@@ -544,14 +498,11 @@ in OllyDBG with just few keystrokes. Select the instruction {JNZ SHORT EthCrack.
 } and press space bar, now a dialog pops up, change the instruction JNZ to JMP
 and hit Enter and close the dialog.
 
-
-
 img:{EthicalCracking5.png}
 Assemble new instruction
 
 Now you need to save the changes made to the original EthCrack.exe. The following
 screenshot explain how to do it.
-
 
 img:{EthicalCracking6.png}
 Find all modifications
@@ -559,7 +510,6 @@ Find all modifications
 Once you have done that, a small dialog pops up and in that click "Copy all". Now
 you get a new window as shown below. Right click on the new window and click on
 "Save file" option.
-
 
 img:{EthicalCracking7.png}
 Save the patched binary
@@ -578,7 +528,6 @@ compiler internals and does not fully exploit the power of GCC compiler. Finally
 I would like to end this tutorial with remembrance/tribute to Turbo C running in
 DOSBox emulator!
 
-
 img:{TurboC.png}
 Turbo C
 
@@ -592,6 +541,4 @@ References
 - Linkers and Loaders by John R Levine â€“ http://amzn.com/1558604960
 - Engineering A Compiler by Keith Cooper, Linda Torczon â€“ http://amzn.com/012088478X
 - Awesome Reverse Engineering Playground/Community â€“ http://crackmes.de
-
-
 

@@ -1,21 +1,9 @@
 ﻿
 
-
-
-
-
-
-
       Lib Files 101
 
       Vineel Kovvuri
       http://vineelkovvuri.com
-
-
-
-
-
-
 
 Introduction
 ============
@@ -34,7 +22,6 @@ extract lib files. Visual Studio installation contains Lib.exe tool.
 Since .lib and .obj files follow Unix COFF format Unix binutil's
 'ar' tool can be used to extract it.
 
-
 Lib StaticLib1.lib /list
 Lib StaticLib1.lib /EXTRACT:Debug\sub.obj /out:sub.obj <-- Extracts one file at
 a time!
@@ -47,13 +34,8 @@ or
 
 use 7-Zip to extract it
 
-
-
-
 img:{6.VSProjectDialog.png}
 Visual Studio New Project dialog for 'Static Library' and 'Dynamic Linked Library'
-
-
 
 Static Library
 ==============
@@ -67,7 +49,6 @@ int add(int a)
     return a + 1;
 }
 
-
 When you build the project what we get is a .lib file containing obj files
 of each of the above .c file. So a static library contains all
 the code that gets compiled from your project, and this .lib will
@@ -77,23 +58,15 @@ NOTE: The functions inside a Static Library is not declared with
 \_\_declspec(dllexport) because all functions declared in a static
 library are meant to be consumed/included by others directly.
 
-
 dumpbin /exports StaticLib.lib  <-- shows nothing because .lib itself does not
 export anything
 dumpbin /symbols StaticLib.lib  <-- shows all the symbols present
 
-
-
-
 img:{1.StaticLib.png}
 Workflow for Static Library creation and consumption
 
-
-
-
 \includegraphics{2.StructureStaticLib.png}
 Concluded based on HxD view of the file
-
 
 Dynamic Linked Library
 ======================
@@ -109,32 +82,22 @@ present inside the .dll file.
 Since .lib does not contain any real .obj unlike static lib, we can
 only see the exported symbols but not their code in case of dll's .lib file.
 
-
 __declspec(dllexport) int add(int a)
 {
     return a + 1;
 }
 
-
-
 dumpbin /exports Dll1.lib <-- shows all the exported functions
-
-
-
 
 img:{3.Dll.png}
 Workflow for Dynamic Linked Library creation and consumption
 
-
-
 \includegraphics{4.StructureDll.png}
 Concluded based on HxD view of the file
-
 
 NOTE: The functions inside a Dynamic Linked Library need to be declared
 with \_\_declspec(dllexport) if they have to be visible and consumed
 by others(indirectly).
-
 
 Static Library with \_\_declspec(dllexport)
 ===========================================
@@ -146,21 +109,15 @@ binary! Below is a screenshot of Consumer.exe which is exporting sub2 function
 because sub2 is actually declared with \_\_declspec(dllexport) in the
 original static library.
 
-
-
 img:{5.StaticLibWithDeclSpec(DllExport).png}
 sub2 function got exported from the final consumer binary
-
-
 
 The takeaway here is Static Libraries are just a convenient archive format
 to hold multiple .obj files nothing more or nothing less! So we should be
 cautious of how the functions are declared.
 
-
 References
 ==========
 
 - PE Format|https://docs.microsoft.com/en-us/windows/desktop/debug/pe-format
-
 

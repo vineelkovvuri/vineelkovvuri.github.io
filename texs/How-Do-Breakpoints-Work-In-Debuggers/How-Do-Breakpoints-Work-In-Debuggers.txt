@@ -1,21 +1,9 @@
 ﻿
 
-
-
-
-
-
-
       How do breakpoints work in debuggers?
 
       Vineel Kovvuri
       http://vineelkovvuri.com
-
-
-
-
-
-
 
 Introduction
 ============
@@ -59,17 +47,11 @@ line/instruction, the debugger makes  a note of the location/address of the
 instruction and it simply gives us below visual feedback but no change is made to
 debuggee
 
-
-
 img:{1.Breakpoints-in-Debuggers.png}
 Breakpoints in debuggers
 
-
-
-
 img:{2.Breakpoints-in-Debuggers.png}
 Breakpoints in debuggers
-
 
 After this, when you jump from debug mode to running mode by hitting the go command
 either via F5 in Visual Studio or â€˜gâ€™ command in Windbg/gdb, the debugger
@@ -83,7 +65,6 @@ instruction when in debug mode, also this is exactly what we expect because we
 donâ€™t want our instructions garbled by the debugger with random 0xCC instructions
 when we want to examine. Now fasten your seat belts and letâ€™s see all of this
 in action!
-
 
 Breakpoints Practice
 ====================
@@ -100,7 +81,6 @@ main function at printf line before hitting go command. So as expected no change
 at the push mnemonic before call instruction (just windbg kept a note of the
 breakpoints).
 
-
 #include <stdio.h>
 int main ()
 {
@@ -116,12 +96,8 @@ int main ()
      return 0;
 }
 
-
-
 img:{3.Breakpoints-in-Debuggers.png}
 Breakpoints in debuggers
-
-
 
 img:{4.Breakpoints-in-Debuggers.png}
 Breakpoints in debuggers
@@ -133,10 +109,8 @@ to put the debuggee in debug mode. Now debugger does the opposite of restoring
 the mnemonics from CC600e2900 to 68600e2900 so that the programmer can examine
 the content of the function as if nothing has happened before! Pretty neat HACK!
 
-
 img:{5.Breakpoints-in-Debuggers.png}
 Breakpoints in debuggers
-
 
 I am stopping here and let this content sink in your brain. Thereâ€™s more to it,
 for example, when the program is running and we want to forcefully break in by

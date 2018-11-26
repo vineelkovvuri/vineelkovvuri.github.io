@@ -11,9 +11,6 @@ Aux Carry	AC
 Parity	PE
 Carry	CY
 
-
-
-
 int main()
 {
 
@@ -64,10 +61,6 @@ int main()
 
 	}
 }
-
-
-
-
 
 int main()
 {
@@ -140,7 +133,6 @@ int main()
         unsigned long res = var1 * var2;
     }
 }
-
 
   0|0x0 |00000000
   1|0x1 |00000001

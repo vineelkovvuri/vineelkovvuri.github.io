@@ -1,21 +1,9 @@
 ﻿
 
-
-
-
-
-
-
       PDB Files: The glue between the binary file and source code
 
       Vineel Kovvuri
       http://vineelkovvuri.com
-
-
-
-
-
-
 
 Introduction
 ============
@@ -40,11 +28,9 @@ and sources from both Symbol Server and Source Server even when the binary chang
 across the debugging sessions. Below are the three topics that we are going to
 understand.
 
-
     - How do Windbg identify the correct symbol file?
     - How do Windbg identify the correct source file?
     - Windbg Symbols and Sources search heuristics
-
 
 How do Windbg identify the correct symbol file?
 ===============================================
@@ -78,8 +64,6 @@ We can get this information either through dumpbin /headers module.exe or using
     5A6C0899 cv            53 0001A8B4     94B4    Format: RSDS, {BB6248C9-7748-4F74-9CBA-147BF261F206}, 1, C:\Programs\Sample.pdb
 ...
 
-
-
 0:000> !lmi Sample
 Loaded Module Info: [sample]
          Module: Sample
@@ -97,11 +81,9 @@ Debug Data Dirs: Type  Size     VA  Pointer
     Symbol Type: DEFERRED - No error - symbol load deferred
     Load Report: no symbols loaded
 
-
 If the GUID in pdb does not match with embedded GUID in binary it does not load
 the PDB file and throws following error *** ERROR: Module load completed but
 symbols could not be loaded for Win32Sample.exe.
-
 
 0:000> .sympath E:\temp\Testing\x64\Release\ <-- Incorrect pdb
 Symbol search path is: E:\temp\Testing\x64\Release\
@@ -112,7 +94,6 @@ Response                         Time (ms)     Location
 OK                                             E:\temp\Testing\x64\Release\
 *** WARNING: Unable to verify checksum for Win32Sample.exe
 *** ERROR: Module load completed but symbols could not be loaded for Win32Sample.exe
-
 
 How do Windbg identify the correct source file?
 ===============================================
@@ -159,7 +140,6 @@ usage: Dia2Dump.exe [ options ] <filename>
   -maptosrc <RVA>   : dump src RVA for this image RVA
   -mapfromsrc <RVA> : dump image RVA for src RVA
 
-
 The most important of all these flags is -sf which will dump out all the source
 files used to create an obj(object file). A sample output form this command
 Dia2Dump.exe -sf <path of pdb file> with a PDB will be as shown below
@@ -187,7 +167,6 @@ Compiland = C:\..<snipped>..\Win32Sample\x64\Release\Win32Sample.obj
         c:\..<snipped>..\win32sample\x64\release\win32sample.pch
 ....
 
-
 The above information clearly suggests that PDB also contains hash of all the
 files needed to create a obj. This hash could be MD5 or SHA256(which is often
 denoted with 0x3), This can be verified using simple get-filehash commandlet on
@@ -196,13 +175,11 @@ binary with PDB file this file checksum will bind the binary with its appropriat
 source file. But the checking of source files against its checksum is somewhat
 relax(more on this later).
 
-
 PS> get-filehash -Algorithm MD5 "c:\<snipped>\win32sample\win32sample.cpp"
 
 Algorithm Hash                              Path
 --------- ----                              ----
 MD5       BBB7EE64784A7C2A96B1439310EEF84A  C:\<snipped>\win32sample\win32sample.cpp
-
 
 This confirms the PDB is indeed storing the MD5 Hash of the file content.
 
@@ -230,14 +207,12 @@ studio 2017\projects\win32sample which generated below files
     - Binary:  C:\<snipped>\Win32Sample\x64\Release\Win32Sample.exe
     - PDB:     C:\<snipped>\Win32Sample\x64\Release\Win32Sample.pdb
 
-
 Lets say we moved the folder from C:\Users\vineelko\Documents\Visual Studio
 2017\Projects\ to E:\Temp\  like below
 
     - Sources: E:\Temp\Win32Sample\Win32Sample.c
     - Binary:  E:\Temp\Win32Sample\x64\Release\Win32Sample.exe
     - PDB:     E:\Temp\Win32Sample\x64\Release\Win32Sample.pdb
-
 
 Now when we start debugging session windbg.exe E:\Temp\Win32Sample\x64\Release\Win32Sample.exe
 Windbg tries to find the .c and .pdb from C:\Users\vineelko\Documents\Visual Studio
@@ -308,7 +283,6 @@ e:\temp\testing\x64\release\Win32Sample.pdb
 00007ff9`2f160000 00007ff9`2f20e000   KERNEL32   (deferred)
 00007ff9`2f400000 00007ff9`2f5e0000   ntdll      (export symbols)
 C:\WINDOWS\SYSTEM32\ntdll.dll
-
 
 Looking at the .reload command output we can say Windbg expects symbol files to
 be present inside the same directory as the application or the folder named 'exe'
@@ -398,7 +372,6 @@ DBGENG:    'win32sample.cpp'
 DBGENG:      check 'e:\temp\Testing\win32sample.cpp'
 DBGENG:      found file 'e:\temp\Testing\win32sample.cpp'
 
-
 Source path heuristics to match a source file is much more involved, It is done
 by prefix and suffix matches by joining the file path and .srcpath directory. If
 the checksum of the file present in PDB does does not match with the file checksum
@@ -410,7 +383,6 @@ windbg> .open -a Win32Sample!main
 WARNING: Unable to find source file with matching checksum.  Found
 'c:\<snipped>\win32sample\win32sample.cpp' with mismatch!
 
-
 In any case, Understanding these details will help us solve unresolved source and
 symbol files issue with much more confidence!
 
@@ -419,6 +391,4 @@ References
 
 - PDB Files: What Every Developer Must Know|https://www.wintellect.com/pdb-files-what-every-developer-must-know/
 - Debug Interface Access SDK|https://docs.microsoft.com/en-us/visualstudio/debugger/debug-interface-access/debug-interface-access-sdk
-
-
 

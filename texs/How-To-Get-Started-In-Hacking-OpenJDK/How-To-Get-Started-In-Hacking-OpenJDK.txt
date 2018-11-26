@@ -1,21 +1,9 @@
 ﻿
 
-
-
-
-
-
-
       How to get started in hacking OpenJDK?
 
       Vineel Kovvuri
       http://vineelkovvuri.com
-
-
-
-
-
-
 
 Introduction
 ============
@@ -33,8 +21,6 @@ All the components of JDK 9 are from http://hg.openjdk.java.net/jdk9/ . OpenJDK
 is under Mercurial. For any one familiar with Git, this is no different. Below is
 the layout of repositories in JDK 9 OpenJDK forest.
 
-
-
 - dev - top-level umbrella project for all the sub projects
 
     - corba - Not my interest
@@ -44,8 +30,6 @@ the layout of repositories in JDK 9 OpenJDK forest.
     - jdk - The Java class libraries including native JNI implementation go here
     - langtools - The Java compiler and other tools go here
     - nashorn - Not my interest
-
-
 
 There are multiple ways to get the code. The easiest being, first clone the umbrella
 'dev' project and run get\_source.sh to pull all other repositories.
@@ -58,11 +42,7 @@ sh ./get\_source.sh
 
 Once done you should see below directory structure.
 
-
-
 img:{OpenJDK-1.png}
-
-
 
 How do I build it?
 ==================
@@ -74,17 +54,11 @@ Run below commands to build the source code. \newline
 bash ./configure \#Setup the environment \newline
 make all \#build the entire forest
 
-
-
 img:{OpenJDK-2.png}
 OpenJDK build directory after running bash ./configure
 
-
-
-
 img:{OpenJDK-3.png}
 OpenJDK images directory after running make all
-
 
 How do I hack it?
 =================
@@ -93,9 +67,7 @@ highly organized, you might need the help of some tools to get around with it. M
 favorite tool of choice for any source code exploration is OpenGrok, I have my
 local OpenGrok instance setup.
 
-
 img:{OpenJDK-4.png}
-
 
 Since images/jdk/bin/java is the binary which executes your class files. I wanted
 to locate the code for it, so that, I can see where the rabbit hole is leading
@@ -110,18 +82,12 @@ I can get to the code from OpenGrok. So below is the disassembled view of main
 function of the java binary. This function is in turn making calls to JLI\_* apis.
 So I selected JLI\_PreprocessArg as my candidate symbol.
 
-
 img:{OpenJDK-5.png}
-
 
 Now searching for the symbol JLI\_PreprocessArg in OpenGrok found the source code
 for jdk/bin/java!
 
-
 img:{OpenJDK-6.png}
-
-
-
 
 img:{OpenJDK-7.png}
 Inside main.c
@@ -130,7 +96,6 @@ To double confirm, I have added a print message and did the make all and it inde
 worked as expected! You could see my print when I execute java from the command
 line in the right side window.
 
-
 img:{OpenJDK-8.png}
 Inside main.c
 
@@ -138,5 +103,4 @@ References
 ==========
 
 - The OpenJDK Developers' Guide - http://openjdk.java.net/guide/
-
 
