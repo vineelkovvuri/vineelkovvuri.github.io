@@ -1,7 +1,6 @@
 ﻿===============================================
 What does it take to write an emulator in Java?
 ===============================================
-
 Vineel Kovvuri - http://vineelkovvuri.com
 
 Contents
