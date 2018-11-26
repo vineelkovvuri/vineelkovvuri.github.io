@@ -1,67 +1,67 @@
-Images:
-    \begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{4.Breakpoints-in-Debuggers.png}
-    \caption{Breakpoints in debuggers}
-    \end{figure}
+﻿Images:
+=======
+=======
+=======
+=======
+=======
 
 List:
-    \begin{enumerate}[noitemsep]
-        \item \href{''http://orwelldevcpp.blogspot.com/''}{Dev-Cpp} is a IDE with GNU C compiler collection(Mingw) as backend
-        \item \href{''http://www.ollydbg.de/''}{OllyDbg} An excellent debugger/reverse engineering tool
-    \end{enumerate}
+=====
+=====
+=====
+=====
 
 Links:
-    \href{https://en.wikipedia.org/wiki/DOSBox}{Dosbox}
-    \url{https://github.com/vineelkovvuri/Chip8Emulator}
+======
+======
 
 Code Listing:
-    \begin{minted}{java}
-     Debug Directories
+=============
+=============
 
-            Time Type        Size      RVA  Pointer
-        -------- ------- -------- -------- --------
-        5A6C0899 cv            53 0001A8B4     94B4    Format: RSDS,
-        {BB6248C9-7748-4F74-9CBA-147BF261F206}, 1, C:\Programs\Sample.pdb
-    \end{minted}
+
+
+
+
+
 
 Tables:
-    \begin{center}
-    \begin{tabular}{|c|c|c|}
-     Generation &x1         &x16          \\
-     \hline
-     Gen 1      &250 MB/s   &4 GB/s       \\
-     Gen 2      &500 MB/s   &8 GB/s       \\
-     Gen 3      &985 MB/s   &15.75 GB/s   \\
-     Gen 4      &1.969 GB/s &31.51 GB/s   \\
-     Gen 5      &3.938 GB/s &63 GB/s
-    \end{tabular}
-    \end{center}
+=======
+=======
+=======
+=======
+=======
+=======
+=======
+=======
+=======
+=======
+=======
 
 Symbols:
-    < \textless
-    > \textgreater
+========
+========
 
 Create bold text inside minted block:
-    content should be escaped between ||
-    \begin{minted}[escapeinside=||]{text}
-    var1-var2 => -135 => |\bf{which cannot be represented in a byte meaning the sign
-    bit of the byte will not be set but the overflow bit gets set. So SF=0 and
-    OF=1}|
+=====================================
+=====================================
+=====================================
+=====================================
+=====================================
 
-    but because it is still under the range of singed numbers representable in a
-    byte OF = 0
-    \end{minted}
+
+
+
 
 Create Columns:
-    \begin{multicols}{4}
-        This creates four columns
-        \columnbreak
-        After this the contents goes to new column
-    \end{multicols}
+===============
+===============
+===============
+===============
+===============
 
 <pre> Tag equivalent for latex:
-    \begin{verbatim}
-        Text
-    \end{verbatim}
+===============================
+===============================
+===============================
 

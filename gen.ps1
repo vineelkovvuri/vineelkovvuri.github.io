@@ -1,6 +1,6 @@
-#powershell -Command .\gen.ps1 -InFile infilepath -OutFile outfilepath
+#powershell -Command .\gen.ps1 -InFile infilepath
 
-param ($InFile, $OutFile)
+param ($InFile)
 
 $HtmlHeader = @"
 <!DOCTYPE html>
@@ -18,4 +18,5 @@ $HtmlFooter = @"
 </html>
 "@;
 
+$OutFile = $InFile -replace ".txt", ".html"
 Set-Content -Encoding UTF8 -Path $OutFile -Value "$HtmlHeader$InFileContent$HtmlFooter"

@@ -1,4 +1,4 @@
-What does it take to write an emulator in Java?
+﻿What does it take to write an emulator in Java?
 ===============================================
 
 Vineel Kovvuri
@@ -7,7 +7,7 @@ http://vineelkovvuri.com
 Introduction
 ============
 I am proud, This weekend I did some productive work. I was able to code Chip 8
-emulator in Java over a night 😉 I have always been fascinated by them and
+emulator in Java over a night ðŸ˜‰ I have always been fascinated by them and
 finally I was able to get the damn thing to work! For those of you who are not
 familiar with software emulator, It is a software which can emulate the
 functionality of other hardware or software components. Notable examples are
@@ -75,7 +75,7 @@ implementation into below 5 Objects.
 CPU
 ===
 The bulk of the decode processing logic is implemented in the run() method and
-each instruction is first fetched using Memory object’s getWord() method(every
+each instruction is first fetched using Memory objectâ€™s getWord() method(every
 opcode in of Chip 8 is of 2 bytes). Then decode the instruction and
 appropriately run the respective executable code. For the majority of time,
 execution mainly results in moving data around.
@@ -171,9 +171,9 @@ number of bytes from the memory location pointer by I register. Now each bit in
 each byte corresponds to one pixel starting from (Vx, Vy). For example if jth
 bit of ith byte is 1 then the pixel at display[Vx + j][Vy + i] XOR with its
 previous value. This mechanism is also called  Stripping in the reference. The
-Display object simulates each pixel as a 12×12 size JPanel. The entire display
-contains 64×32 such pixels or JPanels. These JPanels are initially added to
-JFrame window and these will be set to black for ‘off’ state and green for ‘on’
+Display object simulates each pixel as a 12Ã—12 size JPanel. The entire display
+contains 64Ã—32 such pixels or JPanels. These JPanels are initially added to
+JFrame window and these will be set to black for â€˜offâ€™ state and green for â€˜onâ€™
 state by setPixel() method.
 
 Keyboard
@@ -220,7 +220,7 @@ hard coding the file path to load.
 Output
 ======
 Now in order to test this, we need some chip 8 programs/games, also called as
-ROM files. A simple google search will return good number of ROM files. Let’s
+ROM files. A simple google search will return good number of ROM files. Letâ€™s
 see the output of loading few of them.
 
 Invaders
@@ -232,7 +232,7 @@ img:{4.Emulator.png}
 PingPong
 img:{5.Emulator.png}
 This one is for my wife, It is really not a game, but this ROM file exist beside
-other game files. I know we cannot play with them 😉
+other game files. I know we cannot play with them ðŸ˜‰
 IBM ROM for my wife ;)
 img:{6.Emulator.png}
 I recommened you to read the source code https://github.com/vineelkovvuri/Chip8Emulator.

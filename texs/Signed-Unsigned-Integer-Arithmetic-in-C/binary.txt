@@ -1,4 +1,4 @@
-	
+﻿	
 Key to flag abbreviations
 
 Flag Name	Abbreviation
@@ -51,7 +51,7 @@ int main()
 		mov al, 0xFF
 		add al, 0x1
 
-		// Overflow flag — Set if the integer result is too
+		// Overflow flag â€” Set if the integer result is too
 		// large a positive number or too small a negative
 		// number(excluding the sign - bit) to fit in the
 		// destination operand; cleared otherwise.This flag

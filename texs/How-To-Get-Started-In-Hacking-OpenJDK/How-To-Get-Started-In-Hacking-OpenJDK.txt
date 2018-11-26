@@ -1,0 +1,116 @@
+﻿
+
+
+
+
+
+   
+   
+      How to get started in hacking OpenJDK?
+      
+      Vineel Kovvuri
+      http://vineelkovvuri.com
+   
+   
+
+
+
+
+
+Introduction
+============
+This blog post is not about internals of JDK(Java Development Kit), But a mere documentation for people who want to get started. JDK is open sourced a long time ago. The reference implementation of Java is now based on OpenJDK|http://openjdk.java.net/. So any one interested in it can get the source code and play with it. Here on, when I refer to JDK it means all the components including Java class libraries/JVM(Hotspot)/Java Compiler. In this post, I will walk you in getting and building the latest JDK 9 sources.
+
+How do I get the source code?
+=============================
+All the components of JDK 9 are from http://hg.openjdk.java.net/jdk9/ . OpenJDK is under Mercurial. For any one familiar with Git, this is no different. Below is the layout of repositories in JDK 9 OpenJDK forest.
+
+
+
+- dev - top-level umbrella project for all the sub projects
+    
+    - corba - Not my interest
+    - hotspot - The Java Virtual Machine implementation. JIT/GC go here
+    - jaxp - Not my interest
+    - jaxws - Not my interest
+    - jdk - The Java class libraries including native JNI implementation go here
+    - langtools - The Java compiler and other tools go here
+    - nashorn - Not my interest
+    
+
+
+There are multiple ways to get the code. The easiest being, first clone the umbrella 'dev' project and run get\_source.sh to pull all other repositories.
+
+hg clone http://hg.openjdk.java.net/jdk9/dev 9dev
+
+cd 9dev
+
+sh ./get\_source.sh
+
+Once done you should see below directory structure.
+
+
+
+img:{OpenJDK-1.png}
+
+
+
+How do I build it?
+==================
+Building OpenJDK is straight forward too, The only precursor is to get the dependencies. The OpenJDKâ€™s Adopt OpenJDK project has already documented the dependencies here, Itâ€™s a matter of sudo apt-get install â€¦.
+Run below commands to build the source code. \newline
+\newline
+bash ./configure \#Setup the environment \newline
+make all \#build the entire forest
+
+
+
+img:{OpenJDK-2.png}
+OpenJDK build directory after running bash ./configure
+
+
+
+
+img:{OpenJDK-3.png}
+OpenJDK images directory after running make all
+
+
+How do I hack it?
+=================
+Now its all yours! This is where the fun begins, Even though OpenJDK sources are highly organized, you might need the help of some tools to get around with it. My favorite tool of choice for any source code exploration is OpenGrok, I have my local OpenGrok instance setup.
+
+
+img:{OpenJDK-4.png}
+
+
+Since images/jdk/bin/java is the binary which executes your class files. I wanted to locate the code for it, so that, I can see where the rabbit hole is leading to(essentially in to hotspot) :), The right way to find out is to decipher the build system to understand how things are getting build and from where they are getting build. I really really! donâ€™t want to explore the build system now. So, Its time to wear my black hat and roll up some reverse engineering skills!
+
+With the help of objdump I disassembled the jdk/bin/java binary and looked for symbols, specifically in its main function. Once I know some candidate symbols, I can get to the code from OpenGrok. So below is the disassembled view of main function of the java binary. This function is in turn making calls to JLI\_* apis. So I selected JLI\_PreprocessArg as my candidate symbol.
+
+
+img:{OpenJDK-5.png}
+
+
+Now searching for the symbol JLI\_PreprocessArg in OpenGrok found the source code for jdk/bin/java!
+
+
+img:{OpenJDK-6.png}
+
+
+
+
+img:{OpenJDK-7.png}
+Inside main.c
+
+To double confirm, I have added a print message and did the make all and it indeed worked as expected! You could see my print when I execute java from the command line in the right side window.
+
+
+img:{OpenJDK-8.png}
+Inside main.c
+
+References
+==========
+
+- The OpenJDK Developers' Guide - http://openjdk.java.net/guide/
+
+
