@@ -5,8 +5,15 @@
 ===========================================================
 PDB Files: The glue between the binary file and source code
 ===========================================================
-Vineel Kovvuri
-http://vineelkovvuri.com
+Vineel Kovvuri - http://vineelkovvuri.com
+
+Contents
+1 - Introduction
+2 - How do Windbg identify the correct symbol file?
+3 - How do Windbg identify the correct source file?
+4 - Windbg Symbols and Sources search heuristics
+5 - References
+
 
 Introduction
 ============
@@ -316,23 +323,19 @@ Win32Sample!main:
 DBGENG:  Scan paths for partial path match:
 DBGENG:    prefix 'c:\users\vineelko\documents\visual studio 2017\projects\win32sample'
 DBGENG:    suffix 'win32sample.cpp'
-DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko\documents\visual
-studio 2017\projects\win32sample': 66 (match ')
+DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko\documents\visual studio 2017\projects\win32sample': 66 (match ')
 DBGENG:  Scan paths for partial path match:
 DBGENG:    prefix 'c:\users\vineelko\documents\visual studio 2017\projects'
 DBGENG:    suffix 'win32sample\win32sample.cpp'
-DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko\documents\visual
-studio 2017\projects': 54 (match ')
+DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko\documents\visual studio 2017\projects': 54 (match ')
 DBGENG:  Scan paths for partial path match:
 DBGENG:    prefix 'c:\users\vineelko\documents\visual studio 2017'
 DBGENG:    suffix 'projects\win32sample\win32sample.cpp'
-DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko\documents\visual
-studio 2017': 45 (match ')
+DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko\documents\visual studio 2017': 45 (match ')
 DBGENG:  Scan paths for partial path match:
 DBGENG:    prefix 'c:\users\vineelko\documents'
 DBGENG:    suffix 'visual studio 2017\projects\win32sample\win32sample.cpp'
-DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko\documents': 26
-(match ')
+DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko\documents': 26 (match ')
 DBGENG:  Scan paths for partial path match:
 DBGENG:    prefix 'c:\users\vineelko'
 DBGENG:    suffix 'documents\visual studio 2017\projects\win32sample\win32sample.cpp'
@@ -347,20 +350,16 @@ DBGENG:    suffix 'users\vineelko\documents\visual studio 2017\projects\win32sam
 DBGENG:      match 'e:\temp\Testing' against 'c:': 1 (match ')
 DBGENG:  Scan all paths for:
 DBGENG:    'c:\users\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
-DBGENG:      check 'e:\temp\Testing\c:\users\vineelko\documents\visual studio
-2017\projects\win32sample\win32sample.cpp'
+DBGENG:      check 'e:\temp\Testing\c:\users\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
 DBGENG:  Scan all paths for:
 DBGENG:    'users\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
-DBGENG:      check 'e:\temp\Testing\users\vineelko\documents\visual studio
-2017\projects\win32sample\win32sample.cpp'
+DBGENG:      check 'e:\temp\Testing\users\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
 DBGENG:  Scan all paths for:
 DBGENG:    'vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
-DBGENG:      check 'e:\temp\Testing\vineelko\documents\visual studio
-2017\projects\win32sample\win32sample.cpp'
+DBGENG:      check 'e:\temp\Testing\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
 DBGENG:  Scan all paths for:
 DBGENG:    'documents\visual studio 2017\projects\win32sample\win32sample.cpp'
-DBGENG:      check 'e:\temp\Testing\documents\visual studio
-2017\projects\win32sample\win32sample.cpp'
+DBGENG:      check 'e:\temp\Testing\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
 DBGENG:  Scan all paths for:
 DBGENG:    'visual studio 2017\projects\win32sample\win32sample.cpp'
 DBGENG:      check 'e:\temp\Testing\visual studio 2017\projects\win32sample\win32sample.cpp'

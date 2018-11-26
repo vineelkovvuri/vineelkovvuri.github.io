@@ -1,4 +1,4 @@
-#powershell -Command .\gen.ps1 infilepath
+#powershell -Command .\gen.ps1
 
 Function Generate-HTML
 {
@@ -27,7 +27,7 @@ $HtmlFooter = @"
 
 }
 
-dir -Recurse *.txt | % {Generate-HTML $_.FullName}
+dir -Recurse .\texs\ *.txt | % {Generate-HTML $_.FullName}
 
 
 <#

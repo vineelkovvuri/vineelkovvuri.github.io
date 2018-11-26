@@ -1,8 +1,15 @@
 ﻿=============
 Lib Files 101
 =============
-Vineel Kovvuri
-http://vineelkovvuri.com
+Vineel Kovvuri - http://vineelkovvuri.com
+
+
+Contents
+1 - Introduction
+2 - Static Library
+3 - Dynamic Linked Library
+4 - Static Library with __declspec(dllexport)
+5 - References
 
 Introduction
 ============
@@ -22,15 +29,10 @@ Since .lib and .obj files follow Unix COFF format Unix binutil's
 'ar' tool can be used to extract it.
 
 Lib StaticLib1.lib /list
-Lib StaticLib1.lib /EXTRACT:Debug\sub.obj /out:sub.obj <-- Extracts one file at
-a time!
-
+Lib StaticLib1.lib /EXTRACT:Debug\sub.obj /out:sub.obj <-- Extracts one file at a time!
 or
-
 ar -x StaticLib1.lib
-
 or
-
 use 7-Zip to extract it
 
 img:{6.VSProjectDialog.png}

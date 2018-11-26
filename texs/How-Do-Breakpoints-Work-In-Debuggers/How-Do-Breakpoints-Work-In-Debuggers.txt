@@ -1,8 +1,12 @@
 ﻿=====================================
 How do breakpoints work in debuggers?
 =====================================
-Vineel Kovvuri
-http://vineelkovvuri.com
+Vineel Kovvuri - http://vineelkovvuri.com
+
+Contents
+1 - Introduction
+2 - Breakpoints Theory
+3 - Breakpoints Practice
 
 Introduction
 ============
@@ -40,7 +44,7 @@ will be in running or debugging mode. In running mode, debugger has no control o
 the debuggee until debuggee hits the above said breakpoint instruction. In debug
 mode, it has full control of the debuggee execution, ie.., it can single step each
 line of the code, examine call stack/registers etc. This is exactly the mode in
-which you can also set additional breakpoints by hitting F9 or ˜bp' or
+which you can also set additional breakpoints by hitting F9 or 'bp' or
 equivalent. So when you ask the debugger to put a breakpoint on the current
 line/instruction, the debugger makes  a note of the location/address of the
 instruction and it simply gives us below visual feedback but no change is made to
@@ -53,7 +57,7 @@ img:{2.Breakpoints-in-Debuggers.png}
 Breakpoints in debuggers
 
 After this, when you jump from debug mode to running mode by hitting the go command
-either via F5 in Visual Studio or ˜g' command in Windbg/gdb, the debugger
+either via F5 in Visual Studio or 'g' command in Windbg/gdb, the debugger
 patches the first byte of all addresses at which we asked the debugger to set the
 breakpoints with 0xCC and let the debuggee run. This is in a way, the preparation
 done by debugger to make sure it gets notified back when CPU control reaches the
@@ -69,11 +73,11 @@ Breakpoints Practice
 ====================
 Let's consider the above program and see what happens when we set the breakpoint
 on the main and second printf lines in WinDbg. Once we set the breakpoints WinDbg
-only makes a note of these line addresses. Now when we hit ˜g' WinDbg moves
+only makes a note of these line addresses. Now when we hit 'g' WinDbg moves
 the debuggee to running mode. Let's verify this whether debugger has patched
 the printf line with 0xcc before moving to running mode. Unfortunately, we cannot
 dump the main function because the program is already in run mode! i.e., we cannot
-use commands like ˜uf .'  to see whether the bytes are patched by Windbg. But
+use commands like 'uf .'  to see whether the bytes are patched by Windbg. But
 fortunately, Process Hacker can help us in peering in the binary at the printf
 address when the program is running.  The below screenshot shows the contents of
 main function at printf line before hitting go command. So as expected no change

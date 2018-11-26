@@ -1,8 +1,24 @@
 ﻿======================================================================
 A newbie's introduction to Compilation Process and Reverse Engineering
 ======================================================================
-Vineel Kovvuri
-http://vineelkovvuri.com
+Vineel Kovvuri - http://vineelkovvuri.com
+
+Contents
+1 - Introduction
+2 - Preprocessing
+3 - Compilation
+4 - Lexical Analysis
+5 - Syntax Analysis
+6 - Semantic Analysis
+7 - Code Generation
+8 - Assembler
+9 - Assembling
+10 - Disassembling
+11 - Linking
+12 - Static Linking
+13 - Dynamic Linking
+14 - Ethical Cracking
+15 - References
 
 Introduction
 ============
@@ -13,13 +29,13 @@ source code to executable and also shows how this information is useful in conte
 of reverse engineering. I tried my best not to confuse the reader with too much
 of jargon, and help any newbie to get up to the speed.
 
-GNU compiler collection|'https://en.wikipedia.org/wiki/GNU\_Compiler\_Collection'
+GNU compiler collection|https://en.wikipedia.org/wiki/GNU_Compiler_Collection
 provides an excellent set of tools for dissecting the compilation process and to
 understand the working of bits and bytes in the final executable. For this tutorial
 I am using the following tools and considers C language to illustrate the examples.
 
-    - Dev-Cpp|'http://orwelldevcpp.blogspot.com/' is a IDE with GNU C compiler collection(Mingw) as backend
-    - OllyDbg|'http://www.ollydbg.de/' An excellent debugger/reverse engineering tool
+    - Dev-Cpp|http://orwelldevcpp.blogspot.com/ is a IDE with GNU C compiler collection(Mingw) as backend
+    - OllyDbg|http://www.ollydbg.de/ An excellent debugger/reverse engineering tool
 
 Many people don't know that the powerful programmer tools that are available for
 Linux environment are also available for Windows(thanks to Cygwin/Mingw). Dev-Cpp
@@ -83,7 +99,7 @@ main()
 }
 
 Many of us will try to solve the above snippet as Add(10,2)*Sub(10,2) =$>$ 12*8
-=$>$ 72 (because Add(10,2) = 10 + 2 = 12 and Sub(10,2) = 10 â€“ 2 = 8) but this
+=$>$ 72 (because Add(10,2) = 10 + 2 = 12 and Sub(10,2) = 10 â€" 2 = 8) but this
 is incorrect because from previous observation we know that preprocessor will not
 evaluate expressions. So, AddMulSub(10,2) is expanded as Add(10,2)*Sub(10,2) and
 this again replaced with Add,Sub macros as 10 + 2 * 10 - 2 = 10 + (2 * 10) - 2 =
@@ -135,7 +151,7 @@ Semantic Analysis
 =================
 Once the syntax analyzer has constructed the parse tree for a program the semantic
 analyzer will try to check the meaning of the program. The most important feature
-of semantic analyzer is Type Checking|'https://en.wikipedia.org/wiki/Type_system'.
+of semantic analyzer is Type Checking|https://en.wikipedia.org/wiki/Type_system.
 For example, consider the following statement.
 
 floatX2 = floatX1 + 10;
@@ -167,7 +183,7 @@ now assuming the program is saved as test.c. Issue the command {gcc -S -masm=int
 test.c}. -S instructs the compiler to stop after the generation of assembly code.
 
 By default, GCC uses AT\&T assembly language syntax but as we are working in
-Windows we feel homely if GCC can generate MASM|'https://en.wikipedia.org/wiki/Microsoft_Macro_Assembler'
+Windows we feel homely if GCC can generate MASM|https://en.wikipedia.org/wiki/Microsoft_Macro_Assembler
 like assembly syntax. This is exactly what -masm=intel (Machines Assembly) option
 do. The above command automatically generates a file named test.s. This is a text
 file and can be viewed in text editor.
@@ -242,7 +258,7 @@ optimization is the process of eliminating unnecessary language constructs prese
 in the source program and to generate the final executable for both speed/code
 efficiency. To get a better explanation of compiler optimizations and various
 factors upon which it depends please refer Compiler
-Optimizations|'https://en.wikipedia.org/wiki/Optimizing_compiler'. Optimization
+Optimizations|https://en.wikipedia.org/wiki/Optimizing_compiler. Optimization
 of your code can be broadly based on two factors one is size of the final exe and
 other is speed of the generated code. This can be controlled using -O flag of the
 compiler.
@@ -333,6 +349,7 @@ sequentially. The picture also confirms that Intel instruction format is not of
 fixed length because you will find that some instructions take 1 byte and other
 take more than 1 byte. The most important feature of these object files is, they
 are relocatable.
+
 Linking
 =======
 Linking is the process of rearranging(relocating) the functions from various object
@@ -372,14 +389,14 @@ the command objdump -d a.exe to see its contents. But this time to our surprise
 the output is around 800 lines! The reason for this burst in the a.exe size is
 due to the presence of some Startup and Finalizing routines beside main() and
 test2(). Of all the Startup and Finalizing functions we are concern only with
-\_\_\_mingw\_CRTStartup()
+___mingw_CRTStartup()
 
-In the figure below we can observe that \_\_\_mingw\_CRTStartup() is responsible
+In the figure below we can observe that ___mingw_CRTStartup() is responsible
 for calling the function main() in Line 149 priors calling main(). It also calls
 some startup routines like allocating the Heap Memory for the program using
 HeapAllocWin32 API function and retrieving the command line arguments e.t.c (
 stripped off). Once the main() function is returned there is call to ExitProcess
-Win32 API function(\_ExitProcess@4 is the mangled form of ExitProcess) with return
+Win32 API function(_ExitProcess@4 is the mangled form of ExitProcess) with return
 value of main() as argument. This function causes the current process to terminate.
 
 From the disassembly of a.exe we can understand that the linker also includes
@@ -499,7 +516,8 @@ the control to 0x004012DF (else control path) after the CMP instruction my job i
 done. This can be achieved in many ways.
 
     - By Changing the compared value(0) in CMP to other than zero
-    - By Changing the JNZ instruction to JMP instruction. This will guarantee the else control path no matter value of reg variable
+    - By Changing the JNZ instruction to JMP instruction. This will guarantee
+      the else control path no matter value of reg variable
 
 I choose the second one i.e., changing JNZ to JMP instruction. This can be achieved
 in OllyDBG with just few keystrokes. Select the instruction {JNZ SHORT EthCrack.004012DF
@@ -541,11 +559,11 @@ Turbo C
 
 References
 ==========
-- GNU Binutils â€“ https://sourceware.org/binutils/docs-2.26/binutils/index.html
-- GCC Options â€“ https://gcc.gnu.org/onlinedocs/gcc/Overall-Options.html
-- PE File Format â€“ https://msdn.microsoft.com/en-us/library/ms809762.aspx
-- Code to browse PE File â€“ https://github.com/vineelkovvuri/ExeFileDumper/blob/master/ExeDumper.c
-- Linkers and Loaders by John R Levine â€“ http://amzn.com/1558604960
-- Engineering A Compiler by Keith Cooper, Linda Torczon â€“ http://amzn.com/012088478X
-- Awesome Reverse Engineering Playground/Community â€“ http://crackmes.de
+- GNU Binutils â€" https://sourceware.org/binutils/docs-2.26/binutils/index.html
+- GCC Options â€" https://gcc.gnu.org/onlinedocs/gcc/Overall-Options.html
+- PE File Format â€" https://msdn.microsoft.com/en-us/library/ms809762.aspx
+- Code to browse PE File â€" https://github.com/vineelkovvuri/ExeFileDumper/blob/master/ExeDumper.c
+- Linkers and Loaders by John R Levine â€" http://amzn.com/1558604960
+- Engineering A Compiler by Keith Cooper, Linda Torczon â€" http://amzn.com/012088478X
+- Awesome Reverse Engineering Playground/Community â€" http://crackmes.de
 
