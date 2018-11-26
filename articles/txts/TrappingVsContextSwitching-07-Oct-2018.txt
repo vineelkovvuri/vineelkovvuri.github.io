@@ -24,3 +24,5 @@ point is the kernel does this in the context of the currently running thread.
 Mode transition or trap handling and Context Switching are not one and the same
 they are completely different. Trap handling happens on the current thread
 whereas context switching is selecting a different thread for execution.
+
+img:{DebuggersContext-07-Oct-2018.png}
