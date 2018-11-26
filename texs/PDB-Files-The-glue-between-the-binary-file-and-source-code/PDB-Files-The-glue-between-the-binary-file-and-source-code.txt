@@ -4,14 +4,14 @@
 
 
 
-   
-   
+
+
       PDB Files: The glue between the binary file and source code
-      
+
       Vineel Kovvuri
       http://vineelkovvuri.com
-   
-   
+
+
 
 
 
@@ -300,13 +300,13 @@ DBGHELP: Win32Sample - private symbols & lines
         e:\temp\testing\x64\release\Win32Sample.pdb
 0:000> lm
 start             end                 module name
-00007ff6`2d2f0000 00007ff6`2d2f7000   Win32Sample C (private pdb symbols) 
+00007ff6`2d2f0000 00007ff6`2d2f7000   Win32Sample C (private pdb symbols)
 e:\temp\testing\x64\release\Win32Sample.pdb
 00007ff9`0c5e0000 00007ff9`0c5f6000   VCRUNTIME140   (deferred)
 00007ff9`2c110000 00007ff9`2c206000   ucrtbase   (deferred)
 00007ff9`2c430000 00007ff9`2c696000   KERNELBASE   (deferred)
 00007ff9`2f160000 00007ff9`2f20e000   KERNEL32   (deferred)
-00007ff9`2f400000 00007ff9`2f5e0000   ntdll      (export symbols)      
+00007ff9`2f400000 00007ff9`2f5e0000   ntdll      (export symbols)
 C:\WINDOWS\SYSTEM32\ntdll.dll
 
 

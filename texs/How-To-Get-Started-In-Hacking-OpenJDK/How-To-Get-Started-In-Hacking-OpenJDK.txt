@@ -4,14 +4,14 @@
 
 
 
-   
-   
+
+
       How to get started in hacking OpenJDK?
-      
+
       Vineel Kovvuri
       http://vineelkovvuri.com
-   
-   
+
+
 
 
 
@@ -36,7 +36,7 @@ the layout of repositories in JDK 9 OpenJDK forest.
 
 
 - dev - top-level umbrella project for all the sub projects
-    
+
     - corba - Not my interest
     - hotspot - The Java Virtual Machine implementation. JIT/GC go here
     - jaxp - Not my interest
@@ -44,7 +44,7 @@ the layout of repositories in JDK 9 OpenJDK forest.
     - jdk - The Java class libraries including native JNI implementation go here
     - langtools - The Java compiler and other tools go here
     - nashorn - Not my interest
-    
+
 
 
 There are multiple ways to get the code. The easiest being, first clone the umbrella

@@ -4,14 +4,14 @@
 
 
 
-   
-   
+
+
       A newbie's introduction to Compilation Process and Reverse Engineering
-      
+
       Vineel Kovvuri
       http://vineelkovvuri.com
-   
-   
+
+
 
 
 
@@ -401,7 +401,7 @@ the command objdump -d a.exe to see its contents. But this time to our surprise
 the output is around 800 lines! The reason for this burst in the a.exe size is
 due to the presence of some Startup and Finalizing routines beside main() and
 test2(). Of all the Startup and Finalizing functions we are concern only with
-\_\_\_mingw\_CRTStartup() 
+\_\_\_mingw\_CRTStartup()
 
 In the figure below we can observe that \_\_\_mingw\_CRTStartup() is responsible
 for calling the function main() in Line 149 priors calling main(). It also calls

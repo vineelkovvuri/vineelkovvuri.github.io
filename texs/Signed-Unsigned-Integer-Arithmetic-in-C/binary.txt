@@ -1,4 +1,4 @@
-﻿	
+﻿
 Key to flag abbreviations
 
 Flag Name	Abbreviation
@@ -29,7 +29,7 @@ int main()
 		// where 0x1 is added to 0x80000001
 		// the result will be  0x80000010
 		// this does not saying anything about
-		// how the numbers are treated. its up 
+		// how the numbers are treated. its up
 		// to us to interpret
 		// 0x80000001 (either unsigned 2147483649 or signed -2147483647)
 		// and result as
@@ -43,7 +43,7 @@ int main()
 		add al, 0x1
 
 		// Carry flag is set when a operation results in carry when cannot be
-		// accommodated in the destination. This is indeed happens when the 
+		// accommodated in the destination. This is indeed happens when the
 		// result overflows. Unfortunately overflow flag is a misnomer. Will
 		// talk about that flag later.
 		PUSH 0
@@ -108,15 +108,15 @@ int main()
         signed short var1 = -10;
         unsigned int var2 = 100u;  //Rank of int is > Rank of short
         unsigned int res = var2 * var1; //var1 gets converted to var2's type
-        // 
+        //
     }
     {
         signed int var1 = -10;
         unsigned long var2 = 100u;  //Rank of long is > Rank of int
         unsigned int res = var2 * var1; //var1 gets converted to var2's type
-        // 
+        //
     }
-    
+
     {
         signed int var1 = -10;
         unsigned int var2 = 10;  //Rank of unsigned int is == Rank of signed int

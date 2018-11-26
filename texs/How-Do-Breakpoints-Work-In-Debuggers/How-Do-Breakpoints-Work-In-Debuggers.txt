@@ -4,14 +4,14 @@
 
 
 
-   
-   
+
+
       How do breakpoints work in debuggers?
-      
+
       Vineel Kovvuri
       http://vineelkovvuri.com
-   
-   
+
+
 
 
 

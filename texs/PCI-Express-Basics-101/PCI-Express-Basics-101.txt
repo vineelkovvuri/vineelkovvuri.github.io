@@ -4,14 +4,14 @@
 
 
 
-   
-   
+
+
       PCI Express Basics 101
-      
+
       Vineel Kovvuri
       http://vineelkovvuri.com
-   
-   
+
+
 
 
 
@@ -25,7 +25,7 @@ but mostly the current shipping generation is 3rd generation also
 called as Gen 3. Mainly each generation improves upon the previous
 generation regarding the speed per lane supported by the protocol.
 
-Below is the table for each generation and lane speed 
+Below is the table for each generation and lane speed
 For single-lane (Ã—1) and 16-lane (Ã—16) links, in each direction:
 
 
