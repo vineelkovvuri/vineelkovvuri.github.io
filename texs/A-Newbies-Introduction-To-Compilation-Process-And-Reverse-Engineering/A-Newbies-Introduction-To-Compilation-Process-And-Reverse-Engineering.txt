@@ -13,13 +13,13 @@ source code to executable and also shows how this information is useful in conte
 of reverse engineering. I tried my best not to confuse the reader with too much
 of jargon, and help any newbie to get up to the speed.
 
-GNU compiler collection|''https://en.wikipedia.org/wiki/GNU\_Compiler\_Collection''
+GNU compiler collection|'https://en.wikipedia.org/wiki/GNU\_Compiler\_Collection'
 provides an excellent set of tools for dissecting the compilation process and to
 understand the working of bits and bytes in the final executable. For this tutorial
 I am using the following tools and considers C language to illustrate the examples.
 
-    - Dev-Cpp|''http://orwelldevcpp.blogspot.com/'' is a IDE with GNU C compiler collection(Mingw) as backend
-    - OllyDbg|''http://www.ollydbg.de/'' An excellent debugger/reverse engineering tool
+    - Dev-Cpp|'http://orwelldevcpp.blogspot.com/' is a IDE with GNU C compiler collection(Mingw) as backend
+    - OllyDbg|'http://www.ollydbg.de/' An excellent debugger/reverse engineering tool
 
 Many people don't know that the powerful programmer tools that are available for
 Linux environment are also available for Windows(thanks to Cygwin/Mingw). Dev-Cpp
@@ -135,7 +135,7 @@ Semantic Analysis
 =================
 Once the syntax analyzer has constructed the parse tree for a program the semantic
 analyzer will try to check the meaning of the program. The most important feature
-of semantic analyzer is Type Checking|''https://en.wikipedia.org/wiki/Type_system''.
+of semantic analyzer is Type Checking|'https://en.wikipedia.org/wiki/Type_system'.
 For example, consider the following statement.
 
 floatX2 = floatX1 + 10;
@@ -167,7 +167,7 @@ now assuming the program is saved as test.c. Issue the command {gcc -S -masm=int
 test.c}. -S instructs the compiler to stop after the generation of assembly code.
 
 By default, GCC uses AT\&T assembly language syntax but as we are working in
-Windows we feel homely if GCC can generate MASM|''https://en.wikipedia.org/wiki/Microsoft_Macro_Assembler''
+Windows we feel homely if GCC can generate MASM|'https://en.wikipedia.org/wiki/Microsoft_Macro_Assembler'
 like assembly syntax. This is exactly what -masm=intel (Machines Assembly) option
 do. The above command automatically generates a file named test.s. This is a text
 file and can be viewed in text editor.
@@ -242,7 +242,7 @@ optimization is the process of eliminating unnecessary language constructs prese
 in the source program and to generate the final executable for both speed/code
 efficiency. To get a better explanation of compiler optimizations and various
 factors upon which it depends please refer Compiler
-Optimizations|''https://en.wikipedia.org/wiki/Optimizing_compiler''. Optimization
+Optimizations|'https://en.wikipedia.org/wiki/Optimizing_compiler'. Optimization
 of your code can be broadly based on two factors one is size of the final exe and
 other is speed of the generated code. This can be controlled using -O flag of the
 compiler.

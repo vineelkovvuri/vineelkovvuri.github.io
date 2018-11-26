@@ -1,6 +1,9 @@
 #powershell -Command .\gen.ps1 infilepath
 
-param ($InFile)
+Function Generate-HTML
+{
+
+    param ($InFile)
 
 $HtmlHeader = @"
 <!DOCTYPE html>
@@ -9,8 +12,9 @@ $HtmlHeader = @"
         <pre>
 
 "@;
-$InFileContent = (Get-Content $InFile) -join "`n";
-$InFileContent = $InFileContent -replace 'img:{(.*?)}', '<img src="$1"/>'
+    $InFileContent = (Get-Content $InFile) -join "`n";
+    $InFileContent = $InFileContent -replace 'img:{(.*?)}', '<img src="$1"/>'
+
 $HtmlFooter = @"
 
         </pre>
@@ -18,8 +22,12 @@ $HtmlFooter = @"
 </html>
 "@;
 
-$OutFile = $InFile -replace ".txt", ".html"
-Set-Content -Encoding UTF8 -Path $OutFile -Value "$HtmlHeader$InFileContent$HtmlFooter"
+    $OutFile = $InFile -replace ".txt", ".html"
+    Set-Content -Encoding UTF8 -Path $OutFile -Value "$HtmlHeader$InFileContent$HtmlFooter"
+
+}
+
+dir -Recurse *.txt | % {Generate-HTML $_.FullName}
 
 
 <#

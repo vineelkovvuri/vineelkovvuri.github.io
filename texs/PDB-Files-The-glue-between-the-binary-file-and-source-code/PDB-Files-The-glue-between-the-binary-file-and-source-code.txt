@@ -313,34 +313,34 @@ DBGENG:  Scan paths for partial path match:
 DBGENG:    prefix 'c:\users\vineelko\documents\visual studio 2017\projects\win32sample'
 DBGENG:    suffix 'win32sample.cpp'
 DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko\documents\visual
-studio 2017\projects\win32sample': 66 (match '')
+studio 2017\projects\win32sample': 66 (match ')
 DBGENG:  Scan paths for partial path match:
 DBGENG:    prefix 'c:\users\vineelko\documents\visual studio 2017\projects'
 DBGENG:    suffix 'win32sample\win32sample.cpp'
 DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko\documents\visual
-studio 2017\projects': 54 (match '')
+studio 2017\projects': 54 (match ')
 DBGENG:  Scan paths for partial path match:
 DBGENG:    prefix 'c:\users\vineelko\documents\visual studio 2017'
 DBGENG:    suffix 'projects\win32sample\win32sample.cpp'
 DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko\documents\visual
-studio 2017': 45 (match '')
+studio 2017': 45 (match ')
 DBGENG:  Scan paths for partial path match:
 DBGENG:    prefix 'c:\users\vineelko\documents'
 DBGENG:    suffix 'visual studio 2017\projects\win32sample\win32sample.cpp'
 DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko\documents': 26
-(match '')
+(match ')
 DBGENG:  Scan paths for partial path match:
 DBGENG:    prefix 'c:\users\vineelko'
 DBGENG:    suffix 'documents\visual studio 2017\projects\win32sample\win32sample.cpp'
-DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko': 16 (match '')
+DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko': 16 (match ')
 DBGENG:  Scan paths for partial path match:
 DBGENG:    prefix 'c:\users'
 DBGENG:    suffix 'vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
-DBGENG:      match 'e:\temp\Testing' against 'c:\users': 7 (match '')
+DBGENG:      match 'e:\temp\Testing' against 'c:\users': 7 (match ')
 DBGENG:  Scan paths for partial path match:
 DBGENG:    prefix 'c:'
 DBGENG:    suffix 'users\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
-DBGENG:      match 'e:\temp\Testing' against 'c:': 1 (match '')
+DBGENG:      match 'e:\temp\Testing' against 'c:': 1 (match ')
 DBGENG:  Scan all paths for:
 DBGENG:    'c:\users\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
 DBGENG:      check 'e:\temp\Testing\c:\users\vineelko\documents\visual studio
