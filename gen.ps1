@@ -22,7 +22,7 @@ $HtmlFooter = @"
 </html>
 "@;
 
-    $OutFile = $InFile -replace ".txt", ".html"
+    $OutFile = $InFile -replace ".txt$", ".html"
     Set-Content -Encoding UTF8 -Path $OutFile -Value "$HtmlHeader$InFileContent$HtmlFooter"
 
 }
