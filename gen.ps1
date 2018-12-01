@@ -27,7 +27,7 @@ $HtmlFooter = @"
 
 }
 
-dir -Recurse .\articles\ *.txt | % {Generate-HTML $_.FullName}
+dir -Recurse .\articles\*.txt | % {Generate-HTML $_.FullName}
 
 
 <#
