@@ -5,6 +5,7 @@ Vineel Kovvuri - http://vineelkovvuri.com
 
 Contents
 ========
+
     1 - Introduction
     2 - How do Windbg identify the correct symbol file?
     3 - How do Windbg identify the correct source file?
@@ -12,8 +13,9 @@ Contents
     5 - References
 
 
-Introduction
-============
+1. Introduction
+===============
+
     Have you ever wondered how a debugger magically gets you to the correct pdb and
     correct sources when debugging an application? This article talks exactly that in
     the context of Windbg.
@@ -39,8 +41,9 @@ Introduction
         - How do Windbg identify the correct source file?
         - Windbg Symbols and Sources search heuristics
 
-How do Windbg identify the correct symbol file?
-===============================================
+2. How do Windbg identify the correct symbol file?
+==================================================
+
     Whenever an application is compiled the compiler will generate a pdb file associated
     with it. These pdbs comes in two variants one containing public symbols and other
     contianing private symbols. Public symbols does not contain all the information
@@ -102,8 +105,9 @@ How do Windbg identify the correct symbol file?
     *** WARNING: Unable to verify checksum for Win32Sample.exe
     *** ERROR: Module load completed but symbols could not be loaded for Win32Sample.exe
 
-How do Windbg identify the correct source file?
-===============================================
+3. How do Windbg identify the correct source file?
+==================================================
+
     PDB files contain not only information about symbols like functions/structures/classes
     etc but also about the artifacts(like .obj) involved in generating your application
     binary. Unfortunately examining this information from PDB is little complicated
@@ -196,8 +200,9 @@ How do Windbg identify the correct source file?
     Whenever windbg tries to open a source file associated with a symbol it tries to
     check for this checksum of the source file.
 
-Windbg Symbols and Sources search heuristics
-============================================
+4. Windbg Symbols and Sources search heuristics
+===============================================
+
     If the absolute paths embeded in the PDB file is all we have then debugging in
     Windbg would not be any interesting and fun. Practically we cannot have the pdbs
     and sources available at the embedded paths(for example a program being debugged
@@ -385,8 +390,9 @@ Windbg Symbols and Sources search heuristics
     In any case, Understanding these details will help us solve unresolved source and
     symbol files issue with much more confidence!
 
-References
-==========
+5. References
+=============
+
     - PDB Files: What Every Developer Must Know|https://www.wintellect.com/pdb-files-what-every-developer-must-know/
     - Debug Interface Access SDK|https://docs.microsoft.com/en-us/visualstudio/debugger/debug-interface-access/debug-interface-access-sdk
 

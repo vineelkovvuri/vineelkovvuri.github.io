@@ -10,14 +10,16 @@ Vineel Kovvuri - http://vineelkovvuri.com
 
 Contents
 ========
+
     1 - Introduction
     2 - Static Library
     3 - Dynamic Linked Library
     4 - Static Library with __declspec(dllexport)
     5 - References
 
-Introduction
-============
+1. Introduction
+===============
+
     During the compilation one of the crucial step after assembling is
     creating the Object files. The collection of these object files is
     called a lib file. We can create these .lib files through following
@@ -43,8 +45,9 @@ Introduction
     <img src="6.VSProjectDialog.png"/>
     Visual Studio New Project dialog for 'Static Library' and 'Dynamic Linked Library'
 
-Static Library
-==============
+2. Static Library
+=================
+
     Static Library is created when you want to provide the complete code to
     link into another dll or exe. For example, If a static library
     project contains 4 files add.c,sub.c,mul.c,div.c containing functions
@@ -74,8 +77,9 @@ Static Library
     <img src="2.StructureStaticLib.png"/>
     Concluded based on HxD view of the file
 
-Dynamic Linked Library
-======================
+3. Dynamic Linked Library
+=========================
+
     Dynamic Linked Library(DLL) is in many ways similar to Static Library because
     it also provides the code to be used by other projects like dll or exe,
     but the difference is in the way the code gets re-used by consumers.
@@ -105,8 +109,9 @@ Dynamic Linked Library
     with __declspec(dllexport) if they have to be visible and consumed
     by others(indirectly).
 
-Static Library with __declspec(dllexport)
-===========================================
+4. Static Library with __declspec(dllexport)
+============================================
+
     This is interesting. When a function inside a static library is declared
     with __declspec(dllexport), like any other function, it gets included
     by the consumer in his binary(dll) but because it is declared as
@@ -122,8 +127,9 @@ Static Library with __declspec(dllexport)
     to hold multiple .obj files nothing more or nothing less! So we should be
     cautious of how the functions are declared.
 
-References
-==========
+5. References
+=============
+
     - PE Format|https://docs.microsoft.com/en-us/windows/desktop/debug/pe-format
         </pre>
     </body>
