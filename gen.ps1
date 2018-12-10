@@ -5,24 +5,27 @@ Function Generate-HTML
 
     param ($InFile)
 
-$HtmlHeader = @"
+$HtmlHeader = "
 <!DOCTYPE html>
 <html>
     <body>
         <pre>
 
-"@;
+";
     $Lines = (Get-Content $InFile -Encoding UTF8);
+    # If it appears like a tag we replace the < and > with &lt; and &gt;
     $Lines = $Lines | % {$_ -replace '<(.*?)>', '&lt$1&gt;'}
-    $InFileContent = $Lines -join "`n";
+    # Words which look like beginning of the tag we replace '<word' with '< word'
+    $Lines = $Lines | % {$_ -replace '<([a-zA-Z]*?)', '< $1'}
+    $InFileContent = $Lines -join "`r`n";
     $InFileContent = $InFileContent -replace 'img:{(.*?)}', '<img src="$1"/>'
 
-$HtmlFooter = @"
+$HtmlFooter = "
 
         </pre>
     </body>
 </html>
-"@;
+";
 
     $OutFile = $InFile -replace ".txt$", ".html"
     Set-Content -Encoding UTF8 -Path $OutFile -Value "$HtmlHeader$InFileContent$HtmlFooter"
@@ -40,7 +43,7 @@ Function LineBreak
 {
     param ($Line)
     Write-Host "`t $Line"
-    if ($Line.StartsWith(" ") -or 
+    if ($Line.StartsWith(" ") -or
         $Line.StartsWith("|") -or
         $Line.StartsWith("+") -or
         $Line.StartsWith("-"))
@@ -73,7 +76,7 @@ Function LineBreak
 }
 
 
-dir -Recurse *.txt | % { 
+dir -Recurse *.txt | % {
 
 $filename = $_.FullName;
 Write-Host $filename
@@ -87,7 +90,7 @@ Set-Content -Encoding UTF8 -Path "$filename" -Value $mcon
 
 
 
-dir -Recurse *.txt | % { 
+dir -Recurse *.txt | % {
 
 $filename = $_.FullName;
 $con = Get-Content $filename;
