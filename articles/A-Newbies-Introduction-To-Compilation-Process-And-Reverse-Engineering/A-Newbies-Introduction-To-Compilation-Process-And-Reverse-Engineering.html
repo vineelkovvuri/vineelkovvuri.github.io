@@ -85,8 +85,8 @@ Contents
     following output.
 
     # 1 "test.c"
-    # 1 "<built-in>"
-    # 1 "<command-line>"
+    # 1 "&ltbuilt-in&gt;"
+    # 1 "&ltcommand-line&gt;"
     # 1 "test.c"
 
     main()
@@ -257,7 +257,7 @@ Contents
     translate it back to its original C code in all the cases. To get the feel
     of what I mean, consider the following code snippet.
 
-    #include<stdio.h>
+    #include&ltstdio.h&gt;
     main()
     {
         if(1)  //trivial case
@@ -272,7 +272,7 @@ Contents
 
     the code generation for this is done by the compilation phase as
 
-    #include<stdio.h>
+    #include&ltstdio.h&gt;
     main()
     {
         printf("if");
@@ -456,7 +456,7 @@ Contents
     the final exe. To understand this scenario consider the following code
     snippet.
 
-    #include<stdio.h>
+    #include&ltstdio.h&gt;
     main()
     {
         printf("Hello World...- Vineel!!!");

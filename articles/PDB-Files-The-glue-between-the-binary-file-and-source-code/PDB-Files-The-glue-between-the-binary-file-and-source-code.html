@@ -124,7 +124,7 @@ Contents
     SDK\Samples\DIA2Dump. When you build this project in Visual Studio we get
     Dia2Dump.exe, Using this we can solve the second puzzle.
 
-    usage: Dia2Dump.exe [ options ] <filename>
+    usage: Dia2Dump.exe [ options ] &ltfilename&gt;
       -?                : print this help
       -all              : print all the debug info
       -m                : print all the mods
@@ -142,44 +142,44 @@ Contents
       -fpo [RVA]        : dump frame pointer omission information for a func addr
       -fpo [symbolname] : dump frame pointer omission information for a func symbol
       -compiland [name] : dump symbols for this compiland
-      -lines <funcname> : dump line numbers for this function
-      -lines <RVA>      : dump line numbers for this address
-      -type <symbolname>: dump this type in detail
-      -label <RVA>      : dump label at RVA
-      -sym <symbolname> [childname] : dump child information of this symbol
-      -sym <RVA> [childname]        : dump child information of symbol at this addr
-      -lsrc  <file> [line]          : dump line numbers for this source file
-      -ps <RVA> [-n <number>]       : dump symbols after this address, default 16
-      -psr <RVA> [-n <number>]      : dump symbols before this address, default 16
-      -annotations <RVA>: dump annotation symbol for this RVA
-      -maptosrc <RVA>   : dump src RVA for this image RVA
-      -mapfromsrc <RVA> : dump image RVA for src RVA
+      -lines &ltfuncname&gt; : dump line numbers for this function
+      -lines &ltRVA&gt;      : dump line numbers for this address
+      -type &ltsymbolname&gt;: dump this type in detail
+      -label &ltRVA&gt;      : dump label at RVA
+      -sym &ltsymbolname&gt; [childname] : dump child information of this symbol
+      -sym &ltRVA&gt; [childname]        : dump child information of symbol at this addr
+      -lsrc  &ltfile&gt; [line]          : dump line numbers for this source file
+      -ps &ltRVA&gt; [-n &ltnumber&gt;]       : dump symbols after this address, default 16
+      -psr &ltRVA&gt; [-n &ltnumber&gt;]      : dump symbols before this address, default 16
+      -annotations &ltRVA&gt;: dump annotation symbol for this RVA
+      -maptosrc &ltRVA&gt;   : dump src RVA for this image RVA
+      -mapfromsrc &ltRVA&gt; : dump image RVA for src RVA
 
     The most important of all these flags is -sf which will dump out all the source
     files used to create an obj(object file). A sample output form this command
-    Dia2Dump.exe -sf <path of pdb file> with a PDB will be as shown below
+    Dia2Dump.exe -sf &ltpath of pdb file&gt; with a PDB will be as shown below
 
     ....
-    Compiland = C:\..<snipped>..\Win32Sample\x64\Release\Win32Sample.obj
+    Compiland = C:\..&ltsnipped&gt;..\Win32Sample\x64\Release\Win32Sample.obj
 
-            c:\..<snipped>..\10.0.15063.0\shared\basetsd.h (MD5: 464E631AE358F42C09701CE07F35F8BF)
-            c:\..<snipped>..\10.0.15063.0\shared\guiddef.h (MD5: CA7D066706A198EA5999B084AAB0CE58)
-            c:\..<snipped>..\10.0.15063.0\shared\stralign.h (MD5: D27BD3C9FFF58FF4798B1F17B38C5B06)
-            c:\..<snipped>..\10.0.15063.0\shared\winerror.h (MD5: 7AD19053F0A83DDC031CDE4638299080)
-            c:\..<snipped>..\10.0.15063.0\ucrt\corecrt_memory.h (MD5: 33686D742EF373658431918E1A52326C)
-            c:\..<snipped>..\10.0.15063.0\ucrt\ctype.h (MD5: 1AC17C8CFC2358BD87784AB186BBAFCC)
-            c:\..<snipped>..\10.0.15063.0\ucrt\stdlib.h (MD5: 49CF59C87D23BB42C2D25CDF0D089509)
-            c:\..<snipped>..\10.0.15063.0\ucrt\string.h (MD5: 1DD6630B6C5E4B83DE098670242950A2)
-            c:\..<snipped>..\10.0.15063.0\um\memoryapi.h (MD5: 6F6D38BE202064596573E9449CBAAC58)
-            c:\..<snipped>..\10.0.15063.0\um\oleauto.h (MD5: 9048E2C1FD07AD42EA6E7F51EF63D42B)
-            c:\..<snipped>..\10.0.15063.0\um\processthreadsapi.h (MD5: 65891E84D54E51FA2017AB4D17BF9958)
-            c:\..<snipped>..\10.0.15063.0\um\propidl.h (MD5: B19A6DCE51821A635FE051DBC1CE6E7E)
-            c:\..<snipped>..\10.0.15063.0\um\winbase.h (MD5: 86C4964B16E8566D1E8F05482D9FFA49)
-            c:\..<snipped>..\10.0.15063.0\um\winnt.h (MD5: 02092055CFA70103E984B6855200845C)
-            c:\..<snipped>..\10.0.15063.0\um\winuser.h (MD5: 8A3479DAEAB702729FFBA6C669F54438)
-            c:\..<snipped>..\win32sample\stdafx.h (MD5: AA9C091299F07AD95BB49E6EE4BFF136)
-            c:\..<snipped>..\win32sample\win32sample.cpp (MD5: BBB7EE64784A7C2A96B1439310EEF84A)  <---
-            c:\..<snipped>..\win32sample\x64\release\win32sample.pch
+            c:\..&ltsnipped&gt;..\10.0.15063.0\shared\basetsd.h (MD5: 464E631AE358F42C09701CE07F35F8BF)
+            c:\..&ltsnipped&gt;..\10.0.15063.0\shared\guiddef.h (MD5: CA7D066706A198EA5999B084AAB0CE58)
+            c:\..&ltsnipped&gt;..\10.0.15063.0\shared\stralign.h (MD5: D27BD3C9FFF58FF4798B1F17B38C5B06)
+            c:\..&ltsnipped&gt;..\10.0.15063.0\shared\winerror.h (MD5: 7AD19053F0A83DDC031CDE4638299080)
+            c:\..&ltsnipped&gt;..\10.0.15063.0\ucrt\corecrt_memory.h (MD5: 33686D742EF373658431918E1A52326C)
+            c:\..&ltsnipped&gt;..\10.0.15063.0\ucrt\ctype.h (MD5: 1AC17C8CFC2358BD87784AB186BBAFCC)
+            c:\..&ltsnipped&gt;..\10.0.15063.0\ucrt\stdlib.h (MD5: 49CF59C87D23BB42C2D25CDF0D089509)
+            c:\..&ltsnipped&gt;..\10.0.15063.0\ucrt\string.h (MD5: 1DD6630B6C5E4B83DE098670242950A2)
+            c:\..&ltsnipped&gt;..\10.0.15063.0\um\memoryapi.h (MD5: 6F6D38BE202064596573E9449CBAAC58)
+            c:\..&ltsnipped&gt;..\10.0.15063.0\um\oleauto.h (MD5: 9048E2C1FD07AD42EA6E7F51EF63D42B)
+            c:\..&ltsnipped&gt;..\10.0.15063.0\um\processthreadsapi.h (MD5: 65891E84D54E51FA2017AB4D17BF9958)
+            c:\..&ltsnipped&gt;..\10.0.15063.0\um\propidl.h (MD5: B19A6DCE51821A635FE051DBC1CE6E7E)
+            c:\..&ltsnipped&gt;..\10.0.15063.0\um\winbase.h (MD5: 86C4964B16E8566D1E8F05482D9FFA49)
+            c:\..&ltsnipped&gt;..\10.0.15063.0\um\winnt.h (MD5: 02092055CFA70103E984B6855200845C)
+            c:\..&ltsnipped&gt;..\10.0.15063.0\um\winuser.h (MD5: 8A3479DAEAB702729FFBA6C669F54438)
+            c:\..&ltsnipped&gt;..\win32sample\stdafx.h (MD5: AA9C091299F07AD95BB49E6EE4BFF136)
+            c:\..&ltsnipped&gt;..\win32sample\win32sample.cpp (MD5: BBB7EE64784A7C2A96B1439310EEF84A)  <---
+            c:\..&ltsnipped&gt;..\win32sample\x64\release\win32sample.pch
     ....
 
     The above information clearly suggests that PDB also contains hash of all the
@@ -190,11 +190,11 @@ Contents
     source file. But the checking of source files against its checksum is somewhat
     relax(more on this later).
 
-    PS> get-filehash -Algorithm MD5 "c:\<snipped>\win32sample\win32sample.cpp"
+    PS> get-filehash -Algorithm MD5 "c:\&ltsnipped&gt;\win32sample\win32sample.cpp"
 
     Algorithm Hash                              Path
     --------- ----                              ----
-    MD5       BBB7EE64784A7C2A96B1439310EEF84A  C:\<snipped>\win32sample\win32sample.cpp
+    MD5       BBB7EE64784A7C2A96B1439310EEF84A  C:\&ltsnipped&gt;\win32sample\win32sample.cpp
 
     This confirms the PDB is indeed storing the MD5 Hash of the file content.
 
@@ -219,9 +219,9 @@ Contents
     As an example I have my original source code built from C:\users\vineelko\documents\visual
     studio 2017\projects\win32sample which generated below files
 
-        - Sources: C:\<snipped>\Win32Sample\Win32Sample.c
-        - Binary:  C:\<snipped>\Win32Sample\x64\Release\Win32Sample.exe
-        - PDB:     C:\<snipped>\Win32Sample\x64\Release\Win32Sample.pdb
+        - Sources: C:\&ltsnipped&gt;\Win32Sample\Win32Sample.c
+        - Binary:  C:\&ltsnipped&gt;\Win32Sample\x64\Release\Win32Sample.exe
+        - PDB:     C:\&ltsnipped&gt;\Win32Sample\x64\Release\Win32Sample.pdb
 
     Lets say we moved the folder from C:\Users\vineelko\Documents\Visual Studio
     2017\Projects\ to E:\Temp\  like below
@@ -389,7 +389,7 @@ Contents
 
     windbg> .open -a Win32Sample!main
     WARNING: Unable to find source file with matching checksum.  Found
-    'c:\<snipped>\win32sample\win32sample.cpp' with mismatch!
+    'c:\&ltsnipped&gt;\win32sample\win32sample.cpp' with mismatch!
 
     In any case, Understanding these details will help us solve unresolved source and
     symbol files issue with much more confidence!

@@ -37,7 +37,7 @@ Contents
 
     Why do we need integer conversions at all? The answer is simple we need to have
     single type for the expression. Let's say we have an expression
-    <expr1><op><expr2>when expr1 and expr2 are different types, we want the
+    &ltexpr1&gt;&ltop&gt;&ltexpr2&gt;when expr1 and expr2 are different types, we want the
     resulting expression from this to have one type.
 
     The C99 specification defines below set of integer types called 'standard
@@ -321,16 +321,16 @@ Contents
         main ENDP
 
         Fragment of clang's AST for above program
-        |-BinaryOperator <line:7:9, col:23> 'bool' '<'
-        | |-BinaryOperator <col:9, col:16> 'unsigned long long' '+'
-        | | |-ImplicitCastExpr <col:9> 'unsigned long long' <IntegralCast>
-        | | | `-ImplicitCastExpr <col:9> 'int' <LValueToRValue>
-        | | | `-DeclRefExpr <col:9> 'int' lvalue Var 0x55ea65e030e0 'var1' 'int'
-        | | `-ImplicitCastExpr <col:16> 'unsigned long long' <LValueToRValue>
-        | | `-DeclRefExpr <col:16> 'unsigned long long' lvalue Var 0x55ea65e031b0,
+        |-BinaryOperator &ltline:7:9, col:23&gt; 'bool' '<'
+        | |-BinaryOperator &ltcol:9, col:16&gt; 'unsigned long long' '+'
+        | | |-ImplicitCastExpr &ltcol:9&gt; 'unsigned long long' &ltIntegralCast&gt;
+        | | | `-ImplicitCastExpr &ltcol:9&gt; 'int' &ltLValueToRValue&gt;
+        | | | `-DeclRefExpr &ltcol:9&gt; 'int' lvalue Var 0x55ea65e030e0 'var1' 'int'
+        | | `-ImplicitCastExpr &ltcol:16&gt; 'unsigned long long' &ltLValueToRValue&gt;
+        | | `-DeclRefExpr &ltcol:16&gt; 'unsigned long long' lvalue Var 0x55ea65e031b0,
               'var2' 'unsigned long long'
-        | `-ImplicitCastExpr <col:23> 'unsigned long long' <IntegralCast>
-        | `-IntegerLiteral <col:23> 'int' 0
+        | `-ImplicitCastExpr &ltcol:23&gt; 'unsigned long long' &ltIntegralCast&gt;
+        | `-IntegerLiteral &ltcol:23&gt; 'int' 0
 
     These rules can only dictate what need to be done for each expression in a
     statement one at a time. It cannot determine the type of the complete statement
@@ -382,17 +382,17 @@ Contents
         main ENDP
 
         Fragment of clang's AST for above program
-        |-BinaryOperator <line:7:9, col:23> 'bool' '<'
-        | |-BinaryOperator <col:9, col:16> 'long long' '+'
-        | | |-ImplicitCastExpr <col:9> 'long long' <IntegralCast>
-        | | | `-ImplicitCastExpr <col:9> 'unsigned int' <LValueToRValue>
-        | | | `-DeclRefExpr <col:9> 'unsigned int' lvalue Var 0x56305e1200e0
+        |-BinaryOperator &ltline:7:9, col:23&gt; 'bool' '<'
+        | |-BinaryOperator &ltcol:9, col:16&gt; 'long long' '+'
+        | | |-ImplicitCastExpr &ltcol:9&gt; 'long long' &ltIntegralCast&gt;
+        | | | `-ImplicitCastExpr &ltcol:9&gt; 'unsigned int' &ltLValueToRValue&gt;
+        | | | `-DeclRefExpr &ltcol:9&gt; 'unsigned int' lvalue Var 0x56305e1200e0
                 , 'var1' 'unsigned int'
-        | | `-ImplicitCastExpr <col:16> 'long long' <LValueToRValue>
-        | | `-DeclRefExpr <col:16> 'long long' lvalue Var 0x56305e1201a8 'var2'
+        | | `-ImplicitCastExpr &ltcol:16&gt; 'long long' &ltLValueToRValue&gt;
+        | | `-DeclRefExpr &ltcol:16&gt; 'long long' lvalue Var 0x56305e1201a8 'var2'
                 , 'long long'
-        | `-ImplicitCastExpr <col:23> 'long long' <IntegralCast>
-        | `-IntegerLiteral <col:23> 'int' 0
+        | `-ImplicitCastExpr &ltcol:23&gt; 'long long' &ltIntegralCast&gt;
+        | `-IntegerLiteral &ltcol:23&gt; 'int' 0
 
 5.3.3 Rule 2e interpretation
 ============================
@@ -427,16 +427,16 @@ Contents
         main ENDP
 
         Fragment of clang's AST for above program
-        |-BinaryOperator <line:7:9, col:23> 'bool' '<'
-        | |-BinaryOperator <col:9, col:16> 'long' '+'
-        | | |-ImplicitCastExpr <col:9> 'long' <IntegralCast>
-        | | | `-ImplicitCastExpr <col:9> 'unsigned int' <LValueToRValue>
-        | | | `-DeclRefExpr <col:9> 'unsigned int' lvalue Var 0x564cedbd0100
+        |-BinaryOperator &ltline:7:9, col:23&gt; 'bool' '<'
+        | |-BinaryOperator &ltcol:9, col:16&gt; 'long' '+'
+        | | |-ImplicitCastExpr &ltcol:9&gt; 'long' &ltIntegralCast&gt;
+        | | | `-ImplicitCastExpr &ltcol:9&gt; 'unsigned int' &ltLValueToRValue&gt;
+        | | | `-DeclRefExpr &ltcol:9&gt; 'unsigned int' lvalue Var 0x564cedbd0100
                 ,'var1' 'unsigned int'
-        | | `-ImplicitCastExpr <col:16> 'long' <LValueToRValue>
-        | | `-DeclRefExpr <col:16> 'long' lvalue Var 0x564cedbd01c8 'var2' 'long'
-        | `-ImplicitCastExpr <col:23> 'long' <IntegralCast>
-        | `-IntegerLiteral <col:23> 'int' 0
+        | | `-ImplicitCastExpr &ltcol:16&gt; 'long' &ltLValueToRValue&gt;
+        | | `-DeclRefExpr &ltcol:16&gt; 'long' lvalue Var 0x564cedbd01c8 'var2' 'long'
+        | `-ImplicitCastExpr &ltcol:23&gt; 'long' &ltIntegralCast&gt;
+        | `-IntegerLiteral &ltcol:23&gt; 'int' 0
 
 5.4 Integer conversion matrix on LLP64 Programming Model
 ========================================================
@@ -448,7 +448,7 @@ Contents
     |LLP64 Programming Model +---------------------+------------------------------------------------------------------------------------+
     |                        |    Rank             |  1       1        2       2        3       3        4      4        5      5       |
     +---------------+--------+---------------------+------------------------------------------------------------------------------------+
-    |Size(MS VC x64)|Rank    |<type1> oper <type2> |  signed  unsigned signed  unsigned signed  unsigned signed unsigned signed unsigned|
+    |Size(MS VC x64)|Rank    |&lttype1&gt; oper &lttype2&gt; |  signed  unsigned signed  unsigned signed  unsigned signed unsigned signed unsigned|
     |               |        |                     |  char    char     short   short    int     int      long   long     long   long    |
     |               |        |                     |                                                                     long   long    |
     +---------------+--------+---------------------+------------------------------------------------------------------------------------+
@@ -472,7 +472,7 @@ Contents
     |LLP64 Programming Model +---------------------+--------------------------------------------------------------------------------------+
     |                        |    Rank             |  1       1        2       2        3       3        4        4        5      5       |
     +---------------+--------+---------------------+--------------------------------------------------------------------------------------+
-    |Size(MS VC x64)|Rank    |<type1> oper <type2> |  signed  unsigned signed  unsigned signed  unsigned signed   unsigned signed unsigned|
+    |Size(MS VC x64)|Rank    |&lttype1&gt; oper &lttype2&gt; |  signed  unsigned signed  unsigned signed  unsigned signed   unsigned signed unsigned|
     |               |        |                     |  char    char     short   short    int     int      long     long     long   long    |
     |               |        |                     |                                                                       long   long    |
     +---------------+--------+---------------------+--------------------------------------------------------------------------------------+

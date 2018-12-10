@@ -12,7 +12,9 @@ $HtmlHeader = @"
         <pre>
 
 "@;
-    $InFileContent = (Get-Content $InFile) -join "`n";
+    $Lines = (Get-Content $InFile -Encoding UTF8);
+    $Lines = $Lines | % {$_ -replace '<(.*?)>', '&lt$1&gt;'}
+    $InFileContent = $Lines -join "`n";
     $InFileContent = $InFileContent -replace 'img:{(.*?)}', '<img src="$1"/>'
 
 $HtmlFooter = @"
