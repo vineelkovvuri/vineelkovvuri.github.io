@@ -1,12 +1,24 @@
 #powershell -Command .\gen.ps1
 
+Function GetContentTitle
+{
+    param ($InFile)
+
+    return ([io.fileinfo] $InFile).Basename -Replace "-"," "
+}
+
 Function Generate-HTML
 {
 
     param ($InFile)
 
 $HtmlHeader = "<!DOCTYPE html>
-<html>
+<html lang=`"en`">
+   <head>
+       <meta charset=`"utf-8`">
+       <link rel=`"shortcut icon`" type=`"image/x-icon`" href=`"../../images/favicon.ico`">
+       <title>$(GetContentTitle -InFile $InFile)</title>
+   </head>
     <body>
         <pre>
 ";
