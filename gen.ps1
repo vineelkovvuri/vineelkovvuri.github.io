@@ -19,6 +19,15 @@ $HtmlHeader = "<!DOCTYPE html>
        <link rel=`"shortcut icon`" type=`"image/x-icon`" href=`"../../images/favicon.ico`">
        <title>$(GetContentTitle -InFile $InFile)</title>
    </head>
+    <style>
+    pre {
+       width:800px;
+       margin: 0 auto;
+       text-align: justify;
+       text-justify: inter-word;
+   }
+    </style>
+
     <body>
         <pre>
 ";
