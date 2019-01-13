@@ -1,10 +1,8 @@
-﻿===============================================
-What does it take to write an emulator in Java?
-===============================================
-Vineel Kovvuri - http://vineelkovvuri.com
+﻿==========================================================================
+What does it take to write an emulator in Java? - http://vineelkovvuri.com
+==========================================================================
 
-Contents
-========
+0. Contents
 
     1 - Introduction
     2 - What is Chip 8?
@@ -18,7 +16,6 @@ Contents
     10 - Output
 
 1. Introduction
-===============
 
     I am proud, This weekend I did some productive work. I was able to code Chip
     8 emulator in Java over a night. I have always been fascinated by them and
@@ -30,7 +27,6 @@ Contents
     general purpose software emulators(QEmu|https://en.wikipedia.org/wiki/QEMU)
 
 2. What is Chip 8?
-==================
 
     It was the software used in some of earlier 8 bit microprocessors. Which
     provided portability across multiple computer models. Think of it as the JVM
@@ -43,7 +39,6 @@ Contents
     chip 8 can be found here|https://en.wikipedia.org/wiki/CHIP-8.
 
 3. How does a CPU work?
-=======================
 
     Lets quickly go back to computer organization 101 class. In its most basic
     form, Every CPU need two inputs.
@@ -69,7 +64,6 @@ Contents
     img:{1.Emulator.png}
 
 4. Emulation
-============
 
     In general, for any processor to emulate other hardware or software
     components it has to essentially emulate all the above modules and any
@@ -93,14 +87,13 @@ Contents
     6. Main(Main.java) - The main driver program which sets up the system
 
 5. CPU
-======
 
     The bulk of the decode processing logic is implemented in the run() method
     and each instruction is first fetched using Memory object's getWord()
     method(every opcode in of Chip 8 is of 2 bytes). Then decode the instruction
     and appropriately run the respective executable code. For the majority of
     time, execution mainly results in moving data around.
-
+    `c
     //Below Is The Trimmed Version Of Original Source Code Found At
     //https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8CPU.java
     public class Chip8CPU {
@@ -146,10 +139,9 @@ Contents
             }
         }
     }
-
+    c`
 6. Memory
-=========
-
+    `c
     //Below Is The Trimmed Version Of Original Source Code Found At
     //https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8Memory.java
     public class Chip8Memory {
@@ -166,15 +158,14 @@ Contents
         // Dump RAM for debug
         public void dumpRAM() {...}
     }
-
+    c`
     The primary operations done by CPU with memory is reads and writes. These
     are implemented as getByte() and setByte() operations inside Memory object.
     These reads and writes are actually backed up by 4k integer array. This is
     the maximum memory addressable by Chip 8 instruction set.
 
 7. Display
-==========
-
+    `c
     //Below Is The Trimmed Version Of Original Source Code Found At
     //https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8Display.java
     public class Chip8Display extends JFrame {
@@ -184,7 +175,7 @@ Contents
         public boolean setPixel(int x, int y) {...}
         public void clear() {...}
     }
-
+    c`
     The one and only instruction in the Chip 8 instruction set that interact
     with display is Dxyn - DRW Vx, Vy, nibble. When CPU has decoded this
     instruction, it interface with the Display object and calls setPixel()
@@ -201,8 +192,7 @@ Contents
     method.
 
 8. Keyboard
-===========
-
+    `c
     //Below Is The Trimmed Version Of Original Source Code Found At
     //https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8Keyboard.java
     //This listener is added to Chip8Display module to capture the events
@@ -213,7 +203,7 @@ Contents
         public void keyPressed(KeyEvent e) {...}
         public void keyReleased(KeyEvent e) {...}
     }
-
+    c`
     There are few instructions which interfaces with keyboard. This object is
     hooked as the keyboard listener on to the JFrame of Display. This is the
     only way that I know in Java to capture the keyboard events. Chip 8 has 15
@@ -222,8 +212,7 @@ Contents
     10-15 indexes in to the above array.
 
 9. Main
-=======
-
+    `c
     public class Main {
         public static void main(String... args) {
             // Init peripherals
@@ -238,13 +227,12 @@ Contents
             cpu.run();
         }
     }
-
+    c`
     Finally, this object is responsible for setting up all the modules and
     invoking the CPU run() method. Purposefully I kept this object very simple,
     especially by hard coding the file path to load.
 
 10. Output
-==========
 
     Now in order to test this, we need some chip 8 programs/games, also called
     as ROM files. A simple google search will return good number of ROM files.

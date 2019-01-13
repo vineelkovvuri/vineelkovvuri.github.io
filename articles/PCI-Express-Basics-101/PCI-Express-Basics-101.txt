@@ -1,16 +1,13 @@
-﻿======================
-PCI Express Basics 101
-======================
-Vineel Kovvuri - http://vineelkovvuri.com
+﻿=================================================
+PCI Express Basics 101 - http://vineelkovvuri.com
+=================================================
 
-Contents
-========
+0. Contents
 
     1 - Introduction
     2 - References
 
 1. Introduction
-===============
 
     PCI Express: It is a standard which comes in multiple generations and multiple
     lane configurations. PCI-E is in its 5th generation, but mostly the current
@@ -52,7 +49,6 @@ Contents
     configurations
 
 2. References
-=============
 
     - How PCI Express Works|https://computer.howstuffworks.com/pci-express.htm
 

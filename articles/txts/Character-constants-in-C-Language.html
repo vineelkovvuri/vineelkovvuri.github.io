@@ -7,23 +7,24 @@
    </head>
     <style>
     pre {
-       width:800px;
+       width:650px;
        margin: 0 auto;
-       text-align: justify;
-       text-justify: inter-word;
-   }
+    }
+    .code {
+        border-left: 2px solid;
+    }
     </style>
 
     <body>
         <pre>
 
-Below example show that we can indeed declare a character constant with more than one character (up to 4 chars max)
+<b>Below example show that we can indeed declare a character constant with more than one character (up to 4 chars max)</b>
 
-int main()
-{
+<b>int main()</b>
+<b>{</b>
     unsigned int tag = 'Riya'; // At the max we can have 4 characters
 
-#if 0
+<b>#if 0</b>
     6.4.4.4 Character constants
         An integer character constant has type int.The value of an integer character constant
         containing a single character that maps to a single - byte execution character is the
@@ -34,15 +35,15 @@ int main()
         a single character or escape sequence, its value is the one that results when an object with
         type char whose value is that of the single character or escape sequence is converted to
         type int.
-#endif
+<b>#endif</b>
 
     printf("\n%x ", tag); // This will print 0x52697961 Riya
     return 0;
-}
+<b>}</b>
 
-In Windows, ExAllocatePoolWithTag accepts a tag as an integer as its parameter.
-The usage of this API by the callers uses the above technique to tag the allocated
-block of memory with something meaningful
+<b>In Windows, ExAllocatePoolWithTag accepts a tag as an integer as its parameter.</b>
+<b>The usage of this API by the callers uses the above technique to tag the allocated</b>
+<b>block of memory with something meaningful</b>
 
 
         </pre>

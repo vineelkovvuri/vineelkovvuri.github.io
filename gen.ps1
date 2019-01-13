@@ -1,10 +1,33 @@
 #powershell -Command .\gen.ps1
 
+
+Function ReplaceInlines
+{
+    param ($Content)
+
+    $Content = $Content -replace '`i(.*?)i`', '<i>$1</i>';
+    $Content = $Content -replace '`b(.*?)b`', '<b>$1</b>';
+    $Content = $Content -replace "(?ms)``c`r`n(.*?)`r`n\s*?c``", "<div class=`"code`">`$1</div>";
+
+    return $Content
+}
+
 Function GetContentTitle
 {
     param ($InFile)
 
     return ([io.fileinfo] $InFile).Basename -Replace "-"," "
+}
+
+Function CanLineBeBold
+{
+    param ($Line)
+    if ($Line.Length -gt 0 -and (-not $Line.StartsWith(" "))) {
+        return "<b>$($Line)</b>"
+    }
+    else {
+        return $Line
+    }
 }
 
 Function Generate-HTML
@@ -21,11 +44,12 @@ $HtmlHeader = "<!DOCTYPE html>
    </head>
     <style>
     pre {
-       width:800px;
+       width:650px;
        margin: 0 auto;
-       text-align: justify;
-       text-justify: inter-word;
-   }
+    }
+    .code {
+        border-left: 2px solid;
+    }
     </style>
 
     <body>
@@ -36,7 +60,9 @@ $HtmlHeader = "<!DOCTYPE html>
     $Lines = $Lines | % {$_ -replace '<(.*?)>', '&lt$1&gt;'}
     # Words which look like beginning of the tag we replace '<word' with '< word'
     $Lines = $Lines | % {$_ -replace '<([a-zA-Z]+?)', '< $1'}
+    $Lines = $Lines | % {CanLineBeBold -Line $_}
     $InFileContent = $Lines -join "`r`n";
+    $InFileContent = ReplaceInlines -Content $InFileContent
     $InFileContent = $InFileContent -replace 'img:{(.*?)}', '<img src="$1"/>'
 
 $HtmlFooter = "

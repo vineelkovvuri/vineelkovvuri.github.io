@@ -1,17 +1,14 @@
-﻿=====================================
-How do breakpoints work in debuggers?
-=====================================
-Vineel Kovvuri - http://vineelkovvuri.com
+﻿================================================================
+How do breakpoints work in debuggers? - http://vineelkovvuri.com
+================================================================
 
-Contents
-========
+0. Contents
 
     1 - Introduction
     2 - Breakpoints Theory
     3 - Breakpoints Practice
 
 1. Introduction
-===============
 
     It's been a while, I have got a chance to blog about low-level stuff. In
     this article, I am going to explain how breakpoints work in debuggers. I am
@@ -20,7 +17,6 @@ Contents
     the interplay between Debugger, Debuggee, Operating System and the CPU.
 
 2. Breakpoints Theory
-=====================
 
     To get there, we have to ask ourselves  What does it mean by debugging a
     program/process?. To keep it simple, It's the controlled execution of a
@@ -76,7 +72,6 @@ Contents
     action!
 
 3. Breakpoints Practice
-=======================
 
     Let's consider the above program and see what happens when we set the
     breakpoint on the main and second printf lines in WinDbg. Once we set the
@@ -91,7 +86,7 @@ Contents
     line before hitting go command. So as expected no change at the push
     mnemonic before call instruction (just windbg kept a note of the
     breakpoints).
-
+    `c
     #include <stdio.h>
     int main ()
     {
@@ -106,7 +101,7 @@ Contents
 
          return 0;
     }
-
+    c`
     img:{3.Breakpoints-in-Debuggers.png}
     Breakpoints in debuggers
 

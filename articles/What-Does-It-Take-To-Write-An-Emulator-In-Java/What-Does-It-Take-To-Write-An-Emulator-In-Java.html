@@ -7,22 +7,21 @@
    </head>
     <style>
     pre {
-       width:800px;
+       width:650px;
        margin: 0 auto;
-       text-align: justify;
-       text-justify: inter-word;
-   }
+    }
+    .code {
+        border-left: 2px solid;
+    }
     </style>
 
     <body>
         <pre>
-===============================================
-What does it take to write an emulator in Java?
-===============================================
-Vineel Kovvuri - http://vineelkovvuri.com
+<b>==========================================================================</b>
+<b>What does it take to write an emulator in Java? - http://vineelkovvuri.com</b>
+<b>==========================================================================</b>
 
-Contents
-========
+<b>0. Contents</b>
 
     1 - Introduction
     2 - What is Chip 8?
@@ -35,8 +34,7 @@ Contents
     9 - Main
     10 - Output
 
-1. Introduction
-===============
+<b>1. Introduction</b>
 
     I am proud, This weekend I did some productive work. I was able to code Chip
     8 emulator in Java over a night. I have always been fascinated by them and
@@ -47,8 +45,7 @@ Contents
     Emulator|https://en.wikipedia.org/wiki/List_of_video_game_emulators),
     general purpose software emulators(QEmu|https://en.wikipedia.org/wiki/QEMU)
 
-2. What is Chip 8?
-==================
+<b>2. What is Chip 8?</b>
 
     It was the software used in some of earlier 8 bit microprocessors. Which
     provided portability across multiple computer models. Think of it as the JVM
@@ -60,8 +57,7 @@ Contents
     thoughts about how to write an emulator in its most basic form. More info of
     chip 8 can be found here|https://en.wikipedia.org/wiki/CHIP-8.
 
-3. How does a CPU work?
-=======================
+<b>3. How does a CPU work?</b>
 
     Lets quickly go back to computer organization 101 class. In its most basic
     form, Every CPU need two inputs.
@@ -86,8 +82,7 @@ Contents
 
     <img src="1.Emulator.png"/>
 
-4. Emulation
-============
+<b>4. Emulation</b>
 
     In general, for any processor to emulate other hardware or software
     components it has to essentially emulate all the above modules and any
@@ -110,16 +105,14 @@ Contents
     5. Keyboard(Chip8Keyboard.java) - This emulates the keyboard input
     6. Main(Main.java) - The main driver program which sets up the system
 
-5. CPU
-======
+<b>5. CPU</b>
 
     The bulk of the decode processing logic is implemented in the run() method
     and each instruction is first fetched using Memory object's getWord()
     method(every opcode in of Chip 8 is of 2 bytes). Then decode the instruction
     and appropriately run the respective executable code. For the majority of
     time, execution mainly results in moving data around.
-
-    //Below Is The Trimmed Version Of Original Source Code Found At
+    <div class="code">    //Below Is The Trimmed Version Of Original Source Code Found At
     //https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8CPU.java
     public class Chip8CPU {
         private int V[] = new int[16]; //8bit each
@@ -163,12 +156,9 @@ Contents
                     break;
             }
         }
-    }
-
-6. Memory
-=========
-
-    //Below Is The Trimmed Version Of Original Source Code Found At
+    }</div>
+<b>6. Memory</b>
+    <div class="code">    //Below Is The Trimmed Version Of Original Source Code Found At
     //https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8Memory.java
     public class Chip8Memory {
         // Chip 8 can address up to 4K bytes
@@ -183,17 +173,14 @@ Contents
         public void loadProgram(Path path) {...}
         // Dump RAM for debug
         public void dumpRAM() {...}
-    }
-
+    }</div>
     The primary operations done by CPU with memory is reads and writes. These
     are implemented as getByte() and setByte() operations inside Memory object.
     These reads and writes are actually backed up by 4k integer array. This is
     the maximum memory addressable by Chip 8 instruction set.
 
-7. Display
-==========
-
-    //Below Is The Trimmed Version Of Original Source Code Found At
+<b>7. Display</b>
+    <div class="code">    //Below Is The Trimmed Version Of Original Source Code Found At
     //https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8Display.java
     public class Chip8Display extends JFrame {
         //Chip8 display size
@@ -201,8 +188,7 @@ Contents
         private JPanel display[][] = new JPanel[displayHeight][displayWidth];
         public boolean setPixel(int x, int y) {...}
         public void clear() {...}
-    }
-
+    }</div>
     The one and only instruction in the Chip 8 instruction set that interact
     with display is Dxyn - DRW Vx, Vy, nibble. When CPU has decoded this
     instruction, it interface with the Display object and calls setPixel()
@@ -218,10 +204,8 @@ Contents
     be set to black for 'off' state and green for 'on' state by setPixel()
     method.
 
-8. Keyboard
-===========
-
-    //Below Is The Trimmed Version Of Original Source Code Found At
+<b>8. Keyboard</b>
+    <div class="code">    //Below Is The Trimmed Version Of Original Source Code Found At
     //https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8Keyboard.java
     //This listener is added to Chip8Display module to capture the events
     public class Chip8Keyboard implements KeyListener {
@@ -230,8 +214,7 @@ Contents
         public boolean isChip8keyPressed(int key) {...}
         public void keyPressed(KeyEvent e) {...}
         public void keyReleased(KeyEvent e) {...}
-    }
-
+    }</div>
     There are few instructions which interfaces with keyboard. This object is
     hooked as the keyboard listener on to the JFrame of Display. This is the
     only way that I know in Java to capture the keyboard events. Chip 8 has 15
@@ -239,10 +222,8 @@ Contents
     array of 16 integers and convert the A-F key events to their corresponding
     10-15 indexes in to the above array.
 
-9. Main
-=======
-
-    public class Main {
+<b>9. Main</b>
+    <div class="code">    public class Main {
         public static void main(String... args) {
             // Init peripherals
             Chip8Keyboard keyboard = new Chip8Keyboard();
@@ -255,14 +236,12 @@ Contents
             // Run CPU
             cpu.run();
         }
-    }
-
+    }</div>
     Finally, this object is responsible for setting up all the modules and
     invoking the CPU run() method. Purposefully I kept this object very simple,
     especially by hard coding the file path to load.
 
-10. Output
-==========
+<b>10. Output</b>
 
     Now in order to test this, we need some chip 8 programs/games, also called
     as ROM files. A simple google search will return good number of ROM files.

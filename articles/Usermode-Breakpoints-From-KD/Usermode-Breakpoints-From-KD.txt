@@ -1,10 +1,9 @@
 ========================================================================
 Setting user mode break points from KD aka .process /i vs .process /r /p
+                        http://vineelkovvuri.com
 ========================================================================
-Vineel Kovvuri - http://vineelkovvuri.com
 
-Contents
-========
+0. Contents
 
     1 - Introduction
     2 - How do break points work in user mode debugging
@@ -13,7 +12,6 @@ Contents
     5 - References
 
 1. Introduction
-===============
 
     When performing KD(Kernel Debugging) in Windows with Windbg if you have to set a
     break point in a user mode process we should always use .process /i address; g;
@@ -32,7 +30,6 @@ Contents
     To explain this we need to quickly understand how break points work.
 
 2. How do break points work in user mode debugging
-==================================================
 
     Below are the steps involved for a break point to work in debugging a user mode process.
 
@@ -48,7 +45,6 @@ Contents
           http://vineelkovvuri.com/2016/09/04/how-does-breakpoints-work-in-debuggers/
 
 3. User mode break points from KD
-=================================
 
     When debugging a user mode process from KD the steps works exactly same as above
     but with a slight twist.
@@ -87,7 +83,6 @@ Contents
           multihasher address;g;
 
 4. Setting breakpoints in system dlls
-=====================================
 
     This .process /i is not required if you are putting breakpoints in system dlls
     like kernelbase, ntdll etc because these dlls are loaded at the same virtual
@@ -104,7 +99,6 @@ Contents
         Break point set in ntdll of explorer gets reflected in ntdll of notepad also
 
 5. References
-=============
 
     - Analyst's Perspective: Analyzing User Mode State from a Kernel Connection|http://www.osronline.com/article.cfm?id=576
     - How Windows Debuggers Work?|https://www.microsoftpressstore.com/articles/article.aspx?p=2201303&seqNum=2

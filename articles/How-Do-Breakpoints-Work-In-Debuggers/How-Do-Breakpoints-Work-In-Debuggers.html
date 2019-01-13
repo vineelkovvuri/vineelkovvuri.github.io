@@ -7,29 +7,27 @@
    </head>
     <style>
     pre {
-       width:800px;
+       width:650px;
        margin: 0 auto;
-       text-align: justify;
-       text-justify: inter-word;
-   }
+    }
+    .code {
+        border-left: 2px solid;
+    }
     </style>
 
     <body>
         <pre>
-=====================================
-How do breakpoints work in debuggers?
-=====================================
-Vineel Kovvuri - http://vineelkovvuri.com
+<b>================================================================</b>
+<b>How do breakpoints work in debuggers? - http://vineelkovvuri.com</b>
+<b>================================================================</b>
 
-Contents
-========
+<b>0. Contents</b>
 
     1 - Introduction
     2 - Breakpoints Theory
     3 - Breakpoints Practice
 
-1. Introduction
-===============
+<b>1. Introduction</b>
 
     It's been a while, I have got a chance to blog about low-level stuff. In
     this article, I am going to explain how breakpoints work in debuggers. I am
@@ -37,8 +35,7 @@ Contents
     to set it in your debugger of choice. The goal of this post is to explain
     the interplay between Debugger, Debuggee, Operating System and the CPU.
 
-2. Breakpoints Theory
-=====================
+<b>2. Breakpoints Theory</b>
 
     To get there, we have to ask ourselves  What does it mean by debugging a
     program/process?. To keep it simple, It's the controlled execution of a
@@ -93,8 +90,7 @@ Contents
     want to examine. Now fasten your seat belts and let's see all of this in
     action!
 
-3. Breakpoints Practice
-=======================
+<b>3. Breakpoints Practice</b>
 
     Let's consider the above program and see what happens when we set the
     breakpoint on the main and second printf lines in WinDbg. Once we set the
@@ -109,8 +105,7 @@ Contents
     line before hitting go command. So as expected no change at the push
     mnemonic before call instruction (just windbg kept a note of the
     breakpoints).
-
-    #include &ltstdio.h&gt;
+    <div class="code">    #include &ltstdio.h&gt;
     int main ()
     {
         // This loop takes some time so that we
@@ -123,8 +118,7 @@ Contents
             printf("Hello World!");
 
          return 0;
-    }
-
+    }</div>
     <img src="3.Breakpoints-in-Debuggers.png"/>
     Breakpoints in debuggers
 

@@ -7,23 +7,21 @@
    </head>
     <style>
     pre {
-       width:800px;
+       width:650px;
        margin: 0 auto;
-       text-align: justify;
-       text-justify: inter-word;
-   }
+    }
+    .code {
+        border-left: 2px solid;
+    }
     </style>
 
     <body>
         <pre>
-=============
-Lib Files 101
-=============
-Vineel Kovvuri - http://vineelkovvuri.com
+<b>========================================</b>
+<b>Lib Files 101 - http://vineelkovvuri.com</b>
+<b>========================================</b>
 
-
-Contents
-========
+<b>0. Contents</b>
 
     1 - Introduction
     2 - Static Library
@@ -31,8 +29,7 @@ Contents
     4 - Static Library with __declspec(dllexport)
     5 - References
 
-1. Introduction
-===============
+<b>1. Introduction</b>
 
     During the compilation one of the crucial step after assembling is
     creating the Object files. The collection of these object files is
@@ -49,28 +46,27 @@ Contents
     Since .lib and .obj files follow Unix COFF format Unix binutil's
     'ar' tool can be used to extract it.
 
-    Lib StaticLib1.lib /list
+    <div class="code">    Lib StaticLib1.lib /list
     Lib StaticLib1.lib /EXTRACT:Debug\sub.obj /out:sub.obj <-- Extracts one file at a time!
     or
     ar -x StaticLib1.lib
     or
-    use 7-Zip to extract it
+    use 7-Zip to extract it</div>
 
     <img src="6.VSProjectDialog.png"/>
     Visual Studio New Project dialog for 'Static Library' and 'Dynamic Linked Library'
 
-2. Static Library
-=================
+<b>2. Static Library</b>
 
     Static Library is created when you want to provide the complete code to
     link into another dll or exe. For example, If a static library
     project contains 4 files add.c,sub.c,mul.c,div.c containing functions
     for their operations like below respectively.
 
-    int add(int a)
+    <div class="code">    int add(int a)
     {
         return a + 1;
-    }
+    }</div>
 
     When you build the project what we get is a .lib file containing obj files
     of each of the above .c file. So a static library contains all
@@ -91,8 +87,7 @@ Contents
     <img src="2.StructureStaticLib.png"/>
     Concluded based on HxD view of the file
 
-3. Dynamic Linked Library
-=========================
+<b>3. Dynamic Linked Library</b>
 
     Dynamic Linked Library(DLL) is in many ways similar to Static Library because
     it also provides the code to be used by other projects like dll or exe,
@@ -105,13 +100,12 @@ Contents
 
     Since .lib does not contain any real .obj unlike static lib, we can
     only see the exported symbols but not their code in case of dll's .lib file.
-
-    __declspec(dllexport) int add(int a)
+    <div class="code">    __declspec(dllexport) int add(int a)
     {
         return a + 1;
     }
 
-    dumpbin /exports Dll1.lib <-- shows all the exported functions
+    dumpbin /exports Dll1.lib <-- shows all the exported functions</div>
 
     <img src="3.Dll.png"/>
     Workflow for Dynamic Linked Library creation and consumption
@@ -123,8 +117,7 @@ Contents
     with __declspec(dllexport) if they have to be visible and consumed
     by others(indirectly).
 
-4. Static Library with __declspec(dllexport)
-============================================
+<b>4. Static Library with __declspec(dllexport)</b>
 
     This is interesting. When a function inside a static library is declared
     with __declspec(dllexport), like any other function, it gets included
@@ -141,8 +134,7 @@ Contents
     to hold multiple .obj files nothing more or nothing less! So we should be
     cautious of how the functions are declared.
 
-5. References
-=============
+<b>5. References</b>
 
     - PE Format|https://docs.microsoft.com/en-us/windows/desktop/debug/pe-format
         </pre>

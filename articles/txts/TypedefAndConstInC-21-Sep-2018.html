@@ -7,78 +7,79 @@
    </head>
     <style>
     pre {
-       width:800px;
+       width:650px;
        margin: 0 auto;
-       text-align: justify;
-       text-justify: inter-word;
-   }
+    }
+    .code {
+        border-left: 2px solid;
+    }
     </style>
 
     <body>
         <pre>
-Today, I was really surprise by the following fact in C.
-In Windows, we have BYTE typedefed to unsigned char, and PBYTE typedefed to
-BYTE*, So I excepted following use of typedefs to work in scenario.
+<b>Today, I was really surprise by the following fact in C.</b>
+<b>In Windows, we have BYTE typedefed to unsigned char, and PBYTE typedefed to</b>
+<b>BYTE*, So I excepted following use of typedefs to work in scenario.</b>
 
-CONST BYTE x = 10;
-CONST BYTE* y = &x; //y is a pointer to constant BYTE x, and *y = 20 fails and y = &a works.
+<b>CONST BYTE x = 10;</b>
+<b>CONST BYTE* y = &x; //y is a pointer to constant BYTE x, and *y = 20 fails and y = &a works.</b>
 
-CONST PBYTE z = &x; // And i assumed(wrong) BYTE* and PBYTE are one and the same I
-when applied with COSNT and felt that CONST BYTE* and CONST PBYTE are also one
-and the same. And this is completely incorrect. Looks like const do not gel well
-with typedef.
+<b>CONST PBYTE z = &x; // And i assumed(wrong) BYTE* and PBYTE are one and the same I</b>
+<b>when applied with COSNT and felt that CONST BYTE* and CONST PBYTE are also one</b>
+<b>and the same. And this is completely incorrect. Looks like const do not gel well</b>
+<b>with typedef.</b>
 
 
-CONST PBYTE z = &x;// wont compile because CONST PBYTE z means  BYTE* CONST z
-not CONST BYTE* z; !!!!!
+<b>CONST PBYTE z = &x;// wont compile because CONST PBYTE z means  BYTE* CONST z</b>
+<b>not CONST BYTE* z; !!!!!</b>
 
---------------------------------------------------------------------------------
-I have come across this when trying to implement MemChr function in NT style.
-I initially declared it as
-PVOID
-MemChr(
+<b>--------------------------------------------------------------------------------</b>
+<b>I have come across this when trying to implement MemChr function in NT style.</b>
+<b>I initially declared it as</b>
+<b>PVOID</b>
+<b>MemChr(</b>
     CONST PVOID Buffer, <----
     INT Char,
     SIZE_T Count)
 
-instead of
+<b>instead of</b>
 
-PVOID
-MemChr(
+<b>PVOID</b>
+<b>MemChr(</b>
     CONST VOID* Buffer, <----
     INT Char,
     SIZE_T Count);
 
-/*++
+<b>/*++</b>
 
-Copyright (c) 1989  Microsoft Corporation
+<b>Copyright (c) 1989  Microsoft Corporation</b>
 
-Module Name:
+<b>Module Name:</b>
 
     ucrt.c
 
-Abstract:
+<b>Abstract:</b>
 
     This module implements UCRT functions
 
-Author:
+<b>Author:</b>
 
     Vineel Kovvuri (vineelko) 29-Aug-2018
 
-Environment:
+<b>Environment:</b>
 
     User mode only.
 
---*/
+<b>--*/</b>
 
-#include &ltWindows.h&gt;
+<b>#include &ltWindows.h&gt;</b>
 
-PVOID
-MemChr(
+<b>PVOID</b>
+<b>MemChr(</b>
     CONST VOID* Buffer,
     INT Char,
     SIZE_T Count)
-{
+<b>{</b>
     CONST BYTE* BufferPtr = (CONST BYTE*)Buffer;
     for (SIZE_T Index = 0; Index < Count; Index++) {
         if (*BufferPtr == (BYTE)Char) {
@@ -87,17 +88,17 @@ MemChr(
         BufferPtr++;
     }
     return NULL;
-}
+<b>}</b>
 
-INT
-main()
-{
+<b>INT</b>
+<b>main()</b>
+<b>{</b>
 
-}
---------------------------------------------------------------------------------
-Another learning in MemChr is, it passes Buffer as pointer to Const data
-using CONST VOID* but expects the function to return a pointer to non const
-data as PVOID!!!!. This violates the const correctness.
+<b>}</b>
+<b>--------------------------------------------------------------------------------</b>
+<b>Another learning in MemChr is, it passes Buffer as pointer to Const data</b>
+<b>using CONST VOID* but expects the function to return a pointer to non const</b>
+<b>data as PVOID!!!!. This violates the const correctness.</b>
 
         </pre>
     </body>
