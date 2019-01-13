@@ -13,6 +13,11 @@
     .code {
         border-left: 2px solid;
     }
+    .center {
+		display: inline-block;
+		margin: 0 auto;
+		max-width: 650px;
+	}
     </style>
 
     <body>
@@ -82,13 +87,13 @@
           the currently executing process which happens to be multihasher.exe not
           fscapture.exe!
 
-        <img src="UsermodeBreakPointFromKD1.png"/>
+        <a href="UsermodeBreakPointFromKD1.png" target="_blank"><img class="center" src="UsermodeBreakPointFromKD1.png"/></a>
         Before break point getting updated
 
-        <img src="UsermodeBreakPointFromKD2.png"/>
+        <a href="UsermodeBreakPointFromKD2.png" target="_blank"><img class="center" src="UsermodeBreakPointFromKD2.png"/></a>
         Setting the break point
 
-        <img src="UsermodeBreakPointFromKD3.png"/>
+        <a href="UsermodeBreakPointFromKD3.png" target="_blank"><img class="center" src="UsermodeBreakPointFromKD3.png"/></a>
         After break point is updated
 
         - This means, "g" command used to resume the target is the culprit(may be it
@@ -111,10 +116,10 @@
     this by setting a break point in ntdll.dll. (Even here just make sure when you
     broke initially you are not in System process as it will not have ntdll!)
 
-        <img src="UsermodeBreakPointFromKD4.png"/>
+        <a href="UsermodeBreakPointFromKD4.png" target="_blank"><img class="center" src="UsermodeBreakPointFromKD4.png"/></a>
         Break point is set only in ntdll of explorer process
 
-        <img src="UsermodeBreakPointFromKD5.png"/>
+        <a href="UsermodeBreakPointFromKD5.png" target="_blank"><img class="center" src="UsermodeBreakPointFromKD5.png"/></a>
         Break point set in ntdll of explorer gets reflected in ntdll of notepad also
 
 <b>5. References</b>

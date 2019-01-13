@@ -13,6 +13,11 @@
     .code {
         border-left: 2px solid;
     }
+    .center {
+		display: inline-block;
+		margin: 0 auto;
+		max-width: 650px;
+	}
     </style>
 
     <body>
@@ -53,7 +58,7 @@
     or
     use 7-Zip to extract it</div>
 
-    <img src="6.VSProjectDialog.png"/>
+    <a href="6.VSProjectDialog.png" target="_blank"><img class="center" src="6.VSProjectDialog.png"/></a>
     Visual Studio New Project dialog for 'Static Library' and 'Dynamic Linked Library'
 
 <b>2. Static Library</b>
@@ -81,10 +86,10 @@
     export anything
     dumpbin /symbols StaticLib.lib  <-- shows all the symbols present
 
-    <img src="1.StaticLib.png"/>
+    <a href="1.StaticLib.png" target="_blank"><img class="center" src="1.StaticLib.png"/></a>
     Workflow for Static Library creation and consumption
 
-    <img src="2.StructureStaticLib.png"/>
+    <a href="2.StructureStaticLib.png" target="_blank"><img class="center" src="2.StructureStaticLib.png"/></a>
     Concluded based on HxD view of the file
 
 <b>3. Dynamic Linked Library</b>
@@ -107,10 +112,10 @@
 
     dumpbin /exports Dll1.lib <-- shows all the exported functions</div>
 
-    <img src="3.Dll.png"/>
+    <a href="3.Dll.png" target="_blank"><img class="center" src="3.Dll.png"/></a>
     Workflow for Dynamic Linked Library creation and consumption
 
-    <img src="4.StructureDll.png"/>
+    <a href="4.StructureDll.png" target="_blank"><img class="center" src="4.StructureDll.png"/></a>
     Concluded based on HxD view of the file
 
     NOTE: The functions inside a Dynamic Linked Library need to be declared
@@ -127,7 +132,7 @@
     because sub2 is actually declared with __declspec(dllexport) in the
     original static library.
 
-    <img src="5.StaticLibWithDeclSpec(DllExport).png"/>
+    <a href="5.StaticLibWithDeclSpec(DllExport).png" target="_blank"><img class="center" src="5.StaticLibWithDeclSpec(DllExport).png"/></a>
     sub2 function got exported from the final consumer binary
 
     The takeaway here is Static Libraries are just a convenient archive format

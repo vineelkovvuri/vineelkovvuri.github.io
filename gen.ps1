@@ -50,6 +50,11 @@ $HtmlHeader = "<!DOCTYPE html>
     .code {
         border-left: 2px solid;
     }
+    .center {
+		display: inline-block;
+		margin: 0 auto;
+		max-width: 650px;
+	}
     </style>
 
     <body>
@@ -63,7 +68,7 @@ $HtmlHeader = "<!DOCTYPE html>
     $Lines = $Lines | % {CanLineBeBold -Line $_}
     $InFileContent = $Lines -join "`r`n";
     $InFileContent = ReplaceInlines -Content $InFileContent
-    $InFileContent = $InFileContent -replace 'img:{(.*?)}', '<img src="$1"/>'
+    $InFileContent = $InFileContent -replace 'img:{(.*?)}', '<a href="$1" target="_blank"><img class="center" src="$1"/></a>'
 
 $HtmlFooter = "
         </pre>
