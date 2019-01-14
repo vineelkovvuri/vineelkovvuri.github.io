@@ -48,7 +48,8 @@ $HtmlHeader = "<!DOCTYPE html>
        margin: 0 auto;
     }
     .code {
-        border-left: 2px solid;
+        border-left: 2px solid #9B9B9B;
+        color:#5A5A5A;
     }
     .center {
 		display: inline-block;
