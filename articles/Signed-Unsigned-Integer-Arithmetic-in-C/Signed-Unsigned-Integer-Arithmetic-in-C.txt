@@ -24,25 +24,25 @@ Signed/Unsigned Integer Arithmetic in C - http://vineelkovvuri.com
 1. Introduction
 
     This article is about understanding how integer conversions happen in C
-    language. C standard defines the integer conversion rules not specific to any
-    architecture. It makes things more complicated for the programmers to try and
-    understand them.
+    language. The C standard defines the integer conversion rules agnostic to
+    any specific machine architecture. This also makes things more complicated
+    for the programmers to understand them.
 
-    Why do we need integer conversions at all? The answer is simple we need to
-    have single type for the expression. Let's say we have an expression
-    `i<expr1><op><expr2>i` when expr1 and expr2 are different types, we want the
-    resulting expression from this to have one type.
+    First of all, Why do we need integer conversions at all? The answer is
+    simple, we need to have single type for the expression. Let's say we have an
+    expression `i<expr1><op><expr2>i` when expr1 and expr2 are of different
+    types, we want the resulting expression from this to have one single type.
 
-    The C99 specification defines below set of integer types called 'standard
-    integer types'. Interestingly, the sizes of these integer types are not defined
-    at all. It only defines the minimum supported size. For example, int need not be
-    8 bytes long on x64 platforms, the only definition for int is it should have at
-    least 16 bits and similarly long should have at least 32 bits it need not be
-    8 bytes long. Depending on the platform and the processor architecture the ABI
-    (Application Binary Interface) and the 64bit programming model will define the
-    size of these basic types. Windows x64 follows LLP64(meaning only 'long long'
-    and pointer size is 64 bit wide), So below are the sizes of the standard types
-    that we are sticking to in this article.
+    The C99 specification defines below set of integer types as 'standard
+    integer types'. Interestingly, the sizes of these integer types are not
+    defined at all. It only defines the minimum supported size. For example, int
+    need not be 8 bytes long on x64 platforms. The only definition for int is,
+    it should have at least 16 bits and similarly long should have at least 32
+    bits, it need not be 8 bytes long. Depending on the platform, processor
+    architecture, ABI (Application Binary Interface) and the programming model,
+    the size of these basic types are determined. Windows x64 follows
+    LLP64(meaning only 'long long' and pointer size are 64 bit wide), So below
+    are the sizes of the standard types that we are sticking to in this article.
 
             =================== ========
             `bType                 Sizeb`
@@ -59,14 +59,14 @@ Signed/Unsigned Integer Arithmetic in C - http://vineelkovvuri.com
             unsigned long long   8 bytes
             =================== ========
 
-    Also, The specification leaves other aspects of C language definition undefined
-    and this made room for optimization for the compilers. For example, the result
-    of signed arithmetic leading to overflow/underflow is not defined because the
-    specification predates to the machine architectures when 2's complement
-    representation for -ve numbers is not universal, Even though virtually every
-    architecture now uses 2's complement representation for -ve numbers. Hence the
-    result of unsigned overflow/underflow is well defined but not signed
-    overflow/underflow!
+    Also, The specification leaves other aspects of C language definition
+    undefined and this made room for optimizations for the compilers. For
+    example, the result of signed arithmetic leading to overflow/underflow is
+    not defined because the specification predates to the machine architectures
+    when 2's complement representation for -ve numbers is not universal, even
+    though virtually every modern architecture now uses 2's complement
+    representation for -ve numbers. Hence the result of unsigned
+    overflow/underflow is well defined but not signed overflow/underflow!
 
 2. How signed-ness is represented in the hardware?
 
