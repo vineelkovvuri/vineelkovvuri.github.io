@@ -6,12 +6,18 @@
        <title>How Do Breakpoints Work In Debuggers</title>
    </head>
     <style>
+
+    a.link {
+        border-bottom: 1px dashed #a30000;
+        color: #a30000;
+        text-decoration: none;
+    }
     pre {
        width:650px;
        margin: 0 auto;
     }
     .code {
-        color:white;
+        color:limegreen;
         border-radius:5px;
         background-color:#2d3238;
         padding:5px;
@@ -26,7 +32,7 @@
     <body>
         <pre>
 <b>================================================================</b>
-<b>How do breakpoints work in debuggers? - http://vineelkovvuri.com</b>
+<b>How do breakpoints work in debuggers? - <a target='_blank' class='link' href='http://vineelkovvuri.com'>http://vineelkovvuri.com</a></b>
 <b>================================================================</b>
 
 <b>0. Contents</b>
@@ -148,7 +154,7 @@
     it, for example, when the program is running and we want to forcefully break
     in by hitting toolbar break button or ctrl+break etc then debuggers in
     Windows uses
-    CreateRemoteThread|https://msdn.microsoft.com/en-us/library/windows/desktop/ms682437(v=vs.85).aspx
+    CreateRemoteThread|<a target='_blank' class='link' href='https://msdn.microsoft.com/en-us/library/windows/desktop/ms682437(v=vs.85).aspx'>https://msdn.microsoft.com/en-us/library/windows/desktop/ms682437(v=vs.85).aspx</a>
     Win32 API to create a new remote thread in the debuggee and calls the
     ntdll!DbgBreakPoint.
 

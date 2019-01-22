@@ -8,6 +8,7 @@ Function ReplaceInlines
     $Content = $Content -replace '`i(.*?)i`', '<i>$1</i>';
     $Content = $Content -replace '`b(.*?)b`', '<b>$1</b>';
     $Content = $Content -replace "(?ms)``c`r`n(.*?)`r`n\s*?c``", "<div class=`"code`">`$1</div>";
+    $Content = $Content -replace "(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|`$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|`$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|`$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])", "<a target='_blank' class='link' href='`$0'>`$0</a>" ;
 
     return $Content
 }
@@ -43,12 +44,18 @@ $HtmlHeader = "<!DOCTYPE html>
        <title>$(GetContentTitle -InFile $InFile)</title>
    </head>
     <style>
+
+    a.link {
+        border-bottom: 1px dashed #a30000;
+        color: #a30000;
+        text-decoration: none;
+    }
     pre {
        width:650px;
        margin: 0 auto;
     }
     .code {
-        color:white;
+        color:limegreen;
         border-radius:5px;
         background-color:#2d3238;
         padding:5px;
