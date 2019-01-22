@@ -41,6 +41,13 @@ $HtmlHeader = "<!DOCTYPE html>
        <meta charset=`"utf-8`">
        <link rel=`"shortcut icon`" type=`"image/x-icon`" href=`"../../images/favicon.ico`">
        <title>$(GetContentTitle -InFile $InFile)</title>
+        <script src=`"https://utteranc.es/client.js`"
+            repo=`"vineelkovvuri.github.io`"
+            issue-term=`"pathname`"
+            theme=`"github-light`"
+            crossorigin=`"anonymous`"
+            async>
+        </script>
    </head>
     <style>
     pre {
@@ -73,6 +80,9 @@ $HtmlHeader = "<!DOCTYPE html>
 
 $HtmlFooter = "
         </pre>
+        <div class=`"utterances`">
+
+        </div>
     </body>
 </html>";
 
