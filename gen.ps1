@@ -59,7 +59,7 @@ $HtmlHeader = "<!DOCTYPE html>
         border-radius:5px;
         background-color:#2d3238;
         padding:5px;
-        white-space: pre-wrap;
+        overflow: auto; /* enables horizontal scroll bars to code blocks */
     }
     .center {
 		display: inline-block;
