@@ -53,6 +53,7 @@ $HtmlHeader = "<!DOCTYPE html>
     pre {
        width:650px;
        margin: 0 auto;
+       font-size:11.726px; /* using https://bugs.chromium.org/p/chromium/issues font size */
     }
     .code {
         color:limegreen;
