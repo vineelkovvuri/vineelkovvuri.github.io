@@ -1,5 +1,5 @@
 ========================================================================
-Setting user mode break points from KD aka .process /i vs .process /r /p
+SETTING USER MODE BREAK POINTS FROM KD AKA .PROCESS /I VS .PROCESS /R /P
                         http://vineelkovvuri.com
 ========================================================================
 

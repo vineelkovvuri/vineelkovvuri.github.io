@@ -1,5 +1,5 @@
 ﻿======================================================================
-A newbie's introduction to Compilation Process and Reverse Engineering
+A NEWBIE'S INTRODUCTION TO COMPILATION PROCESS AND REVERSE ENGINEERING
                     http://vineelkovvuri.com
 ======================================================================
 

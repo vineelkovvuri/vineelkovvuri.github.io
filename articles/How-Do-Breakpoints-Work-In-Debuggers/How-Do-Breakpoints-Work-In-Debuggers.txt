@@ -1,5 +1,5 @@
 ﻿================================================================
-How do breakpoints work in debuggers? - http://vineelkovvuri.com
+HOW DO BREAKPOINTS WORK IN DEBUGGERS? - http://vineelkovvuri.com
 ================================================================
 
 0. Contents

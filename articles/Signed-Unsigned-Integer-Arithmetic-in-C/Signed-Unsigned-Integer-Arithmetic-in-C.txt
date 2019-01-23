@@ -1,5 +1,5 @@
 ﻿==================================================================
-Signed/Unsigned Integer Arithmetic in C - http://vineelkovvuri.com
+SIGNED/UNSIGNED INTEGER ARITHMETIC IN C - http://vineelkovvuri.com
 ==================================================================
 
 0. Contents
