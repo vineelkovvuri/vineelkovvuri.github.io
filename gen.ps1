@@ -8,7 +8,7 @@ Function ReplaceInlines
     $Content = $Content -replace '`i(.*?)i`', '<i>$1</i>';
     $Content = $Content -replace '`b(.*?)b`', '<b>$1</b>';
     $Content = $Content -replace "(?ms)``c`r`n(.*?)`r`n\s*?c``", "<div class=`"code`">`$1</div>";
-    $Content = $Content -replace "(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|`$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|`$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|`$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])", "<a target='_blank' class='link' href='`$0'>`$0</a>" ;
+    $Content = $Content -replace "(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|`$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|`$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|`$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])", "<a class='link' href='`$0'>`$0</a>" ;
 
     return $Content
 }

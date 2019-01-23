@@ -35,7 +35,7 @@
         <pre>
 <b>======================================================================</b>
 <b>A newbie's introduction to Compilation Process and Reverse Engineering</b>
-                    <a target='_blank' class='link' href='http://vineelkovvuri.com'>http://vineelkovvuri.com</a>
+                    <a class='link' href='http://vineelkovvuri.com'>http://vineelkovvuri.com</a>
 <b>======================================================================</b>
 
 <b>0. Contents</b>
@@ -67,14 +67,14 @@
     to the speed.
 
     GNU compiler
-    collection|<a target='_blank' class='link' href='https://en.wikipedia.org/wiki/GNU_Compiler_Collection'>https://en.wikipedia.org/wiki/GNU_Compiler_Collection</a> provides an
+    collection|<a class='link' href='https://en.wikipedia.org/wiki/GNU_Compiler_Collection'>https://en.wikipedia.org/wiki/GNU_Compiler_Collection</a> provides an
     excellent set of tools for dissecting the compilation process and to
     understand the working of bits and bytes in the final executable. For this
     tutorial I am using the following tools and considers C language to
     illustrate the examples.
 
-        - Dev-Cpp|<a target='_blank' class='link' href='http://orwelldevcpp.blogspot.com/'>http://orwelldevcpp.blogspot.com/</a> is a IDE with GNU C compiler collection(Mingw) as backend
-        - OllyDbg|<a target='_blank' class='link' href='http://www.ollydbg.de/'>http://www.ollydbg.de/</a> An excellent debugger/reverse engineering tool
+        - Dev-Cpp|<a class='link' href='http://orwelldevcpp.blogspot.com/'>http://orwelldevcpp.blogspot.com/</a> is a IDE with GNU C compiler collection(Mingw) as backend
+        - OllyDbg|<a class='link' href='http://www.ollydbg.de/'>http://www.ollydbg.de/</a> An excellent debugger/reverse engineering tool
 
     Many people don't know that the powerful programmer tools that are available
     for Linux environment are also available for Windows(thanks to
@@ -189,7 +189,7 @@
     Once the syntax analyzer has constructed the parse tree for a program the
     semantic analyzer will try to check the meaning of the program. The most
     important feature of semantic analyzer is Type
-    Checking|<a target='_blank' class='link' href='https://en.wikipedia.org/wiki/Type_system'>https://en.wikipedia.org/wiki/Type_system</a>. For example, consider
+    Checking|<a class='link' href='https://en.wikipedia.org/wiki/Type_system'>https://en.wikipedia.org/wiki/Type_system</a>. For example, consider
     the following statement.
     <div class="code">    floatX2 = floatX1 + 10;</div>
     In the above statement the semantic analyzer converts the integer value 10
@@ -219,7 +219,7 @@
 
     By default, GCC uses AT\&T assembly language syntax but as we are working in
     Windows we feel homely if GCC can generate
-    MASM|<a target='_blank' class='link' href='https://en.wikipedia.org/wiki/Microsoft_Macro_Assembler'>https://en.wikipedia.org/wiki/Microsoft_Macro_Assembler</a> like assembly
+    MASM|<a class='link' href='https://en.wikipedia.org/wiki/Microsoft_Macro_Assembler'>https://en.wikipedia.org/wiki/Microsoft_Macro_Assembler</a> like assembly
     syntax. This is exactly what -masm=intel (Machines Assembly) option do. The
     above command automatically generates a file named test.s. This is a text
     file and can be viewed in text editor.
@@ -291,7 +291,7 @@
     generate the final executable for both speed/code efficiency. To get a
     better explanation of compiler optimizations and various factors upon which
     it depends please refer Compiler
-    Optimizations|<a target='_blank' class='link' href='https://en.wikipedia.org/wiki/Optimizing_compiler'>https://en.wikipedia.org/wiki/Optimizing_compiler</a>.
+    Optimizations|<a class='link' href='https://en.wikipedia.org/wiki/Optimizing_compiler'>https://en.wikipedia.org/wiki/Optimizing_compiler</a>.
     Optimization of your code can be broadly based on two factors one is size of
     the final exe and other is speed of the generated code. This can be
     controlled using -O flag of the compiler.
@@ -594,13 +594,13 @@
 
 <b>11. References</b>
 
-    - GNU Binutils - <a target='_blank' class='link' href='https://sourceware.org/binutils/docs-2.26/binutils/index.html'>https://sourceware.org/binutils/docs-2.26/binutils/index.html</a>
-    - GCC Options - <a target='_blank' class='link' href='https://gcc.gnu.org/onlinedocs/gcc/Overall-Options.html'>https://gcc.gnu.org/onlinedocs/gcc/Overall-Options.html</a>
-    - PE File Format - <a target='_blank' class='link' href='https://msdn.microsoft.com/en-us/library/ms809762.aspx'>https://msdn.microsoft.com/en-us/library/ms809762.aspx</a>
-    - Code to browse PE File - <a target='_blank' class='link' href='https://github.com/vineelkovvuri/ExeFileDumper/blob/master/ExeDumper.c'>https://github.com/vineelkovvuri/ExeFileDumper/blob/master/ExeDumper.c</a>
-    - Linkers and Loaders by John R Levine - <a target='_blank' class='link' href='http://amzn.com/1558604960'>http://amzn.com/1558604960</a>
-    - Engineering A Compiler by Keith Cooper, Linda Torczon - <a target='_blank' class='link' href='http://amzn.com/012088478X'>http://amzn.com/012088478X</a>
-    - Awesome Reverse Engineering Playground/Community - <a target='_blank' class='link' href='http://crackmes.de'>http://crackmes.de</a>
+    - GNU Binutils - <a class='link' href='https://sourceware.org/binutils/docs-2.26/binutils/index.html'>https://sourceware.org/binutils/docs-2.26/binutils/index.html</a>
+    - GCC Options - <a class='link' href='https://gcc.gnu.org/onlinedocs/gcc/Overall-Options.html'>https://gcc.gnu.org/onlinedocs/gcc/Overall-Options.html</a>
+    - PE File Format - <a class='link' href='https://msdn.microsoft.com/en-us/library/ms809762.aspx'>https://msdn.microsoft.com/en-us/library/ms809762.aspx</a>
+    - Code to browse PE File - <a class='link' href='https://github.com/vineelkovvuri/ExeFileDumper/blob/master/ExeDumper.c'>https://github.com/vineelkovvuri/ExeFileDumper/blob/master/ExeDumper.c</a>
+    - Linkers and Loaders by John R Levine - <a class='link' href='http://amzn.com/1558604960'>http://amzn.com/1558604960</a>
+    - Engineering A Compiler by Keith Cooper, Linda Torczon - <a class='link' href='http://amzn.com/012088478X'>http://amzn.com/012088478X</a>
+    - Awesome Reverse Engineering Playground/Community - <a class='link' href='http://crackmes.de'>http://crackmes.de</a>
 
         </pre>
         <div>

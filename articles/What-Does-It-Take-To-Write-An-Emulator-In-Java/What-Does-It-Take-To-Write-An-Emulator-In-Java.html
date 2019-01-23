@@ -34,7 +34,7 @@
     <body>
         <pre>
 <b>==========================================================================</b>
-<b>What does it take to write an emulator in Java? - <a target='_blank' class='link' href='http://vineelkovvuri.com'>http://vineelkovvuri.com</a></b>
+<b>What does it take to write an emulator in Java? - <a class='link' href='http://vineelkovvuri.com'>http://vineelkovvuri.com</a></b>
 <b>==========================================================================</b>
 
 <b>0. Contents</b>
@@ -57,9 +57,9 @@
     finally I was able to get the damn thing to work! For those of you who are
     not familiar with software emulator, It is a software which can emulate the
     functionality of other hardware or software components. Notable examples are
-    video game emulators(Dosbox|<a target='_blank' class='link' href='https://en.wikipedia.org/wiki/DOSBox'>https://en.wikipedia.org/wiki/DOSBox</a> ,NES
-    Emulator|<a target='_blank' class='link' href='https://en.wikipedia.org/wiki/List_of_video_game_emulators'>https://en.wikipedia.org/wiki/List_of_video_game_emulators</a>),
-    general purpose software emulators(QEmu|<a target='_blank' class='link' href='https://en.wikipedia.org/wiki/QEMU'>https://en.wikipedia.org/wiki/QEMU</a>)
+    video game emulators(Dosbox|<a class='link' href='https://en.wikipedia.org/wiki/DOSBox'>https://en.wikipedia.org/wiki/DOSBox</a> ,NES
+    Emulator|<a class='link' href='https://en.wikipedia.org/wiki/List_of_video_game_emulators'>https://en.wikipedia.org/wiki/List_of_video_game_emulators</a>),
+    general purpose software emulators(QEmu|<a class='link' href='https://en.wikipedia.org/wiki/QEMU'>https://en.wikipedia.org/wiki/QEMU</a>)
 
 <b>2. What is Chip 8?</b>
 
@@ -71,7 +71,7 @@
     was trying to write an emulator for this instruction set. Fortunately, I
     tried and succeeded in do it. In this article I would like to share my
     thoughts about how to write an emulator in its most basic form. More info of
-    chip 8 can be found here|<a target='_blank' class='link' href='https://en.wikipedia.org/wiki/CHIP-8'>https://en.wikipedia.org/wiki/CHIP-8</a>.
+    chip 8 can be found here|<a class='link' href='https://en.wikipedia.org/wiki/CHIP-8'>https://en.wikipedia.org/wiki/CHIP-8</a>.
 
 <b>3. How does a CPU work?</b>
 
@@ -104,7 +104,7 @@
     components it has to essentially emulate all the above modules and any
     associated peripherals. First, we need to get familiar with the Chip 8
     Technical Reference found
-    here|<a target='_blank' class='link' href='http://devernay.free.fr/hacks/chip8/C8TECH10.HTM'>http://devernay.free.fr/hacks/chip8/C8TECH10.HTM</a>. This reference covers
+    here|<a class='link' href='http://devernay.free.fr/hacks/chip8/C8TECH10.HTM'>http://devernay.free.fr/hacks/chip8/C8TECH10.HTM</a>. This reference covers
     pretty much every thing we need. Enough theory, Now lets get to the meat of
     the show, THE CODE.
 
@@ -129,7 +129,7 @@
     and appropriately run the respective executable code. For the majority of
     time, execution mainly results in moving data around.
     <div class="code">    //Below Is The Trimmed Version Of Original Source Code Found At
-    //<a target='_blank' class='link' href='https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8CPU.java'>https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8CPU.java</a>
+    //<a class='link' href='https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8CPU.java'>https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8CPU.java</a>
     public class Chip8CPU {
         private int V[] = new int[16]; //8bit each
         private int I;  //16bit
@@ -175,7 +175,7 @@
     }</div>
 <b>6. Memory</b>
     <div class="code">    //Below Is The Trimmed Version Of Original Source Code Found At
-    //<a target='_blank' class='link' href='https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8Memory.java'>https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8Memory.java</a>
+    //<a class='link' href='https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8Memory.java'>https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8Memory.java</a>
     public class Chip8Memory {
         // Chip 8 can address up to 4K bytes
         private int ram[] = new int[0x1000];
@@ -197,7 +197,7 @@
 
 <b>7. Display</b>
     <div class="code">    //Below Is The Trimmed Version Of Original Source Code Found At
-    //<a target='_blank' class='link' href='https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8Display.java'>https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8Display.java</a>
+    //<a class='link' href='https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8Display.java'>https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8Display.java</a>
     public class Chip8Display extends JFrame {
         //Chip8 display size
         private final int displayWidth = 64, displayHeight = 32;
@@ -222,7 +222,7 @@
 
 <b>8. Keyboard</b>
     <div class="code">    //Below Is The Trimmed Version Of Original Source Code Found At
-    //<a target='_blank' class='link' href='https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8Keyboard.java'>https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8Keyboard.java</a>
+    //<a class='link' href='https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8Keyboard.java'>https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8Keyboard.java</a>
     //This listener is added to Chip8Display module to capture the events
     public class Chip8Keyboard implements KeyListener {
         // This keeps the state of the chip 8 keyboard's 15 keys
@@ -275,7 +275,7 @@
     beside other game files. I know we cannot play with them. IBM ROM for my
     wife ;)
     <a href="6.Emulator.png" target="_blank"><img class="center" src="6.Emulator.png"/></a>
-    I recommened you to read the source code <a target='_blank' class='link' href='https://github.com/vineelkovvuri/Chip8Emulator'>https://github.com/vineelkovvuri/Chip8Emulator</a>.
+    I recommened you to read the source code <a class='link' href='https://github.com/vineelkovvuri/Chip8Emulator'>https://github.com/vineelkovvuri/Chip8Emulator</a>.
 
         </pre>
         <div>
