@@ -56,7 +56,7 @@ $HtmlHeader = "<!DOCTYPE html>
        font-size:12px; /* 13px will make it bold */
     }
     .code {
-        color:limegreen;
+        color:white;
         border-radius:5px;
         background-color:#2d3238;
         padding:5px;
