@@ -6,6 +6,15 @@
        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
        <title>Vineel Kovvuri</title>
    </head>
+    <script>
+       var likes = ["Programming Languages", "Operating Systems", "Debuggers", "Compilers", "Electronics", "FPGA", "Virtual Machines", "Microprocessors"];
+       var i = 0;
+       setInterval(function () {
+          var like = document.getElementById("like");
+          like.innerText = likes[i%likes.length];
+          i++;
+       }, 250);
+    </script>
     <style>
     pre {
        width:650px;
@@ -15,26 +24,33 @@
     a {
         text-decoration: none;
     }
+    #like {
+        display: inline-block;
+        position: relative;
+        width: 220px;
+        white-space: nowrap;
+        text-align: center;
+    }
     </style>
    <body>
        <pre>
-<b>Hi, Vineel here, I ❤️ Operating Systems <a href="https://github.com/vineelkovvuri/""><i class="fab fa-github" style="color: #4788f2;"></i></a></b>
+<b>I ❤️ </b><i><span id="like">Operating Systems</span></i> &nbsp;<a href="https://github.com/vineelkovvuri/""><i class="fab fa-github" style="color: #4788f2;"></i></a>
 
-1. <a href="articles/What-Does-It-Take-To-Write-An-Emulator-In-Java/What-Does-It-Take-To-Write-An-Emulator-In-Java.html">What Does It Take To Write An Emulator In Java</a>
+<b>&gt;</b> <a href="articles/What-Does-It-Take-To-Write-An-Emulator-In-Java/What-Does-It-Take-To-Write-An-Emulator-In-Java.html">What does it take to write an emulator in Java</a>
 
-2. <a href="articles/A-Newbies-Introduction-To-Compilation-Process-And-Reverse-Engineering/A-Newbies-Introduction-To-Compilation-Process-And-Reverse-Engineering.html">A Newbies Introduction To Compilation Process And Reverse Engineering</a>
+<b>&gt;</b> <a href="articles/A-Newbies-Introduction-To-Compilation-Process-And-Reverse-Engineering/A-Newbies-Introduction-To-Compilation-Process-And-Reverse-Engineering.html">A newbies introduction to compilation process and reverse engineering</a>
 
-3. <a href="articles/How-Do-Breakpoints-Work-In-Debuggers/How-Do-Breakpoints-Work-In-Debuggers.html">How Do Breakpoints Work In Debuggers</a>
+<b>&gt;</b> <a href="articles/How-Do-Breakpoints-Work-In-Debuggers/How-Do-Breakpoints-Work-In-Debuggers.html">How do breakpoints work in debuggers</a>
 
-4. <a href="articles/Usermode-Breakpoints-From-KD/Usermode-Breakpoints-From-KD.html">Setting user mode breakpoints from KD aka .process /i vs .process /r /p</a>
+<b>&gt;</b> <a href="articles/Usermode-Breakpoints-From-KD/Usermode-Breakpoints-From-KD.html">Setting user mode breakpoints from KD aka .process /i vs .process /r /p</a>
 
-5. <a href="articles/PDB-Files-The-glue-between-the-binary-file-and-source-code/PDB-Files-The-glue-between-the-binary-file-and-source-code.html">PDB Files: The glue between the binary file and source code</a>
+<b>&gt;</b> <a href="articles/PDB-Files-The-glue-between-the-binary-file-and-source-code/PDB-Files-The-glue-between-the-binary-file-and-source-code.html">PDB files: The glue between the binary file and source code</a>
 
-6. <a href="articles/PCI-Express-Basics-101/PCI-Express-Basics-101.html">PCI Express Basics 101</a>
+<b>&gt;</b> <a href="articles/PCI-Express-Basics-101/PCI-Express-Basics-101.html">PCI Express basics 101</a>
 
-7. <a href="articles/Lib-Files-101/Lib-Files-101.html">Lib Files 101</a>
+<b>&gt;</b> <a href="articles/Lib-Files-101/Lib-Files-101.html">Lib files 101</a>
 
-8. <a href="articles/Signed-Unsigned-Integer-Arithmetic-in-C/Signed-Unsigned-Integer-Arithmetic-in-C.html">Signed/Unsigned Integer Arithmetic in C</a>
+<b>&gt;</b> <a href="articles/Signed-Unsigned-Integer-Arithmetic-in-C/Signed-Unsigned-Integer-Arithmetic-in-C.html">Signed/Unsigned integer arithmetic in C</a>
        </pre>
    </body>
 </html>
