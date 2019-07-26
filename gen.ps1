@@ -20,7 +20,7 @@ Function GetContentTitle
     return ([io.fileinfo] $InFile).Basename -Replace "-"," "
 }
 
-Function CanLineBeBold
+Function BoldSubHeadings
 {
     param ($Line)
     if ($Line.Length -gt 0 -and (-not $Line.StartsWith(" "))) {
@@ -77,7 +77,7 @@ $HtmlHeader = "<!DOCTYPE html>
     $Lines = $Lines | % {$_ -replace '<(.*?)>', '&lt$1&gt;'}
     # Words which look like beginning of the tag we replace '<word' with '< word'
     $Lines = $Lines | % {$_ -replace '<([a-zA-Z]+?)', '< $1'}
-    $Lines = $Lines | % {CanLineBeBold -Line $_}
+    $Lines = $Lines | % {BoldSubHeadings -Line $_}
     $InFileContent = $Lines -join "`r`n";
     $InFileContent = ReplaceInlines -Content $InFileContent
     $InFileContent = $InFileContent -replace 'img:{(.*?)}', '<a href="$1" target="_blank"><img class="center" src="$1"/></a>'
