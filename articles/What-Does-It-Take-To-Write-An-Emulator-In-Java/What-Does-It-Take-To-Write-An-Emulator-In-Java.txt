@@ -93,7 +93,7 @@ WHAT DOES IT TAKE TO WRITE AN EMULATOR IN JAVA? - http://vineelkovvuri.com
     method(every opcode in of Chip 8 is of 2 bytes). Then decode the instruction
     and appropriately run the respective executable code. For the majority of
     time, execution mainly results in moving data around.
-    `c
+
     //Below Is The Trimmed Version Of Original Source Code Found At
     //https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8CPU.java
     public class Chip8CPU {
@@ -139,9 +139,9 @@ WHAT DOES IT TAKE TO WRITE AN EMULATOR IN JAVA? - http://vineelkovvuri.com
             }
         }
     }
-    c`
+
 6. Memory
-    `c
+
     //Below Is The Trimmed Version Of Original Source Code Found At
     //https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8Memory.java
     public class Chip8Memory {
@@ -158,14 +158,14 @@ WHAT DOES IT TAKE TO WRITE AN EMULATOR IN JAVA? - http://vineelkovvuri.com
         // Dump RAM for debug
         public void dumpRAM() {...}
     }
-    c`
+
     The primary operations done by CPU with memory is reads and writes. These
     are implemented as getByte() and setByte() operations inside Memory object.
     These reads and writes are actually backed up by 4k integer array. This is
     the maximum memory addressable by Chip 8 instruction set.
 
 7. Display
-    `c
+
     //Below Is The Trimmed Version Of Original Source Code Found At
     //https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8Display.java
     public class Chip8Display extends JFrame {
@@ -175,7 +175,7 @@ WHAT DOES IT TAKE TO WRITE AN EMULATOR IN JAVA? - http://vineelkovvuri.com
         public boolean setPixel(int x, int y) {...}
         public void clear() {...}
     }
-    c`
+
     The one and only instruction in the Chip 8 instruction set that interact
     with display is Dxyn - DRW Vx, Vy, nibble. When CPU has decoded this
     instruction, it interface with the Display object and calls setPixel()
@@ -192,7 +192,7 @@ WHAT DOES IT TAKE TO WRITE AN EMULATOR IN JAVA? - http://vineelkovvuri.com
     method.
 
 8. Keyboard
-    `c
+
     //Below Is The Trimmed Version Of Original Source Code Found At
     //https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8Keyboard.java
     //This listener is added to Chip8Display module to capture the events
@@ -203,7 +203,7 @@ WHAT DOES IT TAKE TO WRITE AN EMULATOR IN JAVA? - http://vineelkovvuri.com
         public void keyPressed(KeyEvent e) {...}
         public void keyReleased(KeyEvent e) {...}
     }
-    c`
+
     There are few instructions which interfaces with keyboard. This object is
     hooked as the keyboard listener on to the JFrame of Display. This is the
     only way that I know in Java to capture the keyboard events. Chip 8 has 15
@@ -212,7 +212,7 @@ WHAT DOES IT TAKE TO WRITE AN EMULATOR IN JAVA? - http://vineelkovvuri.com
     10-15 indexes in to the above array.
 
 9. Main
-    `c
+
     public class Main {
         public static void main(String... args) {
             // Init peripherals
@@ -227,7 +227,7 @@ WHAT DOES IT TAKE TO WRITE AN EMULATOR IN JAVA? - http://vineelkovvuri.com
             cpu.run();
         }
     }
-    c`
+
     Finally, this object is responsible for setting up all the modules and
     invoking the CPU run() method. Purposefully I kept this object very simple,
     especially by hard coding the file path to load.

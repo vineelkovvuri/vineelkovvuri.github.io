@@ -26,4 +26,3 @@ In Windows, ExAllocatePoolWithTag accepts a tag as an integer as its parameter.
 The usage of this API by the callers uses the above technique to tag the allocated
 block of memory with something meaningful
 
-

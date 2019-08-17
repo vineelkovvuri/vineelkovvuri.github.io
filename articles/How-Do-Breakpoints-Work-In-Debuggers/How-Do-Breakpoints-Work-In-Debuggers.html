@@ -27,7 +27,7 @@
     .center {
 		display: inline-block;
 		margin: 0 auto;
-		max-width: 650px;
+		max-width: 620px;
 	}
     </style>
 
@@ -121,7 +121,8 @@
     line before hitting go command. So as expected no change at the push
     mnemonic before call instruction (just windbg kept a note of the
     breakpoints).
-    <div class="code">    #include &ltstdio.h&gt;
+
+    #include &ltstdio.h&gt;
     int main ()
     {
         // This loop takes some time so that we
@@ -134,7 +135,8 @@
             printf("Hello World!");
 
          return 0;
-    }</div>
+    }
+
     <a href="3.Breakpoints-in-Debuggers.png" target="_blank"><img class="center" src="3.Breakpoints-in-Debuggers.png"/></a>
     Breakpoints in debuggers
 

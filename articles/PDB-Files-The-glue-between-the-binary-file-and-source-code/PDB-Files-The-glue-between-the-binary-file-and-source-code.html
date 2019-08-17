@@ -27,7 +27,7 @@
     .center {
 		display: inline-block;
 		margin: 0 auto;
-		max-width: 650px;
+		max-width: 620px;
 	}
     </style>
 
@@ -45,7 +45,6 @@
     3 - How do Windbg identify the correct source file?
     4 - Windbg Symbols and Sources search heuristics
     5 - References
-
 
 <b>1. Introduction</b>
 
@@ -97,7 +96,8 @@
 
     We can get this information either through dumpbin /headers module.exe or using
     !lmi module as shown below respectively
-    <div class="code">    ...
+
+    ...
      Debug Directories
 
             Time Type        Size      RVA  Pointer
@@ -120,11 +120,13 @@
                    Age: 1, Pdb: C:\Programs\Sample.pdb
                VC_FEATURE    14, 1a908,    9508 [Data not mapped]
         Symbol Type: DEFERRED - No error - symbol load deferred
-        Load Report: no symbols loaded</div>
+        Load Report: no symbols loaded
+
     If the GUID in pdb does not match with embedded GUID in binary it does not load
     the PDB file and throws following error *** ERROR: Module load completed but
     symbols could not be loaded for Win32Sample.exe.
-    <div class="code">    0:000> .sympath E:\temp\Testing\x64\Release\ <-- Incorrect pdb
+
+    0:000> .sympath E:\temp\Testing\x64\Release\ <-- Incorrect pdb
     Symbol search path is: E:\temp\Testing\x64\Release\
     Expanded Symbol search path is: e:\temp\testing\x64\release\
 
@@ -132,7 +134,8 @@
     Response                         Time (ms)     Location
     OK                                             E:\temp\Testing\x64\Release\
     *** WARNING: Unable to verify checksum for Win32Sample.exe
-    *** ERROR: Module load completed but symbols could not be loaded for Win32Sample.exe</div>
+    *** ERROR: Module load completed but symbols could not be loaded for Win32Sample.exe
+
 <b>3. How do Windbg identify the correct source file?</b>
 
     PDB files contain not only information about symbols like functions/structures/classes
@@ -146,7 +149,8 @@
     named as Dia2Dump at C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\DIA
     SDK\Samples\DIA2Dump. When you build this project in Visual Studio we get
     Dia2Dump.exe, Using this we can solve the second puzzle.
-    <div class="code">    usage: Dia2Dump.exe [ options ] &ltfilename&gt;
+
+    usage: Dia2Dump.exe [ options ] &ltfilename&gt;
       -?                : print this help
       -all              : print all the debug info
       -m                : print all the mods
@@ -175,11 +179,13 @@
       -psr &ltRVA&gt; [-n &ltnumber&gt;]      : dump symbols before this address, default 16
       -annotations &ltRVA&gt;: dump annotation symbol for this RVA
       -maptosrc &ltRVA&gt;   : dump src RVA for this image RVA
-      -mapfromsrc &ltRVA&gt; : dump image RVA for src RVA</div>
+      -mapfromsrc &ltRVA&gt; : dump image RVA for src RVA
+
     The most important of all these flags is -sf which will dump out all the source
     files used to create an obj(object file). A sample output form this command
     Dia2Dump.exe -sf &ltpath of pdb file&gt; with a PDB will be as shown below
-    <div class="code">    ....
+
+    ....
     Compiland = C:\..&ltsnipped&gt;..\Win32Sample\x64\Release\Win32Sample.obj
 
             c:\..&ltsnipped&gt;..\10.0.15063.0\shared\basetsd.h (MD5: 464E631AE358F42C09701CE07F35F8BF)
@@ -200,7 +206,8 @@
             c:\..&ltsnipped&gt;..\win32sample\stdafx.h (MD5: AA9C091299F07AD95BB49E6EE4BFF136)
             c:\..&ltsnipped&gt;..\win32sample\win32sample.cpp (MD5: BBB7EE64784A7C2A96B1439310EEF84A)  <---
             c:\..&ltsnipped&gt;..\win32sample\x64\release\win32sample.pch
-    ....</div>
+    ....
+
     The above information clearly suggests that PDB also contains hash of all the
     files needed to create a obj. This hash could be MD5 or SHA256(which is often
     denoted with 0x3), This can be verified using simple get-filehash commandlet on
@@ -257,7 +264,8 @@
     respectively.
 
     Below is the output of !lmi which dumps the GUID and the PDB location.
-    <div class="code">    0:000> !lmi Win32Sample
+
+    0:000> !lmi Win32Sample
     Loaded Module Info: [win32sample]
              Module: Win32Sample
        Base Address: 00007ff62d2f0000
@@ -273,9 +281,11 @@
                VC_FEATURE    14,  23e0,    15e0 [Data not mapped]
                      POGO   26c,  23f4,    15f4 [Data not mapped]
         Symbol Type: DEFERRED - No error - symbol load deferred
-        Load Report: no symbols loaded</div>
+        Load Report: no symbols loaded
+
     Turn on verbose symbol logging
-    <div class="code">    0:000> !sym noisy
+
+    0:000> !sym noisy
     noisy mode - symbol prompts on
 
     Try setting the symbol path to E:\temp\Testing
@@ -285,9 +295,11 @@
     Expanded Symbol search path is: e:\temp\testing\
     ************* Path validation summary **************
     Response                         Time (ms)     Location
-    OK                                             E:\temp\Testing\</div>
+    OK                                             E:\temp\Testing\
+
     Try reloading the binary PDB
-    <div class="code">    0:000> .reload /f win32sample.exe
+
+    0:000> .reload /f win32sample.exe
     DBGHELP: e:\temp\testing\Win32Sample.pdb - file not found
     DBGHELP: e:\temp\testing\exe\Win32Sample.pdb - file not found
     DBGHELP: e:\temp\testing\symbols\exe\Win32Sample.pdb - file not found
@@ -311,7 +323,8 @@
     00007ff9`2c430000 00007ff9`2c696000   KERNELBASE   (deferred)
     00007ff9`2f160000 00007ff9`2f20e000   KERNEL32   (deferred)
     00007ff9`2f400000 00007ff9`2f5e0000   ntdll      (export symbols)
-    C:\WINDOWS\SYSTEM32\ntdll.dll</div>
+    C:\WINDOWS\SYSTEM32\ntdll.dll
+
     Looking at the .reload command output we can say Windbg expects symbol files to
     be present inside the same directory as the application or the folder named 'exe'
     inside .sympath directory or the folder named 'dll' inside the .sympath directory
@@ -319,7 +332,8 @@
     for Win32Sample.exe
 
     Turn on verbose source logging
-    <div class="code">    0:000> !srcnoisy 3
+
+    0:000> !srcnoisy 3
     Noisy source output: on
     Noisy source server output: on
     Filter out everything but source server output: off
@@ -389,16 +403,19 @@
     DBGENG:  Scan all paths for:
     DBGENG:    'win32sample.cpp'
     DBGENG:      check 'e:\temp\Testing\win32sample.cpp'
-    DBGENG:      found file 'e:\temp\Testing\win32sample.cpp'</div>
+    DBGENG:      found file 'e:\temp\Testing\win32sample.cpp'
+
     Source path heuristics to match a source file is much more involved, It is done
     by prefix and suffix matches by joining the file path and .srcpath directory. If
     the checksum of the file present in PDB does does not match with the file checksum
     then you should see a warning like below(Which is very important). Unlike symbol
     files, Eventhough Windbg throws a warning it opens the source file in code window.
     But we should be vigilient about it.
-    <div class="code">    windbg> .open -a Win32Sample!main
+
+    windbg> .open -a Win32Sample!main
     WARNING: Unable to find source file with matching checksum.  Found
-    'c:\&ltsnipped&gt;\win32sample\win32sample.cpp' with mismatch!</div>
+    'c:\&ltsnipped&gt;\win32sample\win32sample.cpp' with mismatch!
+
     In any case, Understanding these details will help us solve unresolved source and
     symbol files issue with much more confidence!
 

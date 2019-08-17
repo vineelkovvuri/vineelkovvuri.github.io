@@ -10,7 +10,6 @@ when applied with COSNT and felt that CONST BYTE* and CONST PBYTE are also one
 and the same. And this is completely incorrect. Looks like const do not gel well
 with typedef.
 
-
 CONST PBYTE z = &x;// wont compile because CONST PBYTE z means  BYTE* CONST z
 not CONST BYTE* z; !!!!!
 

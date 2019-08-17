@@ -27,7 +27,7 @@
     .center {
 		display: inline-block;
 		margin: 0 auto;
-		max-width: 650px;
+		max-width: 620px;
 	}
     </style>
 
@@ -158,16 +158,16 @@
     this sign flag whereas operations (like JG/JL) who treat it as signed will
     take this sign flag into account.
 
-    <div class="code">        mov al, 0x81
-        sub al, 0x1 // This triggers sign flag</div>
+        mov al, 0x81
+        sub al, 0x1 // This triggers sign flag
 
     Overflow flag is a little different. First of all, the Overflow flag is not
     set when an operation results in an overflow of the number that can be
     represented in a register. Like for example, if we try to add 1 to 0xff does
     not set this bit.
 
-    <div class="code">        mov al, 0xFF // 0b11111111
-        add al, 0x1  // This will not trigger Overflow flag</div>
+        mov al, 0xFF // 0b11111111
+        add al, 0x1  // This will not trigger Overflow flag
 
     Overflow flag is mainly meant for indicating if there is a chance of result if
     interpreted as signed will cross beyond what can be represented in the register.
@@ -177,21 +177,21 @@
     large a positive number and less than 0b10000000 i.e., too small a negative
     number
 
-    <div class="code">        mov al, 0x7e // This is always positive
-        add al, 0x2  // This will trigger overflow flag</div>
+        mov al, 0x7e // This is always positive
+        add al, 0x2  // This will trigger overflow flag
 
     Let us see how overflow flag is used to determine the below conditional when
     var1 and var2 are signed numbers.
 
-    <div class="code">        if (var1 < var2) {
+        if (var1 < var2) {
             printf("var1 < var2");
-        }</div>
+        }
 
     The above code is translated to cmp followed by jl. cmp does var1-var2. And jl
     says execute printf if SF != OF. Now lets see the combinations why SF needs to
     be not equal to OF
 
-    <div class="code">        var1 = -125;
+        var1 = -125;
         var2 = 10;
         var1 - var2 => -135 => which cannot be represented in a byte meaning the
                                sign bit of the byte will not be set but the overflow
@@ -201,7 +201,7 @@
         var2 = -100;
         var1 - var2 => -20 => this can be represented in a byte and its -ve so SF = 1
                               but because it is still under the range of singed
-                              numbers representable in a byte OF = 0</div>
+                              numbers representable in a byte OF = 0
 
     That is why jl is defined as SF != OF, When this is true it means var1 < var2
     even if var1 and var2 are signed(meaning -ve numbers)
@@ -302,12 +302,12 @@
     var1+var2 is an unsigned expression the compiler will enforce it by using a
     unsigned jump instruction called jae instead of jge instruction.
 
-    <div class="code">                        .----------------This bit will sign extend to all 1's
+                        .----------------This bit will sign extend to all 1's
                         11111011            signed short a = -5
                 1111111111111011            unsigned int a = -5
               + 0000000000001010            unsigned int b = 10
               = 0000000000000101            unsigned int
-        Figure 1: signed number converted to unsigned numbers</div>
+        Figure 1: signed number converted to unsigned numbers
 
     Whenever a signed data type has to be converted to unsigned data type the
     absolute value remains unchanged because sign extension will be done using
@@ -320,7 +320,7 @@
     translates expressions and apply the above rules. Clang AST view especially
     helps in graphically looking at how these promotions/conversion happen
 
-    <div class="code">        signed int var1 = -100;
+        signed int var1 = -100;
         unsigned long long var2 = 10;
         if (var1 + var2 < 0) {
             //resulting unsigned long long expression will never be lessthan 0
@@ -353,7 +353,7 @@
         | | `-DeclRefExpr &ltcol:16&gt; 'unsigned long long' lvalue Var 0x55ea65e031b0,
               'var2' 'unsigned long long'
         | `-ImplicitCastExpr &ltcol:23&gt; 'unsigned long long' &ltIntegralCast&gt;
-        | `-IntegerLiteral &ltcol:23&gt; 'int' 0</div>
+        | `-IntegerLiteral &ltcol:23&gt; 'int' 0
 
     These rules can only dictate what need to be done for each expression in a
     statement one at a time. It cannot determine the type of the complete
@@ -370,18 +370,20 @@
     can hold the unsigned number entirely, then by this rule, the unsigned
     number gets converted to signed number.
 
-    <div class="code">                        .----------------The value is not sign extended in case of
+                        .----------------The value is not sign extended in case of
                         |                unsigned numbers because 1 here does not
                         |                mean anything special except some large +ve
                         V                value
                         00000101            unsigned short a = 5
                 0000000011111011            signed int a = 5
               + 1111111111110110            signed int b = -10
-              = 1111111111111011            signed int</div>
+              = 1111111111111011            signed int
+
         Figure 2: unsigned number converted to signed numbers
 
     For example:
-    <div class="code">        unsigned int var1 = 100;
+
+        unsigned int var1 = 100;
         signed long long var2 = -10;
         if (var1 + var2 < 0) { //resulting in signed long long expression
             printf("This gets printed if var1 + var2 is < 0");
@@ -413,7 +415,7 @@
         | | `-DeclRefExpr &ltcol:16&gt; 'long long' lvalue Var 0x56305e1201a8 'var2'
                 , 'long long'
         | `-ImplicitCastExpr &ltcol:23&gt; 'long long' &ltIntegralCast&gt;
-        | `-IntegerLiteral &ltcol:23&gt; 'int' 0</div>
+        | `-IntegerLiteral &ltcol:23&gt; 'int' 0
 
 <b>5.3.3 Rule 2e interpretation</b>
 
@@ -423,7 +425,7 @@
     signed variable and also both operand types are converted unlike other
     rules. For example:
 
-    <div class="code">        unsigned int var1 = 100; // this gets converted to unsigned long
+        unsigned int var1 = 100; // this gets converted to unsigned long
         signed long var2 = -10;  // this will also converted to unsigned long
         if (var1 + var2 < 0) {   // resulting type is unsigned long
             printf("This will not be printed");
@@ -456,7 +458,7 @@
         | | `-ImplicitCastExpr &ltcol:16&gt; 'long' &ltLValueToRValue&gt;
         | | `-DeclRefExpr &ltcol:16&gt; 'long' lvalue Var 0x564cedbd01c8 'var2' 'long'
         | `-ImplicitCastExpr &ltcol:23&gt; 'long' &ltIntegralCast&gt;
-        | `-IntegerLiteral &ltcol:23&gt; 'int' 0</div>
+        | `-IntegerLiteral &ltcol:23&gt; 'int' 0
 
 <b>5.4 Integer conversion matrix on LLP64 Programming Model</b>
 

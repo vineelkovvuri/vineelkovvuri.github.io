@@ -27,15 +27,15 @@
     .center {
 		display: inline-block;
 		margin: 0 auto;
-		max-width: 650px;
+		max-width: 620px;
 	}
     </style>
 
     <body>
         <pre>
-<b>==================================================================</b>
-<b>SIGNED/UNSIGNED INTEGER ARITHMETIC IN C - <a class='link' href='http://vineelkovvuri.com'>http://vineelkovvuri.com</a></b>
-<b>==================================================================</b>
+<b>==========================================================</b>
+<b>LIBSPNG - C LANGUAGE CASE STUDY - <a class='link' href='http://vineelkovvuri.com'>http://vineelkovvuri.com</a></b>
+<b>==========================================================</b>
 
 <b>0. Contents</b>
 
@@ -45,7 +45,6 @@
     4 - Standard Library
 
 <b>1. Introduction</b>
-
 
 <b>2. Build System</b>
 
@@ -63,7 +62,8 @@
     scope (either at the start of the function or start of a scope)
 
     libspng:
-    <div class="code">        ret = calculate_subimages(sub, &scanline_width, &ctx->ihdr, channels);
+
+        ret = calculate_subimages(sub, &scanline_width, &ctx->ihdr, channels);
         if(ret) return ret;
 
         unsigned char *scanline_orig = NULL, *scanline = NULL, *prev_scanline = NULL;
@@ -102,10 +102,11 @@
 
             uint32_t i, lut_entries;
 
-            if(fmt == SPNG_FMT_RGBA8)</div>
+            if(fmt == SPNG_FMT_RGBA8)
 
     Linux Kernel:
-    <div class="code">        static unsigned long isolate_freepages_block(struct compact_control *cc,
+
+        static unsigned long isolate_freepages_block(struct compact_control *cc,
                         unsigned long *start_pfn,
                         unsigned long end_pfn,
                         struct list_head *freelist,
@@ -156,14 +157,51 @@
                         cursor += (1UL << order) - 1;
                     }
                     goto isolate_fail;
-                }</div>
+                }
+    
 
     Libspng also has multiple exits using the return statement every where in
     the function. Even in linux kernel, we use multiple return statements but
     primarily it is used initially to return from function when invalid
     parameters are given as shown below
 
-    <div class="code">        static enum compact_result compact_zone(struct zone *zone, struct compact_control *cc)
+    Libspng
+
+        static uint16_t sample_to_target(uint16_t sample, uint8_t bit_depth, uint8_t sbits, uint8_t target)
+        {
+            uint16_t sample_bits;
+            int8_t shift_amount;
+
+            if(bit_depth == sbits)
+            {
+                if(target == sbits) return sample; /* no scaling */
+            }/* bit_depth > sbits */
+            else sample = sample >> (bit_depth - sbits); /* shift significant bits to bottom */
+
+            /* downscale */
+            if(target &lt sbits) return sample &gt;> (sbits - target);
+
+            /* upscale using left bit replication */
+            shift_amount = target - sbits;
+            sample_bits = sample;
+            sample = 0;
+
+            while(shift_amount >= 0)
+            {
+                sample = sample | (sample_bits << shift_amount);
+                shift_amount -= sbits;
+            }
+
+            int8_t partial = shift_amount + (int8_t)sbits;
+
+            if(partial != 0) sample = sample | (sample_bits >> abs(shift_amount));
+
+            return sample;
+        }
+
+    Linux Kernel
+
+        static enum compact_result compact_zone(struct zone *zone, struct compact_control *cc)
         {
             enum compact_result ret;
             unsigned long start_pfn = zone->zone_start_pfn;
@@ -205,7 +243,7 @@
                     unsigned long free_pfn = release_freepages(&cc->freepages);
 
                     cc->nr_freepages = 0;
-                    VM_BUG_ON(free_pfn == 0);</div>
+                    VM_BUG_ON(free_pfn == 0);
         </pre>
         <div>
             <script src="https://utteranc.es/client.js"

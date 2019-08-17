@@ -11,7 +11,6 @@ LIBSPNG - C LANGUAGE CASE STUDY - http://vineelkovvuri.com
 
 1. Introduction
 
-
 2. Build System
 
     It uses meson build system to build the library
@@ -28,7 +27,7 @@ LIBSPNG - C LANGUAGE CASE STUDY - http://vineelkovvuri.com
     scope (either at the start of the function or start of a scope)
 
     libspng:
-    `c
+
         ret = calculate_subimages(sub, &scanline_width, &ctx->ihdr, channels);
         if(ret) return ret;
 
@@ -69,10 +68,9 @@ LIBSPNG - C LANGUAGE CASE STUDY - http://vineelkovvuri.com
             uint32_t i, lut_entries;
 
             if(fmt == SPNG_FMT_RGBA8)
-    c`
 
     Linux Kernel:
-    `c
+
         static unsigned long isolate_freepages_block(struct compact_control *cc,
                         unsigned long *start_pfn,
                         unsigned long end_pfn,
@@ -125,7 +123,7 @@ LIBSPNG - C LANGUAGE CASE STUDY - http://vineelkovvuri.com
                     }
                     goto isolate_fail;
                 }
-        c`
+    
 
     Libspng also has multiple exits using the return statement every where in
     the function. Even in linux kernel, we use multiple return statements but
@@ -133,7 +131,7 @@ LIBSPNG - C LANGUAGE CASE STUDY - http://vineelkovvuri.com
     parameters are given as shown below
 
     Libspng
-    `c
+
         static uint16_t sample_to_target(uint16_t sample, uint8_t bit_depth, uint8_t sbits, uint8_t target)
         {
             uint16_t sample_bits;
@@ -165,10 +163,9 @@ LIBSPNG - C LANGUAGE CASE STUDY - http://vineelkovvuri.com
 
             return sample;
         }
-    c`
 
     Linux Kernel
-    `c
+
         static enum compact_result compact_zone(struct zone *zone, struct compact_control *cc)
         {
             enum compact_result ret;
@@ -212,4 +209,3 @@ LIBSPNG - C LANGUAGE CASE STUDY - http://vineelkovvuri.com
 
                     cc->nr_freepages = 0;
                     VM_BUG_ON(free_pfn == 0);
-    c`

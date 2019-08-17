@@ -86,7 +86,7 @@ HOW DO BREAKPOINTS WORK IN DEBUGGERS? - http://vineelkovvuri.com
     line before hitting go command. So as expected no change at the push
     mnemonic before call instruction (just windbg kept a note of the
     breakpoints).
-    `c
+
     #include <stdio.h>
     int main ()
     {
@@ -101,7 +101,7 @@ HOW DO BREAKPOINTS WORK IN DEBUGGERS? - http://vineelkovvuri.com
 
          return 0;
     }
-    c`
+
     img:{3.Breakpoints-in-Debuggers.png}
     Breakpoints in debuggers
 

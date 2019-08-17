@@ -50,7 +50,7 @@ $HtmlHeader = "<!DOCTYPE html>
         text-decoration: none;
     }
     pre {
-       width:750px;
+       width:650px;
        margin: 0 auto;
        font-size:12px; /* 13px will make it bold */
     }
@@ -64,7 +64,7 @@ $HtmlHeader = "<!DOCTYPE html>
     .center {
 		display: inline-block;
 		margin: 0 auto;
-		max-width: 750px;
+		max-width: 620px;
 	}
     </style>
 

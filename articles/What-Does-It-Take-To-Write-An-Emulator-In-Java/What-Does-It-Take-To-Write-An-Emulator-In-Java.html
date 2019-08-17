@@ -27,7 +27,7 @@
     .center {
 		display: inline-block;
 		margin: 0 auto;
-		max-width: 650px;
+		max-width: 620px;
 	}
     </style>
 
@@ -128,7 +128,8 @@
     method(every opcode in of Chip 8 is of 2 bytes). Then decode the instruction
     and appropriately run the respective executable code. For the majority of
     time, execution mainly results in moving data around.
-    <div class="code">    //Below Is The Trimmed Version Of Original Source Code Found At
+
+    //Below Is The Trimmed Version Of Original Source Code Found At
     //<a class='link' href='https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8CPU.java'>https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8CPU.java</a>
     public class Chip8CPU {
         private int V[] = new int[16]; //8bit each
@@ -172,9 +173,11 @@
                     break;
             }
         }
-    }</div>
+    }
+
 <b>6. Memory</b>
-    <div class="code">    //Below Is The Trimmed Version Of Original Source Code Found At
+
+    //Below Is The Trimmed Version Of Original Source Code Found At
     //<a class='link' href='https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8Memory.java'>https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8Memory.java</a>
     public class Chip8Memory {
         // Chip 8 can address up to 4K bytes
@@ -189,14 +192,16 @@
         public void loadProgram(Path path) {...}
         // Dump RAM for debug
         public void dumpRAM() {...}
-    }</div>
+    }
+
     The primary operations done by CPU with memory is reads and writes. These
     are implemented as getByte() and setByte() operations inside Memory object.
     These reads and writes are actually backed up by 4k integer array. This is
     the maximum memory addressable by Chip 8 instruction set.
 
 <b>7. Display</b>
-    <div class="code">    //Below Is The Trimmed Version Of Original Source Code Found At
+
+    //Below Is The Trimmed Version Of Original Source Code Found At
     //<a class='link' href='https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8Display.java'>https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8Display.java</a>
     public class Chip8Display extends JFrame {
         //Chip8 display size
@@ -204,7 +209,8 @@
         private JPanel display[][] = new JPanel[displayHeight][displayWidth];
         public boolean setPixel(int x, int y) {...}
         public void clear() {...}
-    }</div>
+    }
+
     The one and only instruction in the Chip 8 instruction set that interact
     with display is Dxyn - DRW Vx, Vy, nibble. When CPU has decoded this
     instruction, it interface with the Display object and calls setPixel()
@@ -221,7 +227,8 @@
     method.
 
 <b>8. Keyboard</b>
-    <div class="code">    //Below Is The Trimmed Version Of Original Source Code Found At
+
+    //Below Is The Trimmed Version Of Original Source Code Found At
     //<a class='link' href='https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8Keyboard.java'>https://github.com/vineelkovvuri/Chip8Emulator/blob/master/src/main/java/com/vineelkumarreddy/chip8/Chip8Keyboard.java</a>
     //This listener is added to Chip8Display module to capture the events
     public class Chip8Keyboard implements KeyListener {
@@ -230,7 +237,8 @@
         public boolean isChip8keyPressed(int key) {...}
         public void keyPressed(KeyEvent e) {...}
         public void keyReleased(KeyEvent e) {...}
-    }</div>
+    }
+
     There are few instructions which interfaces with keyboard. This object is
     hooked as the keyboard listener on to the JFrame of Display. This is the
     only way that I know in Java to capture the keyboard events. Chip 8 has 15
@@ -239,7 +247,8 @@
     10-15 indexes in to the above array.
 
 <b>9. Main</b>
-    <div class="code">    public class Main {
+
+    public class Main {
         public static void main(String... args) {
             // Init peripherals
             Chip8Keyboard keyboard = new Chip8Keyboard();
@@ -252,7 +261,8 @@
             // Run CPU
             cpu.run();
         }
-    }</div>
+    }
+
     Finally, this object is responsible for setting up all the modules and
     invoking the CPU run() method. Purposefully I kept this object very simple,
     especially by hard coding the file path to load.

@@ -60,7 +60,6 @@ MemCCpy(
     }
 }
 
-
 PVOID
 MemChr(
     IN CONST PVOID Buffer,
@@ -111,7 +110,6 @@ MemCpy(
     return Dest;
 }
 
-
 - Understood that Windows 10 SDK gets installed
 with every latest release of Visual Studio. So
 for example for RS4 Windows SDK you just have to
@@ -123,8 +121,6 @@ Win32 applications all the way down till Windows 7 SP1
 "Windows XP support for C++"
 
 
-
 # Windows Data Types - https://docs.microsoft.com/en-us/windows/desktop/winprog/windows-data-types
 # Universal C runtime routines by category - https://docs.microsoft.com/en-us/cpp/c-runtime-library/buffer-manipulation
-
 

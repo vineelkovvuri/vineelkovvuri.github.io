@@ -27,7 +27,7 @@
     .center {
 		display: inline-block;
 		margin: 0 auto;
-		max-width: 650px;
+		max-width: 620px;
 	}
     </style>
 
@@ -62,12 +62,12 @@
     Since .lib and .obj files follow Unix COFF format Unix binutil's
     'ar' tool can be used to extract it.
 
-    <div class="code">    Lib StaticLib1.lib /list
+    Lib StaticLib1.lib /list
     Lib StaticLib1.lib /EXTRACT:Debug\sub.obj /out:sub.obj <-- Extracts one file at a time!
     or
     ar -x StaticLib1.lib
     or
-    use 7-Zip to extract it</div>
+    use 7-Zip to extract it
 
     <a href="6.VSProjectDialog.png" target="_blank"><img class="center" src="6.VSProjectDialog.png"/></a>
     Visual Studio New Project dialog for 'Static Library' and 'Dynamic Linked Library'
@@ -79,10 +79,10 @@
     project contains 4 files add.c,sub.c,mul.c,div.c containing functions
     for their operations like below respectively.
 
-    <div class="code">    int add(int a)
+    int add(int a)
     {
         return a + 1;
-    }</div>
+    }
 
     When you build the project what we get is a .lib file containing obj files
     of each of the above .c file. So a static library contains all
@@ -116,12 +116,13 @@
 
     Since .lib does not contain any real .obj unlike static lib, we can
     only see the exported symbols but not their code in case of dll's .lib file.
-    <div class="code">    __declspec(dllexport) int add(int a)
+
+    __declspec(dllexport) int add(int a)
     {
         return a + 1;
     }
 
-    dumpbin /exports Dll1.lib <-- shows all the exported functions</div>
+    dumpbin /exports Dll1.lib <-- shows all the exported functions
 
     <a href="3.Dll.png" target="_blank"><img class="center" src="3.Dll.png"/></a>
     Workflow for Dynamic Linked Library creation and consumption

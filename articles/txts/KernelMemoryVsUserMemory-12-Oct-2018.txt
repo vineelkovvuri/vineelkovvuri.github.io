@@ -36,7 +36,6 @@ copy for everything in physical memory. But when the content of these dlls
 change in memory thats when the Memory manager will create a new copy in
 physcial memory.
 
-
 int g_global = 10;
 int main()
 {
@@ -110,7 +109,6 @@ Amd64VtoP: PDE 000000003e24e890
 Amd64VtoP: PTE 000000001a24f480
 Amd64VtoP: Mapped phys 0000000011134a30
 Virtual address 7ff7e2490a30 translates to physical address 11134a30.
-
 
 In the above listing both instances of the applicaiton the physical address for
 nt!NtCreateFile is same 23a3b80. Where as physcial address of
