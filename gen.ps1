@@ -99,7 +99,7 @@ $HtmlFooter = "
     Set-Content -Encoding UTF8 -Path $OutFile -Value "$HtmlHeader$InFileContent$HtmlFooter"
 }
 
-dir -Recurse .\articles\*.txt | % {Generate-HTML $_.FullName}
+dir -Recurse .\posts\*.txt | % {Generate-HTML $_.FullName}
 
 
 <#
