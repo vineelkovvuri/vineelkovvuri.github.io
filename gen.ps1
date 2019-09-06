@@ -95,9 +95,8 @@ $HtmlFooter = "
     </body>
 </html>";
 
-    $OutFile = $InFile -replace ".txt$", ".html"
+    $OutFile = Join-Path -Path $(split-path $InFile) -ChildPath "index.html"
     Set-Content -Encoding UTF8 -Path $OutFile -Value "$HtmlHeader$InFileContent$HtmlFooter"
-
 }
 
 dir -Recurse .\articles\*.txt | % {Generate-HTML $_.FullName}
