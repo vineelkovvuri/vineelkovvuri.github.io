@@ -250,5 +250,5 @@ WHAT DOES IT TAKE TO WRITE AN EMULATOR IN JAVA? - http://vineelkovvuri.com
     beside other game files. I know we cannot play with them. IBM ROM for my
     wife ;)
     img:{6.Emulator.png}
-    I recommened you to read the source code https://github.com/vineelkovvuri/Chip8Emulator.
+    I recommened you to read the source code https://github.com/vineelkovvuri/Projects/tree/master/Chip8Emulator.
 
