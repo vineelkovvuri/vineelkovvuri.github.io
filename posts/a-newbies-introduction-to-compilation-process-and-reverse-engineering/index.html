@@ -64,30 +64,27 @@
 compiler with minimum set of tools is considered to be challenging. This
 tutorial scratches the surface of different compiler phases involved in
 translating a given source code to executable and also shows how this
-information is useful in context of reverse engineering. I tried my best not to
-confuse the reader with too much of jargon, and help any newbie to get up to the
-speed.</p>
+information is useful in context of reverse engineering.</p>
 
-<p><a href="https://en.wikipedia.org/wiki/GNU_Compiler_Collection">GNU compiler collection</a> provides an
-excellent set of tools for dissecting the compilation process and to
+<p><a href="https://en.wikipedia.org/wiki/GNU_Compiler_Collection">GNU compiler collection</a>
+provides an excellent set of tools for dissecting the compilation process and to
 understand the working of bits and bytes in the final executable. For this
-tutorial I am using the following tools and considers C language to
-illustrate the examples.</p>
+tutorial I am using the following tools and considers C language to illustrate
+the examples.</p>
 
 <ul>
 <li><a href="http://orwelldevcpp.blogspot.com/">Dev-Cpp</a> is a IDE with GNU C compiler collection(Mingw) as backend</li>
 <li><a href="http://www.ollydbg.de/">OllyDbg</a> An excellent debugger/reverse engineering tool</li>
 </ul>
 
-<p>for Linux environment are also available for Windows(thanks to
-Many people don&rsquo;t know that the powerful programmer tools that are available
-Cygwin/Mingw). Dev-Cpp is an IDE which consists of entire GNU compiler
-collection(GCC). This IDE uses gcc.exe, g++.exe for compiling C, C++
-programs and gdb.exe for debugging. Also, The Dev-Cpp&rsquo;s
-installation(c:\dev-cpp\bin) directory consists of all the GNU compiler
-tools. To start this tutorial set the PATH variable to Dev-Cpp&rsquo;s bin
-directory as we will be working completely from the command prompt and not
-going to use the IDE.</p>
+<p>for Linux environment are also available for Windows(thanks to Many people don&rsquo;t
+know that the powerful programmer tools that are available Cygwin/Mingw).
+Dev-Cpp is an IDE which consists of entire GNU compiler collection(GCC). This
+IDE uses gcc.exe, g++.exe for compiling C, C++ programs and gdb.exe for
+debugging. Also, The Dev-Cpp&rsquo;s installation(c:\dev-cpp\bin) directory consists
+of all the GNU compiler tools. To start this tutorial set the PATH variable to
+Dev-Cpp&rsquo;s bin directory as we will be working completely from the command prompt
+and not going to use the IDE.</p>
 
 <p>For debugging, using command line GNU Debugger (gdb.exe) may seem daunting.
 To compensate this, we have an excellent user mode debugger for Windows
