@@ -70,7 +70,7 @@ for programmers to understand.</p>
 
 <p>First of all, Why do we need integer conversions at all? The answer is
 simple, we need to have single type for any given expression. Let&rsquo;s say we
-have an expression <code>i&lt;expr1&gt;&lt;op&gt;&lt;expr2&gt;i</code> when expr1 and expr2 are of
+have an expression <em><expr1><op><expr2></em> when expr1 and expr2 are of
 different types, we want the resulting expression from this to have one
 single type.</p>
 
@@ -85,21 +85,66 @@ the size of these basic types are determined. Windows x64 follows
 LLP64(meaning only &lsquo;long long&rsquo; and pointer size are 64 bit wide), So below
 are the sizes of the standard types that we are sticking to in this article.</p>
 
-<pre><code>    =================== ========
-    `bType                 Sizeb`
-    =================== ========
-    signed char          1 bytes
-    unsigned char        1 bytes
-    signed short         2 bytes
-    unsigned short       2 bytes
-    signed int           4 bytes
-    unsigned int         4 bytes
-    signed long          4 bytes
-    unsigned long        4 bytes
-    signed long long     8 bytes
-    unsigned long long   8 bytes
-    =================== ========
-</code></pre>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Size</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>signed char</td>
+<td>1 bytes</td>
+</tr>
+
+<tr>
+<td>unsigned char</td>
+<td>1 bytes</td>
+</tr>
+
+<tr>
+<td>signed short</td>
+<td>2 bytes</td>
+</tr>
+
+<tr>
+<td>unsigned short</td>
+<td>2 bytes</td>
+</tr>
+
+<tr>
+<td>signed int</td>
+<td>4 bytes</td>
+</tr>
+
+<tr>
+<td>unsigned int</td>
+<td>4 bytes</td>
+</tr>
+
+<tr>
+<td>signed long</td>
+<td>4 bytes</td>
+</tr>
+
+<tr>
+<td>unsigned long</td>
+<td>4 bytes</td>
+</tr>
+
+<tr>
+<td>signed long long</td>
+<td>8 bytes</td>
+</tr>
+
+<tr>
+<td>unsigned long long</td>
+<td>8 bytes</td>
+</tr>
+</tbody>
+</table>
 
 <p>Also, The specification leaves other aspects of C language definition
 undefined and this leave room for optimizations for compilers. For example,
@@ -135,22 +180,22 @@ arithmetic.</p>
 any signed/unsigned type information with them and it&rsquo;s up to the
 instructions to interpret the data as either signed or unsigned. But the
 interesting thing about x86/x64 processors is, they provide a flag
-register(EFLAGS) where some of the bits are called <code>bStatus Flagsb</code>. These
+register(EFLAGS) where some of the bits are called <strong>Status Flags</strong>. These
 Status Flags represent the status of arithmetic operations the happened with
 the previous instruction.</p>
 
 <p>The most important flags of these for our discussion are
-    1.  Carry flag - Set if an arithmetic operation generates a carry or a
-        borrow out of the most significant bit of the result; cleared otherwise.
-        This flag indicates an overflow condition for unsigned-integer
-        arithmetic.
-    2.  Sign flag - Set equal to the most significant bit of the result, which
-        is the sign bit of a signed integer. (0 indicates a positive value and 1
-        indicates a negative value.)
-    3.  Overflow flag - Set if the integer result is too large a positive number
-        or too small a negative number (excluding the sign-bit) to fit in the
-        destination operand, cleared otherwise. This flag indicates an overflow
-        condition for signed-integer (two&rsquo;s complement) arithmetic</p>
+1.  Carry flag - Set if an arithmetic operation generates a carry or a
+    borrow out of the most significant bit of the result; cleared otherwise.
+    This flag indicates an overflow condition for unsigned-integer
+    arithmetic.
+2.  Sign flag - Set equal to the most significant bit of the result, which
+    is the sign bit of a signed integer. (0 indicates a positive value and 1
+    indicates a negative value.)
+3.  Overflow flag - Set if the integer result is too large a positive number
+    or too small a negative number (excluding the sign-bit) to fit in the
+    destination operand, cleared otherwise. This flag indicates an overflow
+    condition for signed-integer (two&rsquo;s complement) arithmetic</p>
 
 <p>Of the above three status flags, Carry flag is obvious but other two flags need
 some explanation. Sign flag is set irrespective of whether you are treating the
@@ -164,7 +209,7 @@ So operations(JA/JB) who want to treat the result an unsigned will ignore
 this sign flag whereas operations (like JG/JL) who treat it as signed will
 take this sign flag into account.</p>
 
-<pre><code>mov al, 0x81
+<pre><code class="language-x86asm">mov al, 0x81
 sub al, 0x1 // This triggers sign flag
 </code></pre>
 
@@ -173,7 +218,7 @@ set when an operation results in an overflow of the number that can be
 represented in a register. Like for example, if we try to add 1 to 0xff does
 not set this bit.</p>
 
-<pre><code>mov al, 0xFF // 0b11111111
+<pre><code class="language-x86asm">mov al, 0xFF // 0b11111111
 add al, 0x1  // This will not trigger Overflow flag
 </code></pre>
 
@@ -185,14 +230,14 @@ number. Now overflow flag is set when a result goes beyond 0b01111111 i.e., too
 large a positive number and less than 0b10000000 i.e., too small a negative
 number</p>
 
-<pre><code>mov al, 0x7e // This is always positive
+<pre><code class="language-x86asm">mov al, 0x7e // This is always positive
 add al, 0x2  // This will trigger overflow flag
 </code></pre>
 
 <p>Let us see how overflow flag is used to determine the below conditional when
 var1 and var2 are signed numbers.</p>
 
-<pre><code>if (var1 &lt; var2) {
+<pre><code class="language-c">if (var1 &lt; var2) {
     printf(&quot;var1 &lt; var2&quot;);
 }
 </code></pre>
@@ -201,17 +246,17 @@ var1 and var2 are signed numbers.</p>
 says execute printf if SF != OF. Now lets see the combinations why SF needs to
 be not equal to OF</p>
 
-<pre><code>var1 = -125;
+<pre><code class="language-c">var1 = -125;
 var2 = 10;
 var1 - var2 =&gt; -135 =&gt; which cannot be represented in a byte meaning the
-                       sign bit of the byte will not be set but the overflow
-                       bit gets set. So SF=0 and OF=1
+                        sign bit of the byte will not be set but the overflow
+                        bit gets set. So SF=0 and OF=1
 
 var1 = -120;
 var2 = -100;
 var1 - var2 =&gt; -20 =&gt; this can be represented in a byte and its -ve so SF = 1
-                      but because it is still under the range of singed
-                      numbers representable in a byte OF = 0
+                        but because it is still under the range of singed
+                        numbers representable in a byte OF = 0
 </code></pre>
 
 <p>That is why jl is defined as SF != OF, When this is true it means var1 &lt; var2
@@ -237,50 +282,55 @@ as 0b10000000(0x80) whereas 127 is represented as 0b01111111 (0x7F).</p>
 
 <h2 id="rank">Rank</h2>
 
-<p>Every integer type has an integer conversion rank defined as follows:
-    1.  No two signed integer types shall have the same rank, even if they have
-        the same representation.
-    2.  The rank of a signed integer type shall be greater than the rank of any
-        signed integer type with less precision.
-    3.  The rank of long long int shall be greater than the rank of long int,
-        which shall be greater than the rank of int, which shall be greater than
-        the rank of short int, which shall be greater than the rank of signed char.
-    4.  The rank of any unsigned integer type shall equal the rank of the
-        corresponding signed integer type, if any.
-    5.  The rank of any standard integer type shall be greater than the rank of
-        any extended integer type with the same width.
-    6.  The rank of char shall equal the rank of signed char and unsigned char.
-    7.  The rank of Bool shall be less than the rank of all other standard
-        integer types.
-    8.  The rank of any enumerated type shall equal the rank of the compatible
-        integer type (see 6.7.2.2).
-    9.  The rank of any extended signed integer type relative to another
-        extended signed integer type with the same precision is
-        implementation-defined, but still subject to the other rules for
-        determining the integer conversion rank.
-    10. For all integer types T1, T2, and T3, if T1 has greater rank than T2 and
-        T2 has greater rank than T3, then T1 has greater rank than T3. At a high
-        level the gist of above rules is as follows</p>
+<p>Every integer type has an integer conversion rank defined as follows:</p>
 
-<pre><code>Rank(signed char) == Rank(unsigned char) &lt; Rank(signed short) == Rank(unsigned
+<ol>
+<li>No two signed integer types shall have the same rank, even if they have
+the same representation.</li>
+<li>The rank of a signed integer type shall be greater than the rank of any
+signed integer type with less precision.</li>
+<li>The rank of long long int shall be greater than the rank of long int,
+which shall be greater than the rank of int, which shall be greater than
+the rank of short int, which shall be greater than the rank of signed char.</li>
+<li>The rank of any unsigned integer type shall equal the rank of the
+corresponding signed integer type, if any.</li>
+<li>The rank of any standard integer type shall be greater than the rank of
+any extended integer type with the same width.</li>
+<li>The rank of char shall equal the rank of signed char and unsigned char.</li>
+<li>The rank of Bool shall be less than the rank of all other standard
+integer types.</li>
+<li>The rank of any enumerated type shall equal the rank of the compatible
+integer type (see 6.7.2.2).</li>
+<li>The rank of any extended signed integer type relative to another
+extended signed integer type with the same precision is
+implementation-defined, but still subject to the other rules for
+determining the integer conversion rank.</li>
+<li>For all integer types T1, T2, and T3, if T1 has greater rank than T2 and
+T2 has greater rank than T3, then T1 has greater rank than T3. At a high
+level the gist of above rules is as follows</li>
+</ol>
+
+<blockquote>
+<p>Rank(signed char) == Rank(unsigned char) &lt; Rank(signed short) == Rank(unsigned
 short) &lt; Rank(signed int) == Rank(unsigned int) &lt; Rank(signed long) ==
-Rank(unsigned long) &lt; Rank(signed long long) == Rank(unsigned long long)
-</code></pre>
+Rank(unsigned long) &lt; Rank(signed long long) == Rank(unsigned long long)</p>
+</blockquote>
 
 <h2 id="integer-promotions">Integer Promotions</h2>
 
 <p>The following may be used in an expression wherever an int or unsigned int may be
 used:</p>
 
-<pre><code>*   An object or expression with an integer type whose integer conversion rank
-    is less than or equal to the rank of int and unsigned int.
-*   A bit-field of type Bool, int, signed int, or unsigned int.
-*   1a) If an int can represent all values of the original type, the value is
-    converted to an int;
-*   1b) otherwise, it is converted to an unsigned int. These are called the
-    integer promotions. All other types are unchanged by the integer
-    promotions.
-</code></pre>
+<ul>
+<li>An object or expression with an integer type whose integer conversion rank
+is less than or equal to the rank of int and unsigned int.</li>
+<li>A bit-field of type Bool, int, signed int, or unsigned int.</li>
+<li>1a) If an int can represent all values of the original type, the value is
+converted to an int;</li>
+<li>1b) otherwise, it is converted to an unsigned int. These are called the
+integer promotions. All other types are unchanged by the integer
+promotions.</li>
+</ul>
 
 <h2 id="usual-arithmetic-conversions">Usual arithmetic conversions</h2>
 
@@ -336,14 +386,15 @@ represent for -10 for 2 byte storage and 4 byte storage yields the same.</p>
 translates expressions and apply the above rules. Clang AST view especially
 helps in graphically looking at how these promotions/conversion happen</p>
 
-<pre><code>signed int var1 = -100;
+<pre><code class="language-c">signed int var1 = -100;
 unsigned long long var2 = 10;
 if (var1 + var2 &lt; 0) {
     //resulting unsigned long long expression will never be lessthan 0
     printf(&quot;This will never get printed&quot;);
 }
+</code></pre>
 
-$LN4:
+<pre><code class="language-x86asm">$LN4:
     sub rsp, 56 ; 00000038H
     mov DWORD PTR var1$[rsp], -100          ; ffffffffffffff9cH
     mov QWORD PTR var2$[rsp], 10
@@ -358,8 +409,9 @@ $LN2@main:
     add rsp, 56 ; 00000038H
     ret 0
 main ENDP
+</code></pre>
 
-Fragment of clang's AST for above program
+<pre><code class="language-console">Fragment of clang's AST for above program
 |-BinaryOperator &lt;line:7:9, col:23&gt; 'bool' '&lt;'
 | |-BinaryOperator &lt;col:9, col:16&gt; 'unsigned long long' '+'
 | | |-ImplicitCastExpr &lt;col:9&gt; 'unsigned long long' &lt;IntegralCast&gt;
@@ -367,7 +419,7 @@ Fragment of clang's AST for above program
 | | | `-DeclRefExpr &lt;col:9&gt; 'int' lvalue Var 0x55ea65e030e0 'var1' 'int'
 | | `-ImplicitCastExpr &lt;col:16&gt; 'unsigned long long' &lt;LValueToRValue&gt;
 | | `-DeclRefExpr &lt;col:16&gt; 'unsigned long long' lvalue Var 0x55ea65e031b0,
-      'var2' 'unsigned long long'
+        'var2' 'unsigned long long'
 | `-ImplicitCastExpr &lt;col:23&gt; 'unsigned long long' &lt;IntegralCast&gt;
 | `-IntegerLiteral &lt;col:23&gt; 'int' 0
 </code></pre>
@@ -401,13 +453,14 @@ Figure 2: unsigned number converted to signed numbers
 
 <p>For example:</p>
 
-<pre><code>unsigned int var1 = 100;
+<pre><code class="language-c">unsigned int var1 = 100;
 signed long long var2 = -10;
 if (var1 + var2 &lt; 0) { //resulting in signed long long expression
     printf(&quot;This gets printed if var1 + var2 is &lt; 0&quot;);
 }
+</code></pre>
 
-    sub rsp, 56 ; 00000038H
+<pre><code class="language-x86asm">    sub rsp, 56 ; 00000038H
     mov DWORD PTR var1$[rsp], 100 ; 00000064H
     mov QWORD PTR var2$[rsp], -10
     mov eax, DWORD PTR var1$[rsp]
@@ -421,8 +474,9 @@ $LN2@main:
     add rsp, 56 ; 00000038H
     ret 0
 main ENDP
+</code></pre>
 
-Fragment of clang's AST for above program
+<pre><code class="language-console">Fragment of clang's AST for above program
 |-BinaryOperator &lt;line:7:9, col:23&gt; 'bool' '&lt;'
 | |-BinaryOperator &lt;col:9, col:16&gt; 'long long' '+'
 | | |-ImplicitCastExpr &lt;col:9&gt; 'long long' &lt;IntegralCast&gt;
@@ -444,13 +498,14 @@ we can observe is, the resultant type has unsignedness but the type is of
 signed variable and also both operand types are converted unlike other
 rules. For example:</p>
 
-<pre><code>unsigned int var1 = 100; // this gets converted to unsigned long
+<pre><code class="language-c">unsigned int var1 = 100; // this gets converted to unsigned long
 signed long var2 = -10;  // this will also converted to unsigned long
 if (var1 + var2 &lt; 0) {   // resulting type is unsigned long
     printf(&quot;This will not be printed&quot;);
 }
+</code></pre>
 
-    sub rsp, 56 ; 00000038H
+<pre><code class="language-x86asm">    sub rsp, 56 ; 00000038H
     mov DWORD PTR var1$[rsp], 100 ; 00000064H
     mov DWORD PTR var2$[rsp], -10
     mov eax, DWORD PTR var2$[rsp]
@@ -466,8 +521,9 @@ $LN2@main:
     add rsp, 56 ; 00000038H
     ret 0
 main ENDP
+</code></pre>
 
-Fragment of clang's AST for above program
+<pre><code class="language-console">Fragment of clang's AST for above program
 |-BinaryOperator &lt;line:7:9, col:23&gt; 'bool' '&lt;'
 | |-BinaryOperator &lt;col:9, col:16&gt; 'long' '+'
 | | |-ImplicitCastExpr &lt;col:9&gt; 'long' &lt;IntegralCast&gt;
@@ -484,15 +540,15 @@ Fragment of clang's AST for above program
 
 <p>Below table summaries the rules applied for each expression combination</p>
 
-<p>+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+
+<pre><code class="language-console">+------------------------+---------------------+------------------------------------------------------------------------------------+
 |                        |    Size(MSVC x64)   |  1       1        2       2        4       4        4      4        8      8       |
-|LLP64 Programming Model +&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+
+|LLP64 Programming Model +---------------------+------------------------------------------------------------------------------------+
 |                        |    Rank             |  1       1        2       2        3       3        4      4        5      5       |
-+&mdash;&mdash;&mdash;&mdash;&mdash;+&mdash;&mdash;&ndash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+
-|Size(MS VC x64)|Rank    |<type1> oper <type2> |  signed  unsigned signed  unsigned signed  unsigned signed unsigned signed unsigned|
++---------------+--------+---------------------+------------------------------------------------------------------------------------+
+|Size(MS VC x64)|Rank    |&lt;type1&gt; oper &lt;type2&gt; |  signed  unsigned signed  unsigned signed  unsigned signed unsigned signed unsigned|
 |               |        |                     |  char    char     short   short    int     int      long   long     long   long    |
 |               |        |                     |                                                                     long   long    |
-+&mdash;&mdash;&mdash;&mdash;&mdash;+&mdash;&mdash;&ndash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+
++---------------+--------+---------------------+------------------------------------------------------------------------------------+
 | 1             | 1      |signed char          |  1a      1a       1a      1a       1a      1b       2b     2c       2b     2c      |
 | 1             | 1      |unsigned char        |          1a       1a      1a       1a      1b       2d     2b       2d     2b      |
 | 2             | 2      |signed short         |                   1a      1a       1a      1b       2b     2c       2b     2c      |
@@ -503,20 +559,22 @@ Fragment of clang's AST for above program
 | 4             | 4      |unsigned long        |                                                            2a       2d     2b      |
 | 8             | 5      |signed long long     |                                                                     2a     2c      |
 | 8             | 5      |unsigned long long   |                                                                            2a      |
-+&mdash;&mdash;&mdash;&mdash;&mdash;+&mdash;&mdash;&ndash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+
-Figure 3: Rules applied for each combination of expression</p>
++---------------+--------+---------------------+------------------------------------------------------------------------------------+
+</code></pre>
+
+<p>Figure 3: Rules applied for each combination of expression</p>
 
 <p>Below table summaries the resulting data type of the expression</p>
 
-<p>+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+
+<pre><code class="language-console">+------------------------+---------------------+--------------------------------------------------------------------------------------+
 |                        |    Size(MSVC x64)   |  1       1        2       2        4       4        4        4        8      8       |
-|LLP64 Programming Model +&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+
+|LLP64 Programming Model +---------------------+--------------------------------------------------------------------------------------+
 |                        |    Rank             |  1       1        2       2        3       3        4        4        5      5       |
-+&mdash;&mdash;&mdash;&mdash;&mdash;+&mdash;&mdash;&ndash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+
-|Size(MS VC x64)|Rank    |<type1> oper <type2> |  signed  unsigned signed  unsigned signed  unsigned signed   unsigned signed unsigned|
++---------------+--------+---------------------+--------------------------------------------------------------------------------------+
+|Size(MS VC x64)|Rank    |&lt;type1&gt; oper &lt;type2&gt; |  signed  unsigned signed  unsigned signed  unsigned signed   unsigned signed unsigned|
 |               |        |                     |  char    char     short   short    int     int      long     long     long   long    |
 |               |        |                     |                                                                       long   long    |
-+&mdash;&mdash;&mdash;&mdash;&mdash;+&mdash;&mdash;&ndash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+
++---------------+--------+---------------------+--------------------------------------------------------------------------------------+
 | 1             | 1      |signed char          |  signed  signed   signed  signed   signed  unsigned signed   unsigned signed unsigned|
 |               |        |                     |  int     int      int     int      int     int      long     long     long   long    |
 |               |        |                     |                                                                       long   long    |
@@ -547,8 +605,10 @@ Figure 3: Rules applied for each combination of expression</p>
 | 8             | 5      |unsigned long long   |                                                                              unsigned|
 |               |        |                     |                                                                              long    |
 |               |        |                     |                                                                              long    |
-+&mdash;&mdash;&mdash;&mdash;&mdash;+&mdash;&mdash;&ndash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+
-Figure 4: Resulting type of the expression</p>
++---------------+--------+---------------------+--------------------------------------------------------------------------------------+
+</code></pre>
+
+<p>Figure 4: Resulting type of the expression</p>
 
 <h1 id="references">References</h1>
 
@@ -569,7 +629,7 @@ Figure 4: Resulting type of the expression</p>
 
 <h2 id="unsigned-numbers">unsigned numbers</h2>
 
-<p>000|0x0 |00000000 # 064|0x40|01000000 # 128|0x80|10000000 # 192|0xc0|11000000
+<pre><code class="language-console">000|0x0 |00000000 # 064|0x40|01000000 # 128|0x80|10000000 # 192|0xc0|11000000
 001|0x1 |00000001 # 065|0x41|01000001 # 129|0x81|10000001 # 193|0xc1|11000001
 002|0x2 |00000010 # 066|0x42|01000010 # 130|0x82|10000010 # 194|0xc2|11000010
 003|0x3 |00000011 # 067|0x43|01000011 # 131|0x83|10000011 # 195|0xc3|11000011
@@ -632,11 +692,12 @@ Figure 4: Resulting type of the expression</p>
 060|0x3c|00111100 # 124|0x7c|01111100 # 188|0xbc|10111100 # 252|0xfc|11111100
 061|0x3d|00111101 # 125|0x7d|01111101 # 189|0xbd|10111101 # 253|0xfd|11111101
 062|0x3e|00111110 # 126|0x7e|01111110 # 190|0xbe|10111110 # 254|0xfe|11111110
-063|0x3f|00111111 # 127|0x7f|01111111 # 191|0xbf|10111111 # 255|0xff|11111111</p>
+063|0x3f|00111111 # 127|0x7f|01111111 # 191|0xbf|10111111 # 255|0xff|11111111
+</code></pre>
 
 <h2 id="signed-numbers">signed numbers</h2>
 
-<p>-128|0x80|10000000 # -064|0xc0|11000000 # 0000|0x0 |00000000 # 0064|0x40|01000000
+<pre><code class="language-console">-128|0x80|10000000 # -064|0xc0|11000000 # 0000|0x0 |00000000 # 0064|0x40|01000000
 -127|0x81|10000001 # -063|0xc1|11000001 # 0001|0x1 |00000001 # 0065|0x41|01000001
 -126|0x82|10000010 # -062|0xc2|11000010 # 0002|0x2 |00000010 # 0066|0x42|01000010
 -125|0x83|10000011 # -061|0xc3|11000011 # 0003|0x3 |00000011 # 0067|0x43|01000011
@@ -699,13 +760,17 @@ Figure 4: Resulting type of the expression</p>
 -068|0xbc|10111100 # -004|0xfc|11111100 # 0060|0x3c|00111100 # 0124|0x7c|01111100
 -067|0xbd|10111101 # -003|0xfd|11111101 # 0061|0x3d|00111101 # 0125|0x7d|01111101
 -066|0xbe|10111110 # -002|0xfe|11111110 # 0062|0x3e|00111110 # 0126|0x7e|01111110
--065|0xbf|10111111 # -001|0xff|11111111 # 0063|0x3f|00111111 # 0127|0x7f|01111111</p>
+-065|0xbf|10111111 # -001|0xff|11111111 # 0063|0x3f|00111111 # 0127|0x7f|01111111
+</code></pre>
 
 </main>
 
   <footer>
-  <script src="//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
-<script src="//cdn.bootcss.com/highlight.js/9.12.0/languages/cpp.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/languages/shell.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/languages/x86asm.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/languages/java.min.js"></script>
 
 <script>
 hljs.configure({languages: []});

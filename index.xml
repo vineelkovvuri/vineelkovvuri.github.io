@@ -36,7 +36,7 @@
       
       <guid>/posts/signed-unsigned-integer-arithmetic-in-c/</guid>
       <description>Introduction This article is about understanding how integer conversions happen in C language. The C standard defines the integer conversion rules agnostic to any specific machine architecture. This also makes things more complicated for programmers to understand.
-First of all, Why do we need integer conversions at all? The answer is simple, we need to have single type for any given expression. Let&amp;rsquo;s say we have an expression i&amp;lt;expr1&amp;gt;&amp;lt;op&amp;gt;&amp;lt;expr2&amp;gt;i when expr1 and expr2 are of different types, we want the resulting expression from this to have one single type.</description>
+First of all, Why do we need integer conversions at all? The answer is simple, we need to have single type for any given expression. Let&amp;rsquo;s say we have an expression  when expr1 and expr2 are of different types, we want the resulting expression from this to have one single type.</description>
     </item>
     
     <item>

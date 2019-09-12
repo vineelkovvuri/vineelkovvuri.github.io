@@ -67,10 +67,11 @@ and sources from both Symbol Server and Source Server even when the binary chang
 across the debugging sessions. Below are the three topics that we are going to
 understand.</p>
 
-<pre><code>- How do Windbg identify the correct symbol file?
-- How do Windbg identify the correct source file?
-- Windbg Symbols and Sources search heuristics
-</code></pre>
+<ul>
+<li>How do Windbg identify the correct symbol file?</li>
+<li>How do Windbg identify the correct source file?</li>
+<li>Windbg Symbols and Sources search heuristics</li>
+</ul>
 
 <h1 id="how-do-windbg-identify-the-correct-symbol-file">How do Windbg identify the correct symbol file?</h1>
 
@@ -96,17 +97,15 @@ server it queries the symbol server for the appropriate pdb based on the guid.</
 <p>We can get this information either through dumpbin /headers module.exe or using
 !lmi module as shown below respectively</p>
 
-<p>&hellip;
- Debug Directories</p>
+<pre><code class="language-console">...
+ Debug Directories
 
-<pre><code>    Time Type        Size      RVA  Pointer
--------- ------- -------- -------- --------
-5A6C0899 cv            53 0001A8B4     94B4    Format: RSDS, {BB6248C9-7748-4F74-9CBA-147BF261F206}, 1, C:\Programs\Sample.pdb
-</code></pre>
+        Time Type        Size      RVA  Pointer
+    -------- ------- -------- -------- --------
+    5A6C0899 cv            53 0001A8B4     94B4    Format: RSDS, {BB6248C9-7748-4F74-9CBA-147BF261F206}, 1, C:\Programs\Sample.pdb
+...
 
-<p>&hellip;</p>
-
-<p>0:000&gt; !lmi Sample
+0:000&gt; !lmi Sample
 Loaded Module Info: [sample]
          Module: Sample
    Base Address: 00007ff6ff400000
@@ -121,21 +120,23 @@ Debug Data Dirs: Type  Size     VA  Pointer
                Age: 1, Pdb: C:\Programs\Sample.pdb
            VC_FEATURE    14, 1a908,    9508 [Data not mapped]
     Symbol Type: DEFERRED - No error - symbol load deferred
-    Load Report: no symbols loaded</p>
+    Load Report: no symbols loaded
+</code></pre>
 
 <p>If the GUID in pdb does not match with embedded GUID in binary it does not load
 the PDB file and throws following error *** ERROR: Module load completed but
 symbols could not be loaded for Win32Sample.exe.</p>
 
-<p>0:000&gt; .sympath E:\temp\Testing\x64\Release\ &lt;&ndash; Incorrect pdb
-Symbol search path is: E:\temp\Testing\x64\Release<br />
-Expanded Symbol search path is: e:\temp\testing\x64\release</p>
+<pre><code class="language-console">0:000&gt; .sympath E:\temp\Testing\x64\Release\ &lt;-- Incorrect pdb
+Symbol search path is: E:\temp\Testing\x64\Release\
+Expanded Symbol search path is: e:\temp\testing\x64\release\
 
-<p>************* Path validation summary **************
+************* Path validation summary **************
 Response                         Time (ms)     Location
-OK                                             E:\temp\Testing\x64\Release<br />
+OK                                             E:\temp\Testing\x64\Release\
 *** WARNING: Unable to verify checksum for Win32Sample.exe
-*** ERROR: Module load completed but symbols could not be loaded for Win32Sample.exe</p>
+*** ERROR: Module load completed but symbols could not be loaded for Win32Sample.exe
+</code></pre>
 
 <h1 id="how-do-windbg-identify-the-correct-source-file">How do Windbg identify the correct source file?</h1>
 
@@ -150,7 +151,7 @@ named as Dia2Dump at C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterpr
 SDK\Samples\DIA2Dump. When you build this project in Visual Studio we get
 Dia2Dump.exe, Using this we can solve the second puzzle.</p>
 
-<p>usage: Dia2Dump.exe [ options ] <filename>
+<pre><code class="language-console">usage: Dia2Dump.exe [ options ] &lt;filename&gt;
   -?                : print this help
   -all              : print all the debug info
   -m                : print all the mods
@@ -168,47 +169,47 @@ Dia2Dump.exe, Using this we can solve the second puzzle.</p>
   -fpo [RVA]        : dump frame pointer omission information for a func addr
   -fpo [symbolname] : dump frame pointer omission information for a func symbol
   -compiland [name] : dump symbols for this compiland
-  -lines <funcname> : dump line numbers for this function
-  -lines <RVA>      : dump line numbers for this address
-  -type <symbolname>: dump this type in detail
-  -label <RVA>      : dump label at RVA
-  -sym <symbolname> [childname] : dump child information of this symbol
-  -sym <RVA> [childname]        : dump child information of symbol at this addr
-  -lsrc  <file> [line]          : dump line numbers for this source file
-  -ps <RVA> [-n <number>]       : dump symbols after this address, default 16
-  -psr <RVA> [-n <number>]      : dump symbols before this address, default 16
-  -annotations <RVA>: dump annotation symbol for this RVA
-  -maptosrc <RVA>   : dump src RVA for this image RVA
-  -mapfromsrc <RVA> : dump image RVA for src RVA</p>
+  -lines &lt;funcname&gt; : dump line numbers for this function
+  -lines &lt;RVA&gt;      : dump line numbers for this address
+  -type &lt;symbolname&gt;: dump this type in detail
+  -label &lt;RVA&gt;      : dump label at RVA
+  -sym &lt;symbolname&gt; [childname] : dump child information of this symbol
+  -sym &lt;RVA&gt; [childname]        : dump child information of symbol at this addr
+  -lsrc  &lt;file&gt; [line]          : dump line numbers for this source file
+  -ps &lt;RVA&gt; [-n &lt;number&gt;]       : dump symbols after this address, default 16
+  -psr &lt;RVA&gt; [-n &lt;number&gt;]      : dump symbols before this address, default 16
+  -annotations &lt;RVA&gt;: dump annotation symbol for this RVA
+  -maptosrc &lt;RVA&gt;   : dump src RVA for this image RVA
+  -mapfromsrc &lt;RVA&gt; : dump image RVA for src RVA
+</code></pre>
 
 <p>The most important of all these flags is -sf which will dump out all the source
 files used to create an obj(object file). A sample output form this command
 Dia2Dump.exe -sf <path of pdb file> with a PDB will be as shown below</p>
 
-<p>&hellip;.
-Compiland = C:..<snipped>..\Win32Sample\x64\Release\Win32Sample.obj</p>
+<pre><code class="language-console">....
+Compiland = C:\..&lt;snipped&gt;..\Win32Sample\x64\Release\Win32Sample.obj
 
-<pre><code>    c:\..&lt;snipped&gt;..\10.0.15063.0\shared\basetsd.h (MD5: 464E631AE358F42C09701CE07F35F8BF)
-    c:\..&lt;snipped&gt;..\10.0.15063.0\shared\guiddef.h (MD5: CA7D066706A198EA5999B084AAB0CE58)
-    c:\..&lt;snipped&gt;..\10.0.15063.0\shared\stralign.h (MD5: D27BD3C9FFF58FF4798B1F17B38C5B06)
-    c:\..&lt;snipped&gt;..\10.0.15063.0\shared\winerror.h (MD5: 7AD19053F0A83DDC031CDE4638299080)
-    c:\..&lt;snipped&gt;..\10.0.15063.0\ucrt\corecrt_memory.h (MD5: 33686D742EF373658431918E1A52326C)
-    c:\..&lt;snipped&gt;..\10.0.15063.0\ucrt\ctype.h (MD5: 1AC17C8CFC2358BD87784AB186BBAFCC)
-    c:\..&lt;snipped&gt;..\10.0.15063.0\ucrt\stdlib.h (MD5: 49CF59C87D23BB42C2D25CDF0D089509)
-    c:\..&lt;snipped&gt;..\10.0.15063.0\ucrt\string.h (MD5: 1DD6630B6C5E4B83DE098670242950A2)
-    c:\..&lt;snipped&gt;..\10.0.15063.0\um\memoryapi.h (MD5: 6F6D38BE202064596573E9449CBAAC58)
-    c:\..&lt;snipped&gt;..\10.0.15063.0\um\oleauto.h (MD5: 9048E2C1FD07AD42EA6E7F51EF63D42B)
-    c:\..&lt;snipped&gt;..\10.0.15063.0\um\processthreadsapi.h (MD5: 65891E84D54E51FA2017AB4D17BF9958)
-    c:\..&lt;snipped&gt;..\10.0.15063.0\um\propidl.h (MD5: B19A6DCE51821A635FE051DBC1CE6E7E)
-    c:\..&lt;snipped&gt;..\10.0.15063.0\um\winbase.h (MD5: 86C4964B16E8566D1E8F05482D9FFA49)
-    c:\..&lt;snipped&gt;..\10.0.15063.0\um\winnt.h (MD5: 02092055CFA70103E984B6855200845C)
-    c:\..&lt;snipped&gt;..\10.0.15063.0\um\winuser.h (MD5: 8A3479DAEAB702729FFBA6C669F54438)
-    c:\..&lt;snipped&gt;..\win32sample\stdafx.h (MD5: AA9C091299F07AD95BB49E6EE4BFF136)
-    c:\..&lt;snipped&gt;..\win32sample\win32sample.cpp (MD5: BBB7EE64784A7C2A96B1439310EEF84A)  &lt;---
-    c:\..&lt;snipped&gt;..\win32sample\x64\release\win32sample.pch
+        c:\..&lt;snipped&gt;..\10.0.15063.0\shared\basetsd.h (MD5: 464E631AE358F42C09701CE07F35F8BF)
+        c:\..&lt;snipped&gt;..\10.0.15063.0\shared\guiddef.h (MD5: CA7D066706A198EA5999B084AAB0CE58)
+        c:\..&lt;snipped&gt;..\10.0.15063.0\shared\stralign.h (MD5: D27BD3C9FFF58FF4798B1F17B38C5B06)
+        c:\..&lt;snipped&gt;..\10.0.15063.0\shared\winerror.h (MD5: 7AD19053F0A83DDC031CDE4638299080)
+        c:\..&lt;snipped&gt;..\10.0.15063.0\ucrt\corecrt_memory.h (MD5: 33686D742EF373658431918E1A52326C)
+        c:\..&lt;snipped&gt;..\10.0.15063.0\ucrt\ctype.h (MD5: 1AC17C8CFC2358BD87784AB186BBAFCC)
+        c:\..&lt;snipped&gt;..\10.0.15063.0\ucrt\stdlib.h (MD5: 49CF59C87D23BB42C2D25CDF0D089509)
+        c:\..&lt;snipped&gt;..\10.0.15063.0\ucrt\string.h (MD5: 1DD6630B6C5E4B83DE098670242950A2)
+        c:\..&lt;snipped&gt;..\10.0.15063.0\um\memoryapi.h (MD5: 6F6D38BE202064596573E9449CBAAC58)
+        c:\..&lt;snipped&gt;..\10.0.15063.0\um\oleauto.h (MD5: 9048E2C1FD07AD42EA6E7F51EF63D42B)
+        c:\..&lt;snipped&gt;..\10.0.15063.0\um\processthreadsapi.h (MD5: 65891E84D54E51FA2017AB4D17BF9958)
+        c:\..&lt;snipped&gt;..\10.0.15063.0\um\propidl.h (MD5: B19A6DCE51821A635FE051DBC1CE6E7E)
+        c:\..&lt;snipped&gt;..\10.0.15063.0\um\winbase.h (MD5: 86C4964B16E8566D1E8F05482D9FFA49)
+        c:\..&lt;snipped&gt;..\10.0.15063.0\um\winnt.h (MD5: 02092055CFA70103E984B6855200845C)
+        c:\..&lt;snipped&gt;..\10.0.15063.0\um\winuser.h (MD5: 8A3479DAEAB702729FFBA6C669F54438)
+        c:\..&lt;snipped&gt;..\win32sample\stdafx.h (MD5: AA9C091299F07AD95BB49E6EE4BFF136)
+        c:\..&lt;snipped&gt;..\win32sample\win32sample.cpp (MD5: BBB7EE64784A7C2A96B1439310EEF84A)  &lt;---
+        c:\..&lt;snipped&gt;..\win32sample\x64\release\win32sample.pch
+....
 </code></pre>
-
-<p>&hellip;.</p>
 
 <p>The above information clearly suggests that PDB also contains hash of all the
 files needed to create a obj. This hash could be MD5 or SHA256(which is often
@@ -218,13 +219,12 @@ binary with PDB file this file checksum will bind the binary with its appropriat
 source file. But the checking of source files against its checksum is somewhat
 relax(more on this later).</p>
 
-<p>PS&gt; get-filehash -Algorithm MD5 &ldquo;c:&lt;snipped&gt;\win32sample\win32sample.cpp&rdquo;</p>
+<pre><code class="language-console">PS&gt; get-filehash -Algorithm MD5 &quot;c:\&lt;snipped&gt;\win32sample\win32sample.cpp&quot;
 
-<p>Algorithm Hash                              Path</p>
-
-<hr />
-
-<p>MD5       BBB7EE64784A7C2A96B1439310EEF84A  C:&lt;snipped&gt;\win32sample\win32sample.cpp</p>
+Algorithm Hash                              Path
+--------- ----                              ----
+MD5       BBB7EE64784A7C2A96B1439310EEF84A  C:\&lt;snipped&gt;\win32sample\win32sample.cpp
+</code></pre>
 
 <p>This confirms the PDB is indeed storing the MD5 Hash of the file content.</p>
 
@@ -248,18 +248,20 @@ in the PDB?</p>
 As an example I have my original source code built from C:\users\vineelko\documents\visual
 studio 2017\projects\win32sample which generated below files</p>
 
-<pre><code>- Sources: C:\&lt;snipped&gt;\Win32Sample\Win32Sample.c
-- Binary:  C:\&lt;snipped&gt;\Win32Sample\x64\Release\Win32Sample.exe
-- PDB:     C:\&lt;snipped&gt;\Win32Sample\x64\Release\Win32Sample.pdb
-</code></pre>
+<ul>
+<li>Sources: C:&lt;snipped&gt;\Win32Sample\Win32Sample.c</li>
+<li>Binary:  C:&lt;snipped&gt;\Win32Sample\x64\Release\Win32Sample.exe</li>
+<li>PDB:     C:&lt;snipped&gt;\Win32Sample\x64\Release\Win32Sample.pdb</li>
+</ul>
 
 <p>Lets say we moved the folder from C:\Users\vineelko\Documents\Visual Studio
 2017\Projects\ to E:\Temp\  like below</p>
 
-<pre><code>- Sources: E:\Temp\Win32Sample\Win32Sample.c
-- Binary:  E:\Temp\Win32Sample\x64\Release\Win32Sample.exe
-- PDB:     E:\Temp\Win32Sample\x64\Release\Win32Sample.pdb
-</code></pre>
+<ul>
+<li>Sources: E:\Temp\Win32Sample\Win32Sample.c</li>
+<li>Binary:  E:\Temp\Win32Sample\x64\Release\Win32Sample.exe</li>
+<li>PDB:     E:\Temp\Win32Sample\x64\Release\Win32Sample.pdb</li>
+</ul>
 
 <p>Now when we start debugging session windbg.exe E:\Temp\Win32Sample\x64\Release\Win32Sample.exe
 Windbg tries to find the .c and .pdb from C:\Users\vineelko\Documents\Visual Studio
@@ -271,7 +273,7 @@ respectively.</p>
 
 <p>Below is the output of !lmi which dumps the GUID and the PDB location.</p>
 
-<p>0:000&gt; !lmi Win32Sample
+<pre><code class="language-console">0:000&gt; !lmi Win32Sample
 Loaded Module Info: [win32sample]
          Module: Win32Sample
    Base Address: 00007ff62d2f0000
@@ -287,25 +289,25 @@ Debug Data Dirs: Type  Size     VA  Pointer
            VC_FEATURE    14,  23e0,    15e0 [Data not mapped]
                  POGO   26c,  23f4,    15f4 [Data not mapped]
     Symbol Type: DEFERRED - No error - symbol load deferred
-    Load Report: no symbols loaded</p>
+    Load Report: no symbols loaded
 
-<p>Turn on verbose symbol logging</p>
+Turn on verbose symbol logging
 
-<p>0:000&gt; !sym noisy
-noisy mode - symbol prompts on</p>
+0:000&gt; !sym noisy
+noisy mode - symbol prompts on
 
-<p>Try setting the symbol path to E:\temp\Testing</p>
+Try setting the symbol path to E:\temp\Testing
 
-<p>0:000&gt; .sympath E:\temp\Testing<br />
-Symbol search path is: E:\temp\Testing<br />
-Expanded Symbol search path is: e:\temp\testing<br />
+0:000&gt; .sympath E:\temp\Testing\
+Symbol search path is: E:\temp\Testing\
+Expanded Symbol search path is: e:\temp\testing\
 ************* Path validation summary **************
 Response                         Time (ms)     Location
-OK                                             E:\temp\Testing</p>
+OK                                             E:\temp\Testing\
 
-<p>Try reloading the binary PDB</p>
+Try reloading the binary PDB
 
-<p>0:000&gt; .reload /f win32sample.exe
+0:000&gt; .reload /f win32sample.exe
 DBGHELP: e:\temp\testing\Win32Sample.pdb - file not found
 DBGHELP: e:\temp\testing\exe\Win32Sample.pdb - file not found
 DBGHELP: e:\temp\testing\symbols\exe\Win32Sample.pdb - file not found
@@ -313,23 +315,24 @@ DBGHELP: C:\Users\vineelko\Documents\Visual Studio 2017\Projects\Win32Sample\x64
 - file not found
 *** WARNING: Unable to verify checksum for Win32Sample.exe
 *** ERROR: Module load completed but symbols could not be loaded for Win32Sample.exe
-DBGHELP: Win32Sample - no symbols loaded</p>
+DBGHELP: Win32Sample - no symbols loaded
 
-<p>0:000&gt; .sympath E:\temp\Testing\x64\Release
+0:000&gt; .sympath E:\temp\Testing\x64\Release
 0:000&gt; .reload /f win32sample.exe
 *** WARNING: Unable to verify checksum for Win32Sample.exe
 DBGHELP: Win32Sample - private symbols &amp; lines
         e:\temp\testing\x64\release\Win32Sample.pdb
 0:000&gt; lm
 start             end                 module name
-00007ff6<code>2d2f0000 00007ff6</code>2d2f7000   Win32Sample C (private pdb symbols)
+00007ff6`2d2f0000 00007ff6`2d2f7000   Win32Sample C (private pdb symbols)
 e:\temp\testing\x64\release\Win32Sample.pdb
-00007ff9<code>0c5e0000 00007ff9</code>0c5f6000   VCRUNTIME140   (deferred)
-00007ff9<code>2c110000 00007ff9</code>2c206000   ucrtbase   (deferred)
-00007ff9<code>2c430000 00007ff9</code>2c696000   KERNELBASE   (deferred)
-00007ff9<code>2f160000 00007ff9</code>2f20e000   KERNEL32   (deferred)
-00007ff9<code>2f400000 00007ff9</code>2f5e0000   ntdll      (export symbols)
-C:\WINDOWS\SYSTEM32\ntdll.dll</p>
+00007ff9`0c5e0000 00007ff9`0c5f6000   VCRUNTIME140   (deferred)
+00007ff9`2c110000 00007ff9`2c206000   ucrtbase   (deferred)
+00007ff9`2c430000 00007ff9`2c696000   KERNELBASE   (deferred)
+00007ff9`2f160000 00007ff9`2f20e000   KERNEL32   (deferred)
+00007ff9`2f400000 00007ff9`2f5e0000   ntdll      (export symbols)
+C:\WINDOWS\SYSTEM32\ntdll.dll
+</code></pre>
 
 <p>Looking at the .reload command output we can say Windbg expects symbol files to
 be present inside the same directory as the application or the folder named &lsquo;exe&rsquo;
@@ -339,77 +342,78 @@ for Win32Sample.exe</p>
 
 <p>Turn on verbose source logging</p>
 
-<p>0:000&gt; !srcnoisy 3
+<pre><code class="language-console">0:000&gt; !srcnoisy 3
 Noisy source output: on
 Noisy source server output: on
-Filter out everything but source server output: off</p>
+Filter out everything but source server output: off
 
-<p>0:000&gt; .srcpath e:\temp\Testing
+0:000&gt; .srcpath e:\temp\Testing
 Source search path is: e:\temp\Testing
 ************* Path validation summary **************
 Response                         Time (ms)     Location
-OK                                             e:\temp\Testing</p>
+OK                                             e:\temp\Testing
 
-<p>0:000&gt; x win32Sample!main
-00007ff6<code>2d2f1060 Win32Sample!main (void)
+0:000&gt; x win32Sample!main
+00007ff6`2d2f1060 Win32Sample!main (void)
 0:000&gt; bu win32Sample!main
 0:000&gt; g
 Breakpoint 0 hit
 Win32Sample!main:
-00007ff6</code>2d2f1060 4883ec48        sub     rsp,48h
+00007ff6`2d2f1060 4883ec48        sub     rsp,48h
 DBGENG:  Scan paths for partial path match:
-DBGENG:    prefix &lsquo;c:\users\vineelko\documents\visual studio 2017\projects\win32sample&rsquo;
-DBGENG:    suffix &lsquo;win32sample.cpp&rsquo;
-DBGENG:      match &lsquo;e:\temp\Testing&rsquo; against &lsquo;c:\users\vineelko\documents\visual studio 2017\projects\win32sample&rsquo;: 66 (match &lsquo;)
+DBGENG:    prefix 'c:\users\vineelko\documents\visual studio 2017\projects\win32sample'
+DBGENG:    suffix 'win32sample.cpp'
+DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko\documents\visual studio 2017\projects\win32sample': 66 (match ')
 DBGENG:  Scan paths for partial path match:
-DBGENG:    prefix &lsquo;c:\users\vineelko\documents\visual studio 2017\projects&rsquo;
-DBGENG:    suffix &lsquo;win32sample\win32sample.cpp&rsquo;
-DBGENG:      match &lsquo;e:\temp\Testing&rsquo; against &lsquo;c:\users\vineelko\documents\visual studio 2017\projects&rsquo;: 54 (match &lsquo;)
+DBGENG:    prefix 'c:\users\vineelko\documents\visual studio 2017\projects'
+DBGENG:    suffix 'win32sample\win32sample.cpp'
+DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko\documents\visual studio 2017\projects': 54 (match ')
 DBGENG:  Scan paths for partial path match:
-DBGENG:    prefix &lsquo;c:\users\vineelko\documents\visual studio 2017&rsquo;
-DBGENG:    suffix &lsquo;projects\win32sample\win32sample.cpp&rsquo;
-DBGENG:      match &lsquo;e:\temp\Testing&rsquo; against &lsquo;c:\users\vineelko\documents\visual studio 2017&rsquo;: 45 (match &lsquo;)
+DBGENG:    prefix 'c:\users\vineelko\documents\visual studio 2017'
+DBGENG:    suffix 'projects\win32sample\win32sample.cpp'
+DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko\documents\visual studio 2017': 45 (match ')
 DBGENG:  Scan paths for partial path match:
-DBGENG:    prefix &lsquo;c:\users\vineelko\documents&rsquo;
-DBGENG:    suffix &lsquo;visual studio 2017\projects\win32sample\win32sample.cpp&rsquo;
-DBGENG:      match &lsquo;e:\temp\Testing&rsquo; against &lsquo;c:\users\vineelko\documents&rsquo;: 26 (match &lsquo;)
+DBGENG:    prefix 'c:\users\vineelko\documents'
+DBGENG:    suffix 'visual studio 2017\projects\win32sample\win32sample.cpp'
+DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko\documents': 26 (match ')
 DBGENG:  Scan paths for partial path match:
-DBGENG:    prefix &lsquo;c:\users\vineelko&rsquo;
-DBGENG:    suffix &lsquo;documents\visual studio 2017\projects\win32sample\win32sample.cpp&rsquo;
-DBGENG:      match &lsquo;e:\temp\Testing&rsquo; against &lsquo;c:\users\vineelko&rsquo;: 16 (match &lsquo;)
+DBGENG:    prefix 'c:\users\vineelko'
+DBGENG:    suffix 'documents\visual studio 2017\projects\win32sample\win32sample.cpp'
+DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko': 16 (match ')
 DBGENG:  Scan paths for partial path match:
-DBGENG:    prefix &lsquo;c:\users&rsquo;
-DBGENG:    suffix &lsquo;vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp&rsquo;
-DBGENG:      match &lsquo;e:\temp\Testing&rsquo; against &lsquo;c:\users&rsquo;: 7 (match &lsquo;)
+DBGENG:    prefix 'c:\users'
+DBGENG:    suffix 'vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
+DBGENG:      match 'e:\temp\Testing' against 'c:\users': 7 (match ')
 DBGENG:  Scan paths for partial path match:
-DBGENG:    prefix &lsquo;c:&rsquo;
-DBGENG:    suffix &lsquo;users\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp&rsquo;
-DBGENG:      match &lsquo;e:\temp\Testing&rsquo; against &lsquo;c:&rsquo;: 1 (match &lsquo;)
+DBGENG:    prefix 'c:'
+DBGENG:    suffix 'users\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
+DBGENG:      match 'e:\temp\Testing' against 'c:': 1 (match ')
 DBGENG:  Scan all paths for:
-DBGENG:    &lsquo;c:\users\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp&rsquo;
-DBGENG:      check &lsquo;e:\temp\Testing\c:\users\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp&rsquo;
+DBGENG:    'c:\users\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
+DBGENG:      check 'e:\temp\Testing\c:\users\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
 DBGENG:  Scan all paths for:
-DBGENG:    &lsquo;users\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp&rsquo;
-DBGENG:      check &lsquo;e:\temp\Testing\users\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp&rsquo;
+DBGENG:    'users\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
+DBGENG:      check 'e:\temp\Testing\users\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
 DBGENG:  Scan all paths for:
-DBGENG:    &lsquo;vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp&rsquo;
-DBGENG:      check &lsquo;e:\temp\Testing\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp&rsquo;
+DBGENG:    'vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
+DBGENG:      check 'e:\temp\Testing\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
 DBGENG:  Scan all paths for:
-DBGENG:    &lsquo;documents\visual studio 2017\projects\win32sample\win32sample.cpp&rsquo;
-DBGENG:      check &lsquo;e:\temp\Testing\documents\visual studio 2017\projects\win32sample\win32sample.cpp&rsquo;
+DBGENG:    'documents\visual studio 2017\projects\win32sample\win32sample.cpp'
+DBGENG:      check 'e:\temp\Testing\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
 DBGENG:  Scan all paths for:
-DBGENG:    &lsquo;visual studio 2017\projects\win32sample\win32sample.cpp&rsquo;
-DBGENG:      check &lsquo;e:\temp\Testing\visual studio 2017\projects\win32sample\win32sample.cpp&rsquo;
+DBGENG:    'visual studio 2017\projects\win32sample\win32sample.cpp'
+DBGENG:      check 'e:\temp\Testing\visual studio 2017\projects\win32sample\win32sample.cpp'
 DBGENG:  Scan all paths for:
-DBGENG:    &lsquo;projects\win32sample\win32sample.cpp&rsquo;
-DBGENG:      check &lsquo;e:\temp\Testing\projects\win32sample\win32sample.cpp&rsquo;
+DBGENG:    'projects\win32sample\win32sample.cpp'
+DBGENG:      check 'e:\temp\Testing\projects\win32sample\win32sample.cpp'
 DBGENG:  Scan all paths for:
-DBGENG:    &lsquo;win32sample\win32sample.cpp&rsquo;
-DBGENG:      check &lsquo;e:\temp\Testing\win32sample\win32sample.cpp&rsquo;
+DBGENG:    'win32sample\win32sample.cpp'
+DBGENG:      check 'e:\temp\Testing\win32sample\win32sample.cpp'
 DBGENG:  Scan all paths for:
-DBGENG:    &lsquo;win32sample.cpp&rsquo;
-DBGENG:      check &lsquo;e:\temp\Testing\win32sample.cpp&rsquo;
-DBGENG:      found file &lsquo;e:\temp\Testing\win32sample.cpp&rsquo;</p>
+DBGENG:    'win32sample.cpp'
+DBGENG:      check 'e:\temp\Testing\win32sample.cpp'
+DBGENG:      found file 'e:\temp\Testing\win32sample.cpp'
+</code></pre>
 
 <p>Source path heuristics to match a source file is much more involved, It is done
 by prefix and suffix matches by joining the file path and .srcpath directory. If
@@ -418,9 +422,10 @@ then you should see a warning like below(Which is very important). Unlike symbol
 files, Eventhough Windbg throws a warning it opens the source file in code window.
 But we should be vigilient about it.</p>
 
-<p>windbg&gt; .open -a Win32Sample!main
+<pre><code class="language-console">windbg&gt; .open -a Win32Sample!main
 WARNING: Unable to find source file with matching checksum.  Found
-&lsquo;c:&lt;snipped&gt;\win32sample\win32sample.cpp&rsquo; with mismatch!</p>
+'c:\&lt;snipped&gt;\win32sample\win32sample.cpp' with mismatch!
+</code></pre>
 
 <p>In any case, Understanding these details will help us solve unresolved source and
 symbol files issue with much more confidence!</p>
@@ -435,8 +440,11 @@ symbol files issue with much more confidence!</p>
 </main>
 
   <footer>
-  <script src="//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
-<script src="//cdn.bootcss.com/highlight.js/9.12.0/languages/cpp.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/languages/shell.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/languages/cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/languages/x86asm.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/languages/java.min.js"></script>
 
 <script>
 hljs.configure({languages: []});
