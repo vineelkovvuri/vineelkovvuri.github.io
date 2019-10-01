@@ -47,18 +47,22 @@
 <h1 id="introduction">Introduction</h1>
 
 <p>When performing KD(Kernel Debugging) in Windows with Windbg if you have to set a
-break point in a user mode process we should always use .process /i address; g;
-.reload /user. Lot of good content is written on the internet on this command,
-but nothing seemed to explain why this command should be used instead of the
-familiar .process /r /p address. I would like to shed some light on this. Before
-reading any further I would strongly encourage you to read about it from above
-link. In this article I assume some basic knowledge on how kernel debugging is
-done with Windbg. Also, I would like to start with the following question.</p>
+break point in a user mode process we should always use <strong>.process /i address;
+g; .reload /user</strong>. Lot of good content is written on the
+<a href="http://www.osronline.com/article.cfm?id=576">internet</a> on this command, but
+nothing seemed to explain why this command should be used instead of the
+familiar <strong>.process /r /p address</strong>. I would like to shed some light on this.
+Before reading any further I would strongly encourage you to read about it from
+above link. In this article I assume some basic knowledge on how kernel
+debugging is done with Windbg. Also, I would like to start with the following
+question.</p>
 
+<blockquote>
 <p>If the debugger has read/write access to the user mode process via .process /r
 /p why cannot it insert int 3 in user mode process when performing KD? Why do we
 have to make the user mode process the current process context by running
 .process /i ?</p>
+</blockquote>
 
 <p>To explain this we need to quickly understand how break points work.</p>
 
