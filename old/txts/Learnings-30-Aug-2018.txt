@@ -1,0 +1,126 @@
+- Today I learned about using Windows Data Types(#)
+as part of implementing some of the functions of
+Universal CRT(#) like memcpy/memcmp etc.
+- Whenever we want to read a memory block as bytes
+we need to use the data type BYTE because it is an
+alias of 'unsigned char'
+- Most of APIs use ULONG instead of DWORD, The
+difference between using an unsigned long vs
+an unsigned int is that the former mandates at least
+32bits in size whereas int only mandates 16bits
+in size according to C standard
+- SIZE_T is another generic data type which will
+guaranteed to hold the native pointer size. So it
+is helpful in places where we need counts/sizes
+
+- Practicing Windows NT coding style by implementing
+above functions
+
+/*++
+
+Copyright (c) 1989  Microsoft Corporation
+
+Module Name:
+
+    ucrt.c
+
+Abstract:
+
+    This module implements UCRT functions
+
+Author:
+
+    Vineel Kovvuri (vineelko) 29-Aug-2018
+
+Environment:
+
+    User mode only.
+
+--*/
+
+#include <Windows.h>
+#include <stdio.h>
+
+VOID
+MemCCpy(
+    IN PVOID Dest,
+    IN CONST PVOID Src,
+    IN DWORD Character,
+    IN SIZE_T Count
+)
+{
+    PBYTE DestPtr = (PBYTE)Dest;
+    PBYTE SrcPtr = (PBYTE)Src;
+
+    for (SIZE_T i = 0; i < Count; i++) {
+        if (*SrcPtr == Character || *DestPtr == Character) {
+            break;
+        }
+        *DestPtr++ = *SrcPtr++;
+    }
+}
+
+PVOID
+MemChr(
+    IN CONST PVOID Buffer,
+    IN DWORD Character,
+    IN SIZE_T Count
+)
+{
+    PBYTE Result = NULL;
+    for (SIZE_T i = 0; i < Count; i++) {
+        if (((PBYTE)Buffer)[i] == Character) {
+            Result = (PBYTE)Buffer;
+            break;
+        }
+    }
+
+    return Result;
+}
+
+INT
+MemCmp(
+    IN CONST PVOID Buffer1,
+    IN CONST PVOID Buffer2,
+    IN SIZE_T Count
+)
+{
+    for (SIZE_T i = 0; i < Count; i++) {
+        BYTE Buffer1Byte = ((PBYTE)Buffer1)[i];
+        BYTE Buffer2Byte = ((PBYTE)Buffer2)[i];
+        if (Buffer1Byte != Buffer2Byte) {
+            return Buffer1Byte - Buffer2Byte;
+        }
+    }
+
+    return 0;
+}
+
+PVOID
+MemCpy(
+    IN PVOID Dest,
+    IN CONST PVOID Source,
+    IN SIZE_T Count
+)
+{
+    for (SIZE_T i = 0; i < Count; i++) {
+        ((PBYTE)Dest)[i] = ((PBYTE)Source)[i];
+    }
+
+    return Dest;
+}
+
+- Understood that Windows 10 SDK gets installed
+with every latest release of Visual Studio. So
+for example for RS4 Windows SDK you just have to
+install the latest VS 2017 ver.15.7. Also called
+as v141 platform tool set
+- The installed Windows 10 SDK will support building
+Win32 applications all the way down till Windows 7 SP1
+- To explicitly target Windows XP we need to install
+"Windows XP support for C++"
+
+
+# Windows Data Types - https://docs.microsoft.com/en-us/windows/desktop/winprog/windows-data-types
+# Universal C runtime routines by category - https://docs.microsoft.com/en-us/cpp/c-runtime-library/buffer-manipulation
+

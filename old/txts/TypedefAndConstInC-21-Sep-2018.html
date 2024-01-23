@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+   <head>
+       <meta charset="utf-8">
+       <link rel="shortcut icon" type="image/x-icon" href="../../images/favicon.ico">
+       <title>TypedefAndConstInC 21 Sep 2018</title>
+   </head>
+    <style>
+
+    a.link {
+        border-bottom: 1px dashed #a30000;
+        color: #a30000;
+        text-decoration: none;
+    }
+    pre {
+       width:650px;
+       margin: 0 auto;
+       font-size:12px; /* 13px will make it bold */
+    }
+    .code {
+        color:white;
+        border-radius:5px;
+        background-color:#2d3238;
+        padding:5px;
+        overflow: auto; /* enables horizontal scroll bars to code blocks */
+    }
+    .center {
+		display: inline-block;
+		margin: 0 auto;
+		max-width: 620px;
+	}
+    </style>
+
+    <body>
+        <pre>
+<b>Today, I was really surprise by the following fact in C.</b>
+<b>In Windows, we have BYTE typedefed to unsigned char, and PBYTE typedefed to</b>
+<b>BYTE*, So I excepted following use of typedefs to work in scenario.</b>
+
+<b>CONST BYTE x = 10;</b>
+<b>CONST BYTE* y = &x; //y is a pointer to constant BYTE x, and *y = 20 fails and y = &a works.</b>
+
+<b>CONST PBYTE z = &x; // And i assumed(wrong) BYTE* and PBYTE are one and the same I</b>
+<b>when applied with COSNT and felt that CONST BYTE* and CONST PBYTE are also one</b>
+<b>and the same. And this is completely incorrect. Looks like const do not gel well</b>
+<b>with typedef.</b>
+
+<b>CONST PBYTE z = &x;// wont compile because CONST PBYTE z means  BYTE* CONST z</b>
+<b>not CONST BYTE* z; !!!!!</b>
+
+<b>--------------------------------------------------------------------------------</b>
+<b>I have come across this when trying to implement MemChr function in NT style.</b>
+<b>I initially declared it as</b>
+<b>PVOID</b>
+<b>MemChr(</b>
+    CONST PVOID Buffer, <----
+    INT Char,
+    SIZE_T Count)
+
+<b>instead of</b>
+
+<b>PVOID</b>
+<b>MemChr(</b>
+    CONST VOID* Buffer, <----
+    INT Char,
+    SIZE_T Count);
+
+<b>/*++</b>
+
+<b>Copyright (c) 1989  Microsoft Corporation</b>
+
+<b>Module Name:</b>
+
+    ucrt.c
+
+<b>Abstract:</b>
+
+    This module implements UCRT functions
+
+<b>Author:</b>
+
+    Vineel Kovvuri (vineelko) 29-Aug-2018
+
+<b>Environment:</b>
+
+    User mode only.
+
+<b>--*/</b>
+
+<b>#include &ltWindows.h&gt;</b>
+
+<b>PVOID</b>
+<b>MemChr(</b>
+    CONST VOID* Buffer,
+    INT Char,
+    SIZE_T Count)
+<b>{</b>
+    CONST BYTE* BufferPtr = (CONST BYTE*)Buffer;
+    for (SIZE_T Index = 0; Index < Count; Index++) {
+        if (*BufferPtr == (BYTE)Char) {
+            return BufferPtr;
+        }
+        BufferPtr++;
+    }
+    return NULL;
+<b>}</b>
+
+<b>INT</b>
+<b>main()</b>
+<b>{</b>
+
+<b>}</b>
+<b>--------------------------------------------------------------------------------</b>
+<b>Another learning in MemChr is, it passes Buffer as pointer to Const data</b>
+<b>using CONST VOID* but expects the function to return a pointer to non const</b>
+<b>data as PVOID!!!!. This violates the const correctness.</b>
+
+        </pre>
+        <div>
+            <script src="https://utteranc.es/client.js"
+                repo="vineelkovvuri/vineelkovvuri.github.io"
+                issue-term="pathname"
+                theme="github-light"
+                crossorigin="anonymous"
+                async>
+            </script>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,31 @@
+baseurl = "/"
+languageCode = "en-us"
+title = "Vineel's Blog"
+theme = "hugo-xmin"
+googleAnalytics = ""
+disqusShortname = ""
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+footnotereturnlinkcontents = "↩"
+publishDir = "docs"
+enableEmoji = true
+
+[permalinks]
+    post = "/post/:year/:month/:day/:slug/"
+    note = "/note/:year/:month/:day/:slug/"
+
+[[menu.main]]
+    name = "Home"
+    url = "/"
+    weight = 1
+[[menu.main]]
+    name = "About"
+    url = "/about/"
+    weight = 2
+[[menu.main]]
+    name = "Subscribe"
+    url = "/index.xml"
+
+[params]
+    description = "A website built through Hugo and blogdown."
+    footer = "&copy; [Vineel Kovvuri](http://vineelkovvuri.com) | [Github](https://github.com/vineelkovvuri) | [Twitter](https://twitter.com/vineelkovvuri)"
+

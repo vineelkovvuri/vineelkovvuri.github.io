@@ -1,0 +1,9 @@
+ctype.h    => character manipulation functions
+inttypes.h => contains format specifier for fixed type ints
+limits.h   => contains the implementation defined limits of the defined types
+stdbool.h  => defined bool data type
+stddef.h   => size_t/ptrdiff_t/NULL definetions
+stdint.h   => fixed size integer types like uint32_t etc
+stdio.h    => usual io functions like prints/scanf etc
+stdlib.h   => utility functions like atoi/bsearch/qsort/rand/system functions
+string.h   => string functions + memory functions

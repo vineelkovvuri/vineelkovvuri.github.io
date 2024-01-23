@@ -1,0 +1,13 @@
+Today when debugging an RPC msrc I used below debugger commands to traverse an
+array of structures.
+
+dt -a RPCRT!ABC <address> -r1
+
+also used dqs with a function pointer array to list the pointers along with their
+symbols
+
+C++ Expression evaluator
+dc @@C++(pStubMsg->RpcMsg->Buffer) L@@C++(pStubMsg->RpcMsg->BufferLength/4)
+The above command simply displays buffer contains until its length /4 is needed
+because dc display quadwords and L is followed the object count not byte count
+

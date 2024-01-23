@@ -1,0 +1,82 @@
+Today, I was really surprise by the following fact in C.
+In Windows, we have BYTE typedefed to unsigned char, and PBYTE typedefed to
+BYTE*, So I excepted following use of typedefs to work in scenario.
+
+CONST BYTE x = 10;
+CONST BYTE* y = &x; //y is a pointer to constant BYTE x, and *y = 20 fails and y = &a works.
+
+CONST PBYTE z = &x; // And i assumed(wrong) BYTE* and PBYTE are one and the same I
+when applied with COSNT and felt that CONST BYTE* and CONST PBYTE are also one
+and the same. And this is completely incorrect. Looks like const do not gel well
+with typedef.
+
+CONST PBYTE z = &x;// wont compile because CONST PBYTE z means  BYTE* CONST z
+not CONST BYTE* z; !!!!!
+
+--------------------------------------------------------------------------------
+I have come across this when trying to implement MemChr function in NT style.
+I initially declared it as
+PVOID
+MemChr(
+    CONST PVOID Buffer, <----
+    INT Char,
+    SIZE_T Count)
+
+instead of
+
+PVOID
+MemChr(
+    CONST VOID* Buffer, <----
+    INT Char,
+    SIZE_T Count);
+
+/*++
+
+Copyright (c) 1989  Microsoft Corporation
+
+Module Name:
+
+    ucrt.c
+
+Abstract:
+
+    This module implements UCRT functions
+
+Author:
+
+    Vineel Kovvuri (vineelko) 29-Aug-2018
+
+Environment:
+
+    User mode only.
+
+--*/
+
+#include <Windows.h>
+
+PVOID
+MemChr(
+    CONST VOID* Buffer,
+    INT Char,
+    SIZE_T Count)
+{
+    CONST BYTE* BufferPtr = (CONST BYTE*)Buffer;
+    for (SIZE_T Index = 0; Index < Count; Index++) {
+        if (*BufferPtr == (BYTE)Char) {
+            return BufferPtr;
+        }
+        BufferPtr++;
+    }
+    return NULL;
+}
+
+INT
+main()
+{
+
+}
+--------------------------------------------------------------------------------
+Another learning in MemChr is, it passes Buffer as pointer to Const data
+using CONST VOID* but expects the function to return a pointer to non const
+data as PVOID!!!!. This violates the const correctness.
+

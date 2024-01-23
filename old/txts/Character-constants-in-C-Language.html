@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+   <head>
+       <meta charset="utf-8">
+       <link rel="shortcut icon" type="image/x-icon" href="../../images/favicon.ico">
+       <title>Character constants in C Language</title>
+   </head>
+    <style>
+
+    a.link {
+        border-bottom: 1px dashed #a30000;
+        color: #a30000;
+        text-decoration: none;
+    }
+    pre {
+       width:650px;
+       margin: 0 auto;
+       font-size:12px; /* 13px will make it bold */
+    }
+    .code {
+        color:white;
+        border-radius:5px;
+        background-color:#2d3238;
+        padding:5px;
+        overflow: auto; /* enables horizontal scroll bars to code blocks */
+    }
+    .center {
+		display: inline-block;
+		margin: 0 auto;
+		max-width: 620px;
+	}
+    </style>
+
+    <body>
+        <pre>
+
+<b>Below example show that we can indeed declare a character constant with more than one character (up to 4 chars max)</b>
+
+<b>int main()</b>
+<b>{</b>
+    unsigned int tag = 'Riya'; // At the max we can have 4 characters
+
+<b>#if 0</b>
+    6.4.4.4 Character constants
+        An integer character constant has type int.The value of an integer character constant
+        containing a single character that maps to a single - byte execution character is the
+        numerical value of the representation of the mapped character interpreted as an integer.
+        The value of an integer character constant containing more than one character(e.g.,
+        'ab'), or containing a character or escape sequence that does not map to a single - byte
+        execution character, is implementation - defined.If an integer character constant contains
+        a single character or escape sequence, its value is the one that results when an object with
+        type char whose value is that of the single character or escape sequence is converted to
+        type int.
+<b>#endif</b>
+
+    printf("\n%x ", tag); // This will print 0x52697961 Riya
+    return 0;
+<b>}</b>
+
+<b>In Windows, ExAllocatePoolWithTag accepts a tag as an integer as its parameter.</b>
+<b>The usage of this API by the callers uses the above technique to tag the allocated</b>
+<b>block of memory with something meaningful</b>
+
+        </pre>
+        <div>
+            <script src="https://utteranc.es/client.js"
+                repo="vineelkovvuri/vineelkovvuri.github.io"
+                issue-term="pathname"
+                theme="github-light"
+                crossorigin="anonymous"
+                async>
+            </script>
+        </div>
+    </body>
+</html>
