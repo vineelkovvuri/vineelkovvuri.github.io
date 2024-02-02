@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Home on A minimal Hugo website</title>
+    <title>Home on Vineel Kovvuri</title>
     <link>/</link>
-    <description>Recent content in Home on A minimal Hugo website</description>
+    <description>Recent content in Home on Vineel Kovvuri</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 01 Nov 2019 18:33:07 -0700</lastBuildDate>
@@ -84,6 +84,13 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>/about/</guid>
       <description>I :heart: C | Operating Systems | Debuggers | Compilers | Electronics | FPGA | Virtual Machines | Microprocessors</description>
+    </item>
+    <item>
+      <title>Course Structure</title>
+      <link>/courses/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/courses/</guid>
+      <description>C Java Python </description>
     </item>
   </channel>
 </rss>
