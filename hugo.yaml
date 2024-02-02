@@ -16,9 +16,9 @@ menu:
     - name: Home
       url: ""
       weight: 1
-    - name: Courses
-      url: "courses/"
-      weight: 2
+    # - name: Courses
+    #   url: "courses/"
+    #   weight: 2
     # - name: Blog
     #   url: "posts/"
     #   weight: 3
@@ -30,7 +30,7 @@ menu:
 
 params:
   description: "A website built through Hugo and blogdown."
-  footer: "&copy; [Vineel Kovvuri](https://vineelkovvuri.github.io) 2017 -- {Year} | [Github](https://github.com/vineelkovvuri) | [YouTube](https://youtube.com/@vineelkovvuri)"
+  footer: "&copy; [Vineel Kumar Reddy Kovvuri](https://vineelkovvuri.github.io) 2017 -- {Year} | [Github](https://github.com/vineelkovvuri) | [YouTube](https://youtube.com/@vineelkovvuri)"
 
 markup:
   highlight:
