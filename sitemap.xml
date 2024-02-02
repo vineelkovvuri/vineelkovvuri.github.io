@@ -38,11 +38,17 @@
     <loc>/posts/c-case-studies/f/</loc>
     <lastmod>2018-07-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/about/</loc>
+    <loc>/courses/c/</loc>
   </url><url>
     <loc>/categories/</loc>
   </url><url>
     <loc>/courses/</loc>
+  </url><url>
+    <loc>/courses/java/</loc>
+  </url><url>
+    <loc>/courses/linux/</loc>
+  </url><url>
+    <loc>/courses/python/</loc>
   </url><url>
     <loc>/tags/</loc>
   </url>
