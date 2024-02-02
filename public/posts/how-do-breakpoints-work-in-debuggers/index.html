@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>How Do Breakpoints Work In Debuggers? | A minimal Hugo website</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">How Do Breakpoints Work In Debuggers?</span></h1>
+
+<h2 class="date">2018/10/10</h2>
+</div>
+
+<main>
+<h1 id="introduction">Introduction</h1>
+<p>It&rsquo;s been a while, I have got a chance to blog about low-level stuff. In this
+article, I am going to explain how breakpoints work in debuggers. I am assuming
+the reader is already familiar with what a breakpoint is? and how to set it in
+your debugger of choice. The goal of this post is to explain the interplay
+between Debugger, Debuggee, Operating System and the CPU.</p>
+<h1 id="breakpoints-theory">Breakpoints Theory</h1>
+<p>To get there, we have to ask ourselves  What does it mean by debugging a
+program/process?. To keep it simple, It&rsquo;s the controlled execution of a program
+by other program. The devil is in the word controlled. Whenever you open a
+debugger and launch a program or attach to a running process, the OS and the CPU
+guarantees that any event (like dll loading or interrupts or exceptions etc)
+happening on behalf of debuggee process are notified to debugger process for it
+to take necessary action. The important thing to understand here is, it&rsquo;s the
+execution of debuggee which is causing the debugger to take actions on behalf of
+it, not the other way around.  So there should be something in the debuggee&rsquo;s
+code that should cause CPU to do the heavy lifting.  This is where CPU&rsquo;s
+breakpoint instruction comes in. Every x86/amd64 CPU provides a special
+instruction called breakpoint instruction Int 3 whose mnemonic is 0xCC. When a
+piece of code executes this instruction, the CPU triggers a breakpoint interrupt
+and notifies it to OS and asks it what needs to be done next. Now this event
+from OS gets propagated to debugger by pausing all the threads in the debuggee.
+Now it&rsquo;s up to debugger to handle it according to its will.</p>
+<p>So far so good, But one question that should bother you at this point is The
+programmer never inserted 0xCC instruction in his program when he is writing the
+code. Then who puts it in? It&rsquo;s the debugger that puts this 0xCC instruction in
+the debuggee processing using WriteProcessMemory Win32 Api in Windows. Let&rsquo;s see
+more closely how it is done. Generally, at any given point in time, a debuggee
+will be in running or debugging mode. In running mode, debugger has no control
+of the debuggee until debuggee hits the above said breakpoint instruction. In
+debug mode, it has full control of the debuggee execution, ie.., it can single
+step each line of the code, examine call stack/registers etc. This is exactly
+the mode in which you can also set additional breakpoints by hitting F9 or &lsquo;bp&rsquo;
+or equivalent. So when you ask the debugger to put a breakpoint on the current
+line/instruction, the debugger makes  a note of the location/address of the
+instruction and it simply gives us below visual feedback but no change is made
+to debuggee</p>
+<p><img src="1.Breakpoints-in-Debuggers.png" alt="Breakpoints in debuggers"></p>
+<p><img src="2.Breakpoints-in-Debuggers.png" alt="Breakpoints in debuggers"></p>
+<p>After this, when you jump from debug mode to running mode by hitting the go
+command either via F5 in Visual Studio or &lsquo;g&rsquo; command in Windbg/gdb, the
+debugger patches the first byte of all addresses at which we asked the
+debugger to set the breakpoints with 0xCC and let the debuggee run. This is
+in a way, the preparation done by debugger to make sure it gets notified
+back when CPU control reaches the user set breakpoint. Neat hack! In a
+similar way, once the breakpoint is hit, just before putting the debuggee in
+debug mode, It will update all the addresses back with their original
+content/byte. That is the reason why we don&rsquo;t see this 0xCC instruction when
+in debug mode, also this is exactly what we expect because we don&rsquo;t want our
+instructions garbled by the debugger with random 0xCC instructions when we
+want to examine. Now fasten your seat belts and let&rsquo;s see all of this in
+action!</p>
+<h1 id="breakpoints-practice">Breakpoints Practice</h1>
+<p>Let&rsquo;s consider the above program and see what happens when we set the
+breakpoint on the main and second printf lines in WinDbg. Once we set the
+breakpoints WinDbg only makes a note of these line addresses. Now when we
+hit &lsquo;g&rsquo; WinDbg moves the debuggee to running mode. Let&rsquo;s verify this whether
+debugger has patched the printf line with 0xcc before moving to running
+mode. Unfortunately, we cannot dump the main function because the program is
+already in run mode! i.e., we cannot use commands like &lsquo;uf .&rsquo;  to see
+whether the bytes are patched by Windbg. But fortunately, Process Hacker can
+help us in peering in the binary at the printf address when the program is
+running.  The below screenshot shows the contents of main function at printf
+line before hitting go command. So as expected no change at the push
+mnemonic before call instruction (just windbg kept a note of the
+breakpoints).</p>
+<pre><code class="language-C">#include &lt;stdio.h&gt;
+int main ()
+{
+    // This loop takes some time so that we
+    // get a chance to examine the address of
+    // the breakpoint at the second printf :)
+    for (int i = 1; i &lt; 100000000; i++)
+        printf(&quot;Hello World!&quot;);
+
+    for (int i = 1; i &lt; 10000000; i++)
+        printf(&quot;Hello World!&quot;);
+
+     return 0;
+}
+</code></pre>
+<p><img src="3.Breakpoints-in-Debuggers.png" alt="Breakpoints in debuggers"></p>
+<p><img src="4.Breakpoints-in-Debuggers.png" alt="Breakpoints in debuggers"></p>
+<p>After the initial for loop is done executing  and just before hitting the second
+printf the CPU executes the patched 0xCC instead of original 68600e2900 so this
+causes the breakpoint interrupt from CPU to OS and OS notifies this to debugger
+to put the debuggee in debug mode. Now debugger does the opposite of restoring
+the mnemonics from CC600e2900 to 68600e2900 so that the programmer can examine
+the content of the function as if nothing has happened before! Pretty neat HACK!</p>
+<p><img src="5.Breakpoints-in-Debuggers.png" alt="Breakpoints in debuggers"></p>
+<p>I am stopping here and let this content sink in your brain. There&rsquo;s more to it,
+for example, when the program is running and we want to forcefully break in by
+hitting toolbar break button or ctrl+break etc then debuggers in Windows uses
+<a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms682437(v=vs.85).aspx">CreateRemoteThread</a> Win32 API to create a new remote thread in the debuggee and calls the
+ntdll!DbgBreakPoint.</p>
+
+</main>
+
+  <footer>
+  
+<script defer src="//yihui.org/js/center-img.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js" integrity="sha512-9Ge7wPRBM6DUCnE7Citv0pBWqt7hXeX2732053zamwp+11RX6HBQ7DdXRMNZM6VQmnwKXFKBLE7jS0dgWXUPnA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js" integrity="sha512-wW8K3TEH5ZViD4aMPzwPdhXKs/Kb5MAm7qLRd3QliYlHy0u9utSKZsZzqlZAgJ9xxXp81acwnrZVZ8oTfoLG1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/x86asm.min.js" integrity="sha512-PsyL9V1oGfx9uQV60+pJM/GpWAefAPX7sdnE2rQ/jILKHxZCk2TPHMHLOSoihzaatNHpBzksS0EpMqnBXC7XGg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js" integrity="sha512-i0JFeiLhgBAMGfIEVqMQwALhhse1orgl34XyotSUNiNbDIB1qS9IK53sDochCIrwvj4nJ51CsDSOqhGyhZITGg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+
+<script>
+
+
+hljs.highlightAll();
+</script>
+
+  
+  <hr/>
+  © <a href="https://vineelkovvuri.github.io">Vineel Kovvuri</a> 2017 &ndash; 2024 | <a href="https://github.com/vineelkovvuri">Github</a> | <a href="https://twitter.com/vineelkovvuri">Twitter</a>
+  
+  </footer>
+  </body>
+</html>
+

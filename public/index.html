@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+	<meta name="generator" content="Hugo 0.121.2">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Home | A minimal Hugo website</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+
+
+
+<p><a href="https://github.com/yihui/hugo-xmin"><img src="https://simpleicons.org/icons/github.svg" style="max-width:15%;min-width:40px;float:right;" alt="Github repo" /></a></p>
+<h1 id="hugo-xmin">HUGO XMIN</h1>
+<h2 id="_keep-it-simple-but-not-simpler_"><em>Keep it simple, but not simpler</em></h2>
+<p><strong>XMin</strong> is a Hugo theme written by <a href="https://yihui.org">Yihui Xie</a> in about four hours: half an hour was spent on the Hugo templates, and 3.5 hours were spent on styling. The main motivation for writing this theme was to provide a really minimal example to beginners of Hugo templates. This XMin theme contains about 130 lines of code in total, including the code in HTML templates and CSS (also counting empty lines).</p>
+<pre><code class="language-bash">find . -not -path '*/exampleSite/*' \( -name '*.html' -o -name '*.css' \) | xargs wc -l
+</code></pre>
+<pre><code>       5 ./layouts/404.html
+      12 ./layouts/_default/single.html
+      20 ./layouts/_default/list.html
+      13 ./layouts/_default/terms.html
+       0 ./layouts/partials/foot_custom.html
+       0 ./layouts/partials/head_custom.html
+       9 ./layouts/partials/footer.html
+      20 ./layouts/partials/header.html
+      51 ./static/css/style.css
+       7 ./static/css/fonts.css
+     137 total
+</code></pre>
+<p>I can certainly further reduce the code, for example, by eliminating the CSS, but I believe a tiny bit of CSS can greatly improve readability. You cannot really find many CSS frameworks that only contain 50 lines of code.</p>
+<p>Although it is a minimal theme, it is actually fully functional. It supports pages (including the home page), blog posts, a navigation menu, categories, tags, and RSS. With <a href="https://github.com/yihui/hugo-xmin/blob/master/exampleSite/layouts/partials/foot_custom.html">a little bit customization</a>, it can easily support LaTeX math expressions, e.g.,</p>
+<p><code>$${\sqrt {n}}\left(\left({\frac {1}{n}}\sum _{i=1}^{n}X_{i}\right)-\mu \right)\ {\xrightarrow {d}}\ N\left(0,\sigma ^{2}\right)$$</code></p>
+<p>All pages not under the root directory of the website are listed below. You can also visit the list page of a single section, e.g., <a href="/post/">posts</a>, or <a href="/note/">notes</a>. See the <a href="/about/">About</a> page for the usage of this theme.</p>
+
+
+<ul>
+  
+  
+  
+  <li>
+    <span class="date">2019/11/01</span>
+    <a href="/posts/compiler-internals/">Compiler Internals</a>
+  </li>
+  
+  <li>
+    <span class="date">2019/04/10</span>
+    <a href="/posts/what-does-it-take-to-write-an-emulator-in-java/">What Does It Take To Write An Emulator In Java?</a>
+  </li>
+  
+  <li>
+    <span class="date">2019/03/10</span>
+    <a href="/posts/usermode-breakpoints-from-kd/">Setting User Mode Break Points From Kd Aka .process /i Vs .process /r /p</a>
+  </li>
+  
+  <li>
+    <span class="date">2019/02/10</span>
+    <a href="/posts/signed-unsigned-integer-arithmetic-in-c/">Signed/unsigned Integer Arithmetic In C</a>
+  </li>
+  
+  <li>
+    <span class="date">2019/01/10</span>
+    <a href="/posts/pdb-files-the-glue-between-the-binary-file-and-source-code/">Pdb Files: The Glue Between The Binary File And Source Code</a>
+  </li>
+  
+  <li>
+    <span class="date">2018/12/10</span>
+    <a href="/posts/pci-express-basics-101/">PCI Express Basics 101</a>
+  </li>
+  
+  <li>
+    <span class="date">2018/11/10</span>
+    <a href="/posts/lib-files-101/">Lib Files 101</a>
+  </li>
+  
+  <li>
+    <span class="date">2018/10/10</span>
+    <a href="/posts/how-do-breakpoints-work-in-debuggers/">How Do Breakpoints Work In Debuggers?</a>
+  </li>
+  
+  <li>
+    <span class="date">2018/08/10</span>
+    <a href="/posts/a-newbies-introduction-to-compilation-process-and-reverse-engineering/">A Newbie&rsquo;s Introduction To Compilation Process And Reverse Engineering</a>
+  </li>
+  
+  <li>
+    <span class="date">2018/07/10</span>
+    <a href="/posts/c-case-studies/f/">Libspng - C Language Case Study</a>
+  </li>
+  
+</ul>
+
+  <footer>
+  
+<script defer src="//yihui.org/js/center-img.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js" integrity="sha512-9Ge7wPRBM6DUCnE7Citv0pBWqt7hXeX2732053zamwp+11RX6HBQ7DdXRMNZM6VQmnwKXFKBLE7jS0dgWXUPnA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js" integrity="sha512-wW8K3TEH5ZViD4aMPzwPdhXKs/Kb5MAm7qLRd3QliYlHy0u9utSKZsZzqlZAgJ9xxXp81acwnrZVZ8oTfoLG1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/x86asm.min.js" integrity="sha512-PsyL9V1oGfx9uQV60+pJM/GpWAefAPX7sdnE2rQ/jILKHxZCk2TPHMHLOSoihzaatNHpBzksS0EpMqnBXC7XGg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js" integrity="sha512-i0JFeiLhgBAMGfIEVqMQwALhhse1orgl34XyotSUNiNbDIB1qS9IK53sDochCIrwvj4nJ51CsDSOqhGyhZITGg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+
+<script>
+
+
+hljs.highlightAll();
+</script>
+
+  
+  <hr/>
+  © <a href="https://vineelkovvuri.github.io">Vineel Kovvuri</a> 2017 &ndash; 2024 | <a href="https://github.com/vineelkovvuri">Github</a> | <a href="https://twitter.com/vineelkovvuri">Twitter</a>
+  
+  </footer>
+  </body>
+</html>
+

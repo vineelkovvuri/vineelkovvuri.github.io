@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on A minimal Hugo website</title>
+    <link>/posts/</link>
+    <description>Recent content in Posts on A minimal Hugo website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 01 Nov 2019 18:33:07 -0700</lastBuildDate>
+    <atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Compiler Internals</title>
+      <link>/posts/compiler-internals/</link>
+      <pubDate>Fri, 01 Nov 2019 18:33:07 -0700</pubDate>
+      <guid>/posts/compiler-internals/</guid>
+      <description>Basics //a.c&#xD;int myadd()&#xD;{&#xD;int sum = 10;&#xD;for (int i = 0; i &amp;lt; 100; i++)&#xD;sum += i;&#xD;return sum;&#xD;}&#xD;int myadd2()&#xD;{&#xD;int sum = 10;&#xD;for (int i = 0; i &amp;lt; 100; i++)&#xD;sum += i*i;&#xD;return sum;&#xD;}&#xD;int main()&#xD;{&#xD;return myadd();&#xD;}&#xD;&amp;gt;cl /c a.c&#xD;&amp;gt;link /dump /symbols a.obj&#xD;008 00000000 SECT3 notype () External | myadd&#xD;009 00000050 SECT3 notype () External | myadd2&#xD;00A 000000A0 SECT3 notype () External | main&#xD;The link /dump command dumps the symbols that are part of the obj file.</description>
+    </item>
+    <item>
+      <title>What Does It Take To Write An Emulator In Java?</title>
+      <link>/posts/what-does-it-take-to-write-an-emulator-in-java/</link>
+      <pubDate>Wed, 10 Apr 2019 18:33:07 -0700</pubDate>
+      <guid>/posts/what-does-it-take-to-write-an-emulator-in-java/</guid>
+      <description>Introduction I am proud, This weekend I did some productive work. I was able to code Chip 8 emulator in Java over a night. I have always been fascinated by them and finally I was able to get the damn thing to work! For those of you who are not familiar with software emulator, It is a software which can emulate the functionality of other hardware or software components. Notable examples are video game emulators(Dosbox ,NES Emulator), general purpose software emulators(QEmu)</description>
+    </item>
+    <item>
+      <title>Setting User Mode Break Points From Kd Aka .process /i Vs .process /r /p</title>
+      <link>/posts/usermode-breakpoints-from-kd/</link>
+      <pubDate>Sun, 10 Mar 2019 18:33:07 -0700</pubDate>
+      <guid>/posts/usermode-breakpoints-from-kd/</guid>
+      <description>Introduction When performing KD(Kernel Debugging) in Windows with Windbg if you have to set a break point in a user mode process we should always use .process /i address; g; .reload /user. Lot of good content is written on the internet on this command, but nothing seemed to explain why this command should be used instead of the familiar .process /r /p address. I would like to shed some light on this.</description>
+    </item>
+    <item>
+      <title>Signed/unsigned Integer Arithmetic In C</title>
+      <link>/posts/signed-unsigned-integer-arithmetic-in-c/</link>
+      <pubDate>Sun, 10 Feb 2019 18:33:07 -0700</pubDate>
+      <guid>/posts/signed-unsigned-integer-arithmetic-in-c/</guid>
+      <description>Introduction This article is about understanding how integer conversions happen in C language. The C standard defines the integer conversion rules agnostic to any specific machine architecture. This also makes things more complicated for programmers to understand.&#xA;First of all, Why do we need integer conversions at all? The answer is simple, we need to have single type for any given expression. Let&amp;rsquo;s say we have an expression when expr1 and expr2 are of different types, we want the resulting expression from this to have one single type.</description>
+    </item>
+    <item>
+      <title>Pdb Files: The Glue Between The Binary File And Source Code</title>
+      <link>/posts/pdb-files-the-glue-between-the-binary-file-and-source-code/</link>
+      <pubDate>Thu, 10 Jan 2019 18:33:07 -0700</pubDate>
+      <guid>/posts/pdb-files-the-glue-between-the-binary-file-and-source-code/</guid>
+      <description>Introduction Have you ever wondered how a debugger magically gets you to the correct pdb and correct sources when debugging an application? This article talks exactly that in the context of Windbg.&#xA;As you might be aware of, PDB files(also called as symbol files) is the glue between your application binary and the source code. There are two key Environment variables which configures Windbg about where to look for symbols and sources.</description>
+    </item>
+    <item>
+      <title>PCI Express Basics 101</title>
+      <link>/posts/pci-express-basics-101/</link>
+      <pubDate>Mon, 10 Dec 2018 18:33:07 -0700</pubDate>
+      <guid>/posts/pci-express-basics-101/</guid>
+      <description>Introduction PCI Express: It is a standard which comes in multiple generations and multiple lane configurations. PCI-E is in its 5th generation, but mostly the current shipping generation is 3rd generation also called as Gen 3. Mainly each generation improves upon the previous generation regarding the speed per lane supported by the protocol.&#xA;Below is the table for each generation and lane speed For single-lane and 16-lane links, in each direction:</description>
+    </item>
+    <item>
+      <title>Lib Files 101</title>
+      <link>/posts/lib-files-101/</link>
+      <pubDate>Sat, 10 Nov 2018 18:33:07 -0700</pubDate>
+      <guid>/posts/lib-files-101/</guid>
+      <description>Introduction During the compilation one of the crucial step after assembling is creating the Object files. The collection of these object files is called a lib file. We can create these .lib files through following visual studio project types&#xA;Static Library Dynamic Linked Library The format of these .lib files is specified in &amp;lsquo;Archive (Library) File Format.&amp;rsquo; section of PE Format. As per the spec, .lib is an archive of individual .</description>
+    </item>
+    <item>
+      <title>How Do Breakpoints Work In Debuggers?</title>
+      <link>/posts/how-do-breakpoints-work-in-debuggers/</link>
+      <pubDate>Wed, 10 Oct 2018 18:33:07 -0700</pubDate>
+      <guid>/posts/how-do-breakpoints-work-in-debuggers/</guid>
+      <description>Introduction It&amp;rsquo;s been a while, I have got a chance to blog about low-level stuff. In this article, I am going to explain how breakpoints work in debuggers. I am assuming the reader is already familiar with what a breakpoint is? and how to set it in your debugger of choice. The goal of this post is to explain the interplay between Debugger, Debuggee, Operating System and the CPU.&#xA;Breakpoints Theory To get there, we have to ask ourselves What does it mean by debugging a program/process?</description>
+    </item>
+    <item>
+      <title>A Newbie&#39;s Introduction To Compilation Process And Reverse Engineering</title>
+      <link>/posts/a-newbies-introduction-to-compilation-process-and-reverse-engineering/</link>
+      <pubDate>Fri, 10 Aug 2018 18:33:07 -0700</pubDate>
+      <guid>/posts/a-newbies-introduction-to-compilation-process-and-reverse-engineering/</guid>
+      <description>Introduction Compilers are surely the complex programs of all times. Even today, writing a compiler with minimum set of tools is considered to be challenging. This tutorial scratches the surface of different compiler phases involved in translating a given source code to executable and also shows how this information is useful in context of reverse engineering.&#xA;GNU compiler collection provides an excellent set of tools for dissecting the compilation process and to understand the working of bits and bytes in the final executable.</description>
+    </item>
+    <item>
+      <title>Libspng - C Language Case Study</title>
+      <link>/posts/c-case-studies/f/</link>
+      <pubDate>Tue, 10 Jul 2018 18:33:07 -0700</pubDate>
+      <guid>/posts/c-case-studies/f/</guid>
+      <description>Build System It uses meson build system to build the library&#xA;Data Structures It is not using any fancy data structures instead it relies on plain array of objects and uses the traditional realloc function to expand them.&#xA;Miscellaneous All variables are declared as when needed. This deviates from Linux source code. In Linux kernel, declarations are done only in the beginning of a new scope (either at the start of the function or start of a scope)</description>
+    </item>
+  </channel>
+</rss>

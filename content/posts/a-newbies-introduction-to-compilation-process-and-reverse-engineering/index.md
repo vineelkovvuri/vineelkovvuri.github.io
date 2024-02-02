@@ -276,7 +276,7 @@ Assume this file is saved as test.c issue the command
 
 This command creates the plain assembly language representation(program)
 with a file name test.s
-```C
+```x86asm
     .file  "test.c"
     .intel_syntax
     .def   ___main;  .scl    2;  .type   32; .endef

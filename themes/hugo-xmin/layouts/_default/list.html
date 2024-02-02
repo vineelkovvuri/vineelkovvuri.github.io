@@ -6,6 +6,8 @@
 
 {{ .Content }}
 
+<h1>Blog</h1>
+
 <ul>
   {{ $pages := .Pages }}
   {{ if .IsHome }}{{ $pages = .Site.RegularPages }}{{ end }}
