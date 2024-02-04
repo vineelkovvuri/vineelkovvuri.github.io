@@ -2,47 +2,52 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>/posts/compiler-internals/</loc>
+    <loc>/blog/</loc>
+    <lastmod>2019-11-01T18:33:07-07:00</lastmod>
+  </url><url>
+    <loc>/blog/compiler-internals/</loc>
     <lastmod>2019-11-01T18:33:07-07:00</lastmod>
   </url><url>
     <loc>/</loc>
     <lastmod>2019-11-01T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/posts/</loc>
-    <lastmod>2019-11-01T18:33:07-07:00</lastmod>
-  </url><url>
-    <loc>/posts/what-does-it-take-to-write-an-emulator-in-java/</loc>
+    <loc>/blog/what-does-it-take-to-write-an-emulator-in-java/</loc>
     <lastmod>2019-04-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/posts/usermode-breakpoints-from-kd/</loc>
+    <loc>/blog/usermode-breakpoints-from-kd/</loc>
     <lastmod>2019-03-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/posts/signed-unsigned-integer-arithmetic-in-c/</loc>
+    <loc>/blog/signed-unsigned-integer-arithmetic-in-c/</loc>
     <lastmod>2019-02-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/posts/pdb-files-the-glue-between-the-binary-file-and-source-code/</loc>
+    <loc>/blog/pdb-files-the-glue-between-the-binary-file-and-source-code/</loc>
     <lastmod>2019-01-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/posts/pci-express-basics-101/</loc>
+    <loc>/blog/pci-express-basics-101/</loc>
     <lastmod>2018-12-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/posts/lib-files-101/</loc>
+    <loc>/blog/lib-files-101/</loc>
     <lastmod>2018-11-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/posts/how-do-breakpoints-work-in-debuggers/</loc>
+    <loc>/blog/how-do-breakpoints-work-in-debuggers/</loc>
     <lastmod>2018-10-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/posts/a-newbies-introduction-to-compilation-process-and-reverse-engineering/</loc>
+    <loc>/blog/a-newbies-introduction-to-compilation-process-and-reverse-engineering/</loc>
     <lastmod>2018-08-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/posts/c-case-studies/f/</loc>
+    <loc>/courses/c/</loc>
     <lastmod>2018-07-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/courses/c/</loc>
+    <loc>/courses/</loc>
+    <lastmod>2018-07-10T18:33:07-07:00</lastmod>
+  </url><url>
+    <loc>/blog/c-case-studies/f/</loc>
+    <lastmod>2018-07-10T18:33:07-07:00</lastmod>
+  </url><url>
+    <loc>/courses/c/c-case-studies/f/</loc>
+    <lastmod>2018-07-10T18:33:07-07:00</lastmod>
   </url><url>
     <loc>/categories/</loc>
-  </url><url>
-    <loc>/courses/</loc>
   </url><url>
     <loc>/courses/java/</loc>
   </url><url>
@@ -51,5 +56,7 @@
     <loc>/courses/python/</loc>
   </url><url>
     <loc>/tags/</loc>
+  </url><url>
+    <loc>/vlog/</loc>
   </url>
 </urlset>
