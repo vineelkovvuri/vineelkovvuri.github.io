@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Libspng - C Language Case Study | Vineel Kovvuri</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/courses/">Courses</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/vlog/">Vlog</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Libspng - C Language Case Study</span></h1>
+
+<h2 class="date">2018/07/10</h2>
+</div>
+
+<main>
+<h1 id="build-system">Build System</h1>
+<p>It uses meson build system to build the library</p>
+<h1 id="data-structures">Data Structures</h1>
+<p>It is not using any fancy data structures instead it relies on plain array
+of objects and uses the traditional realloc function to expand them.</p>
+<h1 id="miscellaneous">Miscellaneous</h1>
+<p>All variables are declared as when needed. This deviates from Linux source
+code. In Linux kernel, declarations are done only in the beginning of a new
+scope (either at the start of the function or start of a scope)</p>
+<p>libspng:</p>
+<pre><code class="language-C">ret = calculate_subimages(sub, &amp;scanline_width, &amp;ctx-&gt;ihdr, channels);
+if(ret) return ret;
+
+unsigned char *scanline_orig = NULL, *scanline = NULL, *prev_scanline = NULL;
+
+scanline_orig = spng__malloc(ctx, scanline_width);
+prev_scanline = spng__malloc(ctx, scanline_width);
+
+if(scanline_orig == NULL || prev_scanline == NULL)
+{
+    ret = SPNG_EMEM;
+    goto decode_err;
+}
+
+/* Some of the error-handling goto's might leave scanline incremented,
+   leading to a failed free(), this prevents that. */
+scanline = scanline_orig;
+
+int i;
+for(i=0; i &lt; 7; i++)
+{
+    /* Skip empty passes */
+    if(sub[i].width != 0 &amp;&amp; sub[i].height != 0)
+    {
+        scanline_width = sub[i].scanline_width;
+        break;
+    }
+}
+
+uint16_t *gamma_lut = NULL;
+uint16_t gamma_lut8[256];
+
+if(flags &amp; SPNG_DECODE_USE_GAMA &amp;&amp; ctx-&gt;stored_gama)
+{
+    float file_gamma = (float)ctx-&gt;gama / 100000.0f;
+    float max;
+
+    uint32_t i, lut_entries;
+
+    if(fmt == SPNG_FMT_RGBA8)
+</code></pre>
+<p>Linux Kernel:</p>
+<pre><code class="language-C">static unsigned long isolate_freepages_block(struct compact_control *cc,
+                unsigned long *start_pfn,
+                unsigned long end_pfn,
+                struct list_head *freelist,
+                bool strict)
+{
+    int nr_scanned = 0, total_isolated = 0;
+    struct page *cursor, *valid_page = NULL;
+    unsigned long flags = 0;
+    bool locked = false;
+    unsigned long blockpfn = *start_pfn;
+    unsigned int order;
+
+    cursor = pfn_to_page(blockpfn);
+
+    /* Isolate free pages. */
+    for (; blockpfn &lt; end_pfn; blockpfn++, cursor++) {
+        int isolated;
+        struct page *page = cursor;
+
+        /*
+         * Periodically drop the lock (if held) regardless of its
+         * contention, to give chance to IRQs. Abort if fatal signal
+         * pending or async compaction detects need_resched()
+         */
+        if (!(blockpfn % SWAP_CLUSTER_MAX)
+            &amp;&amp; compact_unlock_should_abort(&amp;cc-&gt;zone-&gt;lock, flags,
+                                &amp;locked, cc))
+            break;
+
+        nr_scanned++;
+        if (!pfn_valid_within(blockpfn))
+            goto isolate_fail;
+
+        if (!valid_page)
+            valid_page = page;
+
+        /*
+         * For compound pages such as THP and hugetlbfs, we can save
+         * potentially a lot of iterations if we skip them at once.
+         * The check is racy, but we can consider only valid values
+         * and the only danger is skipping too much.
+         */
+        if (PageCompound(page)) {
+            const unsigned int order = compound_order(page);
+
+            if (likely(order &lt; MAX_ORDER)) {
+                blockpfn += (1UL &lt;&lt; order) - 1;
+                cursor += (1UL &lt;&lt; order) - 1;
+            }
+            goto isolate_fail;
+        }
+</code></pre>
+<p>Libspng also has multiple exits using the return statement every where in
+the function. Even in linux kernel, we use multiple return statements but
+primarily it is used initially to return from function when invalid
+parameters are given as shown below</p>
+<p>Libspng</p>
+<pre><code class="language-C">static uint16_t sample_to_target(uint16_t sample, uint8_t bit_depth, uint8_t sbits, uint8_t target)
+{
+    uint16_t sample_bits;
+    int8_t shift_amount;
+
+    if(bit_depth == sbits)
+    {
+        if(target == sbits) return sample; /* no scaling */
+    }/* bit_depth &gt; sbits */
+    else sample = sample &gt;&gt; (bit_depth - sbits); /* shift significant bits to bottom */
+
+    /* downscale */
+    if(target &lt; sbits) return sample &gt;&gt; (sbits - target);
+
+    /* upscale using left bit replication */
+    shift_amount = target - sbits;
+    sample_bits = sample;
+    sample = 0;
+
+    while(shift_amount &gt;= 0)
+    {
+        sample = sample | (sample_bits &lt;&lt; shift_amount);
+        shift_amount -= sbits;
+    }
+
+    int8_t partial = shift_amount + (int8_t)sbits;
+
+    if(partial != 0) sample = sample | (sample_bits &gt;&gt; abs(shift_amount));
+
+    return sample;
+}
+</code></pre>
+<p>Linux Kernel</p>
+<pre><code class="language-C">static enum compact_result compact_zone(struct zone *zone, struct compact_control *cc)
+{
+    enum compact_result ret;
+    unsigned long start_pfn = zone-&gt;zone_start_pfn;
+    unsigned long end_pfn = zone_end_pfn(zone);
+    const bool sync = cc-&gt;mode != MIGRATE_ASYNC;
+
+    cc-&gt;migratetype = gfpflags_to_migratetype(cc-&gt;gfp_mask);
+    ret = compaction_suitable(zone, cc-&gt;order, cc-&gt;alloc_flags,
+                            cc-&gt;classzone_idx);
+    /* Compaction is likely to fail */
+    if (ret == COMPACT_SUCCESS || ret == COMPACT_SKIPPED)
+        return ret;
+    ...
+    ...
+            /* All pages were either migrated or will be released */
+            cc-&gt;nr_migratepages = 0;
+            if (err) {
+                putback_movable_pages(&amp;cc-&gt;migratepages);
+                /*
+                 * migrate_pages() may return -ENOMEM when scanners meet
+                 * and we want compact_finished() to detect it
+                 */
+                if (err == -ENOMEM &amp;&amp; !compact_scanners_met(cc)) {
+                    ret = COMPACT_CONTENDED;
+                    goto out;
+                }
+            ....
+            }
+
+    ....
+        }
+
+    out:
+        /*
+         * Release free pages and update where the free scanner should restart,
+         * so we don't leave any returned pages behind in the next attempt.
+         */
+        if (cc-&gt;nr_freepages &gt; 0) {
+            unsigned long free_pfn = release_freepages(&amp;cc-&gt;freepages);
+
+            cc-&gt;nr_freepages = 0;
+            VM_BUG_ON(free_pfn == 0);
+</code></pre>
+
+</main>
+
+  <footer>
+  
+<script defer src="//yihui.org/js/center-img.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js" integrity="sha512-9Ge7wPRBM6DUCnE7Citv0pBWqt7hXeX2732053zamwp+11RX6HBQ7DdXRMNZM6VQmnwKXFKBLE7jS0dgWXUPnA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js" integrity="sha512-wW8K3TEH5ZViD4aMPzwPdhXKs/Kb5MAm7qLRd3QliYlHy0u9utSKZsZzqlZAgJ9xxXp81acwnrZVZ8oTfoLG1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/x86asm.min.js" integrity="sha512-PsyL9V1oGfx9uQV60+pJM/GpWAefAPX7sdnE2rQ/jILKHxZCk2TPHMHLOSoihzaatNHpBzksS0EpMqnBXC7XGg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js" integrity="sha512-i0JFeiLhgBAMGfIEVqMQwALhhse1orgl34XyotSUNiNbDIB1qS9IK53sDochCIrwvj4nJ51CsDSOqhGyhZITGg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+
+<script>
+
+
+hljs.highlightAll();
+</script>
+
+  
+  <hr/>
+  © <a href="https://vineelkovvuri.github.io">Vineel Kumar Reddy Kovvuri</a> 2017 &ndash; 2024 | <a href="https://github.com/vineelkovvuri">Github</a> | <a href="https://youtube.com/@vineelkovvuri">YouTube</a>
+  
+  </footer>
+  </body>
+</html>
+

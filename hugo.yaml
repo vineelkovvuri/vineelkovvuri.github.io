@@ -16,12 +16,15 @@ menu:
     - name: Home
       url: ""
       weight: 1
-    # - name: Courses
-    #   url: "courses/"
-    #   weight: 2
-    # - name: Blog
-    #   url: "posts/"
-    #   weight: 3
+    - name: Courses
+      url: "courses/"
+      weight: 2
+    - name: Blog
+      url: "blog/"
+      weight: 3
+    - name: Vlog
+      url: "vlog/"
+      weight: 4
     # - name: Tags
     #   url: "tags/"
     #   weight: 4
@@ -35,6 +38,8 @@ params:
 markup:
   highlight:
     codeFences: false
+    lineNos: true
   goldmark:
     renderer:
       unsafe: true
+enableEmoji: true

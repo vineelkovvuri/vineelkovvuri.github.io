@@ -1,0 +1,23 @@
+{{ partial "header.html" . }}
+<!-- <div class="article-meta">
+<h1><span class="title">{{ .Title | markdownify }}</span></h1>
+{{ with .Params.author }}<h2 class="author">{{ . }}</h2>{{ end }}
+{{ if (gt .Params.date 0) }}<h2 class="date">{{ .Date.Format "2006/01/02" }}</h2>{{ end }}
+</div> -->
+
+{{ .Content }}
+
+<h1>Vlog</h1>
+
+<main>
+    {{ range $.Site.Data.youtube.videos }}
+    <span class="date">{{ .date }}</span>
+    <a href="https://youtube.com/watch?v={{ .id }}">{{ .title | markdownify }}</a>
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+        <iframe src="https://www.youtube.com/embed/{{.id}}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="{{.title}}"></iframe>
+    </div>
+    <br>
+    {{ end }}
+</main>
+
+{{ partial "footer.html" . }}

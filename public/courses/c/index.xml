@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>C Language Course Structure on Vineel Kovvuri</title>
+    <link>/courses/c/</link>
+    <description>Recent content in C Language Course Structure on Vineel Kovvuri</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 10 Jul 2018 18:33:07 -0700</lastBuildDate>
+    <atom:link href="/courses/c/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Libspng - C Language Case Study</title>
+      <link>/courses/c/c-case-studies/f/</link>
+      <pubDate>Tue, 10 Jul 2018 18:33:07 -0700</pubDate>
+      <guid>/courses/c/c-case-studies/f/</guid>
+      <description>Build System It uses meson build system to build the library&#xA;Data Structures It is not using any fancy data structures instead it relies on plain array of objects and uses the traditional realloc function to expand them.&#xA;Miscellaneous All variables are declared as when needed. This deviates from Linux source code. In Linux kernel, declarations are done only in the beginning of a new scope (either at the start of the function or start of a scope)</description>
+    </item>
+  </channel>
+</rss>

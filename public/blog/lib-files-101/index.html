@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lib Files 101 | Vineel Kovvuri</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/courses/">Courses</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/vlog/">Vlog</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Lib Files 101</span></h1>
+
+<h2 class="date">2018/11/10</h2>
+</div>
+
+<main>
+<h1 id="introduction">Introduction</h1>
+<p>During the compilation one of the crucial step after assembling is
+creating the Object files. The collection of these object files is
+called a lib file. We can create these .lib files through following
+visual studio project types</p>
+<ol>
+<li>Static Library</li>
+<li>Dynamic Linked Library</li>
+</ol>
+<p>The format of these .lib files is specified in &lsquo;Archive (Library) File Format.&rsquo;
+section of <a href="https://docs.microsoft.com/en-us/windows/desktop/debug/pe-format#archive-library-file-formatspecification">PE
+Format</a>.
+As per the spec, .lib is an archive of individual .obj files with some metadata.
+Multiple tools can be used to extract lib files. Visual Studio installation
+contains Lib.exe tool. Since .lib and .obj files follow Unix COFF format Unix
+binutil&rsquo;s &lsquo;ar&rsquo; tool can be used to extract it.</p>
+<p>Lib StaticLib1.lib /list
+Lib StaticLib1.lib /EXTRACT:Debug\sub.obj /out:sub.obj &lt;&ndash; Extracts one file at a time!
+or
+ar -x StaticLib1.lib
+or
+use 7-Zip to extract it</p>
+<p><img src="6.VSProjectDialog.png" alt="">
+Visual Studio New Project dialog for &lsquo;Static Library&rsquo; and &lsquo;Dynamic Linked Library&rsquo;</p>
+<h1 id="static-library">Static Library</h1>
+<p>Static Library is created when you want to provide the complete code to
+link into another dll or exe. For example, If a static library
+project contains 4 files add.c,sub.c,mul.c,div.c containing functions
+for their operations like below respectively.</p>
+<pre><code class="language-C">int add(int a)
+{
+    return a + 1;
+}
+</code></pre>
+<p>When you build the project what we get is a .lib file containing obj files
+of each of the above .c file. So a static library contains all
+the code that gets compiled from your project, and this .lib will
+be consumed by any other project types(dll or exe).</p>
+<p>NOTE: The functions inside a Static Library is not declared with
+__declspec(dllexport) because all functions declared in a static
+library are meant to be consumed/included by others directly.</p>
+<p>dumpbin /exports StaticLib.lib  &lt;&ndash; shows nothing because .lib itself does not
+export anything
+dumpbin /symbols StaticLib.lib  &lt;&ndash; shows all the symbols present</p>
+<p><img src="1.StaticLib.png" alt="">
+Workflow for Static Library creation and consumption</p>
+<p><img src="2.StructureStaticLib.png" alt="">
+Concluded based on HxD view of the file</p>
+<h1 id="dynamic-linked-library">Dynamic Linked Library</h1>
+<p>Dynamic Linked Library(DLL) is in many ways similar to Static Library because
+it also provides the code to be used by other projects like dll or exe,
+but the difference is in the way the code gets re-used by consumers.
+In DLL, the outcome of the project is not only a .lib file but also a
+.dll file. In fact, in case of DLL project, the .lib file does not contain
+any .obj file instead it contains only pointers of exported functions to
+the dll containing the actual code. In a Dll, all of the code is indeed
+present inside the .dll file.</p>
+<p>Since .lib does not contain any real .obj unlike static lib, we can
+only see the exported symbols but not their code in case of dll&rsquo;s .lib file.</p>
+<pre><code class="language-C">__declspec(dllexport) int add(int a)
+{
+    return a + 1;
+}
+</code></pre>
+<p>dumpbin /exports Dll1.lib &lt;&ndash; shows all the exported functions</p>
+<p><img src="3.Dll.png" alt="">
+Workflow for Dynamic Linked Library creation and consumption</p>
+<p><img src="4.StructureDll.png" alt="">
+Concluded based on HxD view of the file</p>
+<p>NOTE: The functions inside a Dynamic Linked Library need to be declared
+with __declspec(dllexport) if they have to be visible and consumed
+by others(indirectly).</p>
+<h1 id="static-library-with-__declspecdllexport">Static Library with __declspec(dllexport)</h1>
+<p>This is interesting. When a function inside a static library is declared
+with __declspec(dllexport), like any other function, it gets included
+by the consumer in his binary(dll) but because it is declared as
+__declspec(dllexport) that function gets exported as well from the consumer
+binary! Below is a screenshot of Consumer.exe which is exporting sub2 function
+because sub2 is actually declared with __declspec(dllexport) in the
+original static library.</p>
+<p><img src="5.StaticLibWithDeclSpec(DllExport).png" alt="">
+sub2 function got exported from the final consumer binary</p>
+<p>The takeaway here is Static Libraries are just a convenient archive format
+to hold multiple .obj files nothing more or nothing less! So we should be
+cautious of how the functions are declared.</p>
+<h1 id="references">References</h1>
+<ul>
+<li><a href="https://docs.microsoft.com/en-us/windows/desktop/debug/pe-format">PE Format</a></li>
+</ul>
+
+</main>
+
+  <footer>
+  
+<script defer src="//yihui.org/js/center-img.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js" integrity="sha512-9Ge7wPRBM6DUCnE7Citv0pBWqt7hXeX2732053zamwp+11RX6HBQ7DdXRMNZM6VQmnwKXFKBLE7jS0dgWXUPnA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js" integrity="sha512-wW8K3TEH5ZViD4aMPzwPdhXKs/Kb5MAm7qLRd3QliYlHy0u9utSKZsZzqlZAgJ9xxXp81acwnrZVZ8oTfoLG1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/x86asm.min.js" integrity="sha512-PsyL9V1oGfx9uQV60+pJM/GpWAefAPX7sdnE2rQ/jILKHxZCk2TPHMHLOSoihzaatNHpBzksS0EpMqnBXC7XGg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js" integrity="sha512-i0JFeiLhgBAMGfIEVqMQwALhhse1orgl34XyotSUNiNbDIB1qS9IK53sDochCIrwvj4nJ51CsDSOqhGyhZITGg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+
+<script>
+
+
+hljs.highlightAll();
+</script>
+
+  
+  <hr/>
+  © <a href="https://vineelkovvuri.github.io">Vineel Kumar Reddy Kovvuri</a> 2017 &ndash; 2024 | <a href="https://github.com/vineelkovvuri">Github</a> | <a href="https://youtube.com/@vineelkovvuri">YouTube</a>
+  
+  </footer>
+  </body>
+</html>
+
