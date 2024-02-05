@@ -6,7 +6,7 @@ title: Home
 
 # VINEEL KOVVURI
 
-**Hi!** I'm **Vineel Kovvuri**, currently working as a Senior Software Engineer at **Microsoft** in Redmond, Washington. With around 13 years of experience, I graduated with a Master's degree from **IIIT Hyderabad**. I love teaching, hence I've created this website to share that passion at no cost :muscle:
+**Hi!** I'm **Vineel Kovvuri**, currently working as a Senior Software Engineer at **Microsoft** in Redmond, Washington. With around 13 years of experience, I graduated with a Master's degree from **IIIT Hyderabad**. I love teaching, hence I've created this website to share that passion for free :muscle:
 
 | Course                                               | Timing (IST) | Start Date | Meeting Invite                       |
 |------------------------------------------------------|--------------|------------|--------------------------------------|
