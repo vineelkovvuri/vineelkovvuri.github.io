@@ -8,7 +8,13 @@
     <loc>/blog/compiler-internals/</loc>
     <lastmod>2019-11-01T18:33:07-07:00</lastmod>
   </url><url>
+    <loc>/tags/compilers/</loc>
+    <lastmod>2019-11-01T18:33:07-07:00</lastmod>
+  </url><url>
     <loc>/</loc>
+    <lastmod>2019-11-01T18:33:07-07:00</lastmod>
+  </url><url>
+    <loc>/tags/</loc>
     <lastmod>2019-11-01T18:33:07-07:00</lastmod>
   </url><url>
     <loc>/blog/what-does-it-take-to-write-an-emulator-in-java/</loc>
@@ -35,27 +41,29 @@
     <loc>/blog/a-newbies-introduction-to-compilation-process-and-reverse-engineering/</loc>
     <lastmod>2018-08-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/courses/c/</loc>
-    <lastmod>2018-07-10T18:33:07-07:00</lastmod>
+    <loc>/tags/asm/</loc>
+    <lastmod>2018-08-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/courses/</loc>
-    <lastmod>2018-07-10T18:33:07-07:00</lastmod>
+    <loc>/tags/c/</loc>
+    <lastmod>2018-08-10T18:33:07-07:00</lastmod>
+  </url><url>
+    <loc>/tags/reversing/</loc>
+    <lastmod>2018-08-10T18:33:07-07:00</lastmod>
   </url><url>
     <loc>/blog/c-case-studies/f/</loc>
     <lastmod>2018-07-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/courses/c/c-case-studies/f/</loc>
-    <lastmod>2018-07-10T18:33:07-07:00</lastmod>
+    <loc>/courses/c/</loc>
   </url><url>
     <loc>/categories/</loc>
+  </url><url>
+    <loc>/courses/</loc>
   </url><url>
     <loc>/courses/java/</loc>
   </url><url>
     <loc>/courses/linux/</loc>
   </url><url>
     <loc>/courses/python/</loc>
-  </url><url>
-    <loc>/tags/</loc>
   </url><url>
     <loc>/vlog/</loc>
   </url>

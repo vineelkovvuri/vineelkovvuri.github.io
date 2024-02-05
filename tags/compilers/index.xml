@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Compilers on Vineel Kovvuri</title>
+    <link>/tags/compilers/</link>
+    <description>Recent content in Compilers on Vineel Kovvuri</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 01 Nov 2019 18:33:07 -0700</lastBuildDate>
+    <atom:link href="/tags/compilers/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Compiler Internals</title>
+      <link>/blog/compiler-internals/</link>
+      <pubDate>Fri, 01 Nov 2019 18:33:07 -0700</pubDate>
+      <guid>/blog/compiler-internals/</guid>
+      <description>Basics //a.c&#xD;int myadd()&#xD;{&#xD;int sum = 10;&#xD;for (int i = 0; i &amp;lt; 100; i++)&#xD;sum += i;&#xD;return sum;&#xD;}&#xD;int myadd2()&#xD;{&#xD;int sum = 10;&#xD;for (int i = 0; i &amp;lt; 100; i++)&#xD;sum += i*i;&#xD;return sum;&#xD;}&#xD;int main()&#xD;{&#xD;return myadd();&#xD;}&#xD;&amp;gt;cl /c a.c&#xD;&amp;gt;link /dump /symbols a.obj&#xD;008 00000000 SECT3 notype () External | myadd&#xD;009 00000050 SECT3 notype () External | myadd2&#xD;00A 000000A0 SECT3 notype () External | main&#xD;The link /dump command dumps the symbols that are part of the obj file.</description>
+    </item>
+  </channel>
+</rss>
