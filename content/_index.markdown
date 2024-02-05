@@ -18,12 +18,13 @@ title: Home
 
 
 <hr>
-
-[<img src="./images/gmail.png" style="max-width:40px;" alt="Github repo" />](vineel.kovvuri@gmail.com) &nbsp; &nbsp;
-[<img src="./images/github.png" style="max-width:40px;" alt="Github repo" />](https://www.github.com/vineelkovvuri) &nbsp; &nbsp;
-[<img src="./images/youtube.png" style="max-width:40px;" alt="Github repo" />](https://www.youtube.com/@vineelkovvuri) &nbsp; &nbsp;
-[<img src="./images/discord.png" style="max-width:40px;" alt="Github repo" />](https://discord.gg/baDQSPpE) &nbsp; &nbsp;
-[<img src="./images/linkedin.png" style="max-width:40px;" alt="Github repo" />](https://www.linkedin.com/in/vineelkovvuri) &nbsp; &nbsp;
+<div class="social">
+<a href="mailto:vineel.kovvuri@gmail.com" target=_blank> <img src="./images/gmail.png" style="max-width:40px;" alt="vineel.kovvuri@gmail.com" />&nbsp;&nbsp; </a>
+<a href="https://www.github.com/vineelkovvuri" target=_blank> <img src="./images/github.png" style="max-width:40px;" alt="https://www.github.com/vineelkovvuri" />&nbsp;&nbsp; </a>
+<a href="https://www.youtube.com/@vineelkovvuri" target=_blank> <img src="./images/youtube.png" style="max-width:40px;" alt="https://www.youtube.com/@vineelkovvuri" />&nbsp;&nbsp; </a>
+<a href="https://discord.gg/baDQSPpE" target=_blank> <img src="./images/discord.png" style="max-width:40px;" alt="https://discord.gg/baDQSPpE" />&nbsp;&nbsp; </a>
+<a href="https://www.linkedin.com/in/vineelkovvuri" target=_blank> <img src="./images/linkedin.png" style="max-width:40px;" alt="https://www.linkedin.com/in/vineelkovvuri" />&nbsp;&nbsp; </a>
+</div>
 
 
 [//]: <> (https://gist.github.com/rxaviers/7360908)

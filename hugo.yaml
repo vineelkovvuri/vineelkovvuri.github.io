@@ -33,7 +33,7 @@ menu:
 
 params:
   description: "A website built through Hugo and blogdown."
-  footer: "&copy; [Vineel Kumar Reddy Kovvuri](https://vineelkovvuri.github.io) 2017 -- {Year} | [Github](https://github.com/vineelkovvuri) | [YouTube](https://youtube.com/@vineelkovvuri)"
+  footer: "&copy; [Vineel Kumar Reddy Kovvuri](https://vineelkovvuri.github.io) 2017 -- {Year}"
 
 markup:
   highlight:
