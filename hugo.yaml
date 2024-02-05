@@ -25,6 +25,9 @@ menu:
     - name: Vlog
       url: "vlog/"
       weight: 4
+    - name: Presentations
+      url: "presentations/"
+      weight: 5
     # - name: Tags
     #   url: "tags/"
     #   weight: 4
