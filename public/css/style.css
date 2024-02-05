@@ -53,3 +53,7 @@ thead, tfoot, tr:nth-child(even) { background: #eee; }
 .social {
   text-align: center;
 }
+
+.social a {
+  text-decoration: none;
+}

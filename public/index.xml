@@ -86,6 +86,20 @@
       <description>C Some Fundamentals Compiling And Running Your First Program Variables, Data Types, And Arithmetic Expressions Program Looping Making Decisions Working With Arrays Working With Functions Working With Structures Character Strings Pointers Operations On Bits The Preprocessor Extending Data Types With The Enumerated Data Type, Type Definitions, And Data Type Conversions Working With Larger Programs Input And Output Operations In C Miscellaneous And Advanced Features Debugging Programs Object-Oriented Programming The Standard C Library Resources C Programming Notes for Professionals </description>
     </item>
     <item>
+      <title>Git Presentation - Part 1</title>
+      <link>/presentations/git-part-1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/presentations/git-part-1/</guid>
+      <description>&#xD;Previous&#xD;Next &amp;nbsp; &amp;nbsp;&#xD;/ [pdf]&#xD;View the PDF file here.&#xD;</description>
+    </item>
+    <item>
+      <title>Git Presentation - Part 2</title>
+      <link>/presentations/git-part-2/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/presentations/git-part-2/</guid>
+      <description>&#xD;Previous&#xD;Next &amp;nbsp; &amp;nbsp;&#xD;/ [pdf]&#xD;View the PDF file here.&#xD;</description>
+    </item>
+    <item>
       <title>Java Course Structure</title>
       <link>/courses/java/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -105,6 +119,13 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>/courses/python/</guid>
       <description>Python Getting Started A Python Q&amp;amp;A Session How Python Runs Programs How You Run Programs Types And Operations Introducing Python Object Types Numeric Types The Dynamic Typing Interlude String Fundamentals Lists And Dictionaries Tuples, Files, And Everything Else Statements And Syntax Introducing Python Statements Assignments, Expressions, And Prints If Tests And Syntax Rules While And For Loops Iterations And Comprehensions The Documentation Interlude Functions And Generators Function Basics Scopes Arguments Advanced Function Topics Comprehensions And Generations The Benchmarking Interlude Modules And Packages Modules: The Big Picture Module Coding Basics Module Packages Advanced Module Topics Classes And OOP OOP: The Big Picture Class Coding Basics A More Realistic Example Class Coding Details Operator Overloading Designing With Classes Advanced Class Topics Exceptions And Tools Exception Basics Exception Coding Details Exception Objects Designing With Exceptions Advanced Topics Unicode And Byte Strings Managed Attributes Resources Python Notes for Professionals </description>
+    </item>
+    <item>
+      <title>Visual Studio Code</title>
+      <link>/presentations/vscode/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/presentations/vscode/</guid>
+      <description>&#xD;Previous&#xD;Next &amp;nbsp; &amp;nbsp;&#xD;/ [pdf]&#xD;View the PDF file here.&#xD;</description>
     </item>
   </channel>
 </rss>

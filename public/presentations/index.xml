@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Presentations on Vineel Kovvuri</title>
+    <link>/presentations/</link>
+    <description>Recent content in Presentations on Vineel Kovvuri</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="/presentations/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Git Presentation - Part 1</title>
+      <link>/presentations/git-part-1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/presentations/git-part-1/</guid>
+      <description>&#xD;Previous&#xD;Next &amp;nbsp; &amp;nbsp;&#xD;/ [pdf]&#xD;View the PDF file here.&#xD;</description>
+    </item>
+    <item>
+      <title>Git Presentation - Part 2</title>
+      <link>/presentations/git-part-2/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/presentations/git-part-2/</guid>
+      <description>&#xD;Previous&#xD;Next &amp;nbsp; &amp;nbsp;&#xD;/ [pdf]&#xD;View the PDF file here.&#xD;</description>
+    </item>
+    <item>
+      <title>Visual Studio Code</title>
+      <link>/presentations/vscode/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/presentations/vscode/</guid>
+      <description>&#xD;Previous&#xD;Next &amp;nbsp; &amp;nbsp;&#xD;/ [pdf]&#xD;View the PDF file here.&#xD;</description>
+    </item>
+  </channel>
+</rss>

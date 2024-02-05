@@ -7,6 +7,7 @@ hugo
 # the contents of public folder should be hosted at vineelkovvuri.github.io
 
 
+hugo
 git add .
 git commit -sam "Fixups"
 git push origin HEAD:main
@@ -20,5 +21,6 @@ cd ..\vineelkovvuri.github.io
 git add .
 git commit -sam "Fixups"
 git push origin HEAD:main
+cd ..\vineelkovvuri.github.io.sources
 
 

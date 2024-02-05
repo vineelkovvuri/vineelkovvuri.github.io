@@ -59,11 +59,19 @@
   </url><url>
     <loc>/courses/</loc>
   </url><url>
+    <loc>/presentations/git-part-1/</loc>
+  </url><url>
+    <loc>/presentations/git-part-2/</loc>
+  </url><url>
     <loc>/courses/java/</loc>
   </url><url>
     <loc>/courses/linux/</loc>
   </url><url>
+    <loc>/presentations/</loc>
+  </url><url>
     <loc>/courses/python/</loc>
+  </url><url>
+    <loc>/presentations/vscode/</loc>
   </url><url>
     <loc>/vlog/</loc>
   </url>
