@@ -2,7 +2,7 @@
 title: Home
 ---
 
-[<img src="./Profile.jpg" style="max-width:15%;min-width:40px;float:right;" alt="Github repo" />](https://github.com/yihui/hugo-xmin)
+[<img src="./images/profile.jpg" style="max-width:15%;min-width:40px;float:right;" alt="Github repo" />](https://vineelkovvuri.github.com)
 
 # VINEEL KOVVURI
 
@@ -17,9 +17,13 @@ title: Home
 | [**Algorithms and Data Structures**](courses/linux/) |              |            | https://meet.google.com/gaz-ysbf-fen |
 
 
-- **Email**: vineel.kovvuri@gmail.com
-- **GitHub**: https://www.github.com/vineelkovvuri
-- **YouTube**: https://www.youtube.com/@vineelkovvuri
-- **Discord**: https://discord.gg/baDQSPpE
+<hr>
+
+[<img src="./images/gmail.png" style="max-width:40px;" alt="Github repo" />](vineel.kovvuri@gmail.com) &nbsp; &nbsp;
+[<img src="./images/github.png" style="max-width:40px;" alt="Github repo" />](https://www.github.com/vineelkovvuri) &nbsp; &nbsp;
+[<img src="./images/youtube.png" style="max-width:40px;" alt="Github repo" />](https://www.youtube.com/@vineelkovvuri) &nbsp; &nbsp;
+[<img src="./images/discord.png" style="max-width:40px;" alt="Github repo" />](https://discord.gg/baDQSPpE) &nbsp; &nbsp;
+[<img src="./images/linkedin.png" style="max-width:40px;" alt="Github repo" />](https://www.linkedin.com/in/vineelkovvuri) &nbsp; &nbsp;
+
 
 [//]: <> (https://gist.github.com/rxaviers/7360908)

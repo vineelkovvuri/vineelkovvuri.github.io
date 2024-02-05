@@ -2,6 +2,7 @@
 title: "Libspng - C Language Case Study"
 date: 2018-07-10T18:33:07-07:00
 toc: true
+tags: ['C']
 ---
 
 # Build System

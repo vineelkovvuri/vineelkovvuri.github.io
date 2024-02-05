@@ -6,8 +6,14 @@
     <description>Recent content in Courses on Vineel Kovvuri</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 10 Jul 2018 18:33:07 -0700</lastBuildDate>
     <atom:link href="/courses/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>C Language Course Structure</title>
+      <link>/courses/c/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/courses/c/</guid>
+      <description>C Some Fundamentals Compiling And Running Your First Program Variables, Data Types, And Arithmetic Expressions Program Looping Making Decisions Working With Arrays Working With Functions Working With Structures Character Strings Pointers Operations On Bits The Preprocessor Extending Data Types With The Enumerated Data Type, Type Definitions, And Data Type Conversions Working With Larger Programs Input And Output Operations In C Miscellaneous And Advanced Features Debugging Programs Object-Oriented Programming The Standard C Library Resources C Programming Notes for Professionals </description>
+    </item>
     <item>
       <title>Java Course Structure</title>
       <link>/courses/java/</link>

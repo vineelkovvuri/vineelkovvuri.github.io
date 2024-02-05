@@ -6,8 +6,9 @@
 
 {{ .Content }}
 
+_default\list.html
 <h1>Blog</h1>
-
+{{.Section}}
 <ul>
   {{ $pages := .Pages }}
   {{ if .IsHome }}{{ $pages = .Site.RegularPages }}{{ end }}

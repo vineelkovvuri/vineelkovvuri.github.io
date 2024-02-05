@@ -2,6 +2,7 @@
 title: "A Newbie's Introduction To Compilation Process And Reverse Engineering"
 date: 2018-08-10T18:33:07-07:00
 toc: true
+tags: ['C', 'Asm', 'Reversing']
 ---
 
 # Introduction

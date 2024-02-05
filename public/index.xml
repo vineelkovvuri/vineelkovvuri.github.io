@@ -79,11 +79,11 @@
       <description>Build System It uses meson build system to build the library&#xA;Data Structures It is not using any fancy data structures instead it relies on plain array of objects and uses the traditional realloc function to expand them.&#xA;Miscellaneous All variables are declared as when needed. This deviates from Linux source code. In Linux kernel, declarations are done only in the beginning of a new scope (either at the start of the function or start of a scope)</description>
     </item>
     <item>
-      <title>Libspng - C Language Case Study</title>
-      <link>/courses/c/c-case-studies/f/</link>
-      <pubDate>Tue, 10 Jul 2018 18:33:07 -0700</pubDate>
-      <guid>/courses/c/c-case-studies/f/</guid>
-      <description>Build System It uses meson build system to build the library&#xA;Data Structures It is not using any fancy data structures instead it relies on plain array of objects and uses the traditional realloc function to expand them.&#xA;Miscellaneous All variables are declared as when needed. This deviates from Linux source code. In Linux kernel, declarations are done only in the beginning of a new scope (either at the start of the function or start of a scope)</description>
+      <title>C Language Course Structure</title>
+      <link>/courses/c/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/courses/c/</guid>
+      <description>C Some Fundamentals Compiling And Running Your First Program Variables, Data Types, And Arithmetic Expressions Program Looping Making Decisions Working With Arrays Working With Functions Working With Structures Character Strings Pointers Operations On Bits The Preprocessor Extending Data Types With The Enumerated Data Type, Type Definitions, And Data Type Conversions Working With Larger Programs Input And Output Operations In C Miscellaneous And Advanced Features Debugging Programs Object-Oriented Programming The Standard C Library Resources C Programming Notes for Professionals </description>
     </item>
     <item>
       <title>Java Course Structure</title>
