@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Courses on Vineel Kovvuri</title>
+    <link>/courses/</link>
+    <description>Recent content in Courses on Vineel Kovvuri</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="/courses/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>C Language Course Structure</title>
+      <link>/courses/c/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/courses/c/</guid>
+      <description>C Some Fundamentals Compiling And Running Your First Program Variables, Data Types, And Arithmetic Expressions Program Looping Making Decisions Working With Arrays Working With Functions Working With Structures Character Strings Pointers Operations On Bits The Preprocessor Extending Data Types With The Enumerated Data Type, Type Definitions, And Data Type Conversions Working With Larger Programs Input And Output Operations In C Miscellaneous And Advanced Features Debugging Programs Object-Oriented Programming The Standard C Library Resources C Programming Notes for Professionals </description>
+    </item>
+    <item>
+      <title>Java Course Structure</title>
+      <link>/courses/java/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/courses/java/</guid>
+      <description>Java The Java Language The History and Evolution of Java An Overview of Java Data Types, Variables, and Arrays Operators Control Statements Introducing Classes A Closer Look at Methods and Classes Inheritance Packages and Interfaces Exception Handling Multithreaded Programming Enumerations, Autoboxing, and Annotations I/O, Try-with-Resources, and Other Topics Generics Lambda Expressions Modules Switch Expressions, Records, and Other Recently Added Features The Java Library String Handling Exploring java.lang java.util Part 1: The Collections Framework java.</description>
+    </item>
+    <item>
+      <title>Linux Course Structure</title>
+      <link>/courses/linux/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/courses/linux/</guid>
+      <description>Linux Learning The Shell What Is The Shell Navigation Exploring The System Manipulating Files And Directories Working With Commands Redirection Seeing The World As The Shell Sees It Advanced Keyboard Tricks Permissions Processes Configuration And The Environment The Environment A Gentle Introduction To Vi Customizing The Prompt Common Tasks And Essential Tools Package Management Storage Media Networking Searching For Files Archiving And Backup Regular Expressions Text Processing Formatting Output Printing Compiling Programs Writing Shell Scripts Writing Your First Script Starting A Project Top Down Design Flow Control Branching With If Reading Keyboard Input Flow Control Looping With While Until Troubleshooting Flow Control Branching With Case Positional Parameters Flow Control Looping With For Strings And Numbers Arrays Resources Linux Commands Notes for Professionals </description>
+    </item>
+    <item>
+      <title>Python Course Structure</title>
+      <link>/courses/python/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/courses/python/</guid>
+      <description>Python Getting Started A Python Q&amp;amp;A Session How Python Runs Programs How You Run Programs Types And Operations Introducing Python Object Types Numeric Types The Dynamic Typing Interlude String Fundamentals Lists And Dictionaries Tuples, Files, And Everything Else Statements And Syntax Introducing Python Statements Assignments, Expressions, And Prints If Tests And Syntax Rules While And For Loops Iterations And Comprehensions The Documentation Interlude Functions And Generators Function Basics Scopes Arguments Advanced Function Topics Comprehensions And Generations The Benchmarking Interlude Modules And Packages Modules: The Big Picture Module Coding Basics Module Packages Advanced Module Topics Classes And OOP OOP: The Big Picture Class Coding Basics A More Realistic Example Class Coding Details Operator Overloading Designing With Classes Advanced Class Topics Exceptions And Tools Exception Basics Exception Coding Details Exception Objects Designing With Exceptions Advanced Topics Unicode And Byte Strings Managed Attributes Resources Python Notes for Professionals </description>
+    </item>
+  </channel>
+</rss>
