@@ -5,7 +5,8 @@ tags: ['Compilers']
 ---
 
 ## Basics
-```C
+
+```c
 //a.c
 int myadd()
 {
