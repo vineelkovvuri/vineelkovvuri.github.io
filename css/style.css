@@ -50,6 +50,9 @@ table thead th { border-bottom: 1px solid #ddd; }
 th, td { padding: 5px; }
 thead, tfoot, tr:nth-child(even) { background: #eee; }
 
+/* below will fix the highlightjs theme. As we make it #eee above */
+pre tr:nth-child(even) { background: #fff; }
+
 .social {
   text-align: center;
 }
