@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>UART - From AVR to Linux to Logic Analyzer | Vineel Kovvuri</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/courses/">Courses</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/vlog/">Vlog</a></li>
+      
+      <li><a href="/presentations/">Presentations</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">UART - From AVR to Linux to Logic Analyzer</span></h1>
+
+<h2 class="date">2019/09/20</h2>
+</div>
+
+<main>
+<h1 id="uart---from-avr-to-linux-to-logic-analyzer">UART - From AVR to Linux to Logic Analyzer</h1>
+<h1 id="introduction">Introduction</h1>
+<p>In this article, let&rsquo;s see how a program running on Atmega328PU microcontroller
+can communicate to external world using UART. In order to run through this
+exercise we need below equipment.</p>
+<ol>
+<li><a href="https://www.aliexpress.com/item/32973635527.html?spm=a2g0s.9042311.0.0.27424c4dOZJfJV">Atmega328PU Microcontroller</a></li>
+<li>Breadboard</li>
+<li><a href="https://www.aliexpress.com/item/32651814443.html?spm=a2g0s.9042311.0.0.27424c4dOZJfJV">AVR/USBASP programmer</a></li>
+<li><a href="https://www.amazon.com/gp/product/B00QT7LQ88/ref=ppx_yo_dt_b_asin_title_o02_s00?ie=UTF8&amp;psc=1">USB to TTL Adapater</a></li>
+<li><a href="https://www.aliexpress.com/item/33062091072.html?spm=a2g0s.9042311.0.0.27424c4dHus6xH">Logic Analyzer</a></li>
+<li><a href="https://www.aliexpress.com/item/33024255264.html?spm=a2g0s.9042311.0.0.65aa4c4dDiDkXx">Digital Oscilloscope</a></li>
+</ol>
+<h1 id="atmega328pu-pinout">Atmega328PU pinout</h1>
+<p>It is an 8-bit microcontroller(uC) with following pinout. All its digital pins
+are grouped in to 4 banks(PA/PB/PC/PD).
+<img src="Atmega328PUPinout.png" alt=""></p>
+<h1 id="usbasp-programmer-pinout">USBASP programmer pinout</h1>
+<p>All of the pins highlighted on uC with pink should be connected to below
+appropriate usbasp pins</p>
+<p><img src="usbasp_pinout.png" alt=""></p>
+<h1 id="complete-setup-with-host">Complete setup with host</h1>
+<p>Below is the complete setup and USBASP, USB to TTL adapter, Logic Analyzer
+routed through an USB hub connected to the host machine. Hook the USB to TTL
+Adapter to TX pin to monitor the string in cutecom. Also, to actually see the
+electrical signals transmitted on the TX pin, connect the Logic Analyzer channel
+zero pin to TX pin of the uC.</p>
+<p><img src="setup.png" alt=""></p>
+<h1 id="simple-uart-program-to-send-information-out-of-atmega328pu">Simple UART program to send information out of Atmega328PU</h1>
+<p>Below sample program will initialize the UART and transmits &ldquo;Hello UART&rdquo; string
+on TXD(PD1) pin on the uC.</p>
+<p><img src="UART_Registers.png" alt=""></p>
+<pre><code class="language-c">#include &lt;string.h&gt;
+#include &lt;avr/io.h&gt;
+#include &lt;util/delay.h&gt;
+#include &lt;util/setbaud.h&gt;
+
+void USART_Init()
+{
+  /*Set baud rate */
+  // By default, atmega328p runs at 1Mhz without external oscilator
+  // So as per the data sheet the UBBR value should be 6 for 9600 baud rate
+  UBRR0H = 0;
+  UBRR0L = 6;
+
+  UCSR0A &amp;= ~(1 &lt;&lt; U2X0);
+
+  //Enable receiver and transmitter */
+  UCSR0B = (1&lt;&lt;RXEN0)|(1&lt;&lt;TXEN0);
+  /* Set frame format: 8data, 1stop bit */
+  UCSR0C = (3&lt;&lt;UCSZ00);
+}
+
+void USART_Transmit(unsigned char data)
+{
+  /* Wait for empty transmit buffer */
+  while (!(UCSR0A &amp; (1&lt;&lt;UDRE0)))
+  ;
+  /* Put data into buffer, sends the data */
+  UDR0 = data;
+}
+
+int main()
+{
+  char outstr[50] = &quot;Hello UART \r\n&quot;;
+  USART_Init();
+  DDRB = 0xff;
+  while (1) {
+    for (int i = 0; i &lt; strlen(outstr); i++) {
+      USART_Transmit(outstr[i]);                          /* to test */
+    }
+  }
+
+  return 0;
+}
+
+</code></pre>
+<p>Flash the above program to the uC(check references for the sample makefile) and
+connect USB to TTL adapter to TX pin of the uC. Then fire up cutecom(as sudo)
+and connect the appropriate ttyUSB and make sure the baudrate is set to 9600.</p>
+<p><img src="USB_to_TTL_Adapater.png" alt="">
+<img src="UART_in_cutecom.png" alt=""></p>
+<p>This confirms both the transmission of data from uC and reception on the host
+machine. But in order to actually look at the electrical signals we can use a
+cheap logic analyzer. This logic analyzer works with <a href="https://www.saleae.com/downloads/">Saleae Logic Analyzer
+software</a>.</p>
+<p>Below is the waveforms captured and appropriately decoded in the logic analyzer
+software
+<img src="UART_in_saleae_logic.png" alt=""></p>
+<p>Finally, If you are curious, you can also watch the same in a cheap oscilloscope
+like below! <img src="Final.png" alt=""></p>
+<h1 id="references">References</h1>
+<ul>
+<li><a href="https://www.saleae.com/downloads/">Saleae Logic Analyzer</a></li>
+<li><a href="https://www.sparkfun.com/datasheets/Components/SMD/ATMega328.pdf">ATMega328P Datasheet</a></li>
+<li><a href="https://github.com/vineelkovvuri/AVR-Programming/tree/master/mycode/serialIO">UART Code sample</a></li>
+</ul>
+
+</main>
+
+  <footer>
+  
+<script defer src="/js/center-img.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js" integrity="sha512-axd5V66bnXpNVQzm1c7u1M614TVRXXtouyWCE+eMYl8ALK8ePJEs96Xtx7VVrPBc0UraCn63U1+ARFI3ofW+aA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js" integrity="sha512-9Ge7wPRBM6DUCnE7Citv0pBWqt7hXeX2732053zamwp+11RX6HBQ7DdXRMNZM6VQmnwKXFKBLE7jS0dgWXUPnA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js" integrity="sha512-wW8K3TEH5ZViD4aMPzwPdhXKs/Kb5MAm7qLRd3QliYlHy0u9utSKZsZzqlZAgJ9xxXp81acwnrZVZ8oTfoLG1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/x86asm.min.js" integrity="sha512-PsyL9V1oGfx9uQV60+pJM/GpWAefAPX7sdnE2rQ/jILKHxZCk2TPHMHLOSoihzaatNHpBzksS0EpMqnBXC7XGg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js" integrity="sha512-i0JFeiLhgBAMGfIEVqMQwALhhse1orgl34XyotSUNiNbDIB1qS9IK53sDochCIrwvj4nJ51CsDSOqhGyhZITGg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+
+<script>
+hljs.highlightAll();
+hljs.initLineNumbersOnLoad();
+</script>
+
+  
+  <hr/>
+  © <a href="https://vineelkovvuri.github.io">Vineel Kumar Reddy Kovvuri</a> 2017 &ndash; 2024
+  
+  </footer>
+  </body>
+</html>
+
