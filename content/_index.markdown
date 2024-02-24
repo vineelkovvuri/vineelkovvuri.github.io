@@ -8,13 +8,13 @@ title: Home
 
 **Hi!** I'm **Vineel Kovvuri**, currently working as a Senior Software Engineer at **Microsoft** in Redmond, Washington. With around 13 years of experience, I graduated with a Master's degree from **IIIT Hyderabad**. I love teaching, hence I've created this website to share that passion for free :muscle:
 
-| Course                          | Timing (IST)   | Start Date | Meeting Invite                                     |
-|---------------------------------|----------------|------------|----------------------------------------------------|
-| [**C**](courses/c/)             | 10AM - 11:30AM |            | [**Invite**](https://meet.google.com/uob-kgdq-vde) |
-| [**Java**](courses/java/)       |                |            | [**Invite**](https://meet.google.com/spd-pnfs-hpy) |
-| [**Python**](courses/python/)   |                |            | [**Invite**](https://meet.google.com/ibo-ckah-mrm) |
-| [**Linux**](courses/linux/)     |                |            | [**Invite**](https://meet.google.com/gaz-ysbf-fen) |
-| [**Algorithms**](courses/algo/) |                |            | [**Invite**](https://meet.google.com/gaz-ysbf-fen) |
+| Course                          | Timing (IST) | Start Date | Meeting Invite                                     |
+|---------------------------------|--------------|------------|----------------------------------------------------|
+| [**C**](courses/c/)             |              |            | [**Invite**](https://meet.google.com/uob-kgdq-vde) |
+| [**Java**](courses/java/)       |              |            | [**Invite**](https://meet.google.com/spd-pnfs-hpy) |
+| [**Python**](courses/python/)   |              |            | [**Invite**](https://meet.google.com/ibo-ckah-mrm) |
+| [**Linux**](courses/linux/)     |              |            | [**Invite**](https://meet.google.com/gaz-ysbf-fen) |
+| [**Algorithms**](courses/algo/) |              |            | [**Invite**](https://meet.google.com/gaz-ysbf-fen) |
 
 
 <hr>
