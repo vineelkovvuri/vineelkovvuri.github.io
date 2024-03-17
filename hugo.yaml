@@ -16,9 +16,9 @@ menu:
     - name: Home
       url: ""
       weight: 1
-    - name: Courses
-      url: "courses/"
-      weight: 2
+    # - name: Courses
+    #   url: "courses/"
+    #   weight: 2
     - name: Blog
       url: "blog/"
       weight: 3
