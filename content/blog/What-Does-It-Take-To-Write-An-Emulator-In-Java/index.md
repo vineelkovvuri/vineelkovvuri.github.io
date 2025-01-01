@@ -81,7 +81,7 @@ and each instruction is first fetched using Memory object's getWord()
 method(every opcode in of Chip 8 is of 2 bytes). Then decode the instruction
 and appropriately run the respective executable code. For the majority of
 time, execution mainly results in moving data around.
-```Java
+```java
 //Below Is The Trimmed Version Of Original Source Code Found At
 //https://github.com/vineelkovvuri/Projects/tree/master/Chip8Emulator/src/main/java/com/vineelkumarreddy/chip8/Chip8CPU.java
 public class Chip8CPU {
@@ -129,7 +129,7 @@ public class Chip8CPU {
 }
 ```
 # Memory
-```Java
+```java
 //Below Is The Trimmed Version Of Original Source Code Found At
 //https://github.com/vineelkovvuri/Projects/tree/master/Chip8Emulator/src/main/java/com/vineelkumarreddy/chip8/Chip8Memory.java
 public class Chip8Memory {
@@ -153,7 +153,7 @@ These reads and writes are actually backed up by 4k integer array. This is
 the maximum memory addressable by Chip 8 instruction set.
 
 # Display
-```Java
+```java
 //Below Is The Trimmed Version Of Original Source Code Found At
 //https://github.com/vineelkovvuri/Projects/tree/master/Chip8Emulator/src/main/java/com/vineelkumarreddy/chip8/Chip8Display.java
 public class Chip8Display extends JFrame {
@@ -180,7 +180,7 @@ be set to black for 'off' state and green for 'on' state by setPixel()
 method.
 
 # Keyboard
-```Java
+```java
 //Below Is The Trimmed Version Of Original Source Code Found At
 //https://github.com/vineelkovvuri/Projects/tree/master/Chip8Emulator/src/main/java/com/vineelkumarreddy/chip8/Chip8Keyboard.java
 //This listener is added to Chip8Display module to capture the events
@@ -200,7 +200,7 @@ array of 16 integers and convert the A-F key events to their corresponding
 10-15 indexes in to the above array.
 
 # Main
-```Java
+```java
 public class Main {
     public static void main(String... args) {
         // Init peripherals

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=9999&amp;path=livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Pdb Files: The Glue Between The Binary File And Source Code | Vineel Kovvuri</title>
@@ -17,8 +17,6 @@
       <li><a href="/">Home</a></li>
       
       <li><a href="/blog/">Blog</a></li>
-      
-      <li><a href="/vlog/">Vlog</a></li>
       
       <li><a href="/presentations/">Presentations</a></li>
       
@@ -79,45 +77,88 @@ path or via _NT_SYMBOL_PATH matches or not. In cases where we are using symbol
 server it queries the symbol server for the appropriate pdb based on the guid.</p>
 <p>We can get this information either through dumpbin /headers module.exe or using
 !lmi module as shown below respectively</p>
-<pre><code class="language-console">...
- Debug Directories
-
-        Time Type        Size      RVA  Pointer
-    -------- ------- -------- -------- --------
-    5A6C0899 cv            53 0001A8B4     94B4    Format: RSDS, {BB6248C9-7748-4F74-9CBA-147BF261F206}, 1, C:\Programs\Sample.pdb
-...
-
-0:000&gt; !lmi Sample
-Loaded Module Info: [sample]
-         Module: Sample
-   Base Address: 00007ff6ff400000
-     Image Name: Sample.exe
-   Machine Type: 34404 (X64)
-     Time Stamp: 5a6c0899 Fri Jan 26 21:05:29 2018
-           Size: 24000
-       CheckSum: 0
-Characteristics: 22
-Debug Data Dirs: Type  Size     VA  Pointer
-             CODEVIEW    53, 1a8b4,    94b4 RSDS - GUID: {BB6248C9-7748-4F74-9CBA-147BF261F206}
-               Age: 1, Pdb: C:\Programs\Sample.pdb
-           VC_FEATURE    14, 1a908,    9508 [Data not mapped]
-    Symbol Type: DEFERRED - No error - symbol load deferred
-    Load Report: no symbols loaded
-</code></pre>
-<p>If the GUID in pdb does not match with embedded GUID in binary it does not load
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span> Debug Directories
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>        Time Type        Size      RVA  Pointer
+</span></span><span style="display:flex;"><span>    -------- ------- -------- -------- --------
+</span></span><span style="display:flex;"><span>    5A6C0899 cv            53 0001A8B4     94B4    Format: RSDS, {BB6248C9-7748-4F74-9CBA-147BF261F206}, 1, C:\Programs\Sample.pdb
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>0:000&gt; !lmi Sample
+</span></span><span style="display:flex;"><span>Loaded Module Info: [sample]
+</span></span><span style="display:flex;"><span>         Module: Sample
+</span></span><span style="display:flex;"><span>   Base Address: 00007ff6ff400000
+</span></span><span style="display:flex;"><span>     Image Name: Sample.exe
+</span></span><span style="display:flex;"><span>   Machine Type: 34404 (X64)
+</span></span><span style="display:flex;"><span>     Time Stamp: 5a6c0899 Fri Jan 26 21:05:29 2018
+</span></span><span style="display:flex;"><span>           Size: 24000
+</span></span><span style="display:flex;"><span>       CheckSum: 0
+</span></span><span style="display:flex;"><span>Characteristics: 22
+</span></span><span style="display:flex;"><span>Debug Data Dirs: Type  Size     VA  Pointer
+</span></span><span style="display:flex;"><span>             CODEVIEW    53, 1a8b4,    94b4 RSDS - GUID: {BB6248C9-7748-4F74-9CBA-147BF261F206}
+</span></span><span style="display:flex;"><span>               Age: 1, Pdb: C:\Programs\Sample.pdb
+</span></span><span style="display:flex;"><span>           VC_FEATURE    14, 1a908,    9508 [Data not mapped]
+</span></span><span style="display:flex;"><span>    Symbol Type: DEFERRED - No error - symbol load deferred
+</span></span><span style="display:flex;"><span>    Load Report: no symbols loaded
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>If the GUID in pdb does not match with embedded GUID in binary it does not load
 the PDB file and throws following error *** ERROR: Module load completed but
 symbols could not be loaded for Win32Sample.exe.</p>
-<pre><code class="language-console">0:000&gt; .sympath E:\temp\Testing\x64\Release\ &lt;-- Incorrect pdb
-Symbol search path is: E:\temp\Testing\x64\Release\
-Expanded Symbol search path is: e:\temp\testing\x64\release\
-
-************* Path validation summary **************
-Response                         Time (ms)     Location
-OK                                             E:\temp\Testing\x64\Release\
-*** WARNING: Unable to verify checksum for Win32Sample.exe
-*** ERROR: Module load completed but symbols could not be loaded for Win32Sample.exe
-</code></pre>
-<h1 id="how-do-windbg-identify-the-correct-source-file">How do Windbg identify the correct source file?</h1>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>0:000&gt; .sympath E:\temp\Testing\x64\Release\ &lt;-- Incorrect pdb
+</span></span><span style="display:flex;"><span>Symbol search path is: E:\temp\Testing\x64\Release\
+</span></span><span style="display:flex;"><span>Expanded Symbol search path is: e:\temp\testing\x64\release\
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>************* Path validation summary **************
+</span></span><span style="display:flex;"><span>Response                         Time (ms)     Location
+</span></span><span style="display:flex;"><span>OK                                             E:\temp\Testing\x64\Release\
+</span></span><span style="display:flex;"><span>*** WARNING: Unable to verify checksum for Win32Sample.exe
+</span></span><span style="display:flex;"><span>*** ERROR: Module load completed but symbols could not be loaded for Win32Sample.exe
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h1 id="how-do-windbg-identify-the-correct-source-file">How do Windbg identify the correct source file?</h1>
 <p>PDB files contain not only information about symbols like functions/structures/classes
 etc but also about the artifacts(like .obj) involved in generating your application
 binary. Unfortunately examining this information from PDB is little complicated
@@ -128,77 +169,149 @@ Luckily, every installation of Visual Studio ships with a sample project aptly
 named as Dia2Dump at C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\DIA
 SDK\Samples\DIA2Dump. When you build this project in Visual Studio we get
 Dia2Dump.exe, Using this we can solve the second puzzle.</p>
-<pre><code class="language-console">usage: Dia2Dump.exe [ options ] &lt;filename&gt;
-  -?                : print this help
-  -all              : print all the debug info
-  -m                : print all the mods
-  -p                : print all the publics
-  -g                : print all the globals
-  -t                : print all the types
-  -f                : print all the files
-  -s                : print symbols
-  -l [RVA [bytes]]  : print line number info at RVA address in the bytes range
-  -c                : print section contribution info
-  -dbg              : dump debug streams
-  -injsrc [file]    : dump injected source
-  -sf               : dump all source files
-  -oem              : dump all OEM specific types
-  -fpo [RVA]        : dump frame pointer omission information for a func addr
-  -fpo [symbolname] : dump frame pointer omission information for a func symbol
-  -compiland [name] : dump symbols for this compiland
-  -lines &lt;funcname&gt; : dump line numbers for this function
-  -lines &lt;RVA&gt;      : dump line numbers for this address
-  -type &lt;symbolname&gt;: dump this type in detail
-  -label &lt;RVA&gt;      : dump label at RVA
-  -sym &lt;symbolname&gt; [childname] : dump child information of this symbol
-  -sym &lt;RVA&gt; [childname]        : dump child information of symbol at this addr
-  -lsrc  &lt;file&gt; [line]          : dump line numbers for this source file
-  -ps &lt;RVA&gt; [-n &lt;number&gt;]       : dump symbols after this address, default 16
-  -psr &lt;RVA&gt; [-n &lt;number&gt;]      : dump symbols before this address, default 16
-  -annotations &lt;RVA&gt;: dump annotation symbol for this RVA
-  -maptosrc &lt;RVA&gt;   : dump src RVA for this image RVA
-  -mapfromsrc &lt;RVA&gt; : dump image RVA for src RVA
-</code></pre>
-<p>The most important of all these flags is -sf which will dump out all the source
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>usage: Dia2Dump.exe [ options ] &lt;filename&gt;
+</span></span><span style="display:flex;"><span>  -?                : print this help
+</span></span><span style="display:flex;"><span>  -all              : print all the debug info
+</span></span><span style="display:flex;"><span>  -m                : print all the mods
+</span></span><span style="display:flex;"><span>  -p                : print all the publics
+</span></span><span style="display:flex;"><span>  -g                : print all the globals
+</span></span><span style="display:flex;"><span>  -t                : print all the types
+</span></span><span style="display:flex;"><span>  -f                : print all the files
+</span></span><span style="display:flex;"><span>  -s                : print symbols
+</span></span><span style="display:flex;"><span>  -l [RVA [bytes]]  : print line number info at RVA address in the bytes range
+</span></span><span style="display:flex;"><span>  -c                : print section contribution info
+</span></span><span style="display:flex;"><span>  -dbg              : dump debug streams
+</span></span><span style="display:flex;"><span>  -injsrc [file]    : dump injected source
+</span></span><span style="display:flex;"><span>  -sf               : dump all source files
+</span></span><span style="display:flex;"><span>  -oem              : dump all OEM specific types
+</span></span><span style="display:flex;"><span>  -fpo [RVA]        : dump frame pointer omission information for a func addr
+</span></span><span style="display:flex;"><span>  -fpo [symbolname] : dump frame pointer omission information for a func symbol
+</span></span><span style="display:flex;"><span>  -compiland [name] : dump symbols for this compiland
+</span></span><span style="display:flex;"><span>  -lines &lt;funcname&gt; : dump line numbers for this function
+</span></span><span style="display:flex;"><span>  -lines &lt;RVA&gt;      : dump line numbers for this address
+</span></span><span style="display:flex;"><span>  -type &lt;symbolname&gt;: dump this type in detail
+</span></span><span style="display:flex;"><span>  -label &lt;RVA&gt;      : dump label at RVA
+</span></span><span style="display:flex;"><span>  -sym &lt;symbolname&gt; [childname] : dump child information of this symbol
+</span></span><span style="display:flex;"><span>  -sym &lt;RVA&gt; [childname]        : dump child information of symbol at this addr
+</span></span><span style="display:flex;"><span>  -lsrc  &lt;file&gt; [line]          : dump line numbers for this source file
+</span></span><span style="display:flex;"><span>  -ps &lt;RVA&gt; [-n &lt;number&gt;]       : dump symbols after this address, default 16
+</span></span><span style="display:flex;"><span>  -psr &lt;RVA&gt; [-n &lt;number&gt;]      : dump symbols before this address, default 16
+</span></span><span style="display:flex;"><span>  -annotations &lt;RVA&gt;: dump annotation symbol for this RVA
+</span></span><span style="display:flex;"><span>  -maptosrc &lt;RVA&gt;   : dump src RVA for this image RVA
+</span></span><span style="display:flex;"><span>  -mapfromsrc &lt;RVA&gt; : dump image RVA for src RVA
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>The most important of all these flags is -sf which will dump out all the source
 files used to create an obj(object file). A sample output form this command
 Dia2Dump.exe -sf <path of pdb file> with a PDB will be as shown below</p>
-<pre><code class="language-console">....
-Compiland = C:\..&lt;snipped&gt;..\Win32Sample\x64\Release\Win32Sample.obj
-
-        c:\..&lt;snipped&gt;..\10.0.15063.0\shared\basetsd.h (MD5: 464E631AE358F42C09701CE07F35F8BF)
-        c:\..&lt;snipped&gt;..\10.0.15063.0\shared\guiddef.h (MD5: CA7D066706A198EA5999B084AAB0CE58)
-        c:\..&lt;snipped&gt;..\10.0.15063.0\shared\stralign.h (MD5: D27BD3C9FFF58FF4798B1F17B38C5B06)
-        c:\..&lt;snipped&gt;..\10.0.15063.0\shared\winerror.h (MD5: 7AD19053F0A83DDC031CDE4638299080)
-        c:\..&lt;snipped&gt;..\10.0.15063.0\ucrt\corecrt_memory.h (MD5: 33686D742EF373658431918E1A52326C)
-        c:\..&lt;snipped&gt;..\10.0.15063.0\ucrt\ctype.h (MD5: 1AC17C8CFC2358BD87784AB186BBAFCC)
-        c:\..&lt;snipped&gt;..\10.0.15063.0\ucrt\stdlib.h (MD5: 49CF59C87D23BB42C2D25CDF0D089509)
-        c:\..&lt;snipped&gt;..\10.0.15063.0\ucrt\string.h (MD5: 1DD6630B6C5E4B83DE098670242950A2)
-        c:\..&lt;snipped&gt;..\10.0.15063.0\um\memoryapi.h (MD5: 6F6D38BE202064596573E9449CBAAC58)
-        c:\..&lt;snipped&gt;..\10.0.15063.0\um\oleauto.h (MD5: 9048E2C1FD07AD42EA6E7F51EF63D42B)
-        c:\..&lt;snipped&gt;..\10.0.15063.0\um\processthreadsapi.h (MD5: 65891E84D54E51FA2017AB4D17BF9958)
-        c:\..&lt;snipped&gt;..\10.0.15063.0\um\propidl.h (MD5: B19A6DCE51821A635FE051DBC1CE6E7E)
-        c:\..&lt;snipped&gt;..\10.0.15063.0\um\winbase.h (MD5: 86C4964B16E8566D1E8F05482D9FFA49)
-        c:\..&lt;snipped&gt;..\10.0.15063.0\um\winnt.h (MD5: 02092055CFA70103E984B6855200845C)
-        c:\..&lt;snipped&gt;..\10.0.15063.0\um\winuser.h (MD5: 8A3479DAEAB702729FFBA6C669F54438)
-        c:\..&lt;snipped&gt;..\win32sample\stdafx.h (MD5: AA9C091299F07AD95BB49E6EE4BFF136)
-        c:\..&lt;snipped&gt;..\win32sample\win32sample.cpp (MD5: BBB7EE64784A7C2A96B1439310EEF84A)  &lt;---
-        c:\..&lt;snipped&gt;..\win32sample\x64\release\win32sample.pch
-....
-</code></pre>
-<p>The above information clearly suggests that PDB also contains hash of all the
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>....
+</span></span><span style="display:flex;"><span>Compiland = C:\..&lt;snipped&gt;..\Win32Sample\x64\Release\Win32Sample.obj
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>        c:\..&lt;snipped&gt;..\10.0.15063.0\shared\basetsd.h (MD5: 464E631AE358F42C09701CE07F35F8BF)
+</span></span><span style="display:flex;"><span>        c:\..&lt;snipped&gt;..\10.0.15063.0\shared\guiddef.h (MD5: CA7D066706A198EA5999B084AAB0CE58)
+</span></span><span style="display:flex;"><span>        c:\..&lt;snipped&gt;..\10.0.15063.0\shared\stralign.h (MD5: D27BD3C9FFF58FF4798B1F17B38C5B06)
+</span></span><span style="display:flex;"><span>        c:\..&lt;snipped&gt;..\10.0.15063.0\shared\winerror.h (MD5: 7AD19053F0A83DDC031CDE4638299080)
+</span></span><span style="display:flex;"><span>        c:\..&lt;snipped&gt;..\10.0.15063.0\ucrt\corecrt_memory.h (MD5: 33686D742EF373658431918E1A52326C)
+</span></span><span style="display:flex;"><span>        c:\..&lt;snipped&gt;..\10.0.15063.0\ucrt\ctype.h (MD5: 1AC17C8CFC2358BD87784AB186BBAFCC)
+</span></span><span style="display:flex;"><span>        c:\..&lt;snipped&gt;..\10.0.15063.0\ucrt\stdlib.h (MD5: 49CF59C87D23BB42C2D25CDF0D089509)
+</span></span><span style="display:flex;"><span>        c:\..&lt;snipped&gt;..\10.0.15063.0\ucrt\string.h (MD5: 1DD6630B6C5E4B83DE098670242950A2)
+</span></span><span style="display:flex;"><span>        c:\..&lt;snipped&gt;..\10.0.15063.0\um\memoryapi.h (MD5: 6F6D38BE202064596573E9449CBAAC58)
+</span></span><span style="display:flex;"><span>        c:\..&lt;snipped&gt;..\10.0.15063.0\um\oleauto.h (MD5: 9048E2C1FD07AD42EA6E7F51EF63D42B)
+</span></span><span style="display:flex;"><span>        c:\..&lt;snipped&gt;..\10.0.15063.0\um\processthreadsapi.h (MD5: 65891E84D54E51FA2017AB4D17BF9958)
+</span></span><span style="display:flex;"><span>        c:\..&lt;snipped&gt;..\10.0.15063.0\um\propidl.h (MD5: B19A6DCE51821A635FE051DBC1CE6E7E)
+</span></span><span style="display:flex;"><span>        c:\..&lt;snipped&gt;..\10.0.15063.0\um\winbase.h (MD5: 86C4964B16E8566D1E8F05482D9FFA49)
+</span></span><span style="display:flex;"><span>        c:\..&lt;snipped&gt;..\10.0.15063.0\um\winnt.h (MD5: 02092055CFA70103E984B6855200845C)
+</span></span><span style="display:flex;"><span>        c:\..&lt;snipped&gt;..\10.0.15063.0\um\winuser.h (MD5: 8A3479DAEAB702729FFBA6C669F54438)
+</span></span><span style="display:flex;"><span>        c:\..&lt;snipped&gt;..\win32sample\stdafx.h (MD5: AA9C091299F07AD95BB49E6EE4BFF136)
+</span></span><span style="display:flex;"><span>        c:\..&lt;snipped&gt;..\win32sample\win32sample.cpp (MD5: BBB7EE64784A7C2A96B1439310EEF84A)  &lt;---
+</span></span><span style="display:flex;"><span>        c:\..&lt;snipped&gt;..\win32sample\x64\release\win32sample.pch
+</span></span><span style="display:flex;"><span>....
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>The above information clearly suggests that PDB also contains hash of all the
 files needed to create a obj. This hash could be MD5 or SHA256(which is often
 denoted with 0x3), This can be verified using simple get-filehash commandlet on
 our source file(Win32Sample.cpp) as shown below. Similar to GUID which binds a
 binary with PDB file this file checksum will bind the binary with its appropriate
 source file. But the checking of source files against its checksum is somewhat
 relax(more on this later).</p>
-<pre><code class="language-console">PS&gt; get-filehash -Algorithm MD5 &quot;c:\&lt;snipped&gt;\win32sample\win32sample.cpp&quot;
-
-Algorithm Hash                              Path
---------- ----                              ----
-MD5       BBB7EE64784A7C2A96B1439310EEF84A  C:\&lt;snipped&gt;\win32sample\win32sample.cpp
-</code></pre>
-<p>This confirms the PDB is indeed storing the MD5 Hash of the file content.</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>PS&gt; get-filehash -Algorithm MD5 &#34;c:\&lt;snipped&gt;\win32sample\win32sample.cpp&#34;
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Algorithm Hash                              Path
+</span></span><span style="display:flex;"><span>--------- ----                              ----
+</span></span><span style="display:flex;"><span>MD5       BBB7EE64784A7C2A96B1439310EEF84A  C:\&lt;snipped&gt;\win32sample\win32sample.cpp
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>This confirms the PDB is indeed storing the MD5 Hash of the file content.</p>
 <p>Because each PDB contains symbol and line number information it can open the
 appropriate source file and at the correct line number.</p>
 <p>Whenever windbg tries to open a source file associated with a symbol it tries to
@@ -234,155 +347,303 @@ E:\Temp\Win32Sample. Also running !sym noisy and .srcnoisy 3 commands will enabl
 tracing of debugger when it is searching for the symbol files and source files
 respectively.</p>
 <p>Below is the output of !lmi which dumps the GUID and the PDB location.</p>
-<pre><code class="language-console">0:000&gt; !lmi Win32Sample
-Loaded Module Info: [win32sample]
-         Module: Win32Sample
-   Base Address: 00007ff62d2f0000
-     Image Name: Win32Sample.exe
-   Machine Type: 34404 (X64)
-     Time Stamp: 5a6c354c Sat Jan 27 00:16:12 2018
-           Size: 7000
-       CheckSum: 0
-Characteristics: 22
-Debug Data Dirs: Type  Size     VA  Pointer
-             CODEVIEW    78,  2368,    1568 RSDS - GUID: {7FAA9AFE-D714-4E38-B2CE-A99C41BF8CD4}
-               Age: 1, Pdb: C:\Users\vineelko\Documents\Visual Studio 2017\Projects\Win32Sample\x64\Release\Win32Sample.pdb
-           VC_FEATURE    14,  23e0,    15e0 [Data not mapped]
-                 POGO   26c,  23f4,    15f4 [Data not mapped]
-    Symbol Type: DEFERRED - No error - symbol load deferred
-    Load Report: no symbols loaded
-
-Turn on verbose symbol logging
-
-0:000&gt; !sym noisy
-noisy mode - symbol prompts on
-
-Try setting the symbol path to E:\temp\Testing
-
-0:000&gt; .sympath E:\temp\Testing\
-Symbol search path is: E:\temp\Testing\
-Expanded Symbol search path is: e:\temp\testing\
-************* Path validation summary **************
-Response                         Time (ms)     Location
-OK                                             E:\temp\Testing\
-
-Try reloading the binary PDB
-
-0:000&gt; .reload /f win32sample.exe
-DBGHELP: e:\temp\testing\Win32Sample.pdb - file not found
-DBGHELP: e:\temp\testing\exe\Win32Sample.pdb - file not found
-DBGHELP: e:\temp\testing\symbols\exe\Win32Sample.pdb - file not found
-DBGHELP: C:\Users\vineelko\Documents\Visual Studio 2017\Projects\Win32Sample\x64\Release\Win32Sample.pdb
-- file not found
-*** WARNING: Unable to verify checksum for Win32Sample.exe
-*** ERROR: Module load completed but symbols could not be loaded for Win32Sample.exe
-DBGHELP: Win32Sample - no symbols loaded
-
-0:000&gt; .sympath E:\temp\Testing\x64\Release
-0:000&gt; .reload /f win32sample.exe
-*** WARNING: Unable to verify checksum for Win32Sample.exe
-DBGHELP: Win32Sample - private symbols &amp; lines
-        e:\temp\testing\x64\release\Win32Sample.pdb
-0:000&gt; lm
-start             end                 module name
-00007ff6`2d2f0000 00007ff6`2d2f7000   Win32Sample C (private pdb symbols)
-e:\temp\testing\x64\release\Win32Sample.pdb
-00007ff9`0c5e0000 00007ff9`0c5f6000   VCRUNTIME140   (deferred)
-00007ff9`2c110000 00007ff9`2c206000   ucrtbase   (deferred)
-00007ff9`2c430000 00007ff9`2c696000   KERNELBASE   (deferred)
-00007ff9`2f160000 00007ff9`2f20e000   KERNEL32   (deferred)
-00007ff9`2f400000 00007ff9`2f5e0000   ntdll      (export symbols)
-C:\WINDOWS\SYSTEM32\ntdll.dll
-</code></pre>
-<p>Looking at the .reload command output we can say Windbg expects symbol files to
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>0:000&gt; !lmi Win32Sample
+</span></span><span style="display:flex;"><span>Loaded Module Info: [win32sample]
+</span></span><span style="display:flex;"><span>         Module: Win32Sample
+</span></span><span style="display:flex;"><span>   Base Address: 00007ff62d2f0000
+</span></span><span style="display:flex;"><span>     Image Name: Win32Sample.exe
+</span></span><span style="display:flex;"><span>   Machine Type: 34404 (X64)
+</span></span><span style="display:flex;"><span>     Time Stamp: 5a6c354c Sat Jan 27 00:16:12 2018
+</span></span><span style="display:flex;"><span>           Size: 7000
+</span></span><span style="display:flex;"><span>       CheckSum: 0
+</span></span><span style="display:flex;"><span>Characteristics: 22
+</span></span><span style="display:flex;"><span>Debug Data Dirs: Type  Size     VA  Pointer
+</span></span><span style="display:flex;"><span>             CODEVIEW    78,  2368,    1568 RSDS - GUID: {7FAA9AFE-D714-4E38-B2CE-A99C41BF8CD4}
+</span></span><span style="display:flex;"><span>               Age: 1, Pdb: C:\Users\vineelko\Documents\Visual Studio 2017\Projects\Win32Sample\x64\Release\Win32Sample.pdb
+</span></span><span style="display:flex;"><span>           VC_FEATURE    14,  23e0,    15e0 [Data not mapped]
+</span></span><span style="display:flex;"><span>                 POGO   26c,  23f4,    15f4 [Data not mapped]
+</span></span><span style="display:flex;"><span>    Symbol Type: DEFERRED - No error - symbol load deferred
+</span></span><span style="display:flex;"><span>    Load Report: no symbols loaded
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Turn on verbose symbol logging
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>0:000&gt; !sym noisy
+</span></span><span style="display:flex;"><span>noisy mode - symbol prompts on
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Try setting the symbol path to E:\temp\Testing
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>0:000&gt; .sympath E:\temp\Testing\
+</span></span><span style="display:flex;"><span>Symbol search path is: E:\temp\Testing\
+</span></span><span style="display:flex;"><span>Expanded Symbol search path is: e:\temp\testing\
+</span></span><span style="display:flex;"><span>************* Path validation summary **************
+</span></span><span style="display:flex;"><span>Response                         Time (ms)     Location
+</span></span><span style="display:flex;"><span>OK                                             E:\temp\Testing\
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Try reloading the binary PDB
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>0:000&gt; .reload /f win32sample.exe
+</span></span><span style="display:flex;"><span>DBGHELP: e:\temp\testing\Win32Sample.pdb - file not found
+</span></span><span style="display:flex;"><span>DBGHELP: e:\temp\testing\exe\Win32Sample.pdb - file not found
+</span></span><span style="display:flex;"><span>DBGHELP: e:\temp\testing\symbols\exe\Win32Sample.pdb - file not found
+</span></span><span style="display:flex;"><span>DBGHELP: C:\Users\vineelko\Documents\Visual Studio 2017\Projects\Win32Sample\x64\Release\Win32Sample.pdb
+</span></span><span style="display:flex;"><span>- file not found
+</span></span><span style="display:flex;"><span>*** WARNING: Unable to verify checksum for Win32Sample.exe
+</span></span><span style="display:flex;"><span>*** ERROR: Module load completed but symbols could not be loaded for Win32Sample.exe
+</span></span><span style="display:flex;"><span>DBGHELP: Win32Sample - no symbols loaded
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>0:000&gt; .sympath E:\temp\Testing\x64\Release
+</span></span><span style="display:flex;"><span>0:000&gt; .reload /f win32sample.exe
+</span></span><span style="display:flex;"><span>*** WARNING: Unable to verify checksum for Win32Sample.exe
+</span></span><span style="display:flex;"><span>DBGHELP: Win32Sample - private symbols &amp; lines
+</span></span><span style="display:flex;"><span>        e:\temp\testing\x64\release\Win32Sample.pdb
+</span></span><span style="display:flex;"><span>0:000&gt; lm
+</span></span><span style="display:flex;"><span>start             end                 module name
+</span></span><span style="display:flex;"><span>00007ff6`2d2f0000 00007ff6`2d2f7000   Win32Sample C (private pdb symbols)
+</span></span><span style="display:flex;"><span>e:\temp\testing\x64\release\Win32Sample.pdb
+</span></span><span style="display:flex;"><span>00007ff9`0c5e0000 00007ff9`0c5f6000   VCRUNTIME140   (deferred)
+</span></span><span style="display:flex;"><span>00007ff9`2c110000 00007ff9`2c206000   ucrtbase   (deferred)
+</span></span><span style="display:flex;"><span>00007ff9`2c430000 00007ff9`2c696000   KERNELBASE   (deferred)
+</span></span><span style="display:flex;"><span>00007ff9`2f160000 00007ff9`2f20e000   KERNEL32   (deferred)
+</span></span><span style="display:flex;"><span>00007ff9`2f400000 00007ff9`2f5e0000   ntdll      (export symbols)
+</span></span><span style="display:flex;"><span>C:\WINDOWS\SYSTEM32\ntdll.dll
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Looking at the .reload command output we can say Windbg expects symbol files to
 be present inside the same directory as the application or the folder named &rsquo;exe&rsquo;
 inside .sympath directory or the folder named &lsquo;dll&rsquo; inside the .sympath directory
 or at the actual embedded path. Running lm confirms that symbols are recognized
 for Win32Sample.exe</p>
 <p>Turn on verbose source logging</p>
-<pre><code class="language-console">0:000&gt; !srcnoisy 3
-Noisy source output: on
-Noisy source server output: on
-Filter out everything but source server output: off
-
-0:000&gt; .srcpath e:\temp\Testing
-Source search path is: e:\temp\Testing
-************* Path validation summary **************
-Response                         Time (ms)     Location
-OK                                             e:\temp\Testing
-
-0:000&gt; x win32Sample!main
-00007ff6`2d2f1060 Win32Sample!main (void)
-0:000&gt; bu win32Sample!main
-0:000&gt; g
-Breakpoint 0 hit
-Win32Sample!main:
-00007ff6`2d2f1060 4883ec48        sub     rsp,48h
-DBGENG:  Scan paths for partial path match:
-DBGENG:    prefix 'c:\users\vineelko\documents\visual studio 2017\projects\win32sample'
-DBGENG:    suffix 'win32sample.cpp'
-DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko\documents\visual studio 2017\projects\win32sample': 66 (match ')
-DBGENG:  Scan paths for partial path match:
-DBGENG:    prefix 'c:\users\vineelko\documents\visual studio 2017\projects'
-DBGENG:    suffix 'win32sample\win32sample.cpp'
-DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko\documents\visual studio 2017\projects': 54 (match ')
-DBGENG:  Scan paths for partial path match:
-DBGENG:    prefix 'c:\users\vineelko\documents\visual studio 2017'
-DBGENG:    suffix 'projects\win32sample\win32sample.cpp'
-DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko\documents\visual studio 2017': 45 (match ')
-DBGENG:  Scan paths for partial path match:
-DBGENG:    prefix 'c:\users\vineelko\documents'
-DBGENG:    suffix 'visual studio 2017\projects\win32sample\win32sample.cpp'
-DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko\documents': 26 (match ')
-DBGENG:  Scan paths for partial path match:
-DBGENG:    prefix 'c:\users\vineelko'
-DBGENG:    suffix 'documents\visual studio 2017\projects\win32sample\win32sample.cpp'
-DBGENG:      match 'e:\temp\Testing' against 'c:\users\vineelko': 16 (match ')
-DBGENG:  Scan paths for partial path match:
-DBGENG:    prefix 'c:\users'
-DBGENG:    suffix 'vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
-DBGENG:      match 'e:\temp\Testing' against 'c:\users': 7 (match ')
-DBGENG:  Scan paths for partial path match:
-DBGENG:    prefix 'c:'
-DBGENG:    suffix 'users\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
-DBGENG:      match 'e:\temp\Testing' against 'c:': 1 (match ')
-DBGENG:  Scan all paths for:
-DBGENG:    'c:\users\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
-DBGENG:      check 'e:\temp\Testing\c:\users\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
-DBGENG:  Scan all paths for:
-DBGENG:    'users\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
-DBGENG:      check 'e:\temp\Testing\users\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
-DBGENG:  Scan all paths for:
-DBGENG:    'vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
-DBGENG:      check 'e:\temp\Testing\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
-DBGENG:  Scan all paths for:
-DBGENG:    'documents\visual studio 2017\projects\win32sample\win32sample.cpp'
-DBGENG:      check 'e:\temp\Testing\documents\visual studio 2017\projects\win32sample\win32sample.cpp'
-DBGENG:  Scan all paths for:
-DBGENG:    'visual studio 2017\projects\win32sample\win32sample.cpp'
-DBGENG:      check 'e:\temp\Testing\visual studio 2017\projects\win32sample\win32sample.cpp'
-DBGENG:  Scan all paths for:
-DBGENG:    'projects\win32sample\win32sample.cpp'
-DBGENG:      check 'e:\temp\Testing\projects\win32sample\win32sample.cpp'
-DBGENG:  Scan all paths for:
-DBGENG:    'win32sample\win32sample.cpp'
-DBGENG:      check 'e:\temp\Testing\win32sample\win32sample.cpp'
-DBGENG:  Scan all paths for:
-DBGENG:    'win32sample.cpp'
-DBGENG:      check 'e:\temp\Testing\win32sample.cpp'
-DBGENG:      found file 'e:\temp\Testing\win32sample.cpp'
-</code></pre>
-<p>Source path heuristics to match a source file is much more involved, It is done
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">70
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">71
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>0:000&gt; !srcnoisy 3
+</span></span><span style="display:flex;"><span>Noisy source output: on
+</span></span><span style="display:flex;"><span>Noisy source server output: on
+</span></span><span style="display:flex;"><span>Filter out everything but source server output: off
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>0:000&gt; .srcpath e:\temp\Testing
+</span></span><span style="display:flex;"><span>Source search path is: e:\temp\Testing
+</span></span><span style="display:flex;"><span>************* Path validation summary **************
+</span></span><span style="display:flex;"><span>Response                         Time (ms)     Location
+</span></span><span style="display:flex;"><span>OK                                             e:\temp\Testing
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>0:000&gt; x win32Sample!main
+</span></span><span style="display:flex;"><span>00007ff6`2d2f1060 Win32Sample!main (void)
+</span></span><span style="display:flex;"><span>0:000&gt; bu win32Sample!main
+</span></span><span style="display:flex;"><span>0:000&gt; g
+</span></span><span style="display:flex;"><span>Breakpoint 0 hit
+</span></span><span style="display:flex;"><span>Win32Sample!main:
+</span></span><span style="display:flex;"><span>00007ff6`2d2f1060 4883ec48        sub     rsp,48h
+</span></span><span style="display:flex;"><span>DBGENG:  Scan paths for partial path match:
+</span></span><span style="display:flex;"><span>DBGENG:    prefix &#39;c:\users\vineelko\documents\visual studio 2017\projects\win32sample&#39;
+</span></span><span style="display:flex;"><span>DBGENG:    suffix &#39;win32sample.cpp&#39;
+</span></span><span style="display:flex;"><span>DBGENG:      match &#39;e:\temp\Testing&#39; against &#39;c:\users\vineelko\documents\visual studio 2017\projects\win32sample&#39;: 66 (match &#39;)
+</span></span><span style="display:flex;"><span>DBGENG:  Scan paths for partial path match:
+</span></span><span style="display:flex;"><span>DBGENG:    prefix &#39;c:\users\vineelko\documents\visual studio 2017\projects&#39;
+</span></span><span style="display:flex;"><span>DBGENG:    suffix &#39;win32sample\win32sample.cpp&#39;
+</span></span><span style="display:flex;"><span>DBGENG:      match &#39;e:\temp\Testing&#39; against &#39;c:\users\vineelko\documents\visual studio 2017\projects&#39;: 54 (match &#39;)
+</span></span><span style="display:flex;"><span>DBGENG:  Scan paths for partial path match:
+</span></span><span style="display:flex;"><span>DBGENG:    prefix &#39;c:\users\vineelko\documents\visual studio 2017&#39;
+</span></span><span style="display:flex;"><span>DBGENG:    suffix &#39;projects\win32sample\win32sample.cpp&#39;
+</span></span><span style="display:flex;"><span>DBGENG:      match &#39;e:\temp\Testing&#39; against &#39;c:\users\vineelko\documents\visual studio 2017&#39;: 45 (match &#39;)
+</span></span><span style="display:flex;"><span>DBGENG:  Scan paths for partial path match:
+</span></span><span style="display:flex;"><span>DBGENG:    prefix &#39;c:\users\vineelko\documents&#39;
+</span></span><span style="display:flex;"><span>DBGENG:    suffix &#39;visual studio 2017\projects\win32sample\win32sample.cpp&#39;
+</span></span><span style="display:flex;"><span>DBGENG:      match &#39;e:\temp\Testing&#39; against &#39;c:\users\vineelko\documents&#39;: 26 (match &#39;)
+</span></span><span style="display:flex;"><span>DBGENG:  Scan paths for partial path match:
+</span></span><span style="display:flex;"><span>DBGENG:    prefix &#39;c:\users\vineelko&#39;
+</span></span><span style="display:flex;"><span>DBGENG:    suffix &#39;documents\visual studio 2017\projects\win32sample\win32sample.cpp&#39;
+</span></span><span style="display:flex;"><span>DBGENG:      match &#39;e:\temp\Testing&#39; against &#39;c:\users\vineelko&#39;: 16 (match &#39;)
+</span></span><span style="display:flex;"><span>DBGENG:  Scan paths for partial path match:
+</span></span><span style="display:flex;"><span>DBGENG:    prefix &#39;c:\users&#39;
+</span></span><span style="display:flex;"><span>DBGENG:    suffix &#39;vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp&#39;
+</span></span><span style="display:flex;"><span>DBGENG:      match &#39;e:\temp\Testing&#39; against &#39;c:\users&#39;: 7 (match &#39;)
+</span></span><span style="display:flex;"><span>DBGENG:  Scan paths for partial path match:
+</span></span><span style="display:flex;"><span>DBGENG:    prefix &#39;c:&#39;
+</span></span><span style="display:flex;"><span>DBGENG:    suffix &#39;users\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp&#39;
+</span></span><span style="display:flex;"><span>DBGENG:      match &#39;e:\temp\Testing&#39; against &#39;c:&#39;: 1 (match &#39;)
+</span></span><span style="display:flex;"><span>DBGENG:  Scan all paths for:
+</span></span><span style="display:flex;"><span>DBGENG:    &#39;c:\users\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp&#39;
+</span></span><span style="display:flex;"><span>DBGENG:      check &#39;e:\temp\Testing\c:\users\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp&#39;
+</span></span><span style="display:flex;"><span>DBGENG:  Scan all paths for:
+</span></span><span style="display:flex;"><span>DBGENG:    &#39;users\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp&#39;
+</span></span><span style="display:flex;"><span>DBGENG:      check &#39;e:\temp\Testing\users\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp&#39;
+</span></span><span style="display:flex;"><span>DBGENG:  Scan all paths for:
+</span></span><span style="display:flex;"><span>DBGENG:    &#39;vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp&#39;
+</span></span><span style="display:flex;"><span>DBGENG:      check &#39;e:\temp\Testing\vineelko\documents\visual studio 2017\projects\win32sample\win32sample.cpp&#39;
+</span></span><span style="display:flex;"><span>DBGENG:  Scan all paths for:
+</span></span><span style="display:flex;"><span>DBGENG:    &#39;documents\visual studio 2017\projects\win32sample\win32sample.cpp&#39;
+</span></span><span style="display:flex;"><span>DBGENG:      check &#39;e:\temp\Testing\documents\visual studio 2017\projects\win32sample\win32sample.cpp&#39;
+</span></span><span style="display:flex;"><span>DBGENG:  Scan all paths for:
+</span></span><span style="display:flex;"><span>DBGENG:    &#39;visual studio 2017\projects\win32sample\win32sample.cpp&#39;
+</span></span><span style="display:flex;"><span>DBGENG:      check &#39;e:\temp\Testing\visual studio 2017\projects\win32sample\win32sample.cpp&#39;
+</span></span><span style="display:flex;"><span>DBGENG:  Scan all paths for:
+</span></span><span style="display:flex;"><span>DBGENG:    &#39;projects\win32sample\win32sample.cpp&#39;
+</span></span><span style="display:flex;"><span>DBGENG:      check &#39;e:\temp\Testing\projects\win32sample\win32sample.cpp&#39;
+</span></span><span style="display:flex;"><span>DBGENG:  Scan all paths for:
+</span></span><span style="display:flex;"><span>DBGENG:    &#39;win32sample\win32sample.cpp&#39;
+</span></span><span style="display:flex;"><span>DBGENG:      check &#39;e:\temp\Testing\win32sample\win32sample.cpp&#39;
+</span></span><span style="display:flex;"><span>DBGENG:  Scan all paths for:
+</span></span><span style="display:flex;"><span>DBGENG:    &#39;win32sample.cpp&#39;
+</span></span><span style="display:flex;"><span>DBGENG:      check &#39;e:\temp\Testing\win32sample.cpp&#39;
+</span></span><span style="display:flex;"><span>DBGENG:      found file &#39;e:\temp\Testing\win32sample.cpp&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Source path heuristics to match a source file is much more involved, It is done
 by prefix and suffix matches by joining the file path and .srcpath directory. If
 the checksum of the file present in PDB does does not match with the file checksum
 then you should see a warning like below(Which is very important). Unlike symbol
 files, Eventhough Windbg throws a warning it opens the source file in code window.
 But we should be vigilient about it.</p>
-<pre><code class="language-console">windbg&gt; .open -a Win32Sample!main
-WARNING: Unable to find source file with matching checksum.  Found
-'c:\&lt;snipped&gt;\win32sample\win32sample.cpp' with mismatch!
-</code></pre>
-<p>In any case, Understanding these details will help us solve unresolved source and
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>windbg&gt; .open -a Win32Sample!main
+</span></span><span style="display:flex;"><span>WARNING: Unable to find source file with matching checksum.  Found
+</span></span><span style="display:flex;"><span>&#39;c:\&lt;snipped&gt;\win32sample\win32sample.cpp&#39; with mismatch!
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>In any case, Understanding these details will help us solve unresolved source and
 symbol files issue with much more confidence!</p>
 <h1 id="references">References</h1>
 <ul>
@@ -396,19 +657,11 @@ symbol files issue with much more confidence!</p>
   
 <script defer src="/js/center-img.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js" integrity="sha512-axd5V66bnXpNVQzm1c7u1M614TVRXXtouyWCE+eMYl8ALK8ePJEs96Xtx7VVrPBc0UraCn63U1+ARFI3ofW+aA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js" integrity="sha512-9Ge7wPRBM6DUCnE7Citv0pBWqt7hXeX2732053zamwp+11RX6HBQ7DdXRMNZM6VQmnwKXFKBLE7jS0dgWXUPnA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js" integrity="sha512-wW8K3TEH5ZViD4aMPzwPdhXKs/Kb5MAm7qLRd3QliYlHy0u9utSKZsZzqlZAgJ9xxXp81acwnrZVZ8oTfoLG1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/x86asm.min.js" integrity="sha512-PsyL9V1oGfx9uQV60+pJM/GpWAefAPX7sdnE2rQ/jILKHxZCk2TPHMHLOSoihzaatNHpBzksS0EpMqnBXC7XGg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js" integrity="sha512-i0JFeiLhgBAMGfIEVqMQwALhhse1orgl34XyotSUNiNbDIB1qS9IK53sDochCIrwvj4nJ51CsDSOqhGyhZITGg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 
 
-<script>
-hljs.highlightAll();
-hljs.initLineNumbersOnLoad();
-</script>
+
+
 
   
   <hr/>

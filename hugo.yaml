@@ -22,13 +22,13 @@ menu:
     #   weight: 2
     - name: Blog
       url: "blog/"
-      weight: 3
-    - name: Vlog
-      url: "vlog/"
-      weight: 4
+      weight: 2
+    # - name: Vlog
+    #   url: "vlog/"
+    #   weight: 4
     - name: Presentations
       url: "presentations/"
-      weight: 5
+      weight: 3
     # - name: Tags
     #   url: "tags/"
     #   weight: 4
@@ -39,10 +39,14 @@ params:
   description: "A website built through Hugo and blogdown."
   footer: "&copy; [Vineel Kumar Reddy Kovvuri](https://vineelkovvuri.github.io) 2017 -- {Year}"
 
+# We are using hugo supported default syntax highlighter.
 markup:
   highlight:
-    codeFences: false
+    codeFences: true
     lineNos: true
+    guessSyntax : true
+    pygmentsUseClasses : true
+    pygmentsCodefences : true
   goldmark:
     renderer:
       unsafe: true
