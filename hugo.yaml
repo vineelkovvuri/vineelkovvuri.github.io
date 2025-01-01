@@ -6,6 +6,7 @@ googleAnalytics: ""
 disqusShortname: ""
 ignoreFiles: ["\\.Rmd$", "\\.Rmarkdown$", "_cache$"]
 footnotereturnlinkcontents: "↩"
+publishDir: docs
 
 permalinks:
   note: "/note/:year/:month/:day/:slug/"
