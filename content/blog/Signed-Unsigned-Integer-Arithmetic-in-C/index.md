@@ -29,7 +29,7 @@ LLP64(meaning only 'long long' and pointer size are 64 bit wide), So below
 are the sizes of the standard types that we are sticking to in this article.
 
 Type                | Size
-------------------- |---------
+--------------------+---------
 signed char         | 1 bytes
 unsigned char       | 1 bytes
 signed short        | 2 bytes
@@ -103,7 +103,7 @@ after executing 'sub' instruction indicates this possibility in Sign Flag.
 So operations(JA/JB) who want to treat the result an unsigned will ignore
 this sign flag whereas operations (like JG/JL) who treat it as signed will
 take this sign flag into account.
-```x86asm
+```nasm
 mov al, 0x81
 sub al, 0x1 // This triggers sign flag
 ```
@@ -111,7 +111,7 @@ Overflow flag is a little different. First of all, the Overflow flag is not
 set when an operation results in an overflow of the number that can be
 represented in a register. Like for example, if we try to add 1 to 0xff does
 not set this bit.
-```x86asm
+```nasm
 mov al, 0xFF // 0b11111111
 add al, 0x1  // This will not trigger Overflow flag
 ```
@@ -122,7 +122,7 @@ For example, if we take a byte(al) it can contain value from 0b00000000(0) to
 number. Now overflow flag is set when a result goes beyond 0b01111111 i.e., too
 large a positive number and less than 0b10000000 i.e., too small a negative
 number
-```x86asm
+```nasm
 mov al, 0x7e // This is always positive
 add al, 0x2  // This will trigger overflow flag
 ```
@@ -274,7 +274,7 @@ if (var1 + var2 < 0) {
     printf("This will never get printed");
 }
 ```
-```x86asm
+```nasm
 $LN4:
     sub rsp, 56 ; 00000038H
     mov DWORD PTR var1$[rsp], -100          ; ffffffffffffff9cH
@@ -338,7 +338,7 @@ if (var1 + var2 < 0) { //resulting in signed long long expression
     printf("This gets printed if var1 + var2 is < 0");
 }
 ```
-```x86asm
+```nasm
     sub rsp, 56 ; 00000038H
     mov DWORD PTR var1$[rsp], 100 ; 00000064H
     mov QWORD PTR var2$[rsp], -10
@@ -382,7 +382,7 @@ if (var1 + var2 < 0) {   // resulting type is unsigned long
     printf("This will not be printed");
 }
 ```
-```x86asm
+```nasm
     sub rsp, 56 ; 00000038H
     mov DWORD PTR var1$[rsp], 100 ; 00000064H
     mov DWORD PTR var2$[rsp], -10
@@ -492,7 +492,7 @@ Figure 4: Resulting type of the expression
 2. [C99 Standard](http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf)
 3. [Should I use Signed or Unsigned Ints In C? (Part 1)](http://blog.robertelder.org/signed-or-unsigned/)
 4. [Should I use Signed or Unsigned Ints In C? (Part 2)](http://blog.robertelder.org/signed-or-unsigned-part-2/)
-5. [X86 Opcode and Instruction Reference](http://ref.x86asm.net/coder-abc.html)
+5. [X86 Opcode and Instruction Reference](http://ref.nasm.net/coder-abc.html)
 6. [Why is imul used for multiplying unsigned numbers?](https://stackoverflow.com/a/42589535/2407966)
 7. [System V Application Binary Interface AMD64 Architecture Processor Supplement](https://software.intel.com/sites/default/files/article/402129/mpx-linux64-abi.pdf)
 8. [64-Bit Programming Models: Why LP64?](http://www.unix.org/version2/whatsnew/lp64_wp.html)

@@ -55,7 +55,7 @@ server it queries the symbol server for the appropriate pdb based on the guid.
 We can get this information either through dumpbin /headers module.exe or using
 !lmi module as shown below respectively
 
-```console
+```shell
 ...
  Debug Directories
 
@@ -84,7 +84,7 @@ Debug Data Dirs: Type  Size     VA  Pointer
 If the GUID in pdb does not match with embedded GUID in binary it does not load
 the PDB file and throws following error *** ERROR: Module load completed but
 symbols could not be loaded for Win32Sample.exe.
-```console
+```shell
 0:000> .sympath E:\temp\Testing\x64\Release\ <-- Incorrect pdb
 Symbol search path is: E:\temp\Testing\x64\Release\
 Expanded Symbol search path is: e:\temp\testing\x64\release\
@@ -107,7 +107,7 @@ Luckily, every installation of Visual Studio ships with a sample project aptly
 named as Dia2Dump at C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\DIA
 SDK\Samples\DIA2Dump. When you build this project in Visual Studio we get
 Dia2Dump.exe, Using this we can solve the second puzzle.
-```console
+```shell
 usage: Dia2Dump.exe [ options ] <filename>
   -?                : print this help
   -all              : print all the debug info
@@ -142,7 +142,7 @@ usage: Dia2Dump.exe [ options ] <filename>
 The most important of all these flags is -sf which will dump out all the source
 files used to create an obj(object file). A sample output form this command
 Dia2Dump.exe -sf <path of pdb file> with a PDB will be as shown below
-```console
+```shell
 ....
 Compiland = C:\..<snipped>..\Win32Sample\x64\Release\Win32Sample.obj
 
@@ -173,7 +173,7 @@ our source file(Win32Sample.cpp) as shown below. Similar to GUID which binds a
 binary with PDB file this file checksum will bind the binary with its appropriate
 source file. But the checking of source files against its checksum is somewhat
 relax(more on this later).
-```console
+```shell
 PS> get-filehash -Algorithm MD5 "c:\<snipped>\win32sample\win32sample.cpp"
 
 Algorithm Hash                              Path
@@ -222,7 +222,7 @@ tracing of debugger when it is searching for the symbol files and source files
 respectively.
 
 Below is the output of !lmi which dumps the GUID and the PDB location.
-```console
+```shell
 0:000> !lmi Win32Sample
 Loaded Module Info: [win32sample]
          Module: Win32Sample
@@ -290,7 +290,7 @@ or at the actual embedded path. Running lm confirms that symbols are recognized
 for Win32Sample.exe
 
 Turn on verbose source logging
-```console
+```shell
 0:000> !srcnoisy 3
 Noisy source output: on
 Noisy source server output: on
@@ -369,7 +369,7 @@ the checksum of the file present in PDB does does not match with the file checks
 then you should see a warning like below(Which is very important). Unlike symbol
 files, Eventhough Windbg throws a warning it opens the source file in code window.
 But we should be vigilient about it.
-```console
+```shell
 windbg> .open -a Win32Sample!main
 WARNING: Unable to find source file with matching checksum.  Found
 'c:\<snipped>\win32sample\win32sample.cpp' with mismatch!

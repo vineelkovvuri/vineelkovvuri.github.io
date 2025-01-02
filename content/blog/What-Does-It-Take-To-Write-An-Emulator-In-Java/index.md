@@ -82,30 +82,30 @@ method(every opcode in of Chip 8 is of 2 bytes). Then decode the instruction
 and appropriately run the respective executable code. For the majority of
 time, execution mainly results in moving data around.
 ```java
-//Below Is The Trimmed Version Of Original Source Code Found At
-//https://github.com/vineelkovvuri/Projects/tree/master/Chip8Emulator/src/main/java/com/vineelkumarreddy/chip8/Chip8CPU.java
+// Below is the trimmed version of original source code found at
+// https://github.com/vineelkovvuri/Projects/tree/master/Chip8Emulator/src/main/java/com/vineelkumarreddy/chip8/Chip8CPU.java
 public class Chip8CPU {
-    private int V[] = new int[16]; //8bit each
-    private int I;  //16bit
-    private int DT; //8bit
-    private int ST; //8bit
-    private int PC; //16bit program counter
-    private int SP; //8bit stack pointer
-    private int stack[] = new int[16]; //16bit each
+    private int V[] = new int[16]; // 8bit each
+    private int I;  // 16bit
+    private int DT; // 8bit
+    private int ST; // 8bit
+    private int PC; // 16bit program counter
+    private int SP; // 8bit stack pointer
+    private int stack[] = new int[16]; // 16bit each
 
     private final Chip8Display display;
     private final Chip8Keyboard keyboard;
     private final Chip8Memory ram;
 
-    private final int DT_FREQUENCY = 60; //60 hz
-    private final int ST_FREQUENCY = 60; //60 hz
+    private final int DT_FREQUENCY = 60; // 60 hz
+    private final int ST_FREQUENCY = 60; // 60 hz
     private final int HZ = 1000; // 60hz => 60 times in 1sec or in 1000 milliseconds
     public void run() {
         while (true) {
-            //FETCH
+            // FETCH
             int instruction = ram.getWord(PC);
-            incrementPC(); //fetched the instruction so move on
-            //DECODE
+            incrementPC(); // fetched the instruction so move on
+            // DECODE
             int opcode = (instruction >> 12) & 0xf;
             switch (opcode) {
                 case 0:
@@ -121,7 +121,7 @@ public class Chip8CPU {
         int opcodeArgs = instruction & 0xfff;
         switch (opcodeArgs & 0xff) {
             case 0xEE: // 00EE - RET
-                //EXECUTE
+                // EXECUTE
                 PC = stack[--SP];
                 break;
         }
@@ -130,8 +130,8 @@ public class Chip8CPU {
 ```
 # Memory
 ```java
-//Below Is The Trimmed Version Of Original Source Code Found At
-//https://github.com/vineelkovvuri/Projects/tree/master/Chip8Emulator/src/main/java/com/vineelkumarreddy/chip8/Chip8Memory.java
+// Below Is The Trimmed Version Of Original Source Code Found At
+// https://github.com/vineelkovvuri/Projects/tree/master/Chip8Emulator/src/main/java/com/vineelkumarreddy/chip8/Chip8Memory.java
 public class Chip8Memory {
     // Chip 8 can address up to 4K bytes
     private int ram[] = new int[0x1000];
@@ -154,10 +154,10 @@ the maximum memory addressable by Chip 8 instruction set.
 
 # Display
 ```java
-//Below Is The Trimmed Version Of Original Source Code Found At
-//https://github.com/vineelkovvuri/Projects/tree/master/Chip8Emulator/src/main/java/com/vineelkumarreddy/chip8/Chip8Display.java
+// Below Is The Trimmed Version Of Original Source Code Found At
+// https://github.com/vineelkovvuri/Projects/tree/master/Chip8Emulator/src/main/java/com/vineelkumarreddy/chip8/Chip8Display.java
 public class Chip8Display extends JFrame {
-    //Chip8 display size
+    // Chip8 display size
     private final int displayWidth = 64, displayHeight = 32;
     private JPanel display[][] = new JPanel[displayHeight][displayWidth];
     public boolean setPixel(int x, int y) {...}
@@ -181,9 +181,9 @@ method.
 
 # Keyboard
 ```java
-//Below Is The Trimmed Version Of Original Source Code Found At
-//https://github.com/vineelkovvuri/Projects/tree/master/Chip8Emulator/src/main/java/com/vineelkumarreddy/chip8/Chip8Keyboard.java
-//This listener is added to Chip8Display module to capture the events
+// Below Is The Trimmed Version Of Original Source Code Found At
+// https://github.com/vineelkovvuri/Projects/tree/master/Chip8Emulator/src/main/java/com/vineelkumarreddy/chip8/Chip8Keyboard.java
+// This listener is added to Chip8Display module to capture the events
 public class Chip8Keyboard implements KeyListener {
     // This keeps the state of the chip 8 keyboard's 15 keys
     private boolean keysPressed[] = new boolean[0x10];
@@ -238,5 +238,5 @@ This one is for my wife, It is really not a game, but this ROM file exist
 beside other game files. I know we cannot play with them. IBM ROM for my
 wife ;)
 ![](6.Emulator.png)
-I recommened you to read the source code https://github.com/vineelkovvuri/Projects/tree/master/Chip8Emulator.
+I recommend you to read the source code https://github.com/vineelkovvuri/Projects/tree/master/Chip8Emulator.
 

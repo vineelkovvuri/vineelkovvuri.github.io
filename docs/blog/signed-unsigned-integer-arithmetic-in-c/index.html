@@ -53,56 +53,18 @@ architecture, ABI (Application Binary Interface) and the programming model,
 the size of these basic types are determined. Windows x64 follows
 LLP64(meaning only &rsquo;long long&rsquo; and pointer size are 64 bit wide), So below
 are the sizes of the standard types that we are sticking to in this article.</p>
-<table>
-<thead>
-<tr>
-<th>Type</th>
-<th>Size</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>signed char</td>
-<td>1 bytes</td>
-</tr>
-<tr>
-<td>unsigned char</td>
-<td>1 bytes</td>
-</tr>
-<tr>
-<td>signed short</td>
-<td>2 bytes</td>
-</tr>
-<tr>
-<td>unsigned short</td>
-<td>2 bytes</td>
-</tr>
-<tr>
-<td>signed int</td>
-<td>4 bytes</td>
-</tr>
-<tr>
-<td>unsigned int</td>
-<td>4 bytes</td>
-</tr>
-<tr>
-<td>signed long</td>
-<td>4 bytes</td>
-</tr>
-<tr>
-<td>unsigned long</td>
-<td>4 bytes</td>
-</tr>
-<tr>
-<td>signed long long</td>
-<td>8 bytes</td>
-</tr>
-<tr>
-<td>unsigned long long</td>
-<td>8 bytes</td>
-</tr>
-</tbody>
-</table>
+<p>Type                | Size
+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+&mdash;&mdash;&mdash;
+signed char         | 1 bytes
+unsigned char       | 1 bytes
+signed short        | 2 bytes
+unsigned short      | 2 bytes
+signed int          | 4 bytes
+unsigned int        | 4 bytes
+signed long         | 4 bytes
+unsigned long       | 4 bytes
+signed long long    | 8 bytes
+unsigned long long  | 8 bytes</p>
 <p>Also, The specification leaves other aspects of C language definition
 undefined and this leave room for optimizations for compilers. For example,
 the result of signed arithmetic leading to overflow/underflow is not defined
@@ -160,14 +122,14 @@ after executing &lsquo;sub&rsquo; instruction indicates this possibility in Sign
 So operations(JA/JB) who want to treat the result an unsigned will ignore
 this sign flag whereas operations (like JG/JL) who treat it as signed will
 take this sign flag into account.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>mov al, 0x81
-</span></span><span style="display:flex;"><span>sub al, 0x1 // This triggers sign flag
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nasm" data-lang="nasm"><span style="display:flex;"><span><span style="color:#06b;font-weight:bold">mov</span> <span style="color:#038">al</span>, <span style="color:#00d;font-weight:bold">0x81</span>
+</span></span><span style="display:flex;"><span><span style="color:#06b;font-weight:bold">sub</span> <span style="color:#038">al</span>, <span style="color:#00d;font-weight:bold">0x1</span> // <span style="color:#369">This</span> <span style="color:#369">triggers</span> <span style="color:#038">si</span><span style="color:#369">gn</span> <span style="color:#369">flag</span>
 </span></span></code></pre></div><p>Overflow flag is a little different. First of all, the Overflow flag is not
 set when an operation results in an overflow of the number that can be
 represented in a register. Like for example, if we try to add 1 to 0xff does
 not set this bit.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>mov al, 0xFF // 0b11111111
-</span></span><span style="display:flex;"><span>add al, 0x1  // This will not trigger Overflow flag
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nasm" data-lang="nasm"><span style="display:flex;"><span><span style="color:#06b;font-weight:bold">mov</span> <span style="color:#038">al</span>, <span style="color:#00d;font-weight:bold">0xFF</span> // <span style="color:#00d;font-weight:bold">0b</span><span style="color:#00d;font-weight:bold">11111111</span>
+</span></span><span style="display:flex;"><span><span style="color:#06b;font-weight:bold">add</span> <span style="color:#038">al</span>, <span style="color:#00d;font-weight:bold">0x1</span>  // <span style="color:#369">This</span> <span style="color:#369">will</span> <span style="color:#369">not</span> <span style="color:#369">trigger</span> <span style="color:#369">Overflow</span> <span style="color:#369">flag</span>
 </span></span></code></pre></div><p>Overflow flag is mainly meant for indicating if there is a chance of result if
 interpreted as signed will cross beyond what can be represented in the register.
 For example, if we take a byte(al) it can contain value from 0b00000000(0) to
@@ -175,8 +137,8 @@ For example, if we take a byte(al) it can contain value from 0b00000000(0) to
 number. Now overflow flag is set when a result goes beyond 0b01111111 i.e., too
 large a positive number and less than 0b10000000 i.e., too small a negative
 number</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>mov al, 0x7e // This is always positive
-</span></span><span style="display:flex;"><span>add al, 0x2  // This will trigger overflow flag
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nasm" data-lang="nasm"><span style="display:flex;"><span><span style="color:#06b;font-weight:bold">mov</span> <span style="color:#038">al</span>, <span style="color:#00d;font-weight:bold">0x7e</span> // <span style="color:#369">This</span> <span style="color:#369">is</span> <span style="color:#038">al</span><span style="color:#369">ways</span> <span style="color:#369">positive</span>
+</span></span><span style="display:flex;"><span><span style="color:#06b;font-weight:bold">add</span> <span style="color:#038">al</span>, <span style="color:#00d;font-weight:bold">0x2</span>  // <span style="color:#369">This</span> <span style="color:#369">will</span> <span style="color:#369">trigger</span> <span style="color:#369">overflow</span> <span style="color:#369">flag</span>
 </span></span></code></pre></div><p>Let us see how overflow flag is used to determine the below conditional when
 var1 and var2 are signed numbers.</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">if</span> (var1 &lt; var2) {
@@ -310,21 +272,21 @@ helps in graphically looking at how these promotions/conversion happen</p>
 </span></span><span style="display:flex;"><span>    <span style="color:#888">//resulting unsigned long long expression will never be lessthan 0
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span>    <span style="color:#06b;font-weight:bold">printf</span>(<span style="color:#d20;background-color:#fff0f0">&#34;This will never get printed&#34;</span>);
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span>$LN4:
-</span></span><span style="display:flex;"><span>    sub rsp, <span style="color:#00d;font-weight:bold">56</span> ; <span style="color:#00d;font-weight:bold">00000038</span>H
-</span></span><span style="display:flex;"><span>    mov DWORD PTR var1$[rsp], -<span style="color:#00d;font-weight:bold">100</span>          ; ffffffffffffff9cH
-</span></span><span style="display:flex;"><span>    mov QWORD PTR var2$[rsp], <span style="color:#00d;font-weight:bold">10</span>
-</span></span><span style="display:flex;"><span>    movsxd rax, DWORD PTR var1$[rsp]
-</span></span><span style="display:flex;"><span>    add rax, QWORD PTR var2$[rsp]
-</span></span><span style="display:flex;"><span>    test rax, rax
-</span></span><span style="display:flex;"><span>    jae SHORT $LN2<span style="color:#a61717;background-color:#e3d2d2">@</span>main                     //This is an unsigned jump
-</span></span><span style="display:flex;"><span>    lea rcx, OFFSET FLAT:$SG4416
-</span></span><span style="display:flex;"><span>    call printf
-</span></span><span style="display:flex;"><span>$LN2<span style="color:#a61717;background-color:#e3d2d2">@</span>main:
-</span></span><span style="display:flex;"><span>    xor eax, eax
-</span></span><span style="display:flex;"><span>    add rsp, <span style="color:#00d;font-weight:bold">56</span> ; <span style="color:#00d;font-weight:bold">00000038</span>H
-</span></span><span style="display:flex;"><span>    ret <span style="color:#00d;font-weight:bold">0</span>
-</span></span><span style="display:flex;"><span>main ENDP
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nasm" data-lang="nasm"><span style="display:flex;"><span><span style="color:#369;font-style:italic">$LN4:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">sub</span> <span style="color:#038">rsp</span>, <span style="color:#00d;font-weight:bold">56</span> <span style="color:#888">; 00000038H</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">mov</span> <span style="color:#888;font-weight:bold">DWORD</span> <span style="color:#369">PTR</span> <span style="color:#369">var1$</span>[<span style="color:#038">rsp</span>], -<span style="color:#00d;font-weight:bold">100</span>          <span style="color:#888">; ffffffffffffff9cH</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">mov</span> <span style="color:#888;font-weight:bold">QWORD</span> <span style="color:#369">PTR</span> <span style="color:#369">var2$</span>[<span style="color:#038">rsp</span>], <span style="color:#00d;font-weight:bold">10</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">movsxd</span> <span style="color:#038">rax</span>, <span style="color:#888;font-weight:bold">DWORD</span> <span style="color:#369">PTR</span> <span style="color:#369">var1$</span>[<span style="color:#038">rsp</span>]
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">add</span> <span style="color:#038">rax</span>, <span style="color:#888;font-weight:bold">QWORD</span> <span style="color:#369">PTR</span> <span style="color:#369">var2$</span>[<span style="color:#038">rsp</span>]
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">test</span> <span style="color:#038">rax</span>, <span style="color:#038">rax</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">jae</span> <span style="color:#369">SHORT</span> <span style="color:#080;font-weight:bold">$</span><span style="color:#369">LN2@main</span>                     //<span style="color:#369">This</span> <span style="color:#369">is</span> <span style="color:#369">an</span> <span style="color:#369">unsigned</span> <span style="color:#369">jump</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">lea</span> <span style="color:#038">rcx</span>, <span style="color:#369">OFFSET</span> <span style="color:#369">FLAT</span>:<span style="color:#080;font-weight:bold">$</span><span style="color:#369">SG4416</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">call</span> <span style="color:#369">printf</span>
+</span></span><span style="display:flex;"><span><span style="color:#369;font-style:italic">$LN2@main:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">xor</span> <span style="color:#038">eax</span>, <span style="color:#038">eax</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">add</span> <span style="color:#038">rsp</span>, <span style="color:#00d;font-weight:bold">56</span> <span style="color:#888">; 00000038H</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">ret</span> <span style="color:#00d;font-weight:bold">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#06b;font-weight:bold">main</span> <span style="color:#369">ENDP</span>
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span><span style="color:#888">Fragment of clang&#39;s AST for above program
 </span></span></span><span style="display:flex;"><span><span style="color:#888">|-BinaryOperator &lt;line:7:9, col:23&gt; &#39;bool&#39; &#39;&lt;&#39;
 </span></span></span><span style="display:flex;"><span><span style="color:#888">| |-BinaryOperator &lt;col:9, col:16&gt; &#39;unsigned long long&#39; &#39;+&#39;
@@ -365,20 +327,20 @@ Figure 2: unsigned number converted to signed numbers
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">if</span> (var1 + var2 &lt; <span style="color:#00d;font-weight:bold">0</span>) { <span style="color:#888">//resulting in signed long long expression
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span>    <span style="color:#06b;font-weight:bold">printf</span>(<span style="color:#d20;background-color:#fff0f0">&#34;This gets printed if var1 + var2 is &lt; 0&#34;</span>);
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span>    sub rsp, <span style="color:#00d;font-weight:bold">56</span> ; <span style="color:#00d;font-weight:bold">00000038</span>H
-</span></span><span style="display:flex;"><span>    mov DWORD PTR var1$[rsp], <span style="color:#00d;font-weight:bold">100</span> ; <span style="color:#00d;font-weight:bold">00000064</span>H
-</span></span><span style="display:flex;"><span>    mov QWORD PTR var2$[rsp], -<span style="color:#00d;font-weight:bold">10</span>
-</span></span><span style="display:flex;"><span>    mov eax, DWORD PTR var1$[rsp]
-</span></span><span style="display:flex;"><span>    add rax, QWORD PTR var2$[rsp]
-</span></span><span style="display:flex;"><span>    test rax, rax
-</span></span><span style="display:flex;"><span>    jge SHORT $LN2<span style="color:#a61717;background-color:#e3d2d2">@</span>main // This is a signed jump
-</span></span><span style="display:flex;"><span>    lea rcx, OFFSET FLAT:$SG4869
-</span></span><span style="display:flex;"><span>    call printf
-</span></span><span style="display:flex;"><span>$LN2<span style="color:#a61717;background-color:#e3d2d2">@</span>main:
-</span></span><span style="display:flex;"><span>    xor eax, eax
-</span></span><span style="display:flex;"><span>    add rsp, <span style="color:#00d;font-weight:bold">56</span> ; <span style="color:#00d;font-weight:bold">00000038</span>H
-</span></span><span style="display:flex;"><span>    ret <span style="color:#00d;font-weight:bold">0</span>
-</span></span><span style="display:flex;"><span>main ENDP
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nasm" data-lang="nasm"><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">sub</span> <span style="color:#038">rsp</span>, <span style="color:#00d;font-weight:bold">56</span> <span style="color:#888">; 00000038H</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">mov</span> <span style="color:#888;font-weight:bold">DWORD</span> <span style="color:#369">PTR</span> <span style="color:#369">var1$</span>[<span style="color:#038">rsp</span>], <span style="color:#00d;font-weight:bold">100</span> <span style="color:#888">; 00000064H</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">mov</span> <span style="color:#888;font-weight:bold">QWORD</span> <span style="color:#369">PTR</span> <span style="color:#369">var2$</span>[<span style="color:#038">rsp</span>], -<span style="color:#00d;font-weight:bold">10</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">mov</span> <span style="color:#038">eax</span>, <span style="color:#888;font-weight:bold">DWORD</span> <span style="color:#369">PTR</span> <span style="color:#369">var1$</span>[<span style="color:#038">rsp</span>]
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">add</span> <span style="color:#038">rax</span>, <span style="color:#888;font-weight:bold">QWORD</span> <span style="color:#369">PTR</span> <span style="color:#369">var2$</span>[<span style="color:#038">rsp</span>]
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">test</span> <span style="color:#038">rax</span>, <span style="color:#038">rax</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">jge</span> <span style="color:#369">SHORT</span> <span style="color:#080;font-weight:bold">$</span><span style="color:#369">LN2@main</span> // <span style="color:#369">This</span> <span style="color:#369">is</span> <span style="color:#369">a</span> <span style="color:#038">si</span><span style="color:#369">gned</span> <span style="color:#369">jump</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">lea</span> <span style="color:#038">rcx</span>, <span style="color:#369">OFFSET</span> <span style="color:#369">FLAT</span>:<span style="color:#080;font-weight:bold">$</span><span style="color:#369">SG4869</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">call</span> <span style="color:#369">printf</span>
+</span></span><span style="display:flex;"><span><span style="color:#369;font-style:italic">$LN2@main:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">xor</span> <span style="color:#038">eax</span>, <span style="color:#038">eax</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">add</span> <span style="color:#038">rsp</span>, <span style="color:#00d;font-weight:bold">56</span> <span style="color:#888">; 00000038H</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">ret</span> <span style="color:#00d;font-weight:bold">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#06b;font-weight:bold">main</span> <span style="color:#369">ENDP</span>
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span><span style="color:#888">Fragment of clang&#39;s AST for above program
 </span></span></span><span style="display:flex;"><span><span style="color:#888">|-BinaryOperator &lt;line:7:9, col:23&gt; &#39;bool&#39; &#39;&lt;&#39;
 </span></span></span><span style="display:flex;"><span><span style="color:#888">| |-BinaryOperator &lt;col:9, col:16&gt; &#39;long long&#39; &#39;+&#39;
@@ -402,22 +364,22 @@ rules. For example:</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">if</span> (var1 + var2 &lt; <span style="color:#00d;font-weight:bold">0</span>) {   <span style="color:#888">// resulting type is unsigned long
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span>    <span style="color:#06b;font-weight:bold">printf</span>(<span style="color:#d20;background-color:#fff0f0">&#34;This will not be printed&#34;</span>);
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span>    sub rsp, <span style="color:#00d;font-weight:bold">56</span> ; <span style="color:#00d;font-weight:bold">00000038</span>H
-</span></span><span style="display:flex;"><span>    mov DWORD PTR var1$[rsp], <span style="color:#00d;font-weight:bold">100</span> ; <span style="color:#00d;font-weight:bold">00000064</span>H
-</span></span><span style="display:flex;"><span>    mov DWORD PTR var2$[rsp], -<span style="color:#00d;font-weight:bold">10</span>
-</span></span><span style="display:flex;"><span>    mov eax, DWORD PTR var2$[rsp]
-</span></span><span style="display:flex;"><span>    mov ecx, DWORD PTR var1$[rsp]
-</span></span><span style="display:flex;"><span>    add ecx, eax
-</span></span><span style="display:flex;"><span>    mov eax, ecx
-</span></span><span style="display:flex;"><span>    test eax, eax
-</span></span><span style="display:flex;"><span>    jae SHORT $LN2<span style="color:#a61717;background-color:#e3d2d2">@</span>main // This is an unsigned jump
-</span></span><span style="display:flex;"><span>    lea rcx, OFFSET FLAT:$SG4869
-</span></span><span style="display:flex;"><span>    call printf
-</span></span><span style="display:flex;"><span>$LN2<span style="color:#a61717;background-color:#e3d2d2">@</span>main:
-</span></span><span style="display:flex;"><span>    xor eax, eax
-</span></span><span style="display:flex;"><span>    add rsp, <span style="color:#00d;font-weight:bold">56</span> ; <span style="color:#00d;font-weight:bold">00000038</span>H
-</span></span><span style="display:flex;"><span>    ret <span style="color:#00d;font-weight:bold">0</span>
-</span></span><span style="display:flex;"><span>main ENDP
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nasm" data-lang="nasm"><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">sub</span> <span style="color:#038">rsp</span>, <span style="color:#00d;font-weight:bold">56</span> <span style="color:#888">; 00000038H</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">mov</span> <span style="color:#888;font-weight:bold">DWORD</span> <span style="color:#369">PTR</span> <span style="color:#369">var1$</span>[<span style="color:#038">rsp</span>], <span style="color:#00d;font-weight:bold">100</span> <span style="color:#888">; 00000064H</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">mov</span> <span style="color:#888;font-weight:bold">DWORD</span> <span style="color:#369">PTR</span> <span style="color:#369">var2$</span>[<span style="color:#038">rsp</span>], -<span style="color:#00d;font-weight:bold">10</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">mov</span> <span style="color:#038">eax</span>, <span style="color:#888;font-weight:bold">DWORD</span> <span style="color:#369">PTR</span> <span style="color:#369">var2$</span>[<span style="color:#038">rsp</span>]
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">mov</span> <span style="color:#038">ecx</span>, <span style="color:#888;font-weight:bold">DWORD</span> <span style="color:#369">PTR</span> <span style="color:#369">var1$</span>[<span style="color:#038">rsp</span>]
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">add</span> <span style="color:#038">ecx</span>, <span style="color:#038">eax</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">mov</span> <span style="color:#038">eax</span>, <span style="color:#038">ecx</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">test</span> <span style="color:#038">eax</span>, <span style="color:#038">eax</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">jae</span> <span style="color:#369">SHORT</span> <span style="color:#080;font-weight:bold">$</span><span style="color:#369">LN2@main</span> // <span style="color:#369">This</span> <span style="color:#369">is</span> <span style="color:#369">an</span> <span style="color:#369">unsigned</span> <span style="color:#369">jump</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">lea</span> <span style="color:#038">rcx</span>, <span style="color:#369">OFFSET</span> <span style="color:#369">FLAT</span>:<span style="color:#080;font-weight:bold">$</span><span style="color:#369">SG4869</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">call</span> <span style="color:#369">printf</span>
+</span></span><span style="display:flex;"><span><span style="color:#369;font-style:italic">$LN2@main:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">xor</span> <span style="color:#038">eax</span>, <span style="color:#038">eax</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">add</span> <span style="color:#038">rsp</span>, <span style="color:#00d;font-weight:bold">56</span> <span style="color:#888">; 00000038H</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">ret</span> <span style="color:#00d;font-weight:bold">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#06b;font-weight:bold">main</span> <span style="color:#369">ENDP</span>
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span><span style="color:#888">Fragment of clang&#39;s AST for above program
 </span></span></span><span style="display:flex;"><span><span style="color:#888">|-BinaryOperator &lt;line:7:9, col:23&gt; &#39;bool&#39; &#39;&lt;&#39;
 </span></span></span><span style="display:flex;"><span><span style="color:#888">| |-BinaryOperator &lt;col:9, col:16&gt; &#39;long&#39; &#39;+&#39;
@@ -500,7 +462,7 @@ rules. For example:</p>
 <li><a href="http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf">C99 Standard</a></li>
 <li><a href="http://blog.robertelder.org/signed-or-unsigned/">Should I use Signed or Unsigned Ints In C? (Part 1)</a></li>
 <li><a href="http://blog.robertelder.org/signed-or-unsigned-part-2/">Should I use Signed or Unsigned Ints In C? (Part 2)</a></li>
-<li><a href="http://ref.x86asm.net/coder-abc.html">X86 Opcode and Instruction Reference</a></li>
+<li><a href="http://ref.nasm.net/coder-abc.html">X86 Opcode and Instruction Reference</a></li>
 <li><a href="https://stackoverflow.com/a/42589535/2407966">Why is imul used for multiplying unsigned numbers?</a></li>
 <li><a href="https://software.intel.com/sites/default/files/article/402129/mpx-linux64-abi.pdf">System V Application Binary Interface AMD64 Architecture Processor Supplement</a></li>
 <li><a href="http://www.unix.org/version2/whatsnew/lp64_wp.html">64-Bit Programming Models: Why LP64?</a></li>

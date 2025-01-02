@@ -47,8 +47,7 @@ this phase will do
 
 ```C
 #define PI  3.14156
-main()
-{
+main() {
     float f1;
     f = PI*2;
 }
@@ -63,8 +62,7 @@ following output.
 # 1 "<command-line>"
 # 1 "test.c"
 
-main()
-{
+main() {
     float f1;
     f = 3.14156*2; // Preprocessor macro substituted
 }
@@ -87,8 +85,7 @@ following example?
 #define Add(x,y) x+y
 #define Sub(x,y) x-y
 #define AddMulSub(x,y) Add(x,y)*Sub(x,y)
-main()
-{
+main() {
     printf("%d",AddMulSub(10,2));
 }
 ```
@@ -111,8 +108,7 @@ The responsibility of a lexical analyzer(or Lexer for short) is to split the
 given program in to valid language tokens(or lexems).  For example consider
 the following code.
 ```C
-main()
-{
+main() {
     c = a << b;
 }
 ```
@@ -162,13 +158,11 @@ Once the program passes above stages the compiler translate the high level
 program in to its equivalent assembly language program(may not have one-one
 correspondence due to code optimizations)
 ```C
-add()
-{
+add() {
     printf("Add Routine");
 }
 
-main()
-{
+main() {
     add();
 }
 ```
@@ -204,8 +198,7 @@ variable is assumed at Zero, this is because, the compilation phase has no
 idea on exactly from where these extern variables are referenced. You can
 observe this in the following illustration.
 ```C
-main()
-{
+main() {
     //Referring an external variable
     //Don't know where its definition is located
     extern int x;
@@ -224,14 +217,10 @@ translate it back to its original C code in all the cases. To get the feel
 of what I mean, consider the following code snippet.
 ```C
 #include<stdio.h>
-main()
-{
-    if(1)  //trivial case
-    {
+main() {
+    if(1) {  //trivial case
         printf("if");
-    }
-    else   //Will be discarded by the compilation phase of the compiler
-    {
+    } else {   //Will be discarded by the compilation phase of the compiler
         printf("else");
     }
 }
@@ -239,8 +228,7 @@ main()
 the code generation for this is done by the compilation phase as
 ```C
 #include<stdio.h>
-main()
-{
+main() {
     printf("if");
 }
 ```
@@ -265,8 +253,7 @@ It is the process of converting a given assembly language program in to its
 equivalent architecture specific machine language code. This can be
 x86/x64/arm. Consider the following code
 ```C
-main()
-{
+main() {
     printf("Vineel");
 }
 ```
@@ -276,7 +263,7 @@ Assume this file is saved as test.c issue the command
 
 This command creates the plain assembly language representation(program)
 with a file name test.s
-```x86asm
+```nasm
     .file  "test.c"
     .intel_syntax
     .def   ___main;  .scl    2;  .type   32; .endef
@@ -354,9 +341,8 @@ dll file. But the real crux of linking lies in relocating. Consider two
 programs test1.c test2.c whose contents are shown below.
 ```C
 //test1.c                            //test2.c
-main()                                test2()
-{                                     {
-    printf("main() of test1.c");           printf("test2() of test2.c");
+main() {                              test2() {
+    printf("main() of test1.c");          printf("test2() of test2.c");
     test2();
 }                                     }
 ```
@@ -414,8 +400,7 @@ the final exe. To understand this scenario consider the following code
 snippet.
 ```C
 #include<stdio.h>
-main()
-{
+main() {
     printf("Hello World...- Vineel!!!");
 }
 ```
@@ -459,15 +444,13 @@ license/registry key/config. Also let's pretend this application will run
 with its complete features enabled if it is registered and it will be
 terminated if it is not registered.
 ```C
-main()
-{
+main() {
     //if reg == 1 the application is registered and not registered otherwise
     int reg = 0 ; //Let's pretend this value is comming from external sources like reg key/config/license
-    if(reg == 0 ){
+    if(reg == 0 ) {
         printf("Not Registered");
         exit(1);
-    }
-    else {
+    } else {
        printf("Registered");
        //The Task of the application starts here
    }

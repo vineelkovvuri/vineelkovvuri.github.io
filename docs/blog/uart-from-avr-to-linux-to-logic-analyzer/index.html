@@ -70,43 +70,40 @@ on TXD(PD1) pin on the uC.</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#c00;font-weight:bold">#include</span> <span style="color:#c00;font-weight:bold">&lt;util/delay.h&gt;</span><span style="color:#c00;font-weight:bold">
 </span></span></span><span style="display:flex;"><span><span style="color:#c00;font-weight:bold">#include</span> <span style="color:#c00;font-weight:bold">&lt;util/setbaud.h&gt;</span><span style="color:#c00;font-weight:bold">
 </span></span></span><span style="display:flex;"><span><span style="color:#c00;font-weight:bold"></span>
-</span></span><span style="display:flex;"><span><span style="color:#888;font-weight:bold">void</span> <span style="color:#06b;font-weight:bold">USART_Init</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>  <span style="color:#888">/*Set baud rate */</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#888">// By default, atmega328p runs at 1Mhz without external oscilator
-</span></span></span><span style="display:flex;"><span><span style="color:#888"></span>  <span style="color:#888">// So as per the data sheet the UBBR value should be 6 for 9600 baud rate
-</span></span></span><span style="display:flex;"><span><span style="color:#888"></span>  UBRR0H = <span style="color:#00d;font-weight:bold">0</span>;
-</span></span><span style="display:flex;"><span>  UBRR0L = <span style="color:#00d;font-weight:bold">6</span>;
+</span></span><span style="display:flex;"><span><span style="color:#888;font-weight:bold">void</span> <span style="color:#06b;font-weight:bold">USART_Init</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#888">// Set baud rate
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span>    <span style="color:#888">// By default, atmega328p runs at 1Mhz without external oscilator
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span>    <span style="color:#888">// So as per the data sheet the UBBR value should be 6 for 9600 baud rate
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span>    UBRR0H = <span style="color:#00d;font-weight:bold">0</span>;
+</span></span><span style="display:flex;"><span>    UBRR0L = <span style="color:#00d;font-weight:bold">6</span>;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  UCSR0A &amp;= ~(<span style="color:#00d;font-weight:bold">1</span> &lt;&lt; U2X0);
+</span></span><span style="display:flex;"><span>    UCSR0A &amp;= ~(<span style="color:#00d;font-weight:bold">1</span> &lt;&lt; U2X0);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  <span style="color:#888">//Enable receiver and transmitter */
-</span></span></span><span style="display:flex;"><span><span style="color:#888"></span>  UCSR0B = (<span style="color:#00d;font-weight:bold">1</span>&lt;&lt;RXEN0)|(<span style="color:#00d;font-weight:bold">1</span>&lt;&lt;TXEN0);
-</span></span><span style="display:flex;"><span>  <span style="color:#888">/* Set frame format: 8data, 1stop bit */</span>
-</span></span><span style="display:flex;"><span>  UCSR0C = (<span style="color:#00d;font-weight:bold">3</span>&lt;&lt;UCSZ00);
+</span></span><span style="display:flex;"><span>    <span style="color:#888">// Enable receiver and transmitter
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span>    UCSR0B = (<span style="color:#00d;font-weight:bold">1</span>&lt;&lt;RXEN0)|(<span style="color:#00d;font-weight:bold">1</span>&lt;&lt;TXEN0);
+</span></span><span style="display:flex;"><span>    <span style="color:#888">// Set frame format: 8data, 1stop bit
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span>    UCSR0C = (<span style="color:#00d;font-weight:bold">3</span>&lt;&lt;UCSZ00);
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#888;font-weight:bold">void</span> <span style="color:#06b;font-weight:bold">USART_Transmit</span>(<span style="color:#888;font-weight:bold">unsigned</span> <span style="color:#888;font-weight:bold">char</span> data)
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>  <span style="color:#888">/* Wait for empty transmit buffer */</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">while</span> (!(UCSR0A &amp; (<span style="color:#00d;font-weight:bold">1</span>&lt;&lt;UDRE0)))
-</span></span><span style="display:flex;"><span>  ;
-</span></span><span style="display:flex;"><span>  <span style="color:#888">/* Put data into buffer, sends the data */</span>
-</span></span><span style="display:flex;"><span>  UDR0 = data;
+</span></span><span style="display:flex;"><span><span style="color:#888;font-weight:bold">void</span> <span style="color:#06b;font-weight:bold">USART_Transmit</span>(<span style="color:#888;font-weight:bold">unsigned</span> <span style="color:#888;font-weight:bold">char</span> data) {
+</span></span><span style="display:flex;"><span>    <span style="color:#888">// Wait for empty transmit buffer
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span>    <span style="color:#080;font-weight:bold">while</span> (!(UCSR0A &amp; (<span style="color:#00d;font-weight:bold">1</span>&lt;&lt;UDRE0)));
+</span></span><span style="display:flex;"><span>    <span style="color:#888">// Put data into buffer, sends the data
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span>    UDR0 = data;
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">main</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>  <span style="color:#888;font-weight:bold">char</span> outstr[<span style="color:#00d;font-weight:bold">50</span>] = <span style="color:#d20;background-color:#fff0f0">&#34;Hello UART </span><span style="color:#04d;background-color:#fff0f0">\r\n</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>;
-</span></span><span style="display:flex;"><span>  <span style="color:#06b;font-weight:bold">USART_Init</span>();
-</span></span><span style="display:flex;"><span>  DDRB = <span style="color:#00d;font-weight:bold">0xff</span>;
-</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">while</span> (<span style="color:#00d;font-weight:bold">1</span>) {
-</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">for</span> (<span style="color:#888;font-weight:bold">int</span> i = <span style="color:#00d;font-weight:bold">0</span>; i &lt; <span style="color:#06b;font-weight:bold">strlen</span>(outstr); i++) {
-</span></span><span style="display:flex;"><span>      <span style="color:#06b;font-weight:bold">USART_Transmit</span>(outstr[i]);                          <span style="color:#888">/* to test */</span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">char</span> outstr[<span style="color:#00d;font-weight:bold">50</span>] = <span style="color:#d20;background-color:#fff0f0">&#34;Hello UART </span><span style="color:#04d;background-color:#fff0f0">\r\n</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>;
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#06b;font-weight:bold">USART_Init</span>();
+</span></span><span style="display:flex;"><span>    DDRB = <span style="color:#00d;font-weight:bold">0xff</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">while</span> (<span style="color:#00d;font-weight:bold">1</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#080;font-weight:bold">for</span> (<span style="color:#888;font-weight:bold">int</span> i = <span style="color:#00d;font-weight:bold">0</span>; i &lt; <span style="color:#06b;font-weight:bold">strlen</span>(outstr); i++) {
+</span></span><span style="display:flex;"><span>            <span style="color:#06b;font-weight:bold">USART_Transmit</span>(outstr[i]);  <span style="color:#888">// to test
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span>        }
 </span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>  }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">return</span> <span style="color:#00d;font-weight:bold">0</span>;
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> <span style="color:#00d;font-weight:bold">0</span>;
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>Flash the above program to the uC(check references for the sample makefile) and
 connect USB to TTL adapter to TX pin of the uC. Then fire up cutecom(as sudo)

@@ -81,8 +81,7 @@ mnemonic before call instruction (just windbg kept a note of the
 breakpoints).
 ```C
 #include <stdio.h>
-int main ()
-{
+int main () {
     // This loop takes some time so that we
     // get a chance to examine the address of
     // the breakpoint at the second printf :)

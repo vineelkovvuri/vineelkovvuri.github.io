@@ -38,8 +38,7 @@ link into another dll or exe. For example, If a static library
 project contains 4 files add.c,sub.c,mul.c,div.c containing functions
 for their operations like below respectively.
 ```C
-int add(int a)
-{
+int add(int a) {
     return a + 1;
 }
 ```
@@ -76,8 +75,7 @@ present inside the .dll file.
 Since .lib does not contain any real .obj unlike static lib, we can
 only see the exported symbols but not their code in case of dll's .lib file.
 ```C
-__declspec(dllexport) int add(int a)
-{
+__declspec(dllexport) int add(int a) {
     return a + 1;
 }
 ```
