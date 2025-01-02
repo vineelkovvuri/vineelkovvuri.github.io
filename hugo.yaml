@@ -37,16 +37,17 @@ menu:
 
 params:
   description: "A website built through Hugo and blogdown."
-  footer: "&copy; [Vineel Kumar Reddy Kovvuri](https://vineelkovvuri.github.io) 2017 -- {Year}"
+  footer: "&copy; [Vineel Kumar Reddy Kovvuri](https://vineelkovvuri.github.io) 2017 -- {Year} ❤️ [Hugo Xmin](https://xmin.yihui.org/)"
 
 # We are using hugo supported default syntax highlighter.
 markup:
   highlight:
     codeFences: true
-    lineNos: true
+    lineNos: false   # enabling this will cause code not wrap
     guessSyntax : true
     pygmentsUseClasses : true
     pygmentsCodefences : true
+    style : pastie
   goldmark:
     renderer:
       unsafe: true

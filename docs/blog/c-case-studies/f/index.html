@@ -43,350 +43,162 @@ of objects and uses the traditional realloc function to expand them.</p>
 code. In Linux kernel, declarations are done only in the beginning of a new
 scope (either at the start of the function or start of a scope)</p>
 <p>libspng:</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span>ret <span style="color:#f92672">=</span> <span style="color:#a6e22e">calculate_subimages</span>(sub, <span style="color:#f92672">&amp;</span>scanline_width, <span style="color:#f92672">&amp;</span>ctx<span style="color:#f92672">-&gt;</span>ihdr, channels);
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span>(ret) <span style="color:#66d9ef">return</span> ret;
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span>ret = <span style="color:#06b;font-weight:bold">calculate_subimages</span>(sub, &amp;scanline_width, &amp;ctx-&gt;ihdr, channels);
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">if</span>(ret) <span style="color:#080;font-weight:bold">return</span> ret;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>scanline_orig <span style="color:#f92672">=</span> NULL, <span style="color:#f92672">*</span>scanline <span style="color:#f92672">=</span> NULL, <span style="color:#f92672">*</span>prev_scanline <span style="color:#f92672">=</span> NULL;
+</span></span><span style="display:flex;"><span><span style="color:#888;font-weight:bold">unsigned</span> <span style="color:#888;font-weight:bold">char</span> *scanline_orig = <span style="color:#038">NULL</span>, *scanline = <span style="color:#038">NULL</span>, *prev_scanline = <span style="color:#038">NULL</span>;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>scanline_orig <span style="color:#f92672">=</span> <span style="color:#a6e22e">spng__malloc</span>(ctx, scanline_width);
-</span></span><span style="display:flex;"><span>prev_scanline <span style="color:#f92672">=</span> <span style="color:#a6e22e">spng__malloc</span>(ctx, scanline_width);
+</span></span><span style="display:flex;"><span>scanline_orig = <span style="color:#06b;font-weight:bold">spng__malloc</span>(ctx, scanline_width);
+</span></span><span style="display:flex;"><span>prev_scanline = <span style="color:#06b;font-weight:bold">spng__malloc</span>(ctx, scanline_width);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span>(scanline_orig <span style="color:#f92672">==</span> NULL <span style="color:#f92672">||</span> prev_scanline <span style="color:#f92672">==</span> NULL)
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">if</span>(scanline_orig == <span style="color:#038">NULL</span> || prev_scanline == <span style="color:#038">NULL</span>)
 </span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    ret <span style="color:#f92672">=</span> SPNG_EMEM;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">goto</span> decode_err;
+</span></span><span style="display:flex;"><span>    ret = SPNG_EMEM;
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">goto</span> decode_err;
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">/* Some of the error-handling goto&#39;s might leave scanline incremented,
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">   leading to a failed free(), this prevents that. */</span>
-</span></span><span style="display:flex;"><span>scanline <span style="color:#f92672">=</span> scanline_orig;
+</span></span><span style="display:flex;"><span><span style="color:#888">/* Some of the error-handling goto&#39;s might leave scanline incremented,
+</span></span></span><span style="display:flex;"><span><span style="color:#888">   leading to a failed free(), this prevents that. */</span>
+</span></span><span style="display:flex;"><span>scanline = scanline_orig;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> i;
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span>(i<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">7</span>; i<span style="color:#f92672">++</span>)
+</span></span><span style="display:flex;"><span><span style="color:#888;font-weight:bold">int</span> i;
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">for</span>(i=<span style="color:#00d;font-weight:bold">0</span>; i &lt; <span style="color:#00d;font-weight:bold">7</span>; i++)
 </span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/* Skip empty passes */</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span>(sub[i].width <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">&amp;&amp;</span> sub[i].height <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#888">/* Skip empty passes */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">if</span>(sub[i].width != <span style="color:#00d;font-weight:bold">0</span> &amp;&amp; sub[i].height != <span style="color:#00d;font-weight:bold">0</span>)
 </span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        scanline_width <span style="color:#f92672">=</span> sub[i].scanline_width;
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>        scanline_width = sub[i].scanline_width;
+</span></span><span style="display:flex;"><span>        <span style="color:#080;font-weight:bold">break</span>;
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">uint16_t</span> <span style="color:#f92672">*</span>gamma_lut <span style="color:#f92672">=</span> NULL;
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">uint16_t</span> gamma_lut8[<span style="color:#ae81ff">256</span>];
+</span></span><span style="display:flex;"><span><span style="color:#888;font-weight:bold">uint16_t</span> *gamma_lut = <span style="color:#038">NULL</span>;
+</span></span><span style="display:flex;"><span><span style="color:#888;font-weight:bold">uint16_t</span> gamma_lut8[<span style="color:#00d;font-weight:bold">256</span>];
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span>(flags <span style="color:#f92672">&amp;</span> SPNG_DECODE_USE_GAMA <span style="color:#f92672">&amp;&amp;</span> ctx<span style="color:#f92672">-&gt;</span>stored_gama)
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">if</span>(flags &amp; SPNG_DECODE_USE_GAMA &amp;&amp; ctx-&gt;stored_gama)
 </span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">float</span> file_gamma <span style="color:#f92672">=</span> (<span style="color:#66d9ef">float</span>)ctx<span style="color:#f92672">-&gt;</span>gama <span style="color:#f92672">/</span> <span style="color:#ae81ff">100000.0f</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">float</span> max;
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">float</span> file_gamma = (<span style="color:#888;font-weight:bold">float</span>)ctx-&gt;gama / <span style="color:#00d;font-weight:bold">100000.0f</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">float</span> max;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint32_t</span> i, lut_entries;
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">uint32_t</span> i, lut_entries;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span>(fmt <span style="color:#f92672">==</span> SPNG_FMT_RGBA8)
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>Linux Kernel:</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">long</span> <span style="color:#a6e22e">isolate_freepages_block</span>(<span style="color:#66d9ef">struct</span> compact_control <span style="color:#f92672">*</span>cc,
-</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">long</span> <span style="color:#f92672">*</span>start_pfn,
-</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">long</span> end_pfn,
-</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">struct</span> list_head <span style="color:#f92672">*</span>freelist,
-</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">bool</span> strict)
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">if</span>(fmt == SPNG_FMT_RGBA8)
+</span></span></code></pre></div><p>Linux Kernel:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">static</span> <span style="color:#888;font-weight:bold">unsigned</span> <span style="color:#888;font-weight:bold">long</span> <span style="color:#06b;font-weight:bold">isolate_freepages_block</span>(<span style="color:#080;font-weight:bold">struct</span> compact_control *cc,
+</span></span><span style="display:flex;"><span>                <span style="color:#888;font-weight:bold">unsigned</span> <span style="color:#888;font-weight:bold">long</span> *start_pfn,
+</span></span><span style="display:flex;"><span>                <span style="color:#888;font-weight:bold">unsigned</span> <span style="color:#888;font-weight:bold">long</span> end_pfn,
+</span></span><span style="display:flex;"><span>                <span style="color:#080;font-weight:bold">struct</span> list_head *freelist,
+</span></span><span style="display:flex;"><span>                <span style="color:#888;font-weight:bold">bool</span> strict)
 </span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> nr_scanned <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>, total_isolated <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">struct</span> page <span style="color:#f92672">*</span>cursor, <span style="color:#f92672">*</span>valid_page <span style="color:#f92672">=</span> NULL;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">long</span> flags <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">bool</span> locked <span style="color:#f92672">=</span> false;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">long</span> blockpfn <span style="color:#f92672">=</span> <span style="color:#f92672">*</span>start_pfn;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> order;
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">int</span> nr_scanned = <span style="color:#00d;font-weight:bold">0</span>, total_isolated = <span style="color:#00d;font-weight:bold">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">struct</span> page *cursor, *valid_page = <span style="color:#038">NULL</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">unsigned</span> <span style="color:#888;font-weight:bold">long</span> flags = <span style="color:#00d;font-weight:bold">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">bool</span> locked = <span style="color:#038">false</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">unsigned</span> <span style="color:#888;font-weight:bold">long</span> blockpfn = *start_pfn;
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">unsigned</span> <span style="color:#888;font-weight:bold">int</span> order;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    cursor <span style="color:#f92672">=</span> <span style="color:#a6e22e">pfn_to_page</span>(blockpfn);
+</span></span><span style="display:flex;"><span>    cursor = <span style="color:#06b;font-weight:bold">pfn_to_page</span>(blockpfn);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/* Isolate free pages. */</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (; blockpfn <span style="color:#f92672">&lt;</span> end_pfn; blockpfn<span style="color:#f92672">++</span>, cursor<span style="color:#f92672">++</span>) {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">int</span> isolated;
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">struct</span> page <span style="color:#f92672">*</span>page <span style="color:#f92672">=</span> cursor;
+</span></span><span style="display:flex;"><span>    <span style="color:#888">/* Isolate free pages. */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">for</span> (; blockpfn &lt; end_pfn; blockpfn++, cursor++) {
+</span></span><span style="display:flex;"><span>        <span style="color:#888;font-weight:bold">int</span> isolated;
+</span></span><span style="display:flex;"><span>        <span style="color:#080;font-weight:bold">struct</span> page *page = cursor;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">/*
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">         * Periodically drop the lock (if held) regardless of its
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">         * contention, to give chance to IRQs. Abort if fatal signal
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">         * pending or async compaction detects need_resched()
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">         */</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>(blockpfn <span style="color:#f92672">%</span> SWAP_CLUSTER_MAX)
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">compact_unlock_should_abort</span>(<span style="color:#f92672">&amp;</span>cc<span style="color:#f92672">-&gt;</span>zone<span style="color:#f92672">-&gt;</span>lock, flags,
-</span></span><span style="display:flex;"><span>                                <span style="color:#f92672">&amp;</span>locked, cc))
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#888">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#888">         * Periodically drop the lock (if held) regardless of its
+</span></span></span><span style="display:flex;"><span><span style="color:#888">         * contention, to give chance to IRQs. Abort if fatal signal
+</span></span></span><span style="display:flex;"><span><span style="color:#888">         * pending or async compaction detects need_resched()
+</span></span></span><span style="display:flex;"><span><span style="color:#888">         */</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#080;font-weight:bold">if</span> (!(blockpfn % SWAP_CLUSTER_MAX)
+</span></span><span style="display:flex;"><span>            &amp;&amp; <span style="color:#06b;font-weight:bold">compact_unlock_should_abort</span>(&amp;cc-&gt;zone-&gt;lock, flags,
+</span></span><span style="display:flex;"><span>                                &amp;locked, cc))
+</span></span><span style="display:flex;"><span>            <span style="color:#080;font-weight:bold">break</span>;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        nr_scanned<span style="color:#f92672">++</span>;
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">pfn_valid_within</span>(blockpfn))
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">goto</span> isolate_fail;
+</span></span><span style="display:flex;"><span>        nr_scanned++;
+</span></span><span style="display:flex;"><span>        <span style="color:#080;font-weight:bold">if</span> (!<span style="color:#06b;font-weight:bold">pfn_valid_within</span>(blockpfn))
+</span></span><span style="display:flex;"><span>            <span style="color:#080;font-weight:bold">goto</span> isolate_fail;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>valid_page)
-</span></span><span style="display:flex;"><span>            valid_page <span style="color:#f92672">=</span> page;
+</span></span><span style="display:flex;"><span>        <span style="color:#080;font-weight:bold">if</span> (!valid_page)
+</span></span><span style="display:flex;"><span>            valid_page = page;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">/*
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">         * For compound pages such as THP and hugetlbfs, we can save
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">         * potentially a lot of iterations if we skip them at once.
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">         * The check is racy, but we can consider only valid values
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">         * and the only danger is skipping too much.
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">         */</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">PageCompound</span>(page)) {
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> order <span style="color:#f92672">=</span> <span style="color:#a6e22e">compound_order</span>(page);
+</span></span><span style="display:flex;"><span>        <span style="color:#888">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#888">         * For compound pages such as THP and hugetlbfs, we can save
+</span></span></span><span style="display:flex;"><span><span style="color:#888">         * potentially a lot of iterations if we skip them at once.
+</span></span></span><span style="display:flex;"><span><span style="color:#888">         * The check is racy, but we can consider only valid values
+</span></span></span><span style="display:flex;"><span><span style="color:#888">         * and the only danger is skipping too much.
+</span></span></span><span style="display:flex;"><span><span style="color:#888">         */</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#080;font-weight:bold">if</span> (<span style="color:#06b;font-weight:bold">PageCompound</span>(page)) {
+</span></span><span style="display:flex;"><span>            <span style="color:#080;font-weight:bold">const</span> <span style="color:#888;font-weight:bold">unsigned</span> <span style="color:#888;font-weight:bold">int</span> order = <span style="color:#06b;font-weight:bold">compound_order</span>(page);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">likely</span>(order <span style="color:#f92672">&lt;</span> MAX_ORDER)) {
-</span></span><span style="display:flex;"><span>                blockpfn <span style="color:#f92672">+=</span> (<span style="color:#ae81ff">1UL</span> <span style="color:#f92672">&lt;&lt;</span> order) <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>;
-</span></span><span style="display:flex;"><span>                cursor <span style="color:#f92672">+=</span> (<span style="color:#ae81ff">1UL</span> <span style="color:#f92672">&lt;&lt;</span> order) <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#080;font-weight:bold">if</span> (<span style="color:#06b;font-weight:bold">likely</span>(order &lt; MAX_ORDER)) {
+</span></span><span style="display:flex;"><span>                blockpfn += (<span style="color:#00d;font-weight:bold">1UL</span> &lt;&lt; order) - <span style="color:#00d;font-weight:bold">1</span>;
+</span></span><span style="display:flex;"><span>                cursor += (<span style="color:#00d;font-weight:bold">1UL</span> &lt;&lt; order) - <span style="color:#00d;font-weight:bold">1</span>;
 </span></span><span style="display:flex;"><span>            }
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">goto</span> isolate_fail;
+</span></span><span style="display:flex;"><span>            <span style="color:#080;font-weight:bold">goto</span> isolate_fail;
 </span></span><span style="display:flex;"><span>        }
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>Libspng also has multiple exits using the return statement every where in
+</span></span></code></pre></div><p>Libspng also has multiple exits using the return statement every where in
 the function. Even in linux kernel, we use multiple return statements but
 primarily it is used initially to return from function when invalid
 parameters are given as shown below</p>
 <p>Libspng</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">uint16_t</span> <span style="color:#a6e22e">sample_to_target</span>(<span style="color:#66d9ef">uint16_t</span> sample, <span style="color:#66d9ef">uint8_t</span> bit_depth, <span style="color:#66d9ef">uint8_t</span> sbits, <span style="color:#66d9ef">uint8_t</span> target)
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">static</span> <span style="color:#888;font-weight:bold">uint16_t</span> <span style="color:#06b;font-weight:bold">sample_to_target</span>(<span style="color:#888;font-weight:bold">uint16_t</span> sample, <span style="color:#888;font-weight:bold">uint8_t</span> bit_depth, <span style="color:#888;font-weight:bold">uint8_t</span> sbits, <span style="color:#888;font-weight:bold">uint8_t</span> target)
 </span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint16_t</span> sample_bits;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int8_t</span> shift_amount;
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">uint16_t</span> sample_bits;
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">int8_t</span> shift_amount;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span>(bit_depth <span style="color:#f92672">==</span> sbits)
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">if</span>(bit_depth == sbits)
 </span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span>(target <span style="color:#f92672">==</span> sbits) <span style="color:#66d9ef">return</span> sample; <span style="color:#75715e">/* no scaling */</span>
-</span></span><span style="display:flex;"><span>    }<span style="color:#75715e">/* bit_depth &gt; sbits */</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span> sample <span style="color:#f92672">=</span> sample <span style="color:#f92672">&gt;&gt;</span> (bit_depth <span style="color:#f92672">-</span> sbits); <span style="color:#75715e">/* shift significant bits to bottom */</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#080;font-weight:bold">if</span>(target == sbits) <span style="color:#080;font-weight:bold">return</span> sample; <span style="color:#888">/* no scaling */</span>
+</span></span><span style="display:flex;"><span>    }<span style="color:#888">/* bit_depth &gt; sbits */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">else</span> sample = sample &gt;&gt; (bit_depth - sbits); <span style="color:#888">/* shift significant bits to bottom */</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/* downscale */</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span>(target <span style="color:#f92672">&lt;</span> sbits) <span style="color:#66d9ef">return</span> sample <span style="color:#f92672">&gt;&gt;</span> (sbits <span style="color:#f92672">-</span> target);
+</span></span><span style="display:flex;"><span>    <span style="color:#888">/* downscale */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">if</span>(target &lt; sbits) <span style="color:#080;font-weight:bold">return</span> sample &gt;&gt; (sbits - target);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/* upscale using left bit replication */</span>
-</span></span><span style="display:flex;"><span>    shift_amount <span style="color:#f92672">=</span> target <span style="color:#f92672">-</span> sbits;
-</span></span><span style="display:flex;"><span>    sample_bits <span style="color:#f92672">=</span> sample;
-</span></span><span style="display:flex;"><span>    sample <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#888">/* upscale using left bit replication */</span>
+</span></span><span style="display:flex;"><span>    shift_amount = target - sbits;
+</span></span><span style="display:flex;"><span>    sample_bits = sample;
+</span></span><span style="display:flex;"><span>    sample = <span style="color:#00d;font-weight:bold">0</span>;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span>(shift_amount <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">while</span>(shift_amount &gt;= <span style="color:#00d;font-weight:bold">0</span>)
 </span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        sample <span style="color:#f92672">=</span> sample <span style="color:#f92672">|</span> (sample_bits <span style="color:#f92672">&lt;&lt;</span> shift_amount);
-</span></span><span style="display:flex;"><span>        shift_amount <span style="color:#f92672">-=</span> sbits;
+</span></span><span style="display:flex;"><span>        sample = sample | (sample_bits &lt;&lt; shift_amount);
+</span></span><span style="display:flex;"><span>        shift_amount -= sbits;
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int8_t</span> partial <span style="color:#f92672">=</span> shift_amount <span style="color:#f92672">+</span> (<span style="color:#66d9ef">int8_t</span>)sbits;
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">int8_t</span> partial = shift_amount + (<span style="color:#888;font-weight:bold">int8_t</span>)sbits;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span>(partial <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span>) sample <span style="color:#f92672">=</span> sample <span style="color:#f92672">|</span> (sample_bits <span style="color:#f92672">&gt;&gt;</span> <span style="color:#a6e22e">abs</span>(shift_amount));
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">if</span>(partial != <span style="color:#00d;font-weight:bold">0</span>) sample = sample | (sample_bits &gt;&gt; <span style="color:#06b;font-weight:bold">abs</span>(shift_amount));
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> sample;
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> sample;
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>Linux Kernel</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">enum</span> compact_result <span style="color:#a6e22e">compact_zone</span>(<span style="color:#66d9ef">struct</span> zone <span style="color:#f92672">*</span>zone, <span style="color:#66d9ef">struct</span> compact_control <span style="color:#f92672">*</span>cc)
+</span></span></code></pre></div><p>Linux Kernel</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">static</span> <span style="color:#080;font-weight:bold">enum</span> compact_result <span style="color:#06b;font-weight:bold">compact_zone</span>(<span style="color:#080;font-weight:bold">struct</span> zone *zone, <span style="color:#080;font-weight:bold">struct</span> compact_control *cc)
 </span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">enum</span> compact_result ret;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">long</span> start_pfn <span style="color:#f92672">=</span> zone<span style="color:#f92672">-&gt;</span>zone_start_pfn;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">long</span> end_pfn <span style="color:#f92672">=</span> <span style="color:#a6e22e">zone_end_pfn</span>(zone);
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">bool</span> sync <span style="color:#f92672">=</span> cc<span style="color:#f92672">-&gt;</span>mode <span style="color:#f92672">!=</span> MIGRATE_ASYNC;
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">enum</span> compact_result ret;
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">unsigned</span> <span style="color:#888;font-weight:bold">long</span> start_pfn = zone-&gt;zone_start_pfn;
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">unsigned</span> <span style="color:#888;font-weight:bold">long</span> end_pfn = <span style="color:#06b;font-weight:bold">zone_end_pfn</span>(zone);
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">const</span> <span style="color:#888;font-weight:bold">bool</span> sync = cc-&gt;mode != MIGRATE_ASYNC;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    cc<span style="color:#f92672">-&gt;</span>migratetype <span style="color:#f92672">=</span> <span style="color:#a6e22e">gfpflags_to_migratetype</span>(cc<span style="color:#f92672">-&gt;</span>gfp_mask);
-</span></span><span style="display:flex;"><span>    ret <span style="color:#f92672">=</span> <span style="color:#a6e22e">compaction_suitable</span>(zone, cc<span style="color:#f92672">-&gt;</span>order, cc<span style="color:#f92672">-&gt;</span>alloc_flags,
-</span></span><span style="display:flex;"><span>                            cc<span style="color:#f92672">-&gt;</span>classzone_idx);
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/* Compaction is likely to fail */</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (ret <span style="color:#f92672">==</span> COMPACT_SUCCESS <span style="color:#f92672">||</span> ret <span style="color:#f92672">==</span> COMPACT_SKIPPED)
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> ret;
+</span></span><span style="display:flex;"><span>    cc-&gt;migratetype = <span style="color:#06b;font-weight:bold">gfpflags_to_migratetype</span>(cc-&gt;gfp_mask);
+</span></span><span style="display:flex;"><span>    ret = <span style="color:#06b;font-weight:bold">compaction_suitable</span>(zone, cc-&gt;order, cc-&gt;alloc_flags,
+</span></span><span style="display:flex;"><span>                            cc-&gt;classzone_idx);
+</span></span><span style="display:flex;"><span>    <span style="color:#888">/* Compaction is likely to fail */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">if</span> (ret == COMPACT_SUCCESS || ret == COMPACT_SKIPPED)
+</span></span><span style="display:flex;"><span>        <span style="color:#080;font-weight:bold">return</span> ret;
 </span></span><span style="display:flex;"><span>    ...
 </span></span><span style="display:flex;"><span>    ...
-</span></span><span style="display:flex;"><span>            <span style="color:#75715e">/* All pages were either migrated or will be released */</span>
-</span></span><span style="display:flex;"><span>            cc<span style="color:#f92672">-&gt;</span>nr_migratepages <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (err) {
-</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">putback_movable_pages</span>(<span style="color:#f92672">&amp;</span>cc<span style="color:#f92672">-&gt;</span>migratepages);
-</span></span><span style="display:flex;"><span>                <span style="color:#75715e">/*
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">                 * migrate_pages() may return -ENOMEM when scanners meet
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">                 * and we want compact_finished() to detect it
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">                 */</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (err <span style="color:#f92672">==</span> <span style="color:#f92672">-</span>ENOMEM <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span><span style="color:#a6e22e">compact_scanners_met</span>(cc)) {
-</span></span><span style="display:flex;"><span>                    ret <span style="color:#f92672">=</span> COMPACT_CONTENDED;
-</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">goto</span> out;
+</span></span><span style="display:flex;"><span>            <span style="color:#888">/* All pages were either migrated or will be released */</span>
+</span></span><span style="display:flex;"><span>            cc-&gt;nr_migratepages = <span style="color:#00d;font-weight:bold">0</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#080;font-weight:bold">if</span> (err) {
+</span></span><span style="display:flex;"><span>                <span style="color:#06b;font-weight:bold">putback_movable_pages</span>(&amp;cc-&gt;migratepages);
+</span></span><span style="display:flex;"><span>                <span style="color:#888">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#888">                 * migrate_pages() may return -ENOMEM when scanners meet
+</span></span></span><span style="display:flex;"><span><span style="color:#888">                 * and we want compact_finished() to detect it
+</span></span></span><span style="display:flex;"><span><span style="color:#888">                 */</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#080;font-weight:bold">if</span> (err == -ENOMEM &amp;&amp; !<span style="color:#06b;font-weight:bold">compact_scanners_met</span>(cc)) {
+</span></span><span style="display:flex;"><span>                    ret = COMPACT_CONTENDED;
+</span></span><span style="display:flex;"><span>                    <span style="color:#080;font-weight:bold">goto</span> out;
 </span></span><span style="display:flex;"><span>                }
 </span></span><span style="display:flex;"><span>            ....
 </span></span><span style="display:flex;"><span>            }
@@ -394,19 +206,17 @@ parameters are given as shown below</p>
 </span></span><span style="display:flex;"><span>    ....
 </span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    out:
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">/*
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">         * Release free pages and update where the free scanner should restart,
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">         * so we don&#39;t leave any returned pages behind in the next attempt.
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">         */</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (cc<span style="color:#f92672">-&gt;</span>nr_freepages <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>) {
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">long</span> free_pfn <span style="color:#f92672">=</span> <span style="color:#a6e22e">release_freepages</span>(<span style="color:#f92672">&amp;</span>cc<span style="color:#f92672">-&gt;</span>freepages);
+</span></span><span style="display:flex;"><span>    <span style="color:#369;font-style:italic">out</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#888">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#888">         * Release free pages and update where the free scanner should restart,
+</span></span></span><span style="display:flex;"><span><span style="color:#888">         * so we don&#39;t leave any returned pages behind in the next attempt.
+</span></span></span><span style="display:flex;"><span><span style="color:#888">         */</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#080;font-weight:bold">if</span> (cc-&gt;nr_freepages &gt; <span style="color:#00d;font-weight:bold">0</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#888;font-weight:bold">unsigned</span> <span style="color:#888;font-weight:bold">long</span> free_pfn = <span style="color:#06b;font-weight:bold">release_freepages</span>(&amp;cc-&gt;freepages);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            cc<span style="color:#f92672">-&gt;</span>nr_freepages <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">VM_BUG_ON</span>(free_pfn <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>);
-</span></span></code></pre></td></tr></table>
-</div>
-</div>
+</span></span><span style="display:flex;"><span>            cc-&gt;nr_freepages = <span style="color:#00d;font-weight:bold">0</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#06b;font-weight:bold">VM_BUG_ON</span>(free_pfn == <span style="color:#00d;font-weight:bold">0</span>);
+</span></span></code></pre></div>
 </main>
 
   <footer>
@@ -421,7 +231,7 @@ parameters are given as shown below</p>
 
   
   <hr/>
-  © <a href="https://vineelkovvuri.github.io">Vineel Kumar Reddy Kovvuri</a> 2017 &ndash; 2025
+  © <a href="https://vineelkovvuri.github.io">Vineel Kumar Reddy Kovvuri</a> 2017 &ndash; 2025 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
   
   </footer>
   </body>

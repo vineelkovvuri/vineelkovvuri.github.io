@@ -8,27 +8,26 @@ tags: ['Compilers']
 
 ```c
 //a.c
-int myadd()
-{
-	int sum = 10;
-	for (int i = 0; i < 100; i++)
-		sum += i;
+int myadd() {
+    int sum = 10;
 
-	return sum;
+    for (int i = 0; i < 100; i++)
+        sum += i;
+
+    return sum;
 }
 
-int myadd2()
-{
-	int sum = 10;
-	for (int i = 0; i < 100; i++)
-		sum += i*i;
+int myadd2() {
+    int sum = 10;
 
-	return sum;
+    for (int i = 0; i < 100; i++)
+        sum += i*i;
+
+    return sum;
 }
 
-int main()
-{
-	return myadd();
+int main() {
+    return myadd();
 }
 ```
 ```shell
@@ -71,27 +70,26 @@ All 3 functions are groups inside the **.text$mn** section and hence **link
 
 ```C
 //a.c
-int myadd()
-{
-	int sum = 10;
-	for (int i = 0; i < 100; i++)
-		sum += i;
+int myadd() {
+    int sum = 10;
 
-	return sum;
+    for (int i = 0; i < 100; i++)
+        sum += i;
+
+    return sum;
 }
 
-static int myadd2()
-{
-	int sum = 10;
-	for (int i = 0; i < 100; i++)
-		sum += i*i;
+static int myadd2() {
+    int sum = 10;
 
-	return sum;
+    for (int i = 0; i < 100; i++)
+        sum += i*i;
+
+    return sum;
 }
 
-int main()
-{
-	return myadd();
+int main() {
+    return myadd();
 }
 ```
 ```shell
@@ -113,27 +111,26 @@ header with **COMDAT; sym=** line
 
 ```C
 //a.c
-int myadd()
-{
-	int sum = 10;
-	for (int i = 0; i < 100; i++)
-		sum += i;
+int myadd() {
+    int sum = 10;
 
-	return sum;
+    for (int i = 0; i < 100; i++)
+        sum += i;
+
+    return sum;
 }
 
-int myadd2()
-{
-	int sum = 10;
-	for (int i = 0; i < 100; i++)
-		sum += i*i;
+int myadd2() {
+    int sum = 10;
 
-	return sum;
+    for (int i = 0; i < 100; i++)
+        sum += i*i;
+
+    return sum;
 }
 
-int main()
-{
-	return myadd();
+int main() {
+    return myadd();
 }
 ```
 ```shell
@@ -201,38 +198,37 @@ function. Hence in the below example we still see all the functions
 
 ```C
 //a.c
-int myadd()
-{
-	int sum = 10;
-	for (int i = 0; i < 100; i++)
-		sum += i;
+int myadd() {
+    int sum = 10;
 
-	return sum;
+    for (int i = 0; i < 100; i++)
+        sum += i;
+
+    return sum;
 }
 //unused function
-int myadd2()
-{
-	int sum = 10;
-	for (int i = 0; i < 100; i++)
-		sum += i*i;
+int myadd2() {
+    int sum = 10;
 
-	return sum;
+    for (int i = 0; i < 100; i++)
+        sum += i*i;
+
+    return sum;
 }
 
 //b.c
-int sub()
-{
-	int diff = 10;
-	for (int i = 0; i < 100; i++)
-		diff -= i;
+int sub() {
+    int diff = 10;
 
-	return diff;
+    for (int i = 0; i < 100; i++)
+        diff -= i;
+
+    return diff;
 }
 
 //main.c
-int main()
-{
-	return myadd();
+int main() {
+    return myadd();
 }
 ```
 ```shell

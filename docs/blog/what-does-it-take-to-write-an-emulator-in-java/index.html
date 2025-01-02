@@ -99,171 +99,83 @@ and each instruction is first fetched using Memory object&rsquo;s getWord()
 method(every opcode in of Chip 8 is of 2 bytes). Then decode the instruction
 and appropriately run the respective executable code. For the majority of
 time, execution mainly results in moving data around.</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">//Below Is The Trimmed Version Of Original Source Code Found At</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">//https://github.com/vineelkovvuri/Projects/tree/master/Chip8Emulator/src/main/java/com/vineelkumarreddy/chip8/Chip8CPU.java</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Chip8CPU</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> V<span style="color:#f92672">[]</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">int</span><span style="color:#f92672">[</span>16<span style="color:#f92672">]</span>; <span style="color:#75715e">//8bit each</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> I;  <span style="color:#75715e">//16bit</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> DT; <span style="color:#75715e">//8bit</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> ST; <span style="color:#75715e">//8bit</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> PC; <span style="color:#75715e">//16bit program counter</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> SP; <span style="color:#75715e">//8bit stack pointer</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> stack<span style="color:#f92672">[]</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">int</span><span style="color:#f92672">[</span>16<span style="color:#f92672">]</span>; <span style="color:#75715e">//16bit each</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> Chip8Display display;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> Chip8Keyboard keyboard;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> Chip8Memory ram;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> DT_FREQUENCY <span style="color:#f92672">=</span> 60; <span style="color:#75715e">//60 hz</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> ST_FREQUENCY <span style="color:#f92672">=</span> 60; <span style="color:#75715e">//60 hz</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> HZ <span style="color:#f92672">=</span> 1000; <span style="color:#75715e">// 60hz =&gt; 60 times in 1sec or in 1000 milliseconds</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span>() {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> (<span style="color:#66d9ef">true</span>) {
-</span></span><span style="display:flex;"><span>            <span style="color:#75715e">//FETCH</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">int</span> instruction <span style="color:#f92672">=</span> ram.<span style="color:#a6e22e">getWord</span>(PC);
-</span></span><span style="display:flex;"><span>            incrementPC(); <span style="color:#75715e">//fetched the instruction so move on</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#75715e">//DECODE</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">int</span> opcode <span style="color:#f92672">=</span> (instruction <span style="color:#f92672">&gt;&gt;</span> 12) <span style="color:#f92672">&amp;</span> 0xf;
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">switch</span> (opcode) {
-</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">case</span> 0:
-</span></span><span style="display:flex;"><span>                    decode0(instruction);
-</span></span><span style="display:flex;"><span>                    printInstructionDecodeCycle(0);
-</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">break</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// Trimmed for brevity</span>
-</span></span><span style="display:flex;"><span>            }
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">incrementPC</span>() {...}
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">decode0</span>(<span style="color:#66d9ef">int</span> instruction) {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">int</span> opcodeArgs <span style="color:#f92672">=</span> instruction <span style="color:#f92672">&amp;</span> 0xfff;
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">switch</span> (opcodeArgs <span style="color:#f92672">&amp;</span> 0xff) {
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">case</span> 0xEE: <span style="color:#75715e">// 00EE - RET</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#75715e">//EXECUTE</span>
-</span></span><span style="display:flex;"><span>                PC <span style="color:#f92672">=</span> stack<span style="color:#f92672">[--</span>SP<span style="color:#f92672">]</span>;
-</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">break</span>;
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h1 id="memory">Memory</h1>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">//Below Is The Trimmed Version Of Original Source Code Found At</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">//https://github.com/vineelkovvuri/Projects/tree/master/Chip8Emulator/src/main/java/com/vineelkumarreddy/chip8/Chip8Memory.java</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Chip8Memory</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Chip 8 can address up to 4K bytes</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> ram<span style="color:#f92672">[]</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">int</span><span style="color:#f92672">[</span>0x1000<span style="color:#f92672">]</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> DEFAULT_LOAD_ADDRESS <span style="color:#f92672">=</span> 0x200;
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Read from RAM</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">getWord</span>(<span style="color:#66d9ef">int</span> index) {...}
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">getByte</span>(<span style="color:#66d9ef">int</span> index) {...}
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Write to RAM</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setByte</span>(<span style="color:#66d9ef">int</span> index, <span style="color:#66d9ef">int</span> value) {...}
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Load program</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">loadProgram</span>(Path path) {...}
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Dump RAM for debug</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">dumpRAM</span>() {...}
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>The primary operations done by CPU with memory is reads and writes. These
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#888">//Below Is The Trimmed Version Of Original Source Code Found At</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#888">//https://github.com/vineelkovvuri/Projects/tree/master/Chip8Emulator/src/main/java/com/vineelkumarreddy/chip8/Chip8CPU.java</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">class</span> <span style="color:#b06;font-weight:bold">Chip8CPU</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">int</span><span style="color:#bbb"> </span>V[]<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">new</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">int</span>[16];<span style="color:#bbb"> </span><span style="color:#888">//8bit each</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">int</span><span style="color:#bbb"> </span>I;<span style="color:#bbb">  </span><span style="color:#888">//16bit</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">int</span><span style="color:#bbb"> </span>DT;<span style="color:#bbb"> </span><span style="color:#888">//8bit</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">int</span><span style="color:#bbb"> </span>ST;<span style="color:#bbb"> </span><span style="color:#888">//8bit</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">int</span><span style="color:#bbb"> </span>PC;<span style="color:#bbb"> </span><span style="color:#888">//16bit program counter</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">int</span><span style="color:#bbb"> </span>SP;<span style="color:#bbb"> </span><span style="color:#888">//8bit stack pointer</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">int</span><span style="color:#bbb"> </span>stack[]<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">new</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">int</span>[16];<span style="color:#bbb"> </span><span style="color:#888">//16bit each</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">final</span><span style="color:#bbb"> </span>Chip8Display<span style="color:#bbb"> </span>display;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">final</span><span style="color:#bbb"> </span>Chip8Keyboard<span style="color:#bbb"> </span>keyboard;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">final</span><span style="color:#bbb"> </span>Chip8Memory<span style="color:#bbb"> </span>ram;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">final</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">int</span><span style="color:#bbb"> </span>DT_FREQUENCY<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>60;<span style="color:#bbb"> </span><span style="color:#888">//60 hz</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">final</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">int</span><span style="color:#bbb"> </span>ST_FREQUENCY<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>60;<span style="color:#bbb"> </span><span style="color:#888">//60 hz</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">final</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">int</span><span style="color:#bbb"> </span>HZ<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>1000;<span style="color:#bbb"> </span><span style="color:#888">// 60hz =&gt; 60 times in 1sec or in 1000 milliseconds</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">void</span><span style="color:#bbb"> </span><span style="color:#06b;font-weight:bold">run</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#080;font-weight:bold">while</span><span style="color:#bbb"> </span>(<span style="color:#080;font-weight:bold">true</span>)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span><span style="color:#888">//FETCH</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span><span style="color:#888;font-weight:bold">int</span><span style="color:#bbb"> </span>instruction<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>ram.<span style="color:#369">getWord</span>(PC);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span>incrementPC();<span style="color:#bbb"> </span><span style="color:#888">//fetched the instruction so move on</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span><span style="color:#888">//DECODE</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span><span style="color:#888;font-weight:bold">int</span><span style="color:#bbb"> </span>opcode<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>(instruction<span style="color:#bbb"> </span>&gt;&gt;<span style="color:#bbb"> </span>12)<span style="color:#bbb"> </span>&amp;<span style="color:#bbb"> </span>0xf;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span><span style="color:#080;font-weight:bold">switch</span><span style="color:#bbb"> </span>(opcode)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                </span><span style="color:#080;font-weight:bold">case</span><span style="color:#bbb"> </span>0:<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span>decode0(instruction);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span>printInstructionDecodeCycle(0);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span><span style="color:#080;font-weight:bold">break</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span><span style="color:#888">// Trimmed for brevity</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">void</span><span style="color:#bbb"> </span><span style="color:#06b;font-weight:bold">incrementPC</span>()<span style="color:#bbb"> </span>{...}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">void</span><span style="color:#bbb"> </span><span style="color:#06b;font-weight:bold">decode0</span>(<span style="color:#888;font-weight:bold">int</span><span style="color:#bbb"> </span>instruction)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#888;font-weight:bold">int</span><span style="color:#bbb"> </span>opcodeArgs<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>instruction<span style="color:#bbb"> </span>&amp;<span style="color:#bbb"> </span>0xfff;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#080;font-weight:bold">switch</span><span style="color:#bbb"> </span>(opcodeArgs<span style="color:#bbb"> </span>&amp;<span style="color:#bbb"> </span>0xff)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span><span style="color:#080;font-weight:bold">case</span><span style="color:#bbb"> </span>0xEE:<span style="color:#bbb"> </span><span style="color:#888">// 00EE - RET</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                </span><span style="color:#888">//EXECUTE</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                </span>PC<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>stack[--SP];<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                </span><span style="color:#080;font-weight:bold">break</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><h1 id="memory">Memory</h1>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#888">//Below Is The Trimmed Version Of Original Source Code Found At</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#888">//https://github.com/vineelkovvuri/Projects/tree/master/Chip8Emulator/src/main/java/com/vineelkumarreddy/chip8/Chip8Memory.java</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">class</span> <span style="color:#b06;font-weight:bold">Chip8Memory</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// Chip 8 can address up to 4K bytes</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">int</span><span style="color:#bbb"> </span>ram[]<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">new</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">int</span>[0x1000];<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">final</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">int</span><span style="color:#bbb"> </span>DEFAULT_LOAD_ADDRESS<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>0x200;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// Read from RAM</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">int</span><span style="color:#bbb"> </span><span style="color:#06b;font-weight:bold">getWord</span>(<span style="color:#888;font-weight:bold">int</span><span style="color:#bbb"> </span>index)<span style="color:#bbb"> </span>{...}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">int</span><span style="color:#bbb"> </span><span style="color:#06b;font-weight:bold">getByte</span>(<span style="color:#888;font-weight:bold">int</span><span style="color:#bbb"> </span>index)<span style="color:#bbb"> </span>{...}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// Write to RAM</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">void</span><span style="color:#bbb"> </span><span style="color:#06b;font-weight:bold">setByte</span>(<span style="color:#888;font-weight:bold">int</span><span style="color:#bbb"> </span>index,<span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">int</span><span style="color:#bbb"> </span>value)<span style="color:#bbb"> </span>{...}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// Load program</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">void</span><span style="color:#bbb"> </span><span style="color:#06b;font-weight:bold">loadProgram</span>(Path<span style="color:#bbb"> </span>path)<span style="color:#bbb"> </span>{...}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// Dump RAM for debug</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">void</span><span style="color:#bbb"> </span><span style="color:#06b;font-weight:bold">dumpRAM</span>()<span style="color:#bbb"> </span>{...}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><p>The primary operations done by CPU with memory is reads and writes. These
 are implemented as getByte() and setByte() operations inside Memory object.
 These reads and writes are actually backed up by 4k integer array. This is
 the maximum memory addressable by Chip 8 instruction set.</p>
 <h1 id="display">Display</h1>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">//Below Is The Trimmed Version Of Original Source Code Found At</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">//https://github.com/vineelkovvuri/Projects/tree/master/Chip8Emulator/src/main/java/com/vineelkumarreddy/chip8/Chip8Display.java</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Chip8Display</span> <span style="color:#66d9ef">extends</span> JFrame {
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//Chip8 display size</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> displayWidth <span style="color:#f92672">=</span> 64, displayHeight <span style="color:#f92672">=</span> 32;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> JPanel display<span style="color:#f92672">[][]</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> JPanel<span style="color:#f92672">[</span>displayHeight<span style="color:#f92672">][</span>displayWidth<span style="color:#f92672">]</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">setPixel</span>(<span style="color:#66d9ef">int</span> x, <span style="color:#66d9ef">int</span> y) {...}
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">clear</span>() {...}
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>The one and only instruction in the Chip 8 instruction set that interact
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#888">//Below Is The Trimmed Version Of Original Source Code Found At</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#888">//https://github.com/vineelkovvuri/Projects/tree/master/Chip8Emulator/src/main/java/com/vineelkumarreddy/chip8/Chip8Display.java</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">class</span> <span style="color:#b06;font-weight:bold">Chip8Display</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">extends</span><span style="color:#bbb"> </span>JFrame<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">//Chip8 display size</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">final</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">int</span><span style="color:#bbb"> </span>displayWidth<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>64,<span style="color:#bbb"> </span>displayHeight<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>32;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">private</span><span style="color:#bbb"> </span>JPanel<span style="color:#bbb"> </span>display[][]<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">new</span><span style="color:#bbb"> </span>JPanel[displayHeight][displayWidth];<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">boolean</span><span style="color:#bbb"> </span><span style="color:#06b;font-weight:bold">setPixel</span>(<span style="color:#888;font-weight:bold">int</span><span style="color:#bbb"> </span>x,<span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">int</span><span style="color:#bbb"> </span>y)<span style="color:#bbb"> </span>{...}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">void</span><span style="color:#bbb"> </span><span style="color:#06b;font-weight:bold">clear</span>()<span style="color:#bbb"> </span>{...}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><p>The one and only instruction in the Chip 8 instruction set that interact
 with display is Dxyn - DRW Vx, Vy, nibble. When CPU has decoded this
 instruction, it interface with the Display object and calls setPixel()
 method to turn on/off a pixel. Display is interesting and it deserves some
@@ -278,74 +190,38 @@ JPanels. These JPanels are initially added to JFrame window and these will
 be set to black for &lsquo;off&rsquo; state and green for &lsquo;on&rsquo; state by setPixel()
 method.</p>
 <h1 id="keyboard">Keyboard</h1>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">//Below Is The Trimmed Version Of Original Source Code Found At</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">//https://github.com/vineelkovvuri/Projects/tree/master/Chip8Emulator/src/main/java/com/vineelkumarreddy/chip8/Chip8Keyboard.java</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">//This listener is added to Chip8Display module to capture the events</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Chip8Keyboard</span> <span style="color:#66d9ef">implements</span> KeyListener {
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// This keeps the state of the chip 8 keyboard&#39;s 15 keys</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">boolean</span> keysPressed<span style="color:#f92672">[]</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">boolean</span><span style="color:#f92672">[</span>0x10<span style="color:#f92672">]</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">isChip8keyPressed</span>(<span style="color:#66d9ef">int</span> key) {...}
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">keyPressed</span>(KeyEvent e) {...}
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">keyReleased</span>(KeyEvent e) {...}
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>There are few instructions which interfaces with keyboard. This object is
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#888">//Below Is The Trimmed Version Of Original Source Code Found At</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#888">//https://github.com/vineelkovvuri/Projects/tree/master/Chip8Emulator/src/main/java/com/vineelkumarreddy/chip8/Chip8Keyboard.java</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#888">//This listener is added to Chip8Display module to capture the events</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">class</span> <span style="color:#b06;font-weight:bold">Chip8Keyboard</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">implements</span><span style="color:#bbb"> </span>KeyListener<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// This keeps the state of the chip 8 keyboard&#39;s 15 keys</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">boolean</span><span style="color:#bbb"> </span>keysPressed[]<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">new</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">boolean</span>[0x10];<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">boolean</span><span style="color:#bbb"> </span><span style="color:#06b;font-weight:bold">isChip8keyPressed</span>(<span style="color:#888;font-weight:bold">int</span><span style="color:#bbb"> </span>key)<span style="color:#bbb"> </span>{...}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">void</span><span style="color:#bbb"> </span><span style="color:#06b;font-weight:bold">keyPressed</span>(KeyEvent<span style="color:#bbb"> </span>e)<span style="color:#bbb"> </span>{...}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">void</span><span style="color:#bbb"> </span><span style="color:#06b;font-weight:bold">keyReleased</span>(KeyEvent<span style="color:#bbb"> </span>e)<span style="color:#bbb"> </span>{...}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><p>There are few instructions which interfaces with keyboard. This object is
 hooked as the keyboard listener on to the JFrame of Display. This is the
 only way that I know in Java to capture the keyboard events. Chip 8 has 15
 keys starting with 0-9 and A-F. We maintain the state of these keys using an
 array of 16 integers and convert the A-F key events to their corresponding
 10-15 indexes in to the above array.</p>
 <h1 id="main">Main</h1>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Main</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span>(String... args) {
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Init peripherals</span>
-</span></span><span style="display:flex;"><span>        Chip8Keyboard keyboard <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Chip8Keyboard();
-</span></span><span style="display:flex;"><span>        Chip8Display display <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Chip8Display(keyboard);
-</span></span><span style="display:flex;"><span>        Chip8Memory ram <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Chip8Memory();
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Init CPU</span>
-</span></span><span style="display:flex;"><span>        Chip8CPU cpu <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Chip8CPU(ram, display, keyboard);
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Load program to RAM</span>
-</span></span><span style="display:flex;"><span>        ram.<span style="color:#a6e22e">loadProgram</span>(Paths.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;/home/vineel/Downloads/chip8/CHIP8/GAMES/INVADERS&#34;</span>));
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Run CPU</span>
-</span></span><span style="display:flex;"><span>        cpu.<span style="color:#a6e22e">run</span>();
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>Finally, this object is responsible for setting up all the modules and
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">class</span> <span style="color:#b06;font-weight:bold">Main</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">static</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">void</span><span style="color:#bbb"> </span><span style="color:#06b;font-weight:bold">main</span>(String...<span style="color:#bbb"> </span>args)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#888">// Init peripherals</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>Chip8Keyboard<span style="color:#bbb"> </span>keyboard<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">new</span><span style="color:#bbb"> </span>Chip8Keyboard();<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>Chip8Display<span style="color:#bbb"> </span>display<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">new</span><span style="color:#bbb"> </span>Chip8Display(keyboard);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>Chip8Memory<span style="color:#bbb"> </span>ram<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">new</span><span style="color:#bbb"> </span>Chip8Memory();<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#888">// Init CPU</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>Chip8CPU<span style="color:#bbb"> </span>cpu<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">new</span><span style="color:#bbb"> </span>Chip8CPU(ram,<span style="color:#bbb"> </span>display,<span style="color:#bbb"> </span>keyboard);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#888">// Load program to RAM</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>ram.<span style="color:#369">loadProgram</span>(Paths.<span style="color:#369">get</span>(<span style="color:#d20;background-color:#fff0f0">&#34;/home/vineel/Downloads/chip8/CHIP8/GAMES/INVADERS&#34;</span>));<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#888">// Run CPU</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>cpu.<span style="color:#369">run</span>();<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><p>Finally, this object is responsible for setting up all the modules and
 invoking the CPU run() method. Purposefully I kept this object very simple,
 especially by hard coding the file path to load.</p>
 <h1 id="output">Output</h1>
@@ -380,7 +256,7 @@ I recommened you to read the source code <a href="https://github.com/vineelkovvu
 
   
   <hr/>
-  © <a href="https://vineelkovvuri.github.io">Vineel Kumar Reddy Kovvuri</a> 2017 &ndash; 2025
+  © <a href="https://vineelkovvuri.github.io">Vineel Kumar Reddy Kovvuri</a> 2017 &ndash; 2025 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
   
   </footer>
   </body>

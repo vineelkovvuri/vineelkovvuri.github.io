@@ -34,191 +34,85 @@
 
 <main>
 <h2 id="basics">Basics</h2>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">//a.c
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">myadd</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> sum <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">100</span>; i<span style="color:#f92672">++</span>)
-</span></span><span style="display:flex;"><span>		sum <span style="color:#f92672">+=</span> i;
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#888">//a.c
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">myadd</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">int</span> sum = <span style="color:#00d;font-weight:bold">10</span>;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> sum;
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">for</span> (<span style="color:#888;font-weight:bold">int</span> i = <span style="color:#00d;font-weight:bold">0</span>; i &lt; <span style="color:#00d;font-weight:bold">100</span>; i++)
+</span></span><span style="display:flex;"><span>        sum += i;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> sum;
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">myadd2</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> sum <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">100</span>; i<span style="color:#f92672">++</span>)
-</span></span><span style="display:flex;"><span>		sum <span style="color:#f92672">+=</span> i<span style="color:#f92672">*</span>i;
+</span></span><span style="display:flex;"><span><span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">myadd2</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">int</span> sum = <span style="color:#00d;font-weight:bold">10</span>;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> sum;
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">for</span> (<span style="color:#888;font-weight:bold">int</span> i = <span style="color:#00d;font-weight:bold">0</span>; i &lt; <span style="color:#00d;font-weight:bold">100</span>; i++)
+</span></span><span style="display:flex;"><span>        sum += i*i;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> sum;
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">myadd</span>();
+</span></span><span style="display:flex;"><span><span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> <span style="color:#06b;font-weight:bold">myadd</span>();
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></td></tr></table>
-</div>
-</div><div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&gt;cl /c a.c
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&gt;cl /c a.c
 </span></span><span style="display:flex;"><span>&gt;link /dump /symbols a.obj
-</span></span><span style="display:flex;"><span><span style="color:#ae81ff">008</span> <span style="color:#ae81ff">00000000</span> SECT3  notype <span style="color:#f92672">()</span>    External     | myadd
-</span></span><span style="display:flex;"><span><span style="color:#ae81ff">009</span> <span style="color:#ae81ff">00000050</span> SECT3  notype <span style="color:#f92672">()</span>    External     | myadd2
-</span></span><span style="display:flex;"><span>00A 000000A0 SECT3  notype <span style="color:#f92672">()</span>    External     | main
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>The <strong>link /dump</strong> command dumps the symbols that are part of the obj file. The
+</span></span><span style="display:flex;"><span><span style="color:#00d;font-weight:bold">008</span> <span style="color:#00d;font-weight:bold">00000000</span> SECT3  notype ()    External     | myadd
+</span></span><span style="display:flex;"><span><span style="color:#00d;font-weight:bold">009</span> <span style="color:#00d;font-weight:bold">00000050</span> SECT3  notype ()    External     | myadd2
+</span></span><span style="display:flex;"><span>00A 000000A0 SECT3  notype ()    External     | main
+</span></span></code></pre></div><p>The <strong>link /dump</strong> command dumps the symbols that are part of the obj file. The
 compiler cannot optimize myadd2 because technically these unused functions can
 be accessed by functions in other libs.</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&gt;link /dump /section:.text$mn a.obj
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&gt;link /dump /section:.text<span style="color:#369">$mn</span> a.obj
 </span></span><span style="display:flex;"><span>Dump of file a.obj
 </span></span><span style="display:flex;"><span>File Type: COFF OBJECT
-</span></span><span style="display:flex;"><span>SECTION HEADER <span style="color:#75715e">#3</span>
-</span></span><span style="display:flex;"><span>.text$mn name
-</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0</span> physical address
-</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0</span> virtual address
+</span></span><span style="display:flex;"><span>SECTION HEADER <span style="color:#888">#3</span>
+</span></span><span style="display:flex;"><span>.text<span style="color:#369">$mn</span> name
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> physical address
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> virtual address
 </span></span><span style="display:flex;"><span>      5E size of raw data
-</span></span><span style="display:flex;"><span>     1BF file pointer to raw data <span style="color:#f92672">(</span>000001BF to 0000021C<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>     1BF file pointer to raw data (000001BF to 0000021C)
 </span></span><span style="display:flex;"><span>     21D file pointer to relocation table
-</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0</span> file pointer to line numbers
-</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">1</span> number of relocations
-</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0</span> number of line numbers
-</span></span><span style="display:flex;"><span><span style="color:#ae81ff">60500020</span> flags
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> file pointer to line numbers
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">1</span> number of relocations
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> number of line numbers
+</span></span><span style="display:flex;"><span><span style="color:#00d;font-weight:bold">60500020</span> flags
 </span></span><span style="display:flex;"><span>         Code
-</span></span><span style="display:flex;"><span>         <span style="color:#ae81ff">16</span> byte align
+</span></span><span style="display:flex;"><span>         <span style="color:#00d;font-weight:bold">16</span> byte align
 </span></span><span style="display:flex;"><span>         Execute Read
 </span></span><span style="display:flex;"><span>  Summary
-</span></span><span style="display:flex;"><span>          5E .text$mn
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>All 3 functions are groups inside the <strong>.text$mn</strong> section and hence <strong>link
+</span></span><span style="display:flex;"><span>          5E .text<span style="color:#369">$mn</span>
+</span></span></code></pre></div><p>All 3 functions are groups inside the <strong>.text$mn</strong> section and hence <strong>link
 /dump /section:.text$mn</strong> will have only one header.</p>
 <h2 id="elimination-of-unused-static-functions">Elimination of unused static functions</h2>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#75715e">//a.c
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">myadd</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> sum <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">100</span>; i<span style="color:#f92672">++</span>)
-</span></span><span style="display:flex;"><span>		sum <span style="color:#f92672">+=</span> i;
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#888">//a.c
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">myadd</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">int</span> sum = <span style="color:#00d;font-weight:bold">10</span>;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> sum;
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">for</span> (<span style="color:#888;font-weight:bold">int</span> i = <span style="color:#00d;font-weight:bold">0</span>; i &lt; <span style="color:#00d;font-weight:bold">100</span>; i++)
+</span></span><span style="display:flex;"><span>        sum += i;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> sum;
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">myadd2</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> sum <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">100</span>; i<span style="color:#f92672">++</span>)
-</span></span><span style="display:flex;"><span>		sum <span style="color:#f92672">+=</span> i<span style="color:#f92672">*</span>i;
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">static</span> <span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">myadd2</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">int</span> sum = <span style="color:#00d;font-weight:bold">10</span>;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> sum;
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">for</span> (<span style="color:#888;font-weight:bold">int</span> i = <span style="color:#00d;font-weight:bold">0</span>; i &lt; <span style="color:#00d;font-weight:bold">100</span>; i++)
+</span></span><span style="display:flex;"><span>        sum += i*i;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> sum;
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">myadd</span>();
+</span></span><span style="display:flex;"><span><span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> <span style="color:#06b;font-weight:bold">myadd</span>();
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></td></tr></table>
-</div>
-</div><div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&gt;cl /c a.c
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&gt;cl /c a.c
 </span></span><span style="display:flex;"><span>&gt;link /dump /symbols a.obj
-</span></span><span style="display:flex;"><span><span style="color:#ae81ff">008</span> <span style="color:#ae81ff">00000000</span> SECT3  notype <span style="color:#f92672">()</span>    External     | myadd
-</span></span><span style="display:flex;"><span><span style="color:#ae81ff">009</span> <span style="color:#ae81ff">00000050</span> SECT3  notype <span style="color:#f92672">()</span>    External     | main
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>Since myadd2 is made static the compiler can for sure know it cannot be used by
+</span></span><span style="display:flex;"><span><span style="color:#00d;font-weight:bold">008</span> <span style="color:#00d;font-weight:bold">00000000</span> SECT3  notype ()    External     | myadd
+</span></span><span style="display:flex;"><span><span style="color:#00d;font-weight:bold">009</span> <span style="color:#00d;font-weight:bold">00000050</span> SECT3  notype ()    External     | main
+</span></span></code></pre></div><p>Since myadd2 is made static the compiler can for sure know it cannot be used by
 other functions external to this .obj so it removed that function.</p>
 <h2 id="comdat-and-gy-switch">COMDAT and /Gy switch</h2>
 <p>With /Gy switch the compiler now spits 3 more headers in .text$mn. This is also
@@ -226,308 +120,147 @@ called COMDAT and will be helpful for linker to eliminate dead code more easily.
 The need for this section will come clear once we look at how linker optimizes
 code. From the output it is clear that each function has got it own section
 header with <strong>COMDAT; sym=</strong> line</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#75715e">//a.c
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">myadd</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> sum <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">100</span>; i<span style="color:#f92672">++</span>)
-</span></span><span style="display:flex;"><span>		sum <span style="color:#f92672">+=</span> i;
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#888">//a.c
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">myadd</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">int</span> sum = <span style="color:#00d;font-weight:bold">10</span>;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> sum;
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">for</span> (<span style="color:#888;font-weight:bold">int</span> i = <span style="color:#00d;font-weight:bold">0</span>; i &lt; <span style="color:#00d;font-weight:bold">100</span>; i++)
+</span></span><span style="display:flex;"><span>        sum += i;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> sum;
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">myadd2</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> sum <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">100</span>; i<span style="color:#f92672">++</span>)
-</span></span><span style="display:flex;"><span>		sum <span style="color:#f92672">+=</span> i<span style="color:#f92672">*</span>i;
+</span></span><span style="display:flex;"><span><span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">myadd2</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">int</span> sum = <span style="color:#00d;font-weight:bold">10</span>;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> sum;
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">for</span> (<span style="color:#888;font-weight:bold">int</span> i = <span style="color:#00d;font-weight:bold">0</span>; i &lt; <span style="color:#00d;font-weight:bold">100</span>; i++)
+</span></span><span style="display:flex;"><span>        sum += i*i;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> sum;
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">myadd</span>();
+</span></span><span style="display:flex;"><span><span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> <span style="color:#06b;font-weight:bold">myadd</span>();
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></td></tr></table>
-</div>
-</div><div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&gt;cl /c /Gy a.c
-</span></span><span style="display:flex;"><span>&gt;link /dump /section:.text$mn a.obj
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&gt;cl /c /Gy a.c
+</span></span><span style="display:flex;"><span>&gt;link /dump /section:.text<span style="color:#369">$mn</span> a.obj
 </span></span><span style="display:flex;"><span>Dump of file a.obj
 </span></span><span style="display:flex;"><span>File Type: COFF OBJECT
-</span></span><span style="display:flex;"><span>SECTION HEADER <span style="color:#75715e">#3</span>
-</span></span><span style="display:flex;"><span>.text$mn name
-</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0</span> physical address
-</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0</span> virtual address
+</span></span><span style="display:flex;"><span>SECTION HEADER <span style="color:#888">#3</span>
+</span></span><span style="display:flex;"><span>.text<span style="color:#369">$mn</span> name
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> physical address
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> virtual address
 </span></span><span style="display:flex;"><span>       E size of raw data
-</span></span><span style="display:flex;"><span>     2AF file pointer to raw data <span style="color:#f92672">(</span>000002AF to 000002BC<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>     2AF file pointer to raw data (000002AF to 000002BC)
 </span></span><span style="display:flex;"><span>     2BD file pointer to relocation table
-</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0</span> file pointer to line numbers
-</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">1</span> number of relocations
-</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0</span> number of line numbers
-</span></span><span style="display:flex;"><span><span style="color:#ae81ff">60501020</span> flags
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> file pointer to line numbers
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">1</span> number of relocations
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> number of line numbers
+</span></span><span style="display:flex;"><span><span style="color:#00d;font-weight:bold">60501020</span> flags
 </span></span><span style="display:flex;"><span>         Code
-</span></span><span style="display:flex;"><span>         COMDAT; sym<span style="color:#f92672">=</span> main
-</span></span><span style="display:flex;"><span>         <span style="color:#ae81ff">16</span> byte align
+</span></span><span style="display:flex;"><span>         COMDAT; <span style="color:#369">sym</span>= main
+</span></span><span style="display:flex;"><span>         <span style="color:#00d;font-weight:bold">16</span> byte align
 </span></span><span style="display:flex;"><span>         Execute Read
-</span></span><span style="display:flex;"><span>SECTION HEADER <span style="color:#75715e">#4</span>
-</span></span><span style="display:flex;"><span>.text$mn name
-</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0</span> physical address
-</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0</span> virtual address
+</span></span><span style="display:flex;"><span>SECTION HEADER <span style="color:#888">#4</span>
+</span></span><span style="display:flex;"><span>.text<span style="color:#369">$mn</span> name
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> physical address
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> virtual address
 </span></span><span style="display:flex;"><span>      3D size of raw data
-</span></span><span style="display:flex;"><span>     2C7 file pointer to raw data <span style="color:#f92672">(</span>000002C7 to 00000303<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0</span> file pointer to relocation table
-</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0</span> file pointer to line numbers
-</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0</span> number of relocations
-</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0</span> number of line numbers
-</span></span><span style="display:flex;"><span><span style="color:#ae81ff">60501020</span> flags
+</span></span><span style="display:flex;"><span>     2C7 file pointer to raw data (000002C7 to 00000303)
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> file pointer to relocation table
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> file pointer to line numbers
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> number of relocations
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> number of line numbers
+</span></span><span style="display:flex;"><span><span style="color:#00d;font-weight:bold">60501020</span> flags
 </span></span><span style="display:flex;"><span>         Code
-</span></span><span style="display:flex;"><span>         COMDAT; sym<span style="color:#f92672">=</span> myadd
-</span></span><span style="display:flex;"><span>         <span style="color:#ae81ff">16</span> byte align
+</span></span><span style="display:flex;"><span>         COMDAT; <span style="color:#369">sym</span>= myadd
+</span></span><span style="display:flex;"><span>         <span style="color:#00d;font-weight:bold">16</span> byte align
 </span></span><span style="display:flex;"><span>         Execute Read
-</span></span><span style="display:flex;"><span>SECTION HEADER <span style="color:#75715e">#5</span>
-</span></span><span style="display:flex;"><span>.text$mn name
-</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0</span> physical address
-</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0</span> virtual address
-</span></span><span style="display:flex;"><span>      <span style="color:#ae81ff">41</span> size of raw data
-</span></span><span style="display:flex;"><span>     <span style="color:#ae81ff">304</span> file pointer to raw data <span style="color:#f92672">(</span><span style="color:#ae81ff">00000304</span> to 00000344<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0</span> file pointer to relocation table
-</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0</span> file pointer to line numbers
-</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0</span> number of relocations
-</span></span><span style="display:flex;"><span>       <span style="color:#ae81ff">0</span> number of line numbers
-</span></span><span style="display:flex;"><span><span style="color:#ae81ff">60501020</span> flags
+</span></span><span style="display:flex;"><span>SECTION HEADER <span style="color:#888">#5</span>
+</span></span><span style="display:flex;"><span>.text<span style="color:#369">$mn</span> name
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> physical address
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> virtual address
+</span></span><span style="display:flex;"><span>      <span style="color:#00d;font-weight:bold">41</span> size of raw data
+</span></span><span style="display:flex;"><span>     <span style="color:#00d;font-weight:bold">304</span> file pointer to raw data (<span style="color:#00d;font-weight:bold">00000304</span> to 00000344)
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> file pointer to relocation table
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> file pointer to line numbers
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> number of relocations
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> number of line numbers
+</span></span><span style="display:flex;"><span><span style="color:#00d;font-weight:bold">60501020</span> flags
 </span></span><span style="display:flex;"><span>         Code
-</span></span><span style="display:flex;"><span>         COMDAT; sym<span style="color:#f92672">=</span> myadd2
-</span></span><span style="display:flex;"><span>         <span style="color:#ae81ff">16</span> byte align
+</span></span><span style="display:flex;"><span>         COMDAT; <span style="color:#369">sym</span>= myadd2
+</span></span><span style="display:flex;"><span>         <span style="color:#00d;font-weight:bold">16</span> byte align
 </span></span><span style="display:flex;"><span>         Execute Read
 </span></span><span style="display:flex;"><span>  Summary
-</span></span><span style="display:flex;"><span>          8C .text$mn
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h2 id="elimination-of-unused-functions-by-the-linker">Elimination of unused functions by the linker</h2>
+</span></span><span style="display:flex;"><span>          8C .text<span style="color:#369">$mn</span>
+</span></span></code></pre></div><h2 id="elimination-of-unused-functions-by-the-linker">Elimination of unused functions by the linker</h2>
 <p>The complete elimination of unused functions in a program can only be done by
 linker because it is the only component which can see through all the
 intermediatory files like .objs. But interestingly linker only works on sections
 not on functions themselfs. Because of this if a .obj contain one used and one
 unused function inside .text section, the linker will not eliminate the unused
 function. Hence in the below example we still see all the functions</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#75715e">//a.c
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">myadd</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> sum <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">100</span>; i<span style="color:#f92672">++</span>)
-</span></span><span style="display:flex;"><span>		sum <span style="color:#f92672">+=</span> i;
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#888">//a.c
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">myadd</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">int</span> sum = <span style="color:#00d;font-weight:bold">10</span>;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> sum;
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">for</span> (<span style="color:#888;font-weight:bold">int</span> i = <span style="color:#00d;font-weight:bold">0</span>; i &lt; <span style="color:#00d;font-weight:bold">100</span>; i++)
+</span></span><span style="display:flex;"><span>        sum += i;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> sum;
 </span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#75715e">//unused function
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">myadd2</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> sum <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">100</span>; i<span style="color:#f92672">++</span>)
-</span></span><span style="display:flex;"><span>		sum <span style="color:#f92672">+=</span> i<span style="color:#f92672">*</span>i;
+</span></span><span style="display:flex;"><span><span style="color:#888">//unused function
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">myadd2</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">int</span> sum = <span style="color:#00d;font-weight:bold">10</span>;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> sum;
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">for</span> (<span style="color:#888;font-weight:bold">int</span> i = <span style="color:#00d;font-weight:bold">0</span>; i &lt; <span style="color:#00d;font-weight:bold">100</span>; i++)
+</span></span><span style="display:flex;"><span>        sum += i*i;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> sum;
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">//b.c
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">sub</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> diff <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">100</span>; i<span style="color:#f92672">++</span>)
-</span></span><span style="display:flex;"><span>		diff <span style="color:#f92672">-=</span> i;
+</span></span><span style="display:flex;"><span><span style="color:#888">//b.c
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">sub</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">int</span> diff = <span style="color:#00d;font-weight:bold">10</span>;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> diff;
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">for</span> (<span style="color:#888;font-weight:bold">int</span> i = <span style="color:#00d;font-weight:bold">0</span>; i &lt; <span style="color:#00d;font-weight:bold">100</span>; i++)
+</span></span><span style="display:flex;"><span>        diff -= i;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> diff;
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">//main.c
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">myadd</span>();
+</span></span><span style="display:flex;"><span><span style="color:#888">//main.c
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> <span style="color:#06b;font-weight:bold">myadd</span>();
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></td></tr></table>
-</div>
-</div><div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&gt;cl /c a.c b.c main.c
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&gt;cl /c a.c b.c main.c
 </span></span><span style="display:flex;"><span>This will produce a.obj, b.obj, main.obj files.
-</span></span><span style="display:flex;"><span>- myadd/myadd2 in .text$mn section of a.obj
-</span></span><span style="display:flex;"><span>- sub in .text$mn section of b.obj
-</span></span><span style="display:flex;"><span>- main in .text$mn section of main.obj
+</span></span><span style="display:flex;"><span>- myadd/myadd2 in .text<span style="color:#369">$mn</span> section of a.obj
+</span></span><span style="display:flex;"><span>- sub in .text<span style="color:#369">$mn</span> section of b.obj
+</span></span><span style="display:flex;"><span>- main in .text<span style="color:#369">$mn</span> section of main.obj
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>&gt;link a.obj b.obj main.obj /nodefaultlib /entry:main /map /opt:ref
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>Since the linker works at multiple objs collectively it has the opportunity to
+</span></span></code></pre></div><p>Since the linker works at multiple objs collectively it has the opportunity to
 remove any unused functions(/opt:ref) when they are not referenced. So we should
 expect myadd2 and sub to be removed from final executable and we get this info
 by using /map. This will produce a .map file. But unfortunately when you look at
 the .map file for the above case we still see myadd2 and sub.</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>0001:00000000       myadd                      <span style="color:#ae81ff">0000000140001000</span> f   a.obj
-</span></span><span style="display:flex;"><span>0001:00000050       myadd2                     <span style="color:#ae81ff">0000000140001050</span> f   a.obj
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>0001:00000000       myadd                      <span style="color:#00d;font-weight:bold">0000000140001000</span> f   a.obj
+</span></span><span style="display:flex;"><span>0001:00000050       myadd2                     <span style="color:#00d;font-weight:bold">0000000140001050</span> f   a.obj
 </span></span><span style="display:flex;"><span>0001:000000a0       sub                        00000001400010a0 f   b.obj
 </span></span><span style="display:flex;"><span>0001:000000e0       main                       00000001400010e0 f   main.obj
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>The reason for this is linker like I said before works at section level not
+</span></span></code></pre></div><p>The reason for this is linker like I said before works at section level not
 function level. To help linker in this case, we need to compile the objs with
 /Gy flag which as we saw before will produce the functions in their own COMDAT
 sections.</p>
 <p>This is exactly where <strong>/Gy</strong> and COMDAT feature come in handy. When compiled
 with /Gy like we saw before, each function will be part of a different section
 and hence linker can eliminate unused functions</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&gt;cl /c /Gy a.c b.c main.c
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&gt;cl /c /Gy a.c b.c main.c
 </span></span><span style="display:flex;"><span>&gt;link a.obj b.obj main.obj /nodefaultlib /entry:main /map /opt:ref
-</span></span><span style="display:flex;"><span>0001:00000000       myadd                      <span style="color:#ae81ff">0000000140001000</span> f   a.obj
-</span></span><span style="display:flex;"><span>0001:00000040       main                       <span style="color:#ae81ff">0000000140001040</span> f   main.obj
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>Now we can see the binary indeed optimized to not contain myadd2 and sub
+</span></span><span style="display:flex;"><span>0001:00000000       myadd                      <span style="color:#00d;font-weight:bold">0000000140001000</span> f   a.obj
+</span></span><span style="display:flex;"><span>0001:00000040       main                       <span style="color:#00d;font-weight:bold">0000000140001040</span> f   main.obj
+</span></span></code></pre></div><p>Now we can see the binary indeed optimized to not contain myadd2 and sub
 functions</p>
 
 </main>
@@ -544,7 +277,7 @@ functions</p>
 
   
   <hr/>
-  © <a href="https://vineelkovvuri.github.io">Vineel Kumar Reddy Kovvuri</a> 2017 &ndash; 2025
+  © <a href="https://vineelkovvuri.github.io">Vineel Kumar Reddy Kovvuri</a> 2017 &ndash; 2025 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
   
   </footer>
   </body>
