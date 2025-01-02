@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=9999&amp;path=livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Signed/unsigned Integer Arithmetic In C | Vineel Kovvuri</title>
+    <title>Signed/Unsigned Integer Arithmetic In C | Vineel Kovvuri</title>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
     <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" rel="stylesheet">
@@ -27,7 +27,7 @@
     </nav>
 
 <div class="article-meta">
-<h1><span class="title">Signed/unsigned Integer Arithmetic In C</span></h1>
+<h1><span class="title">Signed/Unsigned Integer Arithmetic In C</span></h1>
 
 <h2 class="date">2019/02/10</h2>
 </div>
@@ -53,8 +53,8 @@ architecture, ABI (Application Binary Interface) and the programming model,
 the size of these basic types are determined. Windows x64 follows
 LLP64(meaning only &rsquo;long long&rsquo; and pointer size are 64 bit wide), So below
 are the sizes of the standard types that we are sticking to in this article.</p>
-<p>Type                | Size
-&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+&mdash;&mdash;&mdash;
+<pre><code>Type                | Size
+--------------------+---------
 signed char         | 1 bytes
 unsigned char       | 1 bytes
 signed short        | 2 bytes
@@ -64,7 +64,8 @@ unsigned int        | 4 bytes
 signed long         | 4 bytes
 unsigned long       | 4 bytes
 signed long long    | 8 bytes
-unsigned long long  | 8 bytes</p>
+unsigned long long  | 8 bytes
+</code></pre>
 <p>Also, The specification leaves other aspects of C language definition
 undefined and this leave room for optimizations for compilers. For example,
 the result of signed arithmetic leading to overflow/underflow is not defined

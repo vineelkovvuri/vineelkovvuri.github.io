@@ -2,82 +2,82 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>/blog/</loc>
+    <loc>//localhost:9999/blog/</loc>
     <lastmod>2019-11-01T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/blog/compiler-internals/</loc>
+    <loc>//localhost:9999/blog/compiler-internals/</loc>
     <lastmod>2019-11-01T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/tags/compilers/</loc>
+    <loc>//localhost:9999/tags/compilers/</loc>
     <lastmod>2019-11-01T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/</loc>
+    <loc>//localhost:9999/</loc>
     <lastmod>2019-11-01T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/tags/</loc>
+    <loc>//localhost:9999/tags/</loc>
     <lastmod>2019-11-01T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/blog/uart-from-avr-to-linux-to-logic-analyzer/</loc>
+    <loc>//localhost:9999/blog/uart-from-avr-to-linux-to-logic-analyzer/</loc>
     <lastmod>2019-09-20T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/blog/what-does-it-take-to-write-an-emulator-in-java/</loc>
+    <loc>//localhost:9999/blog/what-does-it-take-to-write-an-emulator-in-java/</loc>
     <lastmod>2019-04-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/blog/usermode-breakpoints-from-kd/</loc>
+    <loc>//localhost:9999/blog/usermode-breakpoints-from-kd/</loc>
     <lastmod>2019-03-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/blog/signed-unsigned-integer-arithmetic-in-c/</loc>
+    <loc>//localhost:9999/blog/signed-unsigned-integer-arithmetic-in-c/</loc>
     <lastmod>2019-02-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/blog/pdb-files-the-glue-between-the-binary-file-and-source-code/</loc>
+    <loc>//localhost:9999/blog/pdb-files-the-glue-between-the-binary-file-and-source-code/</loc>
     <lastmod>2019-01-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/blog/pci-express-basics-101/</loc>
+    <loc>//localhost:9999/blog/pci-express-basics-101/</loc>
     <lastmod>2018-12-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/blog/lib-files-101/</loc>
+    <loc>//localhost:9999/blog/lib-files-101/</loc>
     <lastmod>2018-11-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/blog/how-do-breakpoints-work-in-debuggers/</loc>
+    <loc>//localhost:9999/blog/how-do-breakpoints-work-in-debuggers/</loc>
     <lastmod>2018-10-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/blog/a-newbies-introduction-to-compilation-process-and-reverse-engineering/</loc>
+    <loc>//localhost:9999/blog/a-newbies-introduction-to-compilation-process-and-reverse-engineering/</loc>
     <lastmod>2018-08-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/tags/asm/</loc>
+    <loc>//localhost:9999/tags/asm/</loc>
     <lastmod>2018-08-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/tags/c/</loc>
+    <loc>//localhost:9999/tags/c/</loc>
     <lastmod>2018-08-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/tags/reversing/</loc>
+    <loc>//localhost:9999/tags/reversing/</loc>
     <lastmod>2018-08-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/blog/c-case-studies/f/</loc>
+    <loc>//localhost:9999/blog/c-case-studies/f/</loc>
     <lastmod>2018-07-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/courses/c/</loc>
+    <loc>//localhost:9999/courses/c/</loc>
   </url><url>
-    <loc>/categories/</loc>
+    <loc>//localhost:9999/categories/</loc>
   </url><url>
-    <loc>/courses/</loc>
+    <loc>//localhost:9999/courses/</loc>
   </url><url>
-    <loc>/presentations/git-part-1/</loc>
+    <loc>//localhost:9999/presentations/git-part-1/</loc>
   </url><url>
-    <loc>/presentations/git-part-2/</loc>
+    <loc>//localhost:9999/presentations/git-part-2/</loc>
   </url><url>
-    <loc>/presentations/git-part-3/</loc>
+    <loc>//localhost:9999/presentations/git-part-3/</loc>
   </url><url>
-    <loc>/courses/java/</loc>
+    <loc>//localhost:9999/courses/java/</loc>
   </url><url>
-    <loc>/courses/linux/</loc>
+    <loc>//localhost:9999/courses/linux/</loc>
   </url><url>
-    <loc>/presentations/</loc>
+    <loc>//localhost:9999/presentations/</loc>
   </url><url>
-    <loc>/courses/python/</loc>
+    <loc>//localhost:9999/courses/python/</loc>
   </url><url>
-    <loc>/presentations/vscode/</loc>
+    <loc>//localhost:9999/presentations/vscode/</loc>
   </url><url>
-    <loc>/vlog/</loc>
+    <loc>//localhost:9999/vlog/</loc>
   </url>
 </urlset>

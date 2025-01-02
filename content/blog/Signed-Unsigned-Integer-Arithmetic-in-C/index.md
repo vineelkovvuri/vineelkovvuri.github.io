@@ -1,5 +1,5 @@
 ﻿---
-title: "Signed/unsigned Integer Arithmetic In C"
+title: "Signed/Unsigned Integer Arithmetic In C"
 date: 2019-02-10T18:33:07-07:00
 toc: true
 ---
@@ -28,18 +28,18 @@ the size of these basic types are determined. Windows x64 follows
 LLP64(meaning only 'long long' and pointer size are 64 bit wide), So below
 are the sizes of the standard types that we are sticking to in this article.
 
-Type                | Size
---------------------+---------
-signed char         | 1 bytes
-unsigned char       | 1 bytes
-signed short        | 2 bytes
-unsigned short      | 2 bytes
-signed int          | 4 bytes
-unsigned int        | 4 bytes
-signed long         | 4 bytes
-unsigned long       | 4 bytes
-signed long long    | 8 bytes
-unsigned long long  | 8 bytes
+    Type                | Size
+    --------------------+---------
+    signed char         | 1 bytes
+    unsigned char       | 1 bytes
+    signed short        | 2 bytes
+    unsigned short      | 2 bytes
+    signed int          | 4 bytes
+    unsigned int        | 4 bytes
+    signed long         | 4 bytes
+    unsigned long       | 4 bytes
+    signed long long    | 8 bytes
+    unsigned long long  | 8 bytes
 
 Also, The specification leaves other aspects of C language definition
 undefined and this leave room for optimizations for compilers. For example,

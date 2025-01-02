@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Asm on Vineel Kovvuri</title>
-    <link>/tags/asm/</link>
+    <link>//localhost:9999/tags/asm/</link>
     <description>Recent content in Asm on Vineel Kovvuri</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 10 Aug 2018 18:33:07 -0700</lastBuildDate>
-    <atom:link href="/tags/asm/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="//localhost:9999/tags/asm/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>A Newbie&#39;s Introduction To Compilation Process And Reverse Engineering</title>
-      <link>/blog/a-newbies-introduction-to-compilation-process-and-reverse-engineering/</link>
+      <link>//localhost:9999/blog/a-newbies-introduction-to-compilation-process-and-reverse-engineering/</link>
       <pubDate>Fri, 10 Aug 2018 18:33:07 -0700</pubDate>
-      <guid>/blog/a-newbies-introduction-to-compilation-process-and-reverse-engineering/</guid>
+      <guid>//localhost:9999/blog/a-newbies-introduction-to-compilation-process-and-reverse-engineering/</guid>
       <description>Introduction Compilers are surely the complex programs of all times. Even today, writing a compiler with minimum set of tools is considered to be challenging. This tutorial scratches the surface of different compiler phases involved in translating a given source code to executable and also shows how this information is useful in context of reverse engineering.&#xA;GNU compiler collection provides an excellent set of tools for dissecting the compilation process and to understand the working of bits and bytes in the final executable.</description>
     </item>
   </channel>
