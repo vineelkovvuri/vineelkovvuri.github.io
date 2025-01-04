@@ -37,7 +37,7 @@ menu:
 
 params:
   description: "A website built through Hugo and blogdown."
-  footer: "&copy; [Vineel Kumar Reddy Kovvuri](https://vineelkovvuri.github.io) 2017 -- {Year} ❤️ [Hugo Xmin](https://xmin.yihui.org/)"
+  footer: "&copy; Vineel Kumar Reddy Kovvuri 2017 -- {Year} ❤️ [Hugo Xmin](https://xmin.yihui.org/)"
 
 # We are using hugo supported default syntax highlighter.
 markup:
