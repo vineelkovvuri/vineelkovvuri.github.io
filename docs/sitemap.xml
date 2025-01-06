@@ -3,18 +3,24 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>/blog/</loc>
-    <lastmod>2019-11-01T18:33:07-07:00</lastmod>
+    <lastmod>2025-01-06T06:17:07-07:00</lastmod>
+  </url><url>
+    <loc>/</loc>
+    <lastmod>2025-01-06T06:17:07-07:00</lastmod>
+  </url><url>
+    <loc>/tags/rust/</loc>
+    <lastmod>2025-01-06T06:17:07-07:00</lastmod>
+  </url><url>
+    <loc>/blog/rust-from-vs-into-traits/</loc>
+    <lastmod>2025-01-06T06:17:07-07:00</lastmod>
+  </url><url>
+    <loc>/tags/</loc>
+    <lastmod>2025-01-06T06:17:07-07:00</lastmod>
   </url><url>
     <loc>/blog/compiler-internals/</loc>
     <lastmod>2019-11-01T18:33:07-07:00</lastmod>
   </url><url>
     <loc>/tags/compilers/</loc>
-    <lastmod>2019-11-01T18:33:07-07:00</lastmod>
-  </url><url>
-    <loc>/</loc>
-    <lastmod>2019-11-01T18:33:07-07:00</lastmod>
-  </url><url>
-    <loc>/tags/</loc>
     <lastmod>2019-11-01T18:33:07-07:00</lastmod>
   </url><url>
     <loc>/blog/uart-from-avr-to-linux-to-logic-analyzer/</loc>
