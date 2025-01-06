@@ -9,7 +9,7 @@
     <lastBuildDate>Mon, 06 Jan 2025 06:17:07 -0700</lastBuildDate>
     <atom:link href="/tags/rust/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Rust: From vs Into traits - Why implementing `From&lt;T&gt;` on `U` enables us to call `T.into()` to get to `U`</title>
+      <title>Rust: From vs Into traits - Why implementing From&lt;T&gt; on U enables us to call T.into() to get to U</title>
       <link>/blog/rust-from-vs-into-traits/</link>
       <pubDate>Mon, 06 Jan 2025 06:17:07 -0700</pubDate>
       <guid>/blog/rust-from-vs-into-traits/</guid>

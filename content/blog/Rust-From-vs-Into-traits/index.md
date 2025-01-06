@@ -1,5 +1,5 @@
 ---
-title: "Rust: From vs Into traits - Why implementing `From<T>` on `U` enables us to call `T.into()` to get to `U`"
+title: "Rust: From vs Into traits - Why implementing From<T> on U enables us to call T.into() to get to U"
 date: 2025-01-06T06:17:07-07:00
 tags: ['Rust']
 ---
