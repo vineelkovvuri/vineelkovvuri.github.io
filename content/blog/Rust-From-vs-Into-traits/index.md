@@ -4,44 +4,58 @@ date: 2025-01-06T06:17:07-07:00
 tags: ['Rust']
 ---
 
-## Rust: From vs Into traits - Why implementing `From<T>` on `U` enables us to call `T.into()` to get to `U`?
+## Rust: From vs Into Traits - Why does implementing `From<T>` on `U` enable calling `T.into()` to get `U`?
+
 ```rust
 impl From<A> for B {
     fn from(a: A) -> B {
-        // convert A to B
+        // Convert A to B
     }
 }
 ```
-Because we just implemented the new static `from()` method on `B`, if you have an instance of `A` you can get to `B`.
+
+By implementing the `from()` static method on `B`, you can convert an instance of `A` to `B`:
+
 ```rust
 let a: A = ...;
-let b: B = B::from(a); // like this
+let b: B = B::from(a); // This works
 ```
-But generally we don't do this because it is not rustic enough.
-Instead we do below
+
+However, in practice, we often avoid using this directly, as it isn't considered idiomatic Rust. Instead, we do the following:
+
 ```rust
 let b: B = a.into();
 ```
-Q. Wait a second, where does this `.into()` come from? Because we didn't implement any `into()` function on my `A`?
-A. Yes you did not implement it. But rust gave it for free. How?
-Now this gets us in to blanket implementations in Rust. Which a fancy way of saying, implementing something on all types. In other words, doing something like below
+
+### Q: Wait a second, where does this `.into()` come from? We didn't implement any `into()` function on `A`.
+
+A: Correct, you didn't implement it yourself. Rust provides it automatically. How?
+
+This involves **blanket implementations** in Rust, which is a way of implementing something for all types. Essentially, this is done using a construct like:
+
 ```rust
 impl<T> Trait1 for T {
-    ....
+    ...
 }
 ```
-Now in case of From what the rust standard library does is, below blanket implementation.
+
+In the case of the `From` trait, the Rust standard library provides the following blanket implementation:
+
 ```rust
-impl<T, U> Into<U> for T  // For all T, implement Into<U>
+impl<T, U> Into<U> for T  // For all types T, implement Into<U>
 where
-    U: From<T>,           // if U already has an implementation to convert to T
+    U: From<T>,           // If U already implements From<T>
 {
     fn into(self) -> U {
         U::from(self)
     }
 }
 ```
-It provides a blanket implementation of `Into<U>` trait on all `T` where `U` has an implementation of `From<T>`. In other words, This is, in a way saying the compiler has implemented the other half for us for free.
+
+This means that the standard library provides a blanket implementation of the `Into<U>` trait for all `T` where `U` already has an implementation of `From<T>`. In simpler terms, the compiler automatically implements the counterpart `Into` for you.
+
+Effectively, it is as if the compiler wrote this for you:
+
 ```rust
 impl Into<B> for A {
     fn into(self) -> B {
@@ -49,4 +63,5 @@ impl Into<B> for A {
     }
 }
 ```
-So for any given instance of `A` we can call `.into()` on it to convert in to the other type.
+
+Thus, for any instance of `A`, you can call `.into()` to convert it to `B`.
