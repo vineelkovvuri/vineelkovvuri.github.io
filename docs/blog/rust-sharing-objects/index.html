@@ -121,8 +121,8 @@ owners(A and B)</p>
 and mutability of references during compilation. Let&rsquo;s break this down:</p>
 <h4 id="why-part-1-works">Why Part 1 Works:</h4>
 <ol>
-<li>Order of Operations:</li>
-</ol>
+<li>
+<p>Order of Operations:</p>
 <ul>
 <li><code>a</code> is created with a mutable reference to <code>c</code>.</li>
 <li><code>a_ptr</code> is cast to a <code>*mut c_void</code>. At this point, the borrow checker no
@@ -130,34 +130,36 @@ longer tracks the borrow because it has been converted to a raw pointer.</li>
 <li>After this, <code>b</code> is created with a mutable reference to <code>c</code>.</li>
 <li>Finally, <code>b_ptr</code> is cast to a <code>*mut c_void</code>.</li>
 </ul>
-<ol start="2">
-<li>Temporary Escape from Borrow Checking:</li>
-</ol>
+</li>
+<li>
+<p>Temporary Escape from Borrow Checking:</p>
 <ul>
 <li>The cast to <code>*mut c_void</code> removes the borrow checker’s visibility into
 how the mutable reference (<code>mut_ref</code>) in <code>A</code> is being used. Rust assumes
 you are responsible for managing aliasing and mutability safety when you
 use raw pointers.</li>
 </ul>
-<ol start="3">
-<li>Sequential Mutability:</li>
-</ol>
+</li>
+<li>
+<p>Sequential Mutability:</p>
 <ul>
 <li>Since <code>a</code> is converted to <code>a_ptr</code> (a raw pointer) before <code>b</code> is created,
 the borrow checker treats the mutable borrow in <code>a</code> as no longer active.</li>
 </ul>
+</li>
+</ol>
 <h4 id="why-part-2-fails">Why Part 2 Fails:</h4>
 <ol>
-<li>Simultaneous Mutable Borrows:</li>
-</ol>
+<li>
+<p>Simultaneous Mutable Borrows:</p>
 <ul>
 <li>In this case, both <code>A</code> and <code>B</code> are holding mutable references to <code>c</code> at
 the same time. This violates Rust&rsquo;s borrowing rules, which prohibit
 multiple mutable borrows of the same data simultaneously.</li>
 </ul>
-<ol start="2">
-<li>Borrow Checker Enforcement:</li>
-</ol>
+</li>
+<li>
+<p>Borrow Checker Enforcement:</p>
 <ul>
 <li>When you write <code>let mut b = B { mut_ref: &amp;mut c };</code>, the borrow checker
 detects that there is already an outstanding mutable borrow of <code>c</code> held
@@ -165,24 +167,24 @@ by <code>A</code>. Even though you intend to cast <code>a</code> and <code>b</co
 later, the borrow checker enforces its rules at the point of assignment,
 not at the point of casting.</li>
 </ul>
-<ol start="3">
-<li>Raw Pointer Cast Comes Too Late:</li>
-</ol>
+</li>
+<li>
+<p>Raw Pointer Cast Comes Too Late:</p>
 <ul>
 <li>Unlike in the first case, the raw pointer cast (<code>a_ptr</code> and <code>b_ptr</code>)
 happens after the violation has already occurred. At the point where <code>b</code>
 is created, the mutable borrow in <code>A</code> is still active, leading to a
 compile-time error.</li>
 </ul>
+</li>
+</ol>
 <h4 id="key-takeaway">Key Takeaway</h4>
 <p>The difference comes down to when the mutable borrow is considered
-invalidated:</p>
-<ul>
-<li>In the working code, converting <code>A</code> to a raw pointer before creating <code>B</code>
-invalidates the borrow in <code>A</code> in the borrow checker&rsquo;s view.</li>
-<li>In the non-working code, both <code>A</code> and <code>B</code> are created before any cast to
-raw pointers, so the borrow checker detects overlapping mutable borrows.</li>
-</ul>
+invalidated:
+- In the working code, converting <code>A</code> to a raw pointer before creating <code>B</code>
+invalidates the borrow in <code>A</code> in the borrow checker&rsquo;s view.
+- In the non-working code, both <code>A</code> and <code>B</code> are created before any cast to
+raw pointers, so the borrow checker detects overlapping mutable borrows.</p>
 <p>Part 1 ensures that the borrow associated with <code>A</code> is no longer tracked before
 creating <code>B</code>.</p>
 
