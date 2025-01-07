@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Rust: From vs Into traits - Why implementing From&lt;T&gt; on U enables us to call T.into() to get to U | Vineel Kovvuri</title>
+    <title>Rust: From vs Into traits | Vineel Kovvuri</title>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
     <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" rel="stylesheet">
@@ -27,13 +27,13 @@
     </nav>
 
 <div class="article-meta">
-<h1><span class="title">Rust: From vs Into traits - Why implementing From<T> on U enables us to call T.into() to get to U</span></h1>
+<h1><span class="title">Rust: From vs Into traits</span></h1>
 
 <h2 class="date">2025/01/06</h2>
 </div>
 
 <main>
-<h2 id="rust-from-vs-into-traits---why-does-implementing-fromt-on-u-enable-calling-tinto-to-get-u">Rust: From vs Into Traits - Why does implementing <code>From&lt;T&gt;</code> on <code>U</code> enable calling <code>T.into()</code> to get <code>U</code>?</h2>
+<h2 id="why-does-implementing-fromt-on-u-enable-calling-tinto-to-get-u">Why does implementing <code>From&lt;T&gt;</code> on <code>U</code> enable calling <code>T.into()</code> to get <code>U</code>?</h2>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span><span style="color:#038">From</span>&lt;A&gt;<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span>B<span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">from</span>(a: <span style="color:#b06;font-weight:bold">A</span>)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">B</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#888">// Convert A to B

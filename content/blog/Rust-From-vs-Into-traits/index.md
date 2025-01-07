@@ -1,10 +1,10 @@
 ---
-title: "Rust: From vs Into traits - Why implementing From<T> on U enables us to call T.into() to get to U"
+title: "Rust: From vs Into traits"
 date: 2025-01-06T06:17:07-07:00
 tags: ['Rust']
 ---
 
-## Rust: From vs Into Traits - Why does implementing `From<T>` on `U` enable calling `T.into()` to get `U`?
+## Why does implementing `From<T>` on `U` enable calling `T.into()` to get `U`?
 
 ```rust
 impl From<A> for B {
