@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rust: From vs Into traits | Vineel Kovvuri</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/presentations/">Presentations</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Rust: From vs Into traits</span></h1>
+
+<h2 class="date">2025/01/06</h2>
+</div>
+
+<main>
+<h2 id="why-does-implementing-fromt-on-u-enable-calling-tinto-to-get-u">Why does implementing <code>From&lt;T&gt;</code> on <code>U</code> enable calling <code>T.into()</code> to get <code>U</code>?</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span><span style="color:#038">From</span>&lt;A&gt;<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span>B<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">from</span>(a: <span style="color:#b06;font-weight:bold">A</span>)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">B</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#888">// Convert A to B
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><p>By implementing the <code>from()</code> static method on <code>B</code>, you can convert an instance of <code>A</code> to <code>B</code>:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>a: <span style="color:#b06;font-weight:bold">A</span><span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>...;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>b: <span style="color:#b06;font-weight:bold">B</span><span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>B::from(a);<span style="color:#bbb"> </span><span style="color:#888">// This works
+</span></span></span></code></pre></div><p>However, in practice, we often avoid using this directly, as it isn&rsquo;t considered idiomatic Rust. Instead, we do the following:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>b: <span style="color:#b06;font-weight:bold">B</span><span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>a.into();<span style="color:#bbb">
+</span></span></span></code></pre></div><h3 id="q-wait-a-second-where-does-this-into-come-from-we-didnt-implement-any-into-function-on-a">Q: Wait a second, where does this <code>.into()</code> come from? We didn&rsquo;t implement any <code>into()</code> function on <code>A</code>.</h3>
+<p>A: Correct, you didn&rsquo;t implement it yourself. Rust provides it automatically. How?</p>
+<p>This involves <strong>blanket implementations</strong> in Rust, which is a way of implementing something for all types. Essentially, this is done using a construct like:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">impl</span>&lt;T&gt;<span style="color:#bbb"> </span>Trait1<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span>T<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>...<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><p>In the case of the <code>From</code> trait, the Rust standard library provides the following blanket implementation:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">impl</span>&lt;T,<span style="color:#bbb"> </span>U&gt;<span style="color:#bbb"> </span><span style="color:#038">Into</span>&lt;U&gt;<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span>T<span style="color:#bbb">  </span><span style="color:#888">// For all types T, implement Into&lt;U&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">where</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>U: <span style="color:#038">From</span>&lt;T&gt;,<span style="color:#bbb">           </span><span style="color:#888">// If U already implements From&lt;T&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">into</span>(self)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">U</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>U::from(self)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><p>This means that the standard library provides a blanket implementation of the <code>Into&lt;U&gt;</code> trait for all <code>T</code> where <code>U</code> already has an implementation of <code>From&lt;T&gt;</code>. In simpler terms, the compiler automatically implements the counterpart <code>Into</code> for you.</p>
+<p>Effectively, it is as if the compiler wrote this for you:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span><span style="color:#038">Into</span>&lt;B&gt;<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span>A<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">into</span>(self)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">B</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>B::from(self)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><p>Thus, for any instance of <code>A</code>, you can call <code>.into()</code> to convert it to <code>B</code>.</p>
+
+</main>
+
+  <footer>
+  
+<script defer src="/js/center-img.js"></script>
+
+
+
+
+
+
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2025 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+
