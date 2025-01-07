@@ -73,9 +73,9 @@ fn main() {
 }
 ```
 
-Getting curious I asked ChatGPT below question:
+Got curious and asked ChatGPT below question:
 
-### Question: Why Part 1 works but not Part 2?
+### Question: Why Part 1 works but not Part 2? What is so special about *mut c_void?
 ```rust
 // Part 1
 let mut common = C { val: 100 };
