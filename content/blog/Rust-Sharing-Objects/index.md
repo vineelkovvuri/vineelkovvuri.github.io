@@ -100,7 +100,7 @@ let mut b_ptr = &mut b as *mut B as *mut c_void;
 The distinction lies in how the Rust borrow checker analyzes the lifetimes
 and mutability of references during compilation. Let's break this down:
 
-#### Why Part 1 Works:
+#### Why Part 1 Works?
 1. Order of Operations:
     - `a` is created with a mutable reference to `c`.
     - `a_ptr` is cast to a `*mut c_void`. At this point, the borrow checker no
@@ -109,20 +109,20 @@ and mutability of references during compilation. Let's break this down:
     - Finally, `b_ptr` is cast to a `*mut c_void`.
 
 2. Temporary Escape from Borrow Checking:
-    - The cast to `*mut c_void` removes the borrow checker’s visibility into
-        how the mutable reference (`mut_ref`) in `A` is being used. Rust assumes
-        you are responsible for managing aliasing and mutability safety when you
-        use raw pointers.
+    - ==The cast to `*mut c_void` removes the borrow checker’s visibility into how
+      the mutable reference (`mut_ref`) in `A` is being used. Rust assumes you
+      are responsible for managing aliasing and mutability safety when you use
+      raw pointers.==
 
 3. Sequential Mutability:
     - Since `a` is converted to `a_ptr` (a raw pointer) before `b` is created,
-        the borrow checker treats the mutable borrow in `a` as no longer active.
+      the borrow checker treats the mutable borrow in `a` as no longer active.
 
-#### Why Part 2 Fails:
+#### Why Part 2 Fails?
 1. Simultaneous Mutable Borrows:
     - In this case, both `A` and `B` are holding mutable references to `c` at
-        the same time. This violates Rust's borrowing rules, which prohibit
-        multiple mutable borrows of the same data simultaneously.
+      the same time. This violates Rust's borrowing rules, which prohibit
+      multiple mutable borrows of the same data simultaneously.
 
 2. Borrow Checker Enforcement:
     - When you write `let mut b = B { mut_ref: &mut c };`, the borrow checker

@@ -119,7 +119,7 @@ owners(A and B)</p>
 </span></span></span></code></pre></div><h3 id="answerfrom-chatgpt">Answer(From ChatGPT):</h3>
 <p>The distinction lies in how the Rust borrow checker analyzes the lifetimes
 and mutability of references during compilation. Let&rsquo;s break this down:</p>
-<h4 id="why-part-1-works">Why Part 1 Works:</h4>
+<h4 id="why-part-1-works">Why Part 1 Works?</h4>
 <ol>
 <li>
 <p>Order of Operations:</p>
@@ -134,10 +134,10 @@ longer tracks the borrow because it has been converted to a raw pointer.</li>
 <li>
 <p>Temporary Escape from Borrow Checking:</p>
 <ul>
-<li>The cast to <code>*mut c_void</code> removes the borrow checker’s visibility into
-how the mutable reference (<code>mut_ref</code>) in <code>A</code> is being used. Rust assumes
-you are responsible for managing aliasing and mutability safety when you
-use raw pointers.</li>
+<li><mark>The cast to <code>*mut c_void</code> removes the borrow checker’s visibility into how
+the mutable reference (<code>mut_ref</code>) in <code>A</code> is being used. Rust assumes you
+are responsible for managing aliasing and mutability safety when you use
+raw pointers.</mark></li>
 </ul>
 </li>
 <li>
@@ -148,7 +148,7 @@ the borrow checker treats the mutable borrow in <code>a</code> as no longer acti
 </ul>
 </li>
 </ol>
-<h4 id="why-part-2-fails">Why Part 2 Fails:</h4>
+<h4 id="why-part-2-fails">Why Part 2 Fails?</h4>
 <ol>
 <li>
 <p>Simultaneous Mutable Borrows:</p>
