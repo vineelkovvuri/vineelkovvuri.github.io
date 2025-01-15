@@ -1,0 +1,99 @@
+readinglist:
+  - title: systemd by example - Part 1 Minimization
+    href: https://seb.jambor.dev/posts/systemd-by-example-part-1-minimization/
+  - title: The Qualcomm Snapdragon X Architecture Deep Dive Getting To Know Oryon and Adreno X1
+    href: https://www.anandtech.com/show/21445/qualcomm-snapdragon-x-architecture-deep-dive
+  - title: FuzzySecurity | Tutorials
+    href: http://www.fuzzysecurity.com/tutorials.html
+  - title: oss-security - Out-of-bounds read &amp; write in the glibc&#39;s qsort()
+    href: https://www.openwall.com/lists/oss-security/2024/01/30/7
+  - title: A Field Guide for the Modern Embedded Engineer | Lager
+    href: https://www.lagerdata.com/fieldguide
+  - title: Harder, Better, Faster, Stronger
+    href: https://hbfs.wordpress.com/page/3/
+  - title: ESP32 Buyer's Guide Different Chips, Firmware, Sensors | eitherway
+    href: https://eitherway.io/posts/esp32-buyers-guide/
+  - title: What we've been reading in June (2024) | Interrupt
+    href: https://interrupt.memfault.com/blog/june-2024-roundup
+  - title: Writing a Simple Garbage Collector in C
+    href: https://maplant.com/gc.html
+  - title: Great Works in Programming Languages
+    href: https://www.cis.upenn.edu/~bcpierce/courses/670Fall04/GreatWorksInPL.shtml
+  - title: Visual overview of a custom malloc() implementation — The silent tower
+    href: https://silent-tower.net/projects/visual-overview-malloc#fnref:2-Mmap
+  - title: The Modern CLI Renaissance | Gabe Venberg
+    href: https://gabevenberg.com/posts/cli-renaissance/
+  - title: Some Were Meant for C
+    href: https://www.humprog.org/~stephen/research/papers/kell17some-preprint.pdf
+  - title: What every systems programmer should know about concurrency
+    href: https://assets.bitbashing.io/papers/concurrency-primer.pdf
+  - title: TPM GPIO fail How bad OEM firmware ruins TPM security
+    href: https://mkukri.xyz/2024/06/01/tpm-gpio-fail.html
+  - title: Bootloader basics | notes.eatonphil.com
+    href: https://notes.eatonphil.com/bootloader-basics.html
+  - title: The Linux Scheduler a Decade of Wasted Cores
+    href: https://blog.acolyer.org/2016/04/26/the-linux-scheduler-a-decade-of-wasted-cores/
+  - title: 100R — uxn
+    href: https://100r.co/site/uxn.html
+  - title: Front Matter
+    href: http://textbooks.math.gatech.edu/ila/index.html
+  - title: Fleet Below Deck, Part II - Breaking down the editor | The JetBrains Fleet Blog
+    href: https://blog.jetbrains.com/fleet/2022/02/fleet-below-deck-part-ii-breaking-down-the-editor/
+  - title: AN5125, Introduction to Device Trees - Application Note
+    href: https://www.nxp.com/docs/en/application-note/AN5125.pdf
+  - title: Type Conversions | C Language Issues for Application Security | InformIT
+    href: https://www.informit.com/articles/article.aspx?p=686170&amp;seqNum=5
+  - title: Rust for Embedded Systems Current State, Challenges and Open Problems
+    href: https://arxiv.org/abs/2311.05063
+  - title: Introduction to TPM (Trusted Platform Module) - sergioprado.blog
+    href: https://sergioprado.blog/introduction-to-tpm-trusted-platform-module/
+  - title: The Linux Kernel Module Programming Guide
+    href: https://sysprog21.github.io/lkmpg/
+  - title: A Practical Tutorial on PCIe for Total Beginners on Windows (Part 1) - Reversing Engineering for the Soul
+    href: https://ctf.re/windows/kernel/pcie/tutorial/2023/02/14/pcie-part-1/
+  - title: From the Circle to Epicycles (Part 1) - An animated introduction to Fourier Series | andreinc
+    href: https://www.andreinc.net/2024/04/24/from-the-circle-to-epicycles
+  - title: Challenges in Managing SSH Keys - and a Call for Solutions
+    href: https://helda.helsinki.fi/server/api/core/bitstreams/471f0ffe-2626-4d12-8725-2147232d849f/content
+  - title: Welcome to Linux command line for you and me! — Linux command line for you and me 0.1 documentation
+    href: https://lym.readthedocs.io/en/latest/index.html
+  - title: Papers | Unified Extensible Firmware Interface Forum
+    href: https://uefi.org/learning_center/papers
+  - title: Differences Between ELF-32 and ELF-64 | Interrupt
+    href: https://interrupt.memfault.com/blog/elf-format-differences
+  - title: Making USB devices - end to end guide to your first gadget
+    href: https://popovicu.com/posts/making-usb-devices/
+  - title: A Tutorial on the Device Tree (Zynq) -- Part I | xillybus.com
+    href: http://xillybus.com/tutorials/device-tree-zynq-1
+  - title: 1024cores - Introduction
+    href: https://www.1024cores.net/home/lock-free-algorithms/introduction
+  - title: RFC Mitigating unexpected arithmetic overflow - Kees Cook
+    href: https://lore.kernel.org/all/202404291502.612E0A10@keescook/
+  - title: 1 Introduction · Real-World Cryptography
+    href: https://livebook.manning.com/book/real-world-cryptography/chapter-1/
+  - title: Algorithms for Modern Hardware - Algorithmica
+    href: https://en.algorithmica.org/hpc/
+  - title: Hello, JIT World The Joy of Simple JITs
+    href: https://blog.reverberate.org/2012/12/hello-jit-world-joy-of-simple-jits.html
+  - title: Cross-Silicon Exploitation in UEFI A Deep Dive Analysis
+    href: https://www.binarly.io/blog/the-dark-side-of-uefi-a-technical-deep-dive-into-cross-silicon-exploitation
+  - title: Papers | The ryg blog
+    href: https://fgiesen.wordpress.com/category/papers/
+  - title: qoi-specification.pdf
+    href: https://qoiformat.org/qoi-specification.pdf
+  - title: compress/doc/bzip2-format.pdf at master · dsnet/compress
+    href: https://github.com/dsnet/compress/blob/master/doc/bzip2-format.pdf
+  - title: stream File System Hacking FAT32 Deep Dive
+    href: https://www.youtube.com/watch?v=giVfqICb2J4
+  - title: Parsing series of integers with SIMD
+    href: http://0x80.pl/articles/simd-parsing-int-sequences.html
+  - title: Device Firmware Update Cookbook | Interrupt
+    href: https://interrupt.memfault.com/blog/device-firmware-update-cookbook
+  - title: A Primer on Bézier Curves
+    href: https://pomax.github.io/bezierinfo/
+  - title: Boot_sequence
+    href: https://vanhunteradams.com/Pico/Bootloader/Boot_sequence.html
+  - title: Uniting the Linux random-number devices [LWN.net]
+    href: https://lwn.net/SubscriberLink/884875/02fa3ee19d021506/
+  - title: research!rsc Programming Language Memory Models (Memory Models, Part 2)
+    href: https://research.swtch.com/plmm
