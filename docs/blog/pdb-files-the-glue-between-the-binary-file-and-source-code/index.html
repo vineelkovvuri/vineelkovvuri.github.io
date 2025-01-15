@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=9999&amp;path=livereload" data-no-instant defer></script>
+  <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Pdb Files: The Glue Between The Binary File And Source Code | Vineel Kovvuri</title>
@@ -287,7 +287,7 @@ respectively.</p>
 </span></span><span style="display:flex;"><span>00007ff9<span style="color:#d20;background-color:#fff0f0">`</span>2f400000 00007ff9<span style="color:#d20;background-color:#fff0f0">`</span>2f5e0000   ntdll      (<span style="color:#038">export</span> symbols)
 </span></span><span style="display:flex;"><span>C:<span style="color:#04d;background-color:#fff0f0">\W</span>INDOWS<span style="color:#04d;background-color:#fff0f0">\S</span>YSTEM32<span style="color:#04d;background-color:#fff0f0">\n</span>tdll.dll
 </span></span></code></pre></div><p>Looking at the .reload command output we can say Windbg expects symbol files to
-be present inside the same directory as the application or the folder named &rsquo;exe&rsquo;
+be present inside the same directory as the application or the folder named &rsquo;exe'
 inside .sympath directory or the folder named &lsquo;dll&rsquo; inside the .sympath directory
 or at the actual embedded path. Running lm confirms that symbols are recognized
 for Win32Sample.exe</p>

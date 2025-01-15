@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=9999&amp;path=livereload" data-no-instant defer></script>
+  <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Rust: Aligned vs Unaligned Memory Access | Vineel Kovvuri</title>
@@ -33,13 +33,11 @@
 </div>
 
 <main>
-<h2 id="rust-rust-aligned-vs-unaligned-memory-access">Rust: Rust-Aligned-vs-Unaligned-Memory-Access</h2>
+<h2 id="rust-rust-aligned-vs-unaligned-memory-access">Rust: Rust Aligned vs Unaligned Memory Access</h2>
 <p>Unlike C, Rust enforces some rules when trying to access memory. Mainly it
 requires consideration to alignment of the data that we are trying to read.
 Below code will illustrate the details.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#c00;font-weight:bold">#![allow(unused)]</span><span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">main</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb">
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">main</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>data: [<span style="color:#888;font-weight:bold">u8</span>;<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">10</span>]<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>[<span style="color:#00d;font-weight:bold">0x11</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0x22</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0x33</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0x44</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0x55</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0x66</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0x77</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0x88</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0x99</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0xAA</span>];<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// Alignment Tidbit: Alignment depends on the data type we are using. u8 has

@@ -4,15 +4,13 @@ date: 2025-01-14 19:05:52
 tags: ['Rust']
 ---
 
-## Rust: Rust-Aligned-vs-Unaligned-Memory-Access
+## Rust: Rust Aligned vs Unaligned Memory Access
 
 Unlike C, Rust enforces some rules when trying to access memory. Mainly it
 requires consideration to alignment of the data that we are trying to read.
 Below code will illustrate the details.
 
 ```rust
-#![allow(unused)]
-
 fn main() {
     let data: [u8; 10] = [0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xAA];
 
