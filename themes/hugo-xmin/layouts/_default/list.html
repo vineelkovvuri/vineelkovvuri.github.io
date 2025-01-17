@@ -1,14 +1,13 @@
 {{ partial "header.html" . }}
 
 {{if not .IsHome }}
-<h1>{{ .Title | markdownify }}</h1>
+<h1>{{ .Content | markdownify }}</h1>
 {{ end }}
 
 {{ .Content }}
 
-_default\list.html
-<h1>Blog</h1>
-{{.Section}}
+<h1>{{ .Title | markdownify }}</h1>
+<!-- {{.Section}} -->
 <ul>
   {{ $pages := .Pages }}
   {{ if .IsHome }}{{ $pages = .Site.RegularPages }}{{ end }}
