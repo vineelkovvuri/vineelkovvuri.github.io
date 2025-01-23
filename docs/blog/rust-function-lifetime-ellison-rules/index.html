@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rust: Function Lifetime Ellison Rules | Vineel Kovvuri</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/presentations/">Presentations</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Rust: Function Lifetime Ellison Rules</span></h1>
+
+<h2 class="date">2025/01/23</h2>
+</div>
+
+<main>
+<h2 id="rust-function-lifetime-ellison-rules">Rust: Function Lifetime Ellison Rules</h2>
+<p>Lifetime elision in functions
+<a href="https://doc.rust-lang.org/reference/lifetime-elision.html#lifetime-elision-in-functions">https://doc.rust-lang.org/reference/lifetime-elision.html#lifetime-elision-in-functions</a></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#888">// Below is how the rust compiler assigns the lifetime parameters implicitly.
+</span></span></span><span style="display:flex;"><span><span style="color:#888">// Any function parameters(both inputs and outputs) which fall beyond these
+</span></span></span><span style="display:flex;"><span><span style="color:#888">// rules will require explicit lifetime annotations by the programmer.
+</span></span></span><span style="display:flex;"><span><span style="color:#888">//
+</span></span></span><span style="display:flex;"><span><span style="color:#888">// Life Time Ellison Rules:
+</span></span></span><span style="display:flex;"><span><span style="color:#888">// 1. Each elided lifetime in the parameters becomes a distinct lifetime
+</span></span></span><span style="display:flex;"><span><span style="color:#888">//    parameter.
+</span></span></span><span style="display:flex;"><span><span style="color:#888">//      fn foo(x: &amp;i32); =&gt; fn foo&lt;&#39;a&gt;(x: &amp;&#39;a i32);
+</span></span></span><span style="display:flex;"><span><span style="color:#888">//      fn foo(x: &amp;i32, y: &amp;i32); =&gt; fn foo&lt;&#39;a, &#39;b&gt;(x: &amp;&#39;a i32, y: &amp;&#39;b i32);
+</span></span></span><span style="display:flex;"><span><span style="color:#888">// 2. If there is exactly one lifetime used in the parameters (elided or not),
+</span></span></span><span style="display:flex;"><span><span style="color:#888">//    that lifetime is assigned to all elided output lifetimes.
+</span></span></span><span style="display:flex;"><span><span style="color:#888">//      fn foo(x: &amp;i32) -&gt; &amp;i32; =&gt; fn foo&lt;&#39;a&gt;(x: &amp;&#39;a i32) -&gt; &amp;&#39;a i32
+</span></span></span><span style="display:flex;"><span><span style="color:#888">//      fn f(x: &amp;I) -&gt; (&amp;I, &amp;I) =&gt; fn f&lt;&#39;a&gt;(x: &amp;&#39;a I) -&gt; (&amp;&#39;a I, &amp;&#39;a I)
+</span></span></span><span style="display:flex;"><span><span style="color:#888">// 3. If the receiver has type &amp;Self or &amp;mut Self, then the lifetime of that
+</span></span></span><span style="display:flex;"><span><span style="color:#888">//    reference to Self is assigned to all elided output lifetime parameters.
+</span></span></span><span style="display:flex;"><span><span style="color:#888">//      fn f(&amp;self, y: &amp;I, z: &amp;I) -&gt; &amp;I =&gt; fn f(&amp;&#39;a self, y: &amp;&#39;b I, z: &amp;&#39;c I) -&gt; &amp;&#39;a I
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#888">// ---------------------------------------------------------------------------
+</span></span></span><span style="display:flex;"><span><span style="color:#888">// Case 1: Returning a local variable as a reference
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">repro1</span>&lt;<span style="color:#369">&#39;a</span>&gt;()<span style="color:#bbb"> </span>-&gt; <span style="color:#080">&amp;</span><span style="color:#369">&#39;a</span> <span style="color:#888;font-weight:bold">str</span> {<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>x: <span style="color:#038">String</span> =<span style="color:#bbb"> </span><span style="color:#d20;background-color:#fff0f0">&#34;asfdasdf&#34;</span>.to_string();<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>x.as_str()<span style="color:#bbb"> </span><span style="color:#888">// returns a value referencing data owned by the current function
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#888">// ---------------------------------------------------------------------------
+</span></span></span><span style="display:flex;"><span><span style="color:#888">// Case 2: Returning a &amp;str but via using objects
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">struct</span> <span style="color:#b06;font-weight:bold">Phone</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">pub</span><span style="color:#bbb"> </span>name: <span style="color:#038">String</span>,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span>Phone<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// Here the return type&#39;s lifetime is determined by the &amp;self parameter(Rule
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// 3).
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">pub</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">get_name</span>(&amp;self)<span style="color:#bbb"> </span>-&gt; <span style="color:#080">&amp;</span><span style="color:#888;font-weight:bold">str</span> {<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>self.name.as_str()<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">repro2</span>&lt;<span style="color:#369">&#39;a</span>&gt;()<span style="color:#bbb"> </span>-&gt; <span style="color:#080">&amp;</span><span style="color:#369">&#39;a</span> <span style="color:#888;font-weight:bold">str</span> {<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>phone<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>Phone<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>name: <span style="color:#d20;background-color:#fff0f0">&#34;iPhone 15 Pro Max&#34;</span>.to_string(),<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>};<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">//     --&gt; src/main.rs:34:5
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">//     |
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">//  34 |     phone.get_name()
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">//     |     -----^^^^^^^^^^^
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">//     |     |
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">//     |     returns a value referencing data owned by the current function
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">//     |     `phone` is borrowed here
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// The reason why we are getting above error is, In this function, we are
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// trying to return the name with a different lifetime(&#39;a) which can live
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// longer than the phone object itself(which is tied to the local variable)
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span>phone.get_name()<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#888">// ---------------------------------------------------------------------------
+</span></span></span><span style="display:flex;"><span><span style="color:#888">// Case 3: Accidentally returning a local object while returning an error type
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">pub</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">type</span> <span style="color:#b06;font-weight:bold">MyResult</span>&lt;<span style="color:#369">&#39;a</span>,<span style="color:#bbb"> </span>T&gt;<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#038">Result</span>&lt;T,<span style="color:#bbb"> </span>Error&lt;<span style="color:#369">&#39;a</span>&gt;&gt;;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#c00;font-weight:bold">#[derive(Debug, PartialEq)]</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">pub</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">enum</span> <span style="color:#b06;font-weight:bold">Error</span>&lt;<span style="color:#369">&#39;a</span>&gt;<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>NotFound(&amp;<span style="color:#369">&#39;a</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">str</span>),<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">pub</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">struct</span> <span style="color:#b06;font-weight:bold">Book</span>&lt;<span style="color:#369">&#39;a</span>&gt;<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">pub</span><span style="color:#bbb"> </span>name: <span style="color:#080">&amp;</span><span style="color:#369">&#39;a</span> <span style="color:#888;font-weight:bold">str</span>,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">impl</span>&lt;<span style="color:#369">&#39;a</span>&gt;<span style="color:#bbb"> </span>Book&lt;<span style="color:#369">&#39;a</span>&gt;<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// pub(crate) fn get_page_fixed&lt;&#39;b&gt;(&amp;self) -&gt; MyResult&lt;&#39;b, ()&gt; {
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">//     Ok(())
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// }
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// As per Rule 3, the result/error type is now owning the lifetime of the
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// &amp;self.
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">pub</span>(<span style="color:#080;font-weight:bold">crate</span>)<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">get_page</span>(&amp;self)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">MyResult</span>&lt;<span style="color:#038">&#39;_</span>,<span style="color:#bbb"> </span>()&gt;<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#038">Ok</span>(())<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">repro3</span>&lt;<span style="color:#369">&#39;a</span>&gt;()<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">MyResult</span>&lt;<span style="color:#369">&#39;a</span>,<span style="color:#bbb"> </span>()&gt;<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>book<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>Book<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>name: <span style="color:#d20;background-color:#fff0f0">&#34;some book&#34;</span><span style="color:#bbb"> </span>};<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">//     error[E0515]: cannot return value referencing local variable `book`
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">//     --&gt; src/main.rs:61:17
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">//      |
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">//   61 |     let _page = book.get_page()?;
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">//      |                 ----^^^^^^^^^^^^
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">//      |                 |
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">//      |                 returns a value referencing data owned by the current function
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">//      |                 `book` is borrowed here
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// As per Rule 3, get_page() return type is bound to the book lifetime. What
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// this means is, if we call this method and try to propagate the returned
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// error(using the ? operator), we are accidentally trying to outlive the
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// lifetime of book object.
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>_page<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>book.get_page()?;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// For the above get_page() example, the fix is to not tie the lifetime of
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// MyResult to the &amp;self, instead we have to declare it as shown in
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// get_page_fixed() with different lifetime parameter.
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#038">Ok</span>(())<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">main</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>repro1();<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>repro2();<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>repro3();<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div>
+</main>
+
+  <footer>
+  
+<script defer src="/js/center-img.js"></script>
+
+
+
+
+
+
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2025 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+
