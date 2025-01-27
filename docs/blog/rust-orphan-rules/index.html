@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rust: Orphan Rules | Vineel Kovvuri</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/presentations/">Presentations</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Rust: Orphan Rules</span></h1>
+
+<h2 class="date">2025/01/26</h2>
+</div>
+
+<main>
+<h2 id="rust-orphan-rules">Rust: Orphan Rules</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">use</span><span style="color:#bbb"> </span>std::fmt;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">use</span><span style="color:#bbb"> </span>std::ops;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">struct</span> <span style="color:#b06;font-weight:bold">Foo</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">trait</span><span style="color:#bbb"> </span>FooTrait<span style="color:#bbb"> </span>{}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#888">// The orphan rule prevents implementing a trait for a type unless:
+</span></span></span><span style="display:flex;"><span><span style="color:#888">// 1. You own the trait, or
+</span></span></span><span style="display:flex;"><span><span style="color:#888">// 2. You own the type, or
+</span></span></span><span style="display:flex;"><span><span style="color:#888">// 3. Both the trait and the type are local to your crate.
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#888">//------------------------------------------------------------------------------
+</span></span></span><span style="display:flex;"><span><span style="color:#888">// Example 1: Violates all the rules
+</span></span></span><span style="display:flex;"><span><span style="color:#888">// error[E0117]: only traits defined in the current crate can be implemented for types defined outside of the crate
+</span></span></span><span style="display:flex;"><span><span style="color:#888">//   --&gt; src/main.rs:14:1
+</span></span></span><span style="display:flex;"><span><span style="color:#888">//    |
+</span></span></span><span style="display:flex;"><span><span style="color:#888">// 14 | impl fmt::Display for Vec&lt;u32&gt; {
+</span></span></span><span style="display:flex;"><span><span style="color:#888">//    | ^^^^^^^^^^^^^^^^^^^^^^--------
+</span></span></span><span style="display:flex;"><span><span style="color:#888">//    | |                     |
+</span></span></span><span style="display:flex;"><span><span style="color:#888">//    | |                     `Vec` is not defined in the current crate
+</span></span></span><span style="display:flex;"><span><span style="color:#888">//    | impl doesn&#39;t use only types from inside the current crate
+</span></span></span><span style="display:flex;"><span><span style="color:#888">//    |
+</span></span></span><span style="display:flex;"><span><span style="color:#888">//    = note: define and implement a trait or new type instead
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span>fmt::Display<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span><span style="color:#038">Vec</span>&lt;<span style="color:#888;font-weight:bold">u32</span>&gt;<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">fmt</span>(&amp;self,<span style="color:#bbb"> </span>f: <span style="color:#080">&amp;</span><span style="color:#b06;font-weight:bold">mut</span><span style="color:#bbb"> </span>fmt::Formatter&lt;<span style="color:#038">&#39;_</span>&gt;)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">fmt</span>::<span style="color:#038">Result</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>write!(f,<span style="color:#bbb"> </span><span style="color:#d20;background-color:#fff0f0">&#34;{:?}&#34;</span>,<span style="color:#bbb"> </span>self)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#888">//------------------------------------------------------------------------------
+</span></span></span><span style="display:flex;"><span><span style="color:#888">// Example 2: Satisfies Rule 1 - So no violation
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span>FooTrait<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span><span style="color:#038">Vec</span>&lt;<span style="color:#888;font-weight:bold">u32</span>&gt;<span style="color:#bbb"> </span>{}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#888">//------------------------------------------------------------------------------
+</span></span></span><span style="display:flex;"><span><span style="color:#888">// Example 3: Violates all the rules. Because Add, u32 and Vec are all not
+</span></span></span><span style="display:flex;"><span><span style="color:#888">// implemented locally
+</span></span></span><span style="display:flex;"><span><span style="color:#888">// error[E0117]: only traits defined in the current crate can be implemented for types defined outside of the crate
+</span></span></span><span style="display:flex;"><span><span style="color:#888">//   --&gt; src/main.rs:25:1
+</span></span></span><span style="display:flex;"><span><span style="color:#888">//    |
+</span></span></span><span style="display:flex;"><span><span style="color:#888">// 25 | impl ops::Add&lt;u32&gt; for Vec&lt;u32&gt; {
+</span></span></span><span style="display:flex;"><span><span style="color:#888">//    | ^^^^^-------------^^^^^--------
+</span></span></span><span style="display:flex;"><span><span style="color:#888">//    | |    |                 |
+</span></span></span><span style="display:flex;"><span><span style="color:#888">//    | |    |                 `Vec` is not defined in the current crate
+</span></span></span><span style="display:flex;"><span><span style="color:#888">//    | |    `u32` is not defined in the current crate
+</span></span></span><span style="display:flex;"><span><span style="color:#888">//    | impl doesn&#39;t use only types from inside the current crate
+</span></span></span><span style="display:flex;"><span><span style="color:#888">//    |
+</span></span></span><span style="display:flex;"><span><span style="color:#888">//    = note: define and implement a trait or new type instead
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span>ops::Add&lt;<span style="color:#888;font-weight:bold">u32</span>&gt;<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span><span style="color:#038">Vec</span>&lt;<span style="color:#888;font-weight:bold">u32</span>&gt;<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">type</span> <span style="color:#b06;font-weight:bold">Output</span><span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">u32</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">add</span>(self,<span style="color:#bbb"> </span>rhs: <span style="color:#888;font-weight:bold">u32</span>)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">Self</span>::Output<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>todo!()<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#888">//------------------------------------------------------------------------------
+</span></span></span><span style="display:flex;"><span><span style="color:#888">// Example 4: Satisfies Rule 1 - So no violation - Add&lt;Foo&gt; makes the resulting
+</span></span></span><span style="display:flex;"><span><span style="color:#888">// trait(Add&lt;Foo&gt;) local.
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span>ops::Add&lt;Foo&gt;<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span><span style="color:#038">Vec</span>&lt;<span style="color:#888;font-weight:bold">u32</span>&gt;<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">type</span> <span style="color:#b06;font-weight:bold">Output</span><span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>Foo;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">add</span>(self,<span style="color:#bbb"> </span>rhs: <span style="color:#b06;font-weight:bold">Foo</span>)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">Self</span>::Output<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>todo!()<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div>
+</main>
+
+  <footer>
+  
+<script defer src="/js/center-img.js"></script>
+
+
+
+
+
+
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2025 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+
