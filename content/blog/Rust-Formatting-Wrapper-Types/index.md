@@ -1,6 +1,6 @@
 ---
 title: "Rust: Formatting Wrapper Types"
-date: 2025-01-17 14:03:43
+date: 2025-01-30 18:26:41
 tags: ['Rust']
 ---
 
