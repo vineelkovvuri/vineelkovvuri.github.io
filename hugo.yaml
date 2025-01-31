@@ -32,11 +32,14 @@ menu:
     - name: Tags
       url: "tags/"
       weight: 4
+    - name: Bookmarks
+      url: "bookmarks/"
+      weight: 5
     - name: Subscribe
       url: "index.xml"
 
 params:
-  description: "A website built through Hugo and blogdown."
+  description: "A website built using Hugo Xmin."
   footer: "&copy; Vineel Kumar Reddy Kovvuri 2017 -- {Year} ❤️ [Hugo Xmin](https://xmin.yihui.org/)"
 
 # We are using hugo supported default syntax highlighter.
