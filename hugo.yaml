@@ -35,8 +35,8 @@ menu:
     - name: Bookmarks
       url: "bookmarks/"
       weight: 5
-    - name: Subscribe
-      url: "index.xml"
+    # - name: Subscribe
+    #   url: "index.xml"
 
 params:
   description: "A website built using Hugo Xmin."

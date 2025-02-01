@@ -2,123 +2,123 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>//localhost:9999/blog/</loc>
+    <loc>/blog/</loc>
     <lastmod>2025-01-30T18:26:41+00:00</lastmod>
   </url><url>
-    <loc>//localhost:9999/</loc>
+    <loc>/</loc>
     <lastmod>2025-01-30T18:26:41+00:00</lastmod>
   </url><url>
-    <loc>//localhost:9999/tags/rust/</loc>
+    <loc>/tags/rust/</loc>
     <lastmod>2025-01-30T18:26:41+00:00</lastmod>
   </url><url>
-    <loc>//localhost:9999/blog/rust-formatting-wrapper-types/</loc>
+    <loc>/blog/rust-formatting-wrapper-types/</loc>
     <lastmod>2025-01-30T18:26:41+00:00</lastmod>
   </url><url>
-    <loc>//localhost:9999/tags/</loc>
+    <loc>/tags/</loc>
     <lastmod>2025-01-30T18:26:41+00:00</lastmod>
   </url><url>
-    <loc>//localhost:9999/blog/rust-orphan-rules/</loc>
+    <loc>/blog/rust-orphan-rules/</loc>
     <lastmod>2025-01-26T23:01:20+00:00</lastmod>
   </url><url>
-    <loc>//localhost:9999/blog/rust-function-lifetime-ellison-rules/</loc>
+    <loc>/blog/rust-function-lifetime-ellison-rules/</loc>
     <lastmod>2025-01-23T00:34:26+00:00</lastmod>
   </url><url>
-    <loc>//localhost:9999/blog/rust-usage-of-cow/</loc>
+    <loc>/blog/rust-usage-of-cow/</loc>
     <lastmod>2025-01-17T14:03:43+00:00</lastmod>
   </url><url>
-    <loc>//localhost:9999/blog/rust-from-vs-into-traits-part-2/</loc>
+    <loc>/blog/rust-from-vs-into-traits-part-2/</loc>
     <lastmod>2025-01-14T23:33:54+00:00</lastmod>
   </url><url>
-    <loc>//localhost:9999/blog/rust-aligned-vs-unaligned-memory-access/</loc>
+    <loc>/blog/rust-aligned-vs-unaligned-memory-access/</loc>
     <lastmod>2025-01-14T19:05:52+00:00</lastmod>
   </url><url>
-    <loc>//localhost:9999/blog/rust-sharing-objects/</loc>
+    <loc>/blog/rust-sharing-objects/</loc>
     <lastmod>2025-01-07T00:17:07-07:00</lastmod>
   </url><url>
-    <loc>//localhost:9999/blog/rust-from-vs-into-traits/</loc>
+    <loc>/blog/rust-from-vs-into-traits/</loc>
     <lastmod>2025-01-06T06:17:07-07:00</lastmod>
   </url><url>
-    <loc>//localhost:9999/blog/compiler-internals/</loc>
+    <loc>/blog/compiler-internals/</loc>
     <lastmod>2019-11-01T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>//localhost:9999/tags/compilers/</loc>
+    <loc>/tags/compilers/</loc>
     <lastmod>2019-11-01T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>//localhost:9999/blog/uart-from-avr-to-linux-to-logic-analyzer/</loc>
+    <loc>/blog/uart-from-avr-to-linux-to-logic-analyzer/</loc>
     <lastmod>2019-09-20T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>//localhost:9999/blog/what-does-it-take-to-write-an-emulator-in-java/</loc>
+    <loc>/blog/what-does-it-take-to-write-an-emulator-in-java/</loc>
     <lastmod>2019-04-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>//localhost:9999/blog/usermode-breakpoints-from-kd/</loc>
+    <loc>/blog/usermode-breakpoints-from-kd/</loc>
     <lastmod>2019-03-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>//localhost:9999/blog/signed-unsigned-integer-arithmetic-in-c/</loc>
+    <loc>/blog/signed-unsigned-integer-arithmetic-in-c/</loc>
     <lastmod>2019-02-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>//localhost:9999/blog/pdb-files-the-glue-between-the-binary-file-and-source-code/</loc>
+    <loc>/blog/pdb-files-the-glue-between-the-binary-file-and-source-code/</loc>
     <lastmod>2019-01-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>//localhost:9999/blog/pci-express-basics-101/</loc>
+    <loc>/blog/pci-express-basics-101/</loc>
     <lastmod>2018-12-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>//localhost:9999/blog/lib-files-101/</loc>
+    <loc>/blog/lib-files-101/</loc>
     <lastmod>2018-11-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>//localhost:9999/blog/how-do-breakpoints-work-in-debuggers/</loc>
+    <loc>/blog/how-do-breakpoints-work-in-debuggers/</loc>
     <lastmod>2018-10-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>//localhost:9999/blog/a-newbies-introduction-to-compilation-process-and-reverse-engineering/</loc>
+    <loc>/blog/a-newbies-introduction-to-compilation-process-and-reverse-engineering/</loc>
     <lastmod>2018-08-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>//localhost:9999/tags/asm/</loc>
+    <loc>/tags/asm/</loc>
     <lastmod>2018-08-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>//localhost:9999/tags/c/</loc>
+    <loc>/tags/c/</loc>
     <lastmod>2018-08-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>//localhost:9999/tags/reversing/</loc>
+    <loc>/tags/reversing/</loc>
     <lastmod>2018-08-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>//localhost:9999/blog/c-case-studies/f/</loc>
+    <loc>/blog/c-case-studies/f/</loc>
     <lastmod>2018-07-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>//localhost:9999/bookmarks/</loc>
+    <loc>/bookmarks/</loc>
   </url><url>
-    <loc>//localhost:9999/courses/c/</loc>
+    <loc>/courses/c/</loc>
   </url><url>
-    <loc>//localhost:9999/categories/</loc>
+    <loc>/categories/</loc>
   </url><url>
-    <loc>//localhost:9999/courses/</loc>
+    <loc>/courses/</loc>
   </url><url>
-    <loc>//localhost:9999/bookmarks/git-config/</loc>
+    <loc>/bookmarks/git-config/</loc>
   </url><url>
-    <loc>//localhost:9999/presentations/git-part-1/</loc>
+    <loc>/presentations/git-part-1/</loc>
   </url><url>
-    <loc>//localhost:9999/presentations/git-part-2/</loc>
+    <loc>/presentations/git-part-2/</loc>
   </url><url>
-    <loc>//localhost:9999/presentations/git-part-3/</loc>
+    <loc>/presentations/git-part-3/</loc>
   </url><url>
-    <loc>//localhost:9999/courses/java/</loc>
+    <loc>/courses/java/</loc>
   </url><url>
-    <loc>//localhost:9999/courses/linux/</loc>
+    <loc>/courses/linux/</loc>
   </url><url>
-    <loc>//localhost:9999/presentations/</loc>
+    <loc>/presentations/</loc>
   </url><url>
-    <loc>//localhost:9999/courses/python/</loc>
+    <loc>/courses/python/</loc>
   </url><url>
-    <loc>//localhost:9999/presentations/vscode/</loc>
+    <loc>/presentations/vscode/</loc>
   </url><url>
-    <loc>//localhost:9999/vlog/</loc>
+    <loc>/vlog/</loc>
   </url><url>
-    <loc>//localhost:9999/bookmarks/vscode-setting-json/</loc>
+    <loc>/bookmarks/vscode-setting-json/</loc>
   </url><url>
-    <loc>//localhost:9999/bookmarks/windows-11-de-bloat-script/</loc>
+    <loc>/bookmarks/windows-11-de-bloat-script/</loc>
   </url><url>
-    <loc>//localhost:9999/bookmarks/windows-11-path-setup/</loc>
+    <loc>/bookmarks/windows-11-path-setup/</loc>
   </url><url>
-    <loc>//localhost:9999/bookmarks/windows-11-registry-tweaks/</loc>
+    <loc>/bookmarks/windows-11-registry-tweaks/</loc>
   </url><url>
-    <loc>//localhost:9999/bookmarks/windows-11-winget/</loc>
+    <loc>/bookmarks/windows-11-winget/</loc>
   </url>
 </urlset>
