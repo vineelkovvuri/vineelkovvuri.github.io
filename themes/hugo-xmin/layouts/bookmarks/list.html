@@ -1,0 +1,19 @@
+{{ partial "header.html" . }}
+
+{{ .Content }}
+
+<h1>Bookmarks</h1>
+
+<ul>
+  {{ $pages := .Pages }}
+  {{ if .IsHome }}{{ $pages = .Site.RegularPages }}{{ end }}
+  {{ range (where $pages "Section" "!=" "") }}
+  {{if eq .Section "bookmarks"}}
+    <li>
+      <a href="{{ .RelPermalink }}">{{ .Title | markdownify }}</a>
+    </li>
+  {{ end }}
+  {{ end }}
+</ul>
+
+{{ partial "footer.html" . }}

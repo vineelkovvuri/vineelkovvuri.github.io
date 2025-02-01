@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=9999&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Git Config | Vineel Kovvuri</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/presentations/">Presentations</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Git Config</span></h1>
+
+
+</div>
+
+<main>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ini" data-lang="ini"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[user]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">name</span> = <span style="color:#d20;background-color:#fff0f0">Vineel Kovvuri
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    email = vineel.kovvuri@gmail.com</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[alias]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">st</span> = <span style="color:#d20;background-color:#fff0f0">status
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    br = branch -vv
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    co = checkout
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    cp = cherry-pick</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[diff]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">tool</span> = <span style="color:#d20;background-color:#fff0f0">meld
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    colormoved = &#34;default&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    colormovedws = &#34;allow-indentation-change&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[difftool]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">prompt</span> = <span style="color:#d20;background-color:#fff0f0">false</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[merge]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">tool</span> = <span style="color:#d20;background-color:#fff0f0">meld</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[mergetool]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">prompt</span> = <span style="color:#d20;background-color:#fff0f0">false</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[color]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">ui</span> = <span style="color:#d20;background-color:#fff0f0">auto</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[difftool &#34;bc&#34;]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">path</span> = <span style="color:#d20;background-color:#fff0f0">c:/Program Files/Beyond Compare 4/bcomp.exe</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[mergetool &#34;bc&#34;]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">path</span> = <span style="color:#d20;background-color:#fff0f0">c:/Program Files/Beyond Compare 4/bcomp.exe
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    keepBackup = false</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[difftool &#34;meld&#34;]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">path</span> = <span style="color:#d20;background-color:#fff0f0">&#34;C:/Program Files (x86)/Meld/meld/meld.exe&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[mergetool &#34;meld&#34;]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">path</span> = <span style="color:#d20;background-color:#fff0f0">&#34;C:/Program Files (x86)/Meld/meld/meld.exe&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    keepBackup = false</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[core]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">editor</span> = <span style="color:#d20;background-color:#fff0f0">notepad4
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    autocrlf = false</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[help]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">autocorrect</span> = <span style="color:#d20;background-color:#fff0f0">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[safe]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">directory</span> = <span style="color:#d20;background-color:#fff0f0">*</span>
+</span></span></code></pre></div>
+</main>
+
+  <footer>
+  
+<script defer src="/js/center-img.js"></script>
+
+
+
+
+
+
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2025 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+

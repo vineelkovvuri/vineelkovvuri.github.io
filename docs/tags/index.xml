@@ -2,45 +2,45 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on Vineel Kovvuri</title>
-    <link>/tags/</link>
+    <link>//localhost:9999/tags/</link>
     <description>Recent content in Tags on Vineel Kovvuri</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 30 Jan 2025 18:26:41 +0000</lastBuildDate>
-    <atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="//localhost:9999/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Rust</title>
-      <link>/tags/rust/</link>
+      <link>//localhost:9999/tags/rust/</link>
       <pubDate>Thu, 30 Jan 2025 18:26:41 +0000</pubDate>
-      <guid>/tags/rust/</guid>
+      <guid>//localhost:9999/tags/rust/</guid>
       <description></description>
     </item>
     <item>
       <title>Compilers</title>
-      <link>/tags/compilers/</link>
+      <link>//localhost:9999/tags/compilers/</link>
       <pubDate>Fri, 01 Nov 2019 18:33:07 -0700</pubDate>
-      <guid>/tags/compilers/</guid>
+      <guid>//localhost:9999/tags/compilers/</guid>
       <description></description>
     </item>
     <item>
       <title>Asm</title>
-      <link>/tags/asm/</link>
+      <link>//localhost:9999/tags/asm/</link>
       <pubDate>Fri, 10 Aug 2018 18:33:07 -0700</pubDate>
-      <guid>/tags/asm/</guid>
+      <guid>//localhost:9999/tags/asm/</guid>
       <description></description>
     </item>
     <item>
       <title>C</title>
-      <link>/tags/c/</link>
+      <link>//localhost:9999/tags/c/</link>
       <pubDate>Fri, 10 Aug 2018 18:33:07 -0700</pubDate>
-      <guid>/tags/c/</guid>
+      <guid>//localhost:9999/tags/c/</guid>
       <description></description>
     </item>
     <item>
       <title>Reversing</title>
-      <link>/tags/reversing/</link>
+      <link>//localhost:9999/tags/reversing/</link>
       <pubDate>Fri, 10 Aug 2018 18:33:07 -0700</pubDate>
-      <guid>/tags/reversing/</guid>
+      <guid>//localhost:9999/tags/reversing/</guid>
       <description></description>
     </item>
   </channel>

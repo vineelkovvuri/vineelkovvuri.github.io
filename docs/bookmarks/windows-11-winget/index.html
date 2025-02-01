@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=9999&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Windows 11 WinGet | Vineel Kovvuri</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/presentations/">Presentations</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Windows 11 WinGet</span></h1>
+
+
+</div>
+
+<main>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>:: Install winget from store
+</span></span><span style="display:flex;"><span>:: winget search -q <span style="color:#d20;background-color:#fff0f0">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>:: Essentials
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;voidtools.Everything&#34;</span>                      --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;WinsiderSS.SystemInformer&#34;</span>                 --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Google.Chrome&#34;</span>                             --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Mozilla.Firefox&#34;</span>                           --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.VisualStudioCode&#34;</span>                --accept-source-agreements   --accept-package-agreements --override <span style="color:#d20;background-color:#fff0f0">&#34;/VERYSILENT /SP- /MERGETASKS=&#39;!runcode,!desktopicon,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath&#39;&#34;</span>
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;SublimeHQ.SublimeText.4&#34;</span>                   --accept-source-agreements   --accept-package-agreements --override  <span style="color:#d20;background-color:#fff0f0">&#34;/VERYSILENT /SP- /MERGETASKS=contextentry&#34;</span>
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;SumatraPDF.SumatraPDF&#34;</span>                     --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;AndrewZhezherun.WinDjView&#34;</span>                 --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;7zip.7zip&#34;</span>                                 --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;FastStone.Capture&#34;</span>                         --accept-source-agreements   --accept-package-agreements  &amp; REM vineel <span style="color:#038">XPCMI-ICDFU</span>-JVKNW-OGZLO
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;9NKSQGP7F2NH&#34;</span>                              --accept-source-agreements   --accept-package-agreements &amp; REM Whatsapp
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;mRemoteNG.mRemoteNG&#34;</span>                       --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Daum.PotPlayer&#34;</span>                            --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.PowerToys&#34;</span>                       --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;9MSPC6MP8FM4&#34;</span>                              --accept-source-agreements   --accept-package-agreements &amp; REM Microsoft Whiteboard
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;tailscale.tailscale&#34;</span>                       --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Discord.Discord&#34;</span>                           --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>:: Development
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Git.Git&#34;</span>                                   --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Github.cli&#34;</span>                                --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.VisualStudio.2022.Community&#34;</span>     --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Rustlang.Rustup&#34;</span>                           --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Embarcadero.Dev-C++&#34;</span>                       --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;JetBrains.IntelliJIDEA.Community&#34;</span>          --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Insomnia.Insomnia&#34;</span>                         --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Meld.Meld&#34;</span>                                 --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h <span style="color:#d20;background-color:#fff0f0">&#34;python3&#34;</span>                                        --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;LLVM.LLVM&#34;</span>                                 --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Kitware.CMake&#34;</span>                             --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.Azure.StorageExplorer&#34;</span>           --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.PerfView&#34;</span>                        --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.WinDbg&#34;</span>                          --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.TimeTravelDebugging&#34;</span>             --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;MSYS2.MSYS2&#34;</span>                               --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>:: pacman -S <span style="color:#038">mingw-w64</span>-ucrt-x86_64-toolchain
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Nlitesoft.NTLite&#34;</span>                          --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;OpenJS.NodeJS.LTS&#34;</span>                         --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;ScooterSoftware.BeyondCompare4&#34;</span>            --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Telerik.Fiddler.Classic&#34;</span>                   --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;WiresharkFoundation.Wireshark&#34;</span>             --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Zoom.Zoom&#34;</span>                                 --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Hex-Rays.IDA.Free&#34;</span>                         --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Oracle.JDK.23&#34;</span>                             --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>rem winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;MITMediaLab.Scratch.3&#34;</span>                     --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;eSpeak-NG.eSpeak-NG&#34;</span>                       --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>:: Entertainment
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;VideoLAN.VLC&#34;</span>                              --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>:: Utilities
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;AntibodySoftware.WizTree&#34;</span>                  --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;HandBrake.HandBrake&#34;</span>                       --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;REALiX.HWiNFO&#34;</span>                             --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Rufus.Rufus&#34;</span>                               --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;ventoy.Ventoy&#34;</span>                             --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>:: Restricted
+</span></span><span style="display:flex;"><span>:: winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;qBittorrent.qBittorrent&#34;</span>                  --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>:: winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;TeamViewer.TeamViewer&#34;</span>                    --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>:: winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;TorProject.TorBrowser&#34;</span>                    --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>:: Optional
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.AzureCLI&#34;</span>                        --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;9P7KNL5RWT25&#34;</span>                              --accept-source-agreements   --accept-package-agreements &amp; REM Sysinternals Suite
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Alacritty.Alacritty&#34;</span>                       --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;CrystalDewWorld.CrystalDiskMark&#34;</span>           --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;GIMP.GIMP&#34;</span>                                 --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Postman.Postman&#34;</span>                           --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;HeidiSQL.HeidiSQL&#34;</span>                         --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;DBBrowserForSQLite.DBBrowserForSQLite&#34;</span>     --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Apple.iTunes&#34;</span>                              --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Inkscape.Inkscape&#34;</span>                         --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;KDE.Krita&#34;</span>                                 --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;KiCad.KiCad&#34;</span>                               --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;WinSCP.WinSCP&#34;</span>                             --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.PerfView&#34;</span>                        --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;SoftwareFreedomConservancy.QEMU&#34;</span>           --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;AngusJohnson.ResourceHacker&#34;</span>               --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;DigiDNA.iMazingHEICConverter&#34;</span>              --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Audacity.Audacity&#34;</span>                         --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;XK72.Charles&#34;</span>                              --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;LIGHTNINGUK.ImgBurn&#34;</span>                       --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;icsharpcode.ILSpy&#34;</span>                         --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;TechPowerUp.GPU-Z&#34;</span>                         --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.Azure.AZCopy.10&#34;</span>                 --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Mp3tag.Mp3tag&#34;</span>                             --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;cURL.cURL&#34;</span>                                 --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;sharkdp.fd&#34;</span>                                --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;BurntSushi.ripgrep.MSVC&#34;</span>                   --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;zyedidia.micro&#34;</span>                            --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;yt-dlp.yt-dlp&#34;</span>                             --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;jqlang.jq&#34;</span>                                 --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;zufuliu.notepad4&#34;</span>                          --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;CPUID.CPU-Z&#34;</span>                               --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Gyan.FFmpeg&#34;</span>                               --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;junegunn.fzf&#34;</span>                              --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Cockos.LICEcap&#34;</span>                            --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;MHNexus.HxD&#34;</span>                               --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.PowerShell&#34;</span>                      --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Oracle.VirtualBox&#34;</span>                         --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>::winget upgrade --all
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>:: Not needed anymore
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Adobe.Acrobat.Reader.64-bit&#34;</span>               --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;PuTTY.PuTTY&#34;</span>                               --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;TTYPlus.MTPutty&#34;</span>                           --accept-source-agreements   --accept-package-agreements
+</span></span></code></pre></div>
+</main>
+
+  <footer>
+  
+<script defer src="/js/center-img.js"></script>
+
+
+
+
+
+
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2025 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+
