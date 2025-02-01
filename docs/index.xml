@@ -107,13 +107,6 @@
       <description>&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;&#xA;&lt;p&gt;Have you ever wondered how a debugger magically gets you to the correct pdb and&#xA;correct sources when debugging an application? This article talks exactly that in&#xA;the context of Windbg.&lt;/p&gt;&#xA;&lt;p&gt;As you might be aware of, PDB files(also called as symbol files) is the glue&#xA;between your application binary and the source code. There are two key Environment&#xA;variables which configures Windbg about where to look for symbols and sources.&#xA;They are _NT_SYMBOL_PATH and _NT_SOURCE_PATH. The _NT_SYMBOL_PATH points&#xA;to the directory containing your PDBs(also called as symbol files) or to a symbol&#xA;server. _NT_SOURCE_PATH points to the directory of your sources or to a source&#xA;server which indexes the soruce files. One important point to remember here is&#xA;one or more source files make up one or more binary files. But each binary will&#xA;have a single PDB unless the source code is modified. This is important because&#xA;Windbg has to perform lot of book keeping to map binary symbols with their source&#xA;locations.&lt;/p&gt;</description>
     </item>
     <item>
-      <title>PCI Express Basics 101</title>
-      <link>/blog/pci-express-basics-101/</link>
-      <pubDate>Mon, 10 Dec 2018 18:33:07 -0700</pubDate>
-      <guid>/blog/pci-express-basics-101/</guid>
-      <description>&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;&#xA;&lt;p&gt;PCI Express: It is a standard which comes in multiple generations and multiple&#xA;lane configurations. PCI-E is in its 5th generation, but mostly the current&#xA;shipping generation is 3rd generation also called as Gen 3. Mainly each&#xA;generation improves upon the previous generation regarding the speed per lane&#xA;supported by the protocol.&lt;/p&gt;&#xA;&lt;p&gt;Below is the table for each generation and lane speed&#xA;For single-lane and 16-lane links, in each direction:&lt;/p&gt;</description>
-    </item>
-    <item>
       <title>Lib Files 101</title>
       <link>/blog/lib-files-101/</link>
       <pubDate>Sat, 10 Nov 2018 18:33:07 -0700</pubDate>
@@ -133,13 +126,6 @@
       <pubDate>Fri, 10 Aug 2018 18:33:07 -0700</pubDate>
       <guid>/blog/a-newbies-introduction-to-compilation-process-and-reverse-engineering/</guid>
       <description>&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;&#xA;&lt;p&gt;Compilers are surely the complex programs of all times. Even today, writing a&#xA;compiler with minimum set of tools is considered to be challenging. This&#xA;tutorial scratches the surface of different compiler phases involved in&#xA;translating a given source code to executable and also shows how this&#xA;information is useful in context of reverse engineering.&lt;/p&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/GNU_Compiler_Collection&#34;&gt;GNU compiler collection&lt;/a&gt;&#xA;provides an excellent set of tools for dissecting the compilation process and to&#xA;understand the working of bits and bytes in the final executable. For this&#xA;tutorial I am using the following tools and considers C language to illustrate&#xA;the examples.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Libspng - C Language Case Study</title>
-      <link>/blog/c-case-studies/f/</link>
-      <pubDate>Tue, 10 Jul 2018 18:33:07 -0700</pubDate>
-      <guid>/blog/c-case-studies/f/</guid>
-      <description>&lt;h1 id=&#34;build-system&#34;&gt;Build System&lt;/h1&gt;&#xA;&lt;p&gt;It uses meson build system to build the library&lt;/p&gt;&#xA;&lt;h1 id=&#34;data-structures&#34;&gt;Data Structures&lt;/h1&gt;&#xA;&lt;p&gt;It is not using any fancy data structures instead it relies on plain array&#xA;of objects and uses the traditional realloc function to expand them.&lt;/p&gt;&#xA;&lt;h1 id=&#34;miscellaneous&#34;&gt;Miscellaneous&lt;/h1&gt;&#xA;&lt;p&gt;All variables are declared as when needed. This deviates from Linux source&#xA;code. In Linux kernel, declarations are done only in the beginning of a new&#xA;scope (either at the start of the function or start of a scope)&lt;/p&gt;</description>
     </item>
     <item>
       <title>C Language Course Structure</title>

@@ -15,12 +15,5 @@
       <guid>/blog/a-newbies-introduction-to-compilation-process-and-reverse-engineering/</guid>
       <description>&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;&#xA;&lt;p&gt;Compilers are surely the complex programs of all times. Even today, writing a&#xA;compiler with minimum set of tools is considered to be challenging. This&#xA;tutorial scratches the surface of different compiler phases involved in&#xA;translating a given source code to executable and also shows how this&#xA;information is useful in context of reverse engineering.&lt;/p&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/GNU_Compiler_Collection&#34;&gt;GNU compiler collection&lt;/a&gt;&#xA;provides an excellent set of tools for dissecting the compilation process and to&#xA;understand the working of bits and bytes in the final executable. For this&#xA;tutorial I am using the following tools and considers C language to illustrate&#xA;the examples.&lt;/p&gt;</description>
     </item>
-    <item>
-      <title>Libspng - C Language Case Study</title>
-      <link>/blog/c-case-studies/f/</link>
-      <pubDate>Tue, 10 Jul 2018 18:33:07 -0700</pubDate>
-      <guid>/blog/c-case-studies/f/</guid>
-      <description>&lt;h1 id=&#34;build-system&#34;&gt;Build System&lt;/h1&gt;&#xA;&lt;p&gt;It uses meson build system to build the library&lt;/p&gt;&#xA;&lt;h1 id=&#34;data-structures&#34;&gt;Data Structures&lt;/h1&gt;&#xA;&lt;p&gt;It is not using any fancy data structures instead it relies on plain array&#xA;of objects and uses the traditional realloc function to expand them.&lt;/p&gt;&#xA;&lt;h1 id=&#34;miscellaneous&#34;&gt;Miscellaneous&lt;/h1&gt;&#xA;&lt;p&gt;All variables are declared as when needed. This deviates from Linux source&#xA;code. In Linux kernel, declarations are done only in the beginning of a new&#xA;scope (either at the start of the function or start of a scope)&lt;/p&gt;</description>
-    </item>
   </channel>
 </rss>
