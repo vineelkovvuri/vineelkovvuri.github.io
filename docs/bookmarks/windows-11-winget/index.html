@@ -20,8 +20,6 @@
       
       <li><a href="/presentations/">Presentations</a></li>
       
-      <li><a href="/tags/">Tags</a></li>
-      
       <li><a href="/bookmarks/">Bookmarks</a></li>
       
     </ul>
@@ -35,10 +33,11 @@
 </div>
 
 <main>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>:: Install winget from store
-</span></span><span style="display:flex;"><span>:: winget search -q <span style="color:#d20;background-color:#fff0f0">&#34;&#34;</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># Install winget from store</span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># winget search -q &#34;&#34;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>:: Essentials
+</span></span><span style="display:flex;"><span><span style="color:#888"># Essentials</span>
 </span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;voidtools.Everything&#34;</span>                      --accept-source-agreements   --accept-package-agreements
 </span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;WinsiderSS.SystemInformer&#34;</span>                 --accept-source-agreements   --accept-package-agreements
 </span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Google.Chrome&#34;</span>                             --accept-source-agreements   --accept-package-agreements
@@ -58,7 +57,7 @@
 </span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Discord.Discord&#34;</span>                           --accept-source-agreements   --accept-package-agreements
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>:: Development
+</span></span><span style="display:flex;"><span><span style="color:#888"># Development</span>
 </span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Git.Git&#34;</span>                                   --accept-source-agreements   --accept-package-agreements
 </span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Github.cli&#34;</span>                                --accept-source-agreements   --accept-package-agreements
 </span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.VisualStudio.2022.Community&#34;</span>     --accept-source-agreements   --accept-package-agreements
@@ -75,7 +74,7 @@
 </span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.WinDbg&#34;</span>                          --accept-source-agreements   --accept-package-agreements
 </span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.TimeTravelDebugging&#34;</span>             --accept-source-agreements   --accept-package-agreements
 </span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;MSYS2.MSYS2&#34;</span>                               --accept-source-agreements   --accept-package-agreements
-</span></span><span style="display:flex;"><span>:: pacman -S <span style="color:#038">mingw-w64</span>-ucrt-x86_64-toolchain
+</span></span><span style="display:flex;"><span><span style="color:#888"># pacman -S mingw-w64-ucrt-x86_64-toolchain</span>
 </span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Nlitesoft.NTLite&#34;</span>                          --accept-source-agreements   --accept-package-agreements
 </span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;OpenJS.NodeJS.LTS&#34;</span>                         --accept-source-agreements   --accept-package-agreements
 </span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;ScooterSoftware.BeyondCompare4&#34;</span>            --accept-source-agreements   --accept-package-agreements
@@ -88,22 +87,22 @@
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;eSpeak-NG.eSpeak-NG&#34;</span>                       --accept-source-agreements   --accept-package-agreements
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>:: Entertainment
+</span></span><span style="display:flex;"><span><span style="color:#888"># Entertainment</span>
 </span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;VideoLAN.VLC&#34;</span>                              --accept-source-agreements   --accept-package-agreements
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>:: Utilities
+</span></span><span style="display:flex;"><span><span style="color:#888"># Utilities</span>
 </span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;AntibodySoftware.WizTree&#34;</span>                  --accept-source-agreements   --accept-package-agreements
 </span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;HandBrake.HandBrake&#34;</span>                       --accept-source-agreements   --accept-package-agreements
 </span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;REALiX.HWiNFO&#34;</span>                             --accept-source-agreements   --accept-package-agreements
 </span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Rufus.Rufus&#34;</span>                               --accept-source-agreements   --accept-package-agreements
 </span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;ventoy.Ventoy&#34;</span>                             --accept-source-agreements   --accept-package-agreements
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>:: Restricted
-</span></span><span style="display:flex;"><span>:: winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;qBittorrent.qBittorrent&#34;</span>                  --accept-source-agreements   --accept-package-agreements
-</span></span><span style="display:flex;"><span>:: winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;TeamViewer.TeamViewer&#34;</span>                    --accept-source-agreements   --accept-package-agreements
-</span></span><span style="display:flex;"><span>:: winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;TorProject.TorBrowser&#34;</span>                    --accept-source-agreements   --accept-package-agreements
+</span></span><span style="display:flex;"><span><span style="color:#888"># Restricted</span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># winget install -h --id &#34;qBittorrent.qBittorrent&#34;                  --accept-source-agreements   --accept-package-agreements</span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># winget install -h --id &#34;TeamViewer.TeamViewer&#34;                    --accept-source-agreements   --accept-package-agreements</span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># winget install -h --id &#34;TorProject.TorBrowser&#34;                    --accept-source-agreements   --accept-package-agreements</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>:: Optional
+</span></span><span style="display:flex;"><span><span style="color:#888"># Optional</span>
 </span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.AzureCLI&#34;</span>                        --accept-source-agreements   --accept-package-agreements
 </span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;9P7KNL5RWT25&#34;</span>                              --accept-source-agreements   --accept-package-agreements &amp; REM Sysinternals Suite
 </span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Alacritty.Alacritty&#34;</span>                       --accept-source-agreements   --accept-package-agreements
@@ -145,9 +144,9 @@
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Oracle.VirtualBox&#34;</span>                         --accept-source-agreements   --accept-package-agreements
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>::winget upgrade --all
+</span></span><span style="display:flex;"><span><span style="color:#888"># winget upgrade --all</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>:: Not needed anymore
+</span></span><span style="display:flex;"><span><span style="color:#888"># Not needed anymore</span>
 </span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;Adobe.Acrobat.Reader.64-bit&#34;</span>               --accept-source-agreements   --accept-package-agreements
 </span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;PuTTY.PuTTY&#34;</span>                               --accept-source-agreements   --accept-package-agreements
 </span></span><span style="display:flex;"><span>winget install -h --id <span style="color:#d20;background-color:#fff0f0">&#34;TTYPlus.MTPutty&#34;</span>                           --accept-source-agreements   --accept-package-agreements

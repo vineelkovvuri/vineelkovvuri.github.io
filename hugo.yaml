@@ -29,9 +29,9 @@ menu:
     - name: Presentations
       url: "presentations/"
       weight: 3
-    - name: Tags
-      url: "tags/"
-      weight: 4
+    # - name: Tags
+    #   url: "tags/"
+    #   weight: 4
     - name: Bookmarks
       url: "bookmarks/"
       weight: 5

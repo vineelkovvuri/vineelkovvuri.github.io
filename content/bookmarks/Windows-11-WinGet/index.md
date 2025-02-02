@@ -3,10 +3,11 @@ title: "Windows 11 WinGet"
 ---
 
 ```powershell
-:: Install winget from store
-:: winget search -q ""
 
-:: Essentials
+# Install winget from store
+# winget search -q ""
+
+# Essentials
 winget install -h --id "voidtools.Everything"                      --accept-source-agreements   --accept-package-agreements
 winget install -h --id "WinsiderSS.SystemInformer"                 --accept-source-agreements   --accept-package-agreements
 winget install -h --id "Google.Chrome"                             --accept-source-agreements   --accept-package-agreements
@@ -26,7 +27,7 @@ winget install -h --id "tailscale.tailscale"                       --accept-sour
 winget install -h --id "Discord.Discord"                           --accept-source-agreements   --accept-package-agreements
 
 
-:: Development
+# Development
 winget install -h --id "Git.Git"                                   --accept-source-agreements   --accept-package-agreements
 winget install -h --id "Github.cli"                                --accept-source-agreements   --accept-package-agreements
 winget install -h --id "Microsoft.VisualStudio.2022.Community"     --accept-source-agreements   --accept-package-agreements
@@ -43,7 +44,7 @@ winget install -h --id "Microsoft.PerfView"                        --accept-sour
 winget install -h --id "Microsoft.WinDbg"                          --accept-source-agreements   --accept-package-agreements
 winget install -h --id "Microsoft.TimeTravelDebugging"             --accept-source-agreements   --accept-package-agreements
 winget install -h --id "MSYS2.MSYS2"                               --accept-source-agreements   --accept-package-agreements
-:: pacman -S mingw-w64-ucrt-x86_64-toolchain
+# pacman -S mingw-w64-ucrt-x86_64-toolchain
 winget install -h --id "Nlitesoft.NTLite"                          --accept-source-agreements   --accept-package-agreements
 winget install -h --id "OpenJS.NodeJS.LTS"                         --accept-source-agreements   --accept-package-agreements
 winget install -h --id "ScooterSoftware.BeyondCompare4"            --accept-source-agreements   --accept-package-agreements
@@ -56,22 +57,22 @@ rem winget install -h --id "MITMediaLab.Scratch.3"                     --accept-
 
 winget install -h --id "eSpeak-NG.eSpeak-NG"                       --accept-source-agreements   --accept-package-agreements
 
-:: Entertainment
+# Entertainment
 winget install -h --id "VideoLAN.VLC"                              --accept-source-agreements   --accept-package-agreements
 
-:: Utilities
+# Utilities
 winget install -h --id "AntibodySoftware.WizTree"                  --accept-source-agreements   --accept-package-agreements
 winget install -h --id "HandBrake.HandBrake"                       --accept-source-agreements   --accept-package-agreements
 winget install -h --id "REALiX.HWiNFO"                             --accept-source-agreements   --accept-package-agreements
 winget install -h --id "Rufus.Rufus"                               --accept-source-agreements   --accept-package-agreements
 winget install -h --id "ventoy.Ventoy"                             --accept-source-agreements   --accept-package-agreements
 
-:: Restricted
-:: winget install -h --id "qBittorrent.qBittorrent"                  --accept-source-agreements   --accept-package-agreements
-:: winget install -h --id "TeamViewer.TeamViewer"                    --accept-source-agreements   --accept-package-agreements
-:: winget install -h --id "TorProject.TorBrowser"                    --accept-source-agreements   --accept-package-agreements
+# Restricted
+# winget install -h --id "qBittorrent.qBittorrent"                  --accept-source-agreements   --accept-package-agreements
+# winget install -h --id "TeamViewer.TeamViewer"                    --accept-source-agreements   --accept-package-agreements
+# winget install -h --id "TorProject.TorBrowser"                    --accept-source-agreements   --accept-package-agreements
 
-:: Optional
+# Optional
 winget install -h --id "Microsoft.AzureCLI"                        --accept-source-agreements   --accept-package-agreements
 winget install -h --id "9P7KNL5RWT25"                              --accept-source-agreements   --accept-package-agreements & REM Sysinternals Suite
 winget install -h --id "Alacritty.Alacritty"                       --accept-source-agreements   --accept-package-agreements
@@ -113,9 +114,9 @@ winget install -h --id "Microsoft.PowerShell"                      --accept-sour
 
 winget install -h --id "Oracle.VirtualBox"                         --accept-source-agreements   --accept-package-agreements
 
-::winget upgrade --all
+# winget upgrade --all
 
-:: Not needed anymore
+# Not needed anymore
 winget install -h --id "Adobe.Acrobat.Reader.64-bit"               --accept-source-agreements   --accept-package-agreements
 winget install -h --id "PuTTY.PuTTY"                               --accept-source-agreements   --accept-package-agreements
 winget install -h --id "TTYPlus.MTPutty"                           --accept-source-agreements   --accept-package-agreements
