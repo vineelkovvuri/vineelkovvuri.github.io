@@ -1,5 +1,6 @@
 ﻿---
 title: "VSCode Setting JSON"
+tags: ['VSCode', 'WindowsSetup']
 ---
 
 ```json

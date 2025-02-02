@@ -1,5 +1,6 @@
 ﻿---
 title: "Windows 11 De Bloat Script"
+tags: ['WindowsSetup']
 ---
 
 ```powershell

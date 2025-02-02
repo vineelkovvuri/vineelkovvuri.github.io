@@ -1,5 +1,6 @@
 ﻿---
 title: "Windows 11 WinGet"
+tags: ['WindowsSetup']
 ---
 
 ```powershell

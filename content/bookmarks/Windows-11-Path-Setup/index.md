@@ -1,5 +1,6 @@
 ﻿---
 title: "Windows 11 Path Setup"
+tags: ['WindowsSetup']
 ---
 
 ```powershell

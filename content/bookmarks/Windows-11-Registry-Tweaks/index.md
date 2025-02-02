@@ -1,5 +1,6 @@
 ﻿---
 title: "Windows 11 Registry Tweaks"
+tags: ['WindowsSetup']
 ---
 
 ```reg

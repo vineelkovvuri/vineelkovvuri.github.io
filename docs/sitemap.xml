@@ -85,6 +85,8 @@
   </url><url>
     <loc>/courses/</loc>
   </url><url>
+    <loc>/tags/git/</loc>
+  </url><url>
     <loc>/bookmarks/git-config/</loc>
   </url><url>
     <loc>/presentations/git-part-1/</loc>
@@ -105,6 +107,8 @@
   </url><url>
     <loc>/vlog/</loc>
   </url><url>
+    <loc>/tags/vscode/</loc>
+  </url><url>
     <loc>/bookmarks/vscode-setting-json/</loc>
   </url><url>
     <loc>/bookmarks/windows-11-de-bloat-script/</loc>
@@ -114,5 +118,7 @@
     <loc>/bookmarks/windows-11-registry-tweaks/</loc>
   </url><url>
     <loc>/bookmarks/windows-11-winget/</loc>
+  </url><url>
+    <loc>/tags/windowssetup/</loc>
   </url>
 </urlset>

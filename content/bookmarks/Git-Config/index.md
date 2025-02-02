@@ -1,5 +1,6 @@
 ﻿---
 title: "Git Config"
+tags: ['Git', 'WindowsSetup']
 ---
 
 ```ini
