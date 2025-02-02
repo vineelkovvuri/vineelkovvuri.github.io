@@ -41,6 +41,25 @@
 
 </div>
 
+
+    <aside class="toc">
+        <h2>Table of Contents</h2>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#why-does-implementing-fromt-on-u-enable-calling-tinto-to-get-u">Why does implementing <code>From&lt;T&gt;</code> on <code>U</code> enable calling <code>T.into()</code> to get <code>U</code>?</a>
+          <ul>
+            <li><a href="#q-wait-a-second-where-does-this-into-come-from-we-didnt-implement-any-into-function-on-a">Q: Wait a second, where does this <code>.into()</code> come from? We didn&rsquo;t implement any <code>into()</code> function on <code>A</code>.</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </aside>
+
+
 <main>
 <h2 id="why-does-implementing-fromt-on-u-enable-calling-tinto-to-get-u">Why does implementing <code>From&lt;T&gt;</code> on <code>U</code> enable calling <code>T.into()</code> to get <code>U</code>?</h2>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span><span style="color:#038">From</span>&lt;A&gt;<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span>B<span style="color:#bbb"> </span>{<span style="color:#bbb">

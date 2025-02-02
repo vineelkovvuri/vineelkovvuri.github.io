@@ -37,6 +37,41 @@
 
 </div>
 
+
+    <aside class="toc">
+        <h2>Table of Contents</h2>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#how-signed-ness-is-represented-in-the-hardware">How signed-ness is represented in the hardware?</a></li>
+    <li><a href="#how-signed-ness-is-interpreted-in-assembly">How signed-ness is interpreted in assembly?</a></li>
+    <li><a href="#signed-vs-unsigned-integers-in-c">Signed vs Unsigned integers in C</a></li>
+    <li><a href="#integer-arithmetic-conversions-in-c">Integer Arithmetic Conversions in C</a>
+      <ul>
+        <li><a href="#rank">Rank</a></li>
+        <li><a href="#integer-promotions">Integer Promotions</a></li>
+        <li><a href="#usual-arithmetic-conversions">Usual arithmetic conversions</a>
+          <ul>
+            <li><a href="#rule-2c-interpretation">Rule 2c interpretation</a></li>
+            <li><a href="#rule-2d-interpretation">Rule 2d interpretation</a></li>
+            <li><a href="#rule-2e-interpretation">Rule 2e interpretation</a></li>
+          </ul>
+        </li>
+        <li><a href="#integer-conversion-matrix-on-llp64-programming-model">Integer conversion matrix on LLP64 Programming Model</a></li>
+      </ul>
+    </li>
+    <li><a href="#references">References</a></li>
+    <li><a href="#binary-representation">Binary representation</a>
+      <ul>
+        <li><a href="#unsigned-numbers">unsigned numbers</a></li>
+        <li><a href="#signed-numbers">signed numbers</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </aside>
+
+
 <main>
 <h1 id="introduction">Introduction</h1>
 <p>This article is about understanding how integer conversions happen in C

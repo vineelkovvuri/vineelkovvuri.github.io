@@ -41,6 +41,35 @@
 
 </div>
 
+
+    <aside class="toc">
+        <h2>Table of Contents</h2>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#rust-formatting-wrapper-types">Rust: Formatting Wrapper Types</a>
+          <ul>
+            <li><a href="#key-problem">Key Problem</a></li>
+            <li><a href="#detailed-explanation">Detailed Explanation</a></li>
+            <li><a href="#fixed-code">Fixed Code</a></li>
+            <li><a href="#why-this-works">Why This Works</a></li>
+            <li><a href="#key-takeaway">Key Takeaway</a></li>
+            <li><a href="#vineel-q-how-is-writefmtr--self0--creating-new-formatting-operation-isnt-the-first-argument-fmtr-the-existing-formatter-with-02-">Vineel: Q: how is write!(fmtr, &ldquo;{}&rdquo;, self.0)  creating new formatting operation isn&rsquo;t the first argument fmtr the existing formatter with :02 ?</a></li>
+            <li><a href="#the-core-issue-formatting-contexts">The Core Issue: <strong>Formatting Contexts</strong></a></li>
+            <li><a href="#why-02-doesnt-propagate">Why <code>{:02}</code> Doesn’t Propagate</a></li>
+            <li><a href="#the-fix-forward-the-existing-formatter">The Fix: <strong>Forward the Existing Formatter</strong></a></li>
+            <li><a href="#analogy-a-chain-of-commands">Analogy: A Chain of Commands</a></li>
+            <li><a href="#key-takeaway-1">Key Takeaway</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </aside>
+
+
 <main>
 <h2 id="rust-formatting-wrapper-types">Rust: Formatting Wrapper Types</h2>
 <p>Today, I came across this blog post <a href="https://mina86.com/2024/fmt-display-impl/">You’re implementing fmt::Display

@@ -44,6 +44,10 @@ params:
 
 # We are using hugo supported default syntax highlighter.
 markup:
+  tableOfContents:
+    endLevel: 3
+    ordered: false
+    startLevel: 1
   highlight:
     codeFences: true
     lineNos: false   # enabling this will cause code not wrap
