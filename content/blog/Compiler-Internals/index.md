@@ -1,10 +1,11 @@
 ---
 title: "Compiler Internals"
 date: 2019-11-01T18:33:07-07:00
+toc: true
 tags: ['Compilers']
 ---
 
-## Basics
+# Basics
 
 ```c
 //a.c
@@ -66,7 +67,7 @@ SECTION HEADER #3
 All 3 functions are groups inside the **.text$mn** section and hence **link
 /dump /section:.text$mn** will have only one header.
 
-## Elimination of unused static functions
+# Elimination of unused static functions
 
 ```C
 //a.c
@@ -101,7 +102,7 @@ int main() {
 Since myadd2 is made static the compiler can for sure know it cannot be used by
 other functions external to this .obj so it removed that function.
 
-## COMDAT and /Gy switch
+# COMDAT and /Gy switch
 
 With /Gy switch the compiler now spits 3 more headers in .text$mn. This is also
 called COMDAT and will be helpful for linker to eliminate dead code more easily.
@@ -187,7 +188,7 @@ SECTION HEADER #5
           8C .text$mn
 ```
 
-## Elimination of unused functions by the linker
+# Elimination of unused functions by the linker
 
 The complete elimination of unused functions in a program can only be done by
 linker because it is the only component which can see through all the

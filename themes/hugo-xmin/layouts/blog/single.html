@@ -16,11 +16,13 @@
 {{ end }}
 </div>
 
-{{ if .TableOfContents }}
-    <aside class="toc">
-        <h2>Table of Contents</h2>
-        {{ .TableOfContents }}
-    </aside>
+{{ if .Params.toc }}
+    {{ if .TableOfContents }}
+        <aside class="toc">
+            <h2>Table of Contents</h2>
+            {{ .TableOfContents }}
+        </aside>
+    {{ end }}
 {{ end }}
 
 <main>

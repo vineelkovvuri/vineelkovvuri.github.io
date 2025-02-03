@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Windows on Vineel Kovvuri</title>
+    <link>/tags/windows/</link>
+    <description>Recent content in Windows on Vineel Kovvuri</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 10 Mar 2019 18:33:07 -0700</lastBuildDate>
+    <atom:link href="/tags/windows/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Setting User Mode Break Points From Kd Aka .process /i Vs .process /r /p</title>
+      <link>/blog/usermode-breakpoints-from-kd/</link>
+      <pubDate>Sun, 10 Mar 2019 18:33:07 -0700</pubDate>
+      <guid>/blog/usermode-breakpoints-from-kd/</guid>
+      <description>&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;&#xA;&lt;p&gt;When performing KD(Kernel Debugging) in Windows with Windbg if you have to set a&#xA;break point in a user mode process we should always use &lt;strong&gt;.process /i address;&#xA;g; .reload /user&lt;/strong&gt;. Lot of good content is written on the&#xA;&lt;a href=&#34;https://www.osronline.com/article.cfm%5Earticle=576.htm&#34;&gt;internet&lt;/a&gt; on this&#xA;command, but nothing seemed to explain why this command should be used instead&#xA;of the familiar &lt;strong&gt;.process /r /p address&lt;/strong&gt;. I would like to shed some light on&#xA;this. Before reading any further I would strongly encourage you to read about it&#xA;from above link. In this article I assume some basic knowledge on how kernel&#xA;debugging is done with Windbg. Also, I would like to start with the following&#xA;question.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

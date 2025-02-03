@@ -1,10 +1,11 @@
 ---
 title: "Rust: From and Into trait - Part 2"
 date: 2025-01-14 23:33:54
+toc: true
 tags: ['Rust']
 ---
 
-## Rust: From and Into trait usage
+# Rust: From and Into trait usage
 
 Knowing how Rust's `From` and `Into` traits work is one part of the story, but
 being able to use them efficiently is another. In this code sample, we will

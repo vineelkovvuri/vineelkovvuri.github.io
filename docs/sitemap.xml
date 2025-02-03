@@ -44,14 +44,32 @@
     <loc>/tags/compilers/</loc>
     <lastmod>2019-11-01T18:33:07-07:00</lastmod>
   </url><url>
+    <loc>/tags/embedded/</loc>
+    <lastmod>2019-09-20T18:33:07-07:00</lastmod>
+  </url><url>
     <loc>/blog/uart-from-avr-to-linux-to-logic-analyzer/</loc>
     <lastmod>2019-09-20T18:33:07-07:00</lastmod>
+  </url><url>
+    <loc>/tags/emulator/</loc>
+    <lastmod>2019-04-10T18:33:07-07:00</lastmod>
+  </url><url>
+    <loc>/tags/java/</loc>
+    <lastmod>2019-04-10T18:33:07-07:00</lastmod>
   </url><url>
     <loc>/blog/what-does-it-take-to-write-an-emulator-in-java/</loc>
     <lastmod>2019-04-10T18:33:07-07:00</lastmod>
   </url><url>
     <loc>/blog/usermode-breakpoints-from-kd/</loc>
     <lastmod>2019-03-10T18:33:07-07:00</lastmod>
+  </url><url>
+    <loc>/tags/windbg/</loc>
+    <lastmod>2019-03-10T18:33:07-07:00</lastmod>
+  </url><url>
+    <loc>/tags/windows/</loc>
+    <lastmod>2019-03-10T18:33:07-07:00</lastmod>
+  </url><url>
+    <loc>/tags/c/</loc>
+    <lastmod>2019-02-10T18:33:07-07:00</lastmod>
   </url><url>
     <loc>/blog/signed-unsigned-integer-arithmetic-in-c/</loc>
     <lastmod>2019-02-10T18:33:07-07:00</lastmod>
@@ -62,6 +80,9 @@
     <loc>/blog/lib-files-101/</loc>
     <lastmod>2018-11-10T18:33:07-07:00</lastmod>
   </url><url>
+    <loc>/tags/debuggers/</loc>
+    <lastmod>2018-10-10T18:33:07-07:00</lastmod>
+  </url><url>
     <loc>/blog/how-do-breakpoints-work-in-debuggers/</loc>
     <lastmod>2018-10-10T18:33:07-07:00</lastmod>
   </url><url>
@@ -69,9 +90,6 @@
     <lastmod>2018-08-10T18:33:07-07:00</lastmod>
   </url><url>
     <loc>/tags/asm/</loc>
-    <lastmod>2018-08-10T18:33:07-07:00</lastmod>
-  </url><url>
-    <loc>/tags/c/</loc>
     <lastmod>2018-08-10T18:33:07-07:00</lastmod>
   </url><url>
     <loc>/tags/reversing/</loc>

@@ -2,6 +2,7 @@
 title: "Pdb Files: The Glue Between The Binary File And Source Code"
 date: 2019-01-10T18:33:07-07:00
 toc: true
+tags: ['Compilers']
 ---
 
 # Introduction

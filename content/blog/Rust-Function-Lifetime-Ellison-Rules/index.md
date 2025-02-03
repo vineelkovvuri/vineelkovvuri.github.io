@@ -1,10 +1,11 @@
 ---
 title: "Rust: Function Lifetime Ellison Rules"
 date: 2025-01-23 00:34:26
+toc: true
 tags: ['Rust']
 ---
 
-## Rust: Function Lifetime Ellison Rules
+# Rust: Function Lifetime Ellison Rules
 
 Lifetime elision in functions
 https://doc.rust-lang.org/reference/lifetime-elision.html#lifetime-elision-in-functions

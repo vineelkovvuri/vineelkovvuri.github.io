@@ -2,6 +2,7 @@
 title: "Setting User Mode Break Points From Kd Aka .process /i Vs .process /r /p"
 date: 2019-03-10T18:33:07-07:00
 toc: true
+tags: ['WinDbg', 'Windows']
 ---
 
 # Introduction

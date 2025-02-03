@@ -1,10 +1,11 @@
 ---
 title: "Rust: Sharing a Single Object Across Multiple Owners"
 date: 2025-01-07T0:17:07-07:00
+toc: true
 tags: ['Rust']
 ---
 
-## Rust: Sharing a Single Object Across Multiple Owners
+# Rust: Sharing a Single Object Across Multiple Owners
 
 Today, I found an interesting way to share a single object(C) among multiple
 owners(A and B)
@@ -75,7 +76,7 @@ fn main() {
 
 Got curious and asked ChatGPT below question:
 
-### Question: Why Part 1 works but not Part 2? What is so special about *mut c_void?
+## Question: Why Part 1 works but not Part 2? What is so special about *mut c_void?
 ```rust
 // Part 1
 let mut common = C { val: 100 };
@@ -96,11 +97,11 @@ let mut a_ptr = &mut a as *mut A as *mut c_void;
 let mut b_ptr = &mut b as *mut B as *mut c_void;
 ```
 
-### Answer(From ChatGPT):
+## Answer(From ChatGPT):
 The distinction lies in how the Rust borrow checker analyzes the lifetimes
 and mutability of references during compilation. Let's break this down:
 
-#### Why Part 1 Works?
+### Why Part 1 Works?
 1. Order of Operations:
     - `a` is created with a mutable reference to `c`.
     - `a_ptr` is cast to a `*mut c_void`. At this point, the borrow checker no
@@ -118,7 +119,7 @@ and mutability of references during compilation. Let's break this down:
     - Since `a` is converted to `a_ptr` (a raw pointer) before `b` is created,
       the borrow checker treats the mutable borrow in `a` as no longer active.
 
-#### Why Part 2 Fails?
+### Why Part 2 Fails?
 1. Simultaneous Mutable Borrows:
     - In this case, both `A` and `B` are holding mutable references to `c` at
       the same time. This violates Rust's borrowing rules, which prohibit
@@ -137,7 +138,7 @@ and mutability of references during compilation. Let's break this down:
         is created, the mutable borrow in `A` is still active, leading to a
         compile-time error.
 
-#### Key Takeaway
+### Key Takeaway
 The difference comes down to when the mutable borrow is considered
 invalidated:
     - In the working code, converting `A` to a raw pointer before creating `B`

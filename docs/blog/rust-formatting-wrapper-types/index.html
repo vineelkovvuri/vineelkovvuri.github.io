@@ -42,36 +42,31 @@
 </div>
 
 
-    <aside class="toc">
-        <h2>Table of Contents</h2>
-        <nav id="TableOfContents">
+    
+        <aside class="toc">
+            <h2>Table of Contents</h2>
+            <nav id="TableOfContents">
   <ul>
-    <li>
-      <ul>
-        <li><a href="#rust-formatting-wrapper-types">Rust: Formatting Wrapper Types</a>
-          <ul>
-            <li><a href="#key-problem">Key Problem</a></li>
-            <li><a href="#detailed-explanation">Detailed Explanation</a></li>
-            <li><a href="#fixed-code">Fixed Code</a></li>
-            <li><a href="#why-this-works">Why This Works</a></li>
-            <li><a href="#key-takeaway">Key Takeaway</a></li>
-            <li><a href="#vineel-q-how-is-writefmtr--self0--creating-new-formatting-operation-isnt-the-first-argument-fmtr-the-existing-formatter-with-02-">Vineel: Q: how is write!(fmtr, &ldquo;{}&rdquo;, self.0)  creating new formatting operation isn&rsquo;t the first argument fmtr the existing formatter with :02 ?</a></li>
-            <li><a href="#the-core-issue-formatting-contexts">The Core Issue: <strong>Formatting Contexts</strong></a></li>
-            <li><a href="#why-02-doesnt-propagate">Why <code>{:02}</code> Doesn’t Propagate</a></li>
-            <li><a href="#the-fix-forward-the-existing-formatter">The Fix: <strong>Forward the Existing Formatter</strong></a></li>
-            <li><a href="#analogy-a-chain-of-commands">Analogy: A Chain of Commands</a></li>
-            <li><a href="#key-takeaway-1">Key Takeaway</a></li>
-          </ul>
-        </li>
-      </ul>
-    </li>
+    <li><a href="#rust-formatting-wrapper-types">Rust: Formatting Wrapper Types</a></li>
+    <li><a href="#key-problem">Key Problem</a></li>
+    <li><a href="#detailed-explanation">Detailed Explanation</a></li>
+    <li><a href="#fixed-code">Fixed Code</a></li>
+    <li><a href="#why-this-works">Why This Works</a></li>
+    <li><a href="#key-takeaway">Key Takeaway</a></li>
+    <li><a href="#vineel-q-how-is-writefmtr--self0--creating-new-formatting-operation-isnt-the-first-argument-fmtr-the-existing-formatter-with-02-">Vineel: Q: how is write!(fmtr, &ldquo;{}&rdquo;, self.0)  creating new formatting operation isn&rsquo;t the first argument fmtr the existing formatter with :02 ?</a></li>
+    <li><a href="#the-core-issue-formatting-contexts">The Core Issue: <strong>Formatting Contexts</strong></a></li>
+    <li><a href="#why-02-doesnt-propagate">Why <code>{:02}</code> Doesn’t Propagate</a></li>
+    <li><a href="#the-fix-forward-the-existing-formatter">The Fix: <strong>Forward the Existing Formatter</strong></a></li>
+    <li><a href="#analogy-a-chain-of-commands">Analogy: A Chain of Commands</a></li>
+    <li><a href="#key-takeaway-1">Key Takeaway</a></li>
   </ul>
 </nav>
-    </aside>
+        </aside>
+    
 
 
 <main>
-<h2 id="rust-formatting-wrapper-types">Rust: Formatting Wrapper Types</h2>
+<h1 id="rust-formatting-wrapper-types">Rust: Formatting Wrapper Types</h1>
 <p>Today, I came across this blog post <a href="https://mina86.com/2024/fmt-display-impl/">You’re implementing fmt::Display
 wrong</a> where the author discusses the
 caveats of implementing the Display trait for wrapper types. I didn’t fully
@@ -112,12 +107,12 @@ helped me grasp it better.</p>
 </span></span></span></code></pre></div><p>DeepSeek R1 has given the best explanation:</p>
 <p>The issue lies in how formatting traits forward formatting parameters. Let&rsquo;s
 break it down:</p>
-<h3 id="key-problem">Key Problem</h3>
+<h1 id="key-problem">Key Problem</h1>
 <p>The <code>{:02}</code> format specifier in <code>FancyHour</code>&rsquo;s implementation <em>does</em> get
 passed to <code>Hour</code>&rsquo;s <code>Display</code> implementation. However, your <code>Hour</code>&rsquo;s
 <code>Display</code> implementation is <em>ignoring</em> these formatting parameters by using
 <code>write!(fmtr, &quot;{}&quot;, self.0)</code> instead of forwarding them.</p>
-<h3 id="detailed-explanation">Detailed Explanation</h3>
+<h1 id="detailed-explanation">Detailed Explanation</h1>
 <ol>
 <li><strong>Formatting Flow</strong>:</li>
 </ol>
@@ -135,7 +130,7 @@ discarding the <code>:02</code> specifier.</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span>self.<span style="color:#00d;font-weight:bold">0.</span>fmt(fmtr)<span style="color:#bbb"> </span><span style="color:#888">// ✅ Forwards existing formatting parameters
 </span></span></span></code></pre></div><p>This forwards the <em>existing</em> <code>Formatter</code> with its <code>:02</code> specifier to the
 <code>u8</code>&rsquo;s implementation.</p>
-<h3 id="fixed-code">Fixed Code</h3>
+<h1 id="fixed-code">Fixed Code</h1>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">use</span><span style="color:#bbb"> </span>core::fmt;<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">struct</span> <span style="color:#b06;font-weight:bold">FancyHour</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
@@ -162,14 +157,14 @@ discarding the <code>:02</code> specifier.</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>hour_of_day<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>FancyHour<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>hour<span style="color:#bbb"> </span>};<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>println!(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>hour_of_day);<span style="color:#bbb"> </span><span style="color:#888">// Now prints &#34;02&#34;
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span>}<span style="color:#bbb">
-</span></span></span></code></pre></div><h3 id="why-this-works">Why This Works</h3>
+</span></span></span></code></pre></div><h1 id="why-this-works">Why This Works</h1>
 <ul>
 <li><code>self.0.fmt(fmtr)</code> preserves the original <code>Formatter</code> with its <code>:02</code> specifier</li>
 <li><code>u8</code>&rsquo;s native <code>Display</code> implementation understands format specifiers like <code>:02</code></li>
 <li>The <code>write!</code> macro in <code>Hour::fmt</code> was creating a <em>new</em> formatting
 operation, discarding the padding request</li>
 </ul>
-<h3 id="key-takeaway">Key Takeaway</h3>
+<h1 id="key-takeaway">Key Takeaway</h1>
 <p>When implementing formatting traits for wrapper types:</p>
 <ul>
 <li>Use <code>.fmt(fmtr)</code> to forward formatting parameters to inner values</li>
@@ -178,10 +173,10 @@ want to reset formatting options</li>
 </ul>
 <p>This preserves the formatting context (width, padding, alignment, etc.)
 requested by the caller.</p>
-<h3 id="vineel-q-how-is-writefmtr--self0--creating-new-formatting-operation-isnt-the-first-argument-fmtr-the-existing-formatter-with-02-">Vineel: Q: how is write!(fmtr, &ldquo;{}&rdquo;, self.0)  creating new formatting operation isn&rsquo;t the first argument fmtr the existing formatter with :02 ?</h3>
+<h1 id="vineel-q-how-is-writefmtr--self0--creating-new-formatting-operation-isnt-the-first-argument-fmtr-the-existing-formatter-with-02-">Vineel: Q: how is write!(fmtr, &ldquo;{}&rdquo;, self.0)  creating new formatting operation isn&rsquo;t the first argument fmtr the existing formatter with :02 ?</h1>
 <p><strong>DeepSeek R1:</strong> You’re absolutely correct to question this—it’s a subtle
 aspect of how Rust’s formatting machinery works. Let’s break it down:</p>
-<h3 id="the-core-issue-formatting-contexts">The Core Issue: <strong>Formatting Contexts</strong></h3>
+<h1 id="the-core-issue-formatting-contexts">The Core Issue: <strong>Formatting Contexts</strong></h1>
 <p>When you use <code>write!(fmtr, &quot;{}&quot;, self.0)</code>, you’re <strong>starting a new
 formatting operation</strong> with its own <em>format specifier</em> (<code>{}</code>), even though
 you’re reusing the same <code>Formatter</code> (<code>fmtr</code>). This new operation overrides
@@ -192,7 +187,7 @@ how to format the arguments.</li>
 <li><strong>Each <code>write!</code> macro call resets the formatting context</strong> for its
 arguments, using the specifiers in its own format string.</li>
 </ol>
-<h3 id="why-02-doesnt-propagate">Why <code>{:02}</code> Doesn’t Propagate</h3>
+<h1 id="why-02-doesnt-propagate">Why <code>{:02}</code> Doesn’t Propagate</h1>
 <p>In your code:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span>fmt::Display<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span>FancyHour<span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">fmt</span>(&amp;self,<span style="color:#bbb"> </span>fmtr: <span style="color:#080">&amp;</span><span style="color:#b06;font-weight:bold">mut</span><span style="color:#bbb"> </span>fmt::Formatter)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">fmt</span>::<span style="color:#038">Result</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
@@ -213,7 +208,7 @@ arguments, using the specifiers in its own format string.</li>
 <li>But <code>Hour::fmt</code> then starts a <strong>new formatting operation</strong> with <code>&quot;{}&quot;</code>,
 which resets the specifier to default (ignoring <code>:02</code>).</li>
 </ul>
-<h3 id="the-fix-forward-the-existing-formatter">The Fix: <strong>Forward the Existing Formatter</strong></h3>
+<h1 id="the-fix-forward-the-existing-formatter">The Fix: <strong>Forward the Existing Formatter</strong></h1>
 <p>Instead of starting a new formatting operation with <code>write!</code>, directly
 delegate formatting to the inner <code>u8</code>’s <code>fmt</code> method:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span>fmt::Display<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span>Hour<span style="color:#bbb"> </span>{<span style="color:#bbb">
@@ -224,7 +219,7 @@ delegate formatting to the inner <code>u8</code>’s <code>fmt</code> method:</p
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
 </span></span></span></code></pre></div><p>This preserves the original formatting parameters (like <code>:02</code>) because it
 doesn’t reset the context with a new format string.</p>
-<h3 id="analogy-a-chain-of-commands">Analogy: A Chain of Commands</h3>
+<h1 id="analogy-a-chain-of-commands">Analogy: A Chain of Commands</h1>
 <p>Imagine the <code>Formatter</code> is a memo being passed between people:</p>
 <ol>
 <li><strong><code>FancyHour</code> writes</strong>: &ldquo;Format this hour with 2 digits, padded with
@@ -236,7 +231,7 @@ request.</li>
 </ol>
 <p>By using <code>self.0.fmt(fmtr)</code>, <code>Hour</code> simply forwards the original memo
 (<code>:02</code>) to <code>u8</code>.</p>
-<h3 id="key-takeaway-1">Key Takeaway</h3>
+<h1 id="key-takeaway-1">Key Takeaway</h1>
 <ul>
 <li><strong><code>write!(fmtr, &quot;{}&quot;, ...)</code></strong> creates a <strong>new formatting operation</strong> with
 its own specifiers.</li>

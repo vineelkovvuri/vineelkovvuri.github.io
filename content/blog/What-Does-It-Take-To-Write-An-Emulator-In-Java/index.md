@@ -2,6 +2,7 @@
 title: "What Does It Take To Write An Emulator In Java?"
 date: 2019-04-10T18:33:07-07:00
 toc: true
+tags: ['Java', 'Emulator']
 ---
 
 # Introduction

@@ -1,10 +1,11 @@
 ---
 title: "Rust: Usage of Cow(Clone on Write)"
 date: 2025-01-17 14:03:43
+toc: true
 tags: ['Rust']
 ---
 
-## Rust: Usage of Cow(Clone on Write)
+# Rust: Usage of Cow(Clone on Write)
 
 Today, After reading following blog
 post(https://hermanradtke.com/2015/05/29/creating-a-rust-function-that-returns-string-or-str.html/),

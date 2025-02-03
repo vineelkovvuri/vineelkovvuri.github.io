@@ -6,8 +6,15 @@
     <description>Recent content in C on Vineel Kovvuri</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 10 Aug 2018 18:33:07 -0700</lastBuildDate>
+    <lastBuildDate>Sun, 10 Feb 2019 18:33:07 -0700</lastBuildDate>
     <atom:link href="/tags/c/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Signed/Unsigned Integer Arithmetic In C</title>
+      <link>/blog/signed-unsigned-integer-arithmetic-in-c/</link>
+      <pubDate>Sun, 10 Feb 2019 18:33:07 -0700</pubDate>
+      <guid>/blog/signed-unsigned-integer-arithmetic-in-c/</guid>
+      <description>&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;&#xA;&lt;p&gt;This article is about understanding how integer conversions happen in C&#xA;language. The C standard defines the integer conversion rules agnostic to&#xA;any specific machine architecture. This also makes things more complicated&#xA;for programmers to understand.&lt;/p&gt;&#xA;&lt;p&gt;First of all, Why do we need integer conversions at all? The answer is&#xA;simple, we need to have single type for any given expression. Let&amp;rsquo;s say we&#xA;have an expression &lt;em&gt;&lt;expr1&gt;&lt;op&gt;&lt;expr2&gt;&lt;/em&gt; when expr1 and expr2 are of&#xA;different types, we want the resulting expression from this to have one&#xA;single type.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>A Newbie&#39;s Introduction To Compilation Process And Reverse Engineering</title>
       <link>/blog/a-newbies-introduction-to-compilation-process-and-reverse-engineering/</link>

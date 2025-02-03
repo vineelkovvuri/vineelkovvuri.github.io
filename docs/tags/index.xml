@@ -23,17 +23,59 @@
       <description></description>
     </item>
     <item>
-      <title>Asm</title>
-      <link>/tags/asm/</link>
-      <pubDate>Fri, 10 Aug 2018 18:33:07 -0700</pubDate>
-      <guid>/tags/asm/</guid>
+      <title>Embedded</title>
+      <link>/tags/embedded/</link>
+      <pubDate>Fri, 20 Sep 2019 18:33:07 -0700</pubDate>
+      <guid>/tags/embedded/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Emulator</title>
+      <link>/tags/emulator/</link>
+      <pubDate>Wed, 10 Apr 2019 18:33:07 -0700</pubDate>
+      <guid>/tags/emulator/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Java</title>
+      <link>/tags/java/</link>
+      <pubDate>Wed, 10 Apr 2019 18:33:07 -0700</pubDate>
+      <guid>/tags/java/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>WinDbg</title>
+      <link>/tags/windbg/</link>
+      <pubDate>Sun, 10 Mar 2019 18:33:07 -0700</pubDate>
+      <guid>/tags/windbg/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Windows</title>
+      <link>/tags/windows/</link>
+      <pubDate>Sun, 10 Mar 2019 18:33:07 -0700</pubDate>
+      <guid>/tags/windows/</guid>
       <description></description>
     </item>
     <item>
       <title>C</title>
       <link>/tags/c/</link>
-      <pubDate>Fri, 10 Aug 2018 18:33:07 -0700</pubDate>
+      <pubDate>Sun, 10 Feb 2019 18:33:07 -0700</pubDate>
       <guid>/tags/c/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Debuggers</title>
+      <link>/tags/debuggers/</link>
+      <pubDate>Wed, 10 Oct 2018 18:33:07 -0700</pubDate>
+      <guid>/tags/debuggers/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Asm</title>
+      <link>/tags/asm/</link>
+      <pubDate>Fri, 10 Aug 2018 18:33:07 -0700</pubDate>
+      <guid>/tags/asm/</guid>
       <description></description>
     </item>
     <item>

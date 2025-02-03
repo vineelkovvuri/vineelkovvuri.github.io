@@ -42,25 +42,23 @@
 </div>
 
 
-    <aside class="toc">
-        <h2>Table of Contents</h2>
-        <nav id="TableOfContents">
+    
+        <aside class="toc">
+            <h2>Table of Contents</h2>
+            <nav id="TableOfContents">
   <ul>
-    <li>
-      <ul>
-        <li><a href="#basics">Basics</a></li>
-        <li><a href="#elimination-of-unused-static-functions">Elimination of unused static functions</a></li>
-        <li><a href="#comdat-and-gy-switch">COMDAT and /Gy switch</a></li>
-        <li><a href="#elimination-of-unused-functions-by-the-linker">Elimination of unused functions by the linker</a></li>
-      </ul>
-    </li>
+    <li><a href="#basics">Basics</a></li>
+    <li><a href="#elimination-of-unused-static-functions">Elimination of unused static functions</a></li>
+    <li><a href="#comdat-and-gy-switch">COMDAT and /Gy switch</a></li>
+    <li><a href="#elimination-of-unused-functions-by-the-linker">Elimination of unused functions by the linker</a></li>
   </ul>
 </nav>
-    </aside>
+        </aside>
+    
 
 
 <main>
-<h2 id="basics">Basics</h2>
+<h1 id="basics">Basics</h1>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#888">//a.c
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">myadd</span>() {
 </span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">int</span> sum = <span style="color:#00d;font-weight:bold">10</span>;
@@ -112,7 +110,7 @@ be accessed by functions in other libs.</p>
 </span></span><span style="display:flex;"><span>          5E .text<span style="color:#369">$mn</span>
 </span></span></code></pre></div><p>All 3 functions are groups inside the <strong>.text$mn</strong> section and hence <strong>link
 /dump /section:.text$mn</strong> will have only one header.</p>
-<h2 id="elimination-of-unused-static-functions">Elimination of unused static functions</h2>
+<h1 id="elimination-of-unused-static-functions">Elimination of unused static functions</h1>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#888">//a.c
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">myadd</span>() {
 </span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">int</span> sum = <span style="color:#00d;font-weight:bold">10</span>;
@@ -141,7 +139,7 @@ be accessed by functions in other libs.</p>
 </span></span><span style="display:flex;"><span><span style="color:#00d;font-weight:bold">009</span> <span style="color:#00d;font-weight:bold">00000050</span> SECT3  notype ()    External     | main
 </span></span></code></pre></div><p>Since myadd2 is made static the compiler can for sure know it cannot be used by
 other functions external to this .obj so it removed that function.</p>
-<h2 id="comdat-and-gy-switch">COMDAT and /Gy switch</h2>
+<h1 id="comdat-and-gy-switch">COMDAT and /Gy switch</h1>
 <p>With /Gy switch the compiler now spits 3 more headers in .text$mn. This is also
 called COMDAT and will be helpful for linker to eliminate dead code more easily.
 The need for this section will come clear once we look at how linker optimizes
@@ -220,7 +218,7 @@ header with <strong>COMDAT; sym=</strong> line</p>
 </span></span><span style="display:flex;"><span>         Execute Read
 </span></span><span style="display:flex;"><span>  Summary
 </span></span><span style="display:flex;"><span>          8C .text<span style="color:#369">$mn</span>
-</span></span></code></pre></div><h2 id="elimination-of-unused-functions-by-the-linker">Elimination of unused functions by the linker</h2>
+</span></span></code></pre></div><h1 id="elimination-of-unused-functions-by-the-linker">Elimination of unused functions by the linker</h1>
 <p>The complete elimination of unused functions in a program can only be done by
 linker because it is the only component which can see through all the
 intermediatory files like .objs. But interestingly linker only works on sections

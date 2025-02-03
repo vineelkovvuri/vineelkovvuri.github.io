@@ -42,26 +42,24 @@
 </div>
 
 
-    <aside class="toc">
-        <h2>Table of Contents</h2>
-        <nav id="TableOfContents">
+    
+        <aside class="toc">
+            <h2>Table of Contents</h2>
+            <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#why-does-implementing-fromt-on-u-enable-calling-tinto-to-get-u">Why does implementing <code>From&lt;T&gt;</code> on <code>U</code> enable calling <code>T.into()</code> to get <code>U</code>?</a>
       <ul>
-        <li><a href="#why-does-implementing-fromt-on-u-enable-calling-tinto-to-get-u">Why does implementing <code>From&lt;T&gt;</code> on <code>U</code> enable calling <code>T.into()</code> to get <code>U</code>?</a>
-          <ul>
-            <li><a href="#q-wait-a-second-where-does-this-into-come-from-we-didnt-implement-any-into-function-on-a">Q: Wait a second, where does this <code>.into()</code> come from? We didn&rsquo;t implement any <code>into()</code> function on <code>A</code>.</a></li>
-          </ul>
-        </li>
+        <li><a href="#q-wait-a-second-where-does-this-into-come-from-we-didnt-implement-any-into-function-on-a">Q: Wait a second, where does this <code>.into()</code> come from? We didn&rsquo;t implement any <code>into()</code> function on <code>A</code>.</a></li>
       </ul>
     </li>
   </ul>
 </nav>
-    </aside>
+        </aside>
+    
 
 
 <main>
-<h2 id="why-does-implementing-fromt-on-u-enable-calling-tinto-to-get-u">Why does implementing <code>From&lt;T&gt;</code> on <code>U</code> enable calling <code>T.into()</code> to get <code>U</code>?</h2>
+<h1 id="why-does-implementing-fromt-on-u-enable-calling-tinto-to-get-u">Why does implementing <code>From&lt;T&gt;</code> on <code>U</code> enable calling <code>T.into()</code> to get <code>U</code>?</h1>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span><span style="color:#038">From</span>&lt;A&gt;<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span>B<span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">from</span>(a: <span style="color:#b06;font-weight:bold">A</span>)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">B</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#888">// Convert A to B
@@ -72,7 +70,7 @@
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>b: <span style="color:#b06;font-weight:bold">B</span><span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>B::from(a);<span style="color:#bbb"> </span><span style="color:#888">// This works
 </span></span></span></code></pre></div><p>However, in practice, we often avoid using this directly, as it isn&rsquo;t considered idiomatic Rust. Instead, we do the following:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>b: <span style="color:#b06;font-weight:bold">B</span><span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>a.into();<span style="color:#bbb">
-</span></span></span></code></pre></div><h3 id="q-wait-a-second-where-does-this-into-come-from-we-didnt-implement-any-into-function-on-a">Q: Wait a second, where does this <code>.into()</code> come from? We didn&rsquo;t implement any <code>into()</code> function on <code>A</code>.</h3>
+</span></span></span></code></pre></div><h2 id="q-wait-a-second-where-does-this-into-come-from-we-didnt-implement-any-into-function-on-a">Q: Wait a second, where does this <code>.into()</code> come from? We didn&rsquo;t implement any <code>into()</code> function on <code>A</code>.</h2>
 <p>A: Correct, you didn&rsquo;t implement it yourself. Rust provides it automatically. How?</p>
 <p>This involves <strong>blanket implementations</strong> in Rust, which is a way of implementing something for all types. Essentially, this is done using a construct like:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">impl</span>&lt;T&gt;<span style="color:#bbb"> </span>Trait1<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span>T<span style="color:#bbb"> </span>{<span style="color:#bbb">

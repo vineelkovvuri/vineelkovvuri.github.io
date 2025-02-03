@@ -42,27 +42,31 @@
 </div>
 
 
-    <aside class="toc">
-        <h2>Table of Contents</h2>
-        <nav id="TableOfContents">
+    
+        <aside class="toc">
+            <h2>Table of Contents</h2>
+            <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#rust-sharing-a-single-object-across-multiple-owners">Rust: Sharing a Single Object Across Multiple Owners</a>
       <ul>
-        <li><a href="#rust-sharing-a-single-object-across-multiple-owners">Rust: Sharing a Single Object Across Multiple Owners</a>
+        <li><a href="#question-why-part-1-works-but-not-part-2-what-is-so-special-about-mut-c_void">Question: Why Part 1 works but not Part 2? What is so special about *mut c_void?</a></li>
+        <li><a href="#answerfrom-chatgpt">Answer(From ChatGPT):</a>
           <ul>
-            <li><a href="#question-why-part-1-works-but-not-part-2-what-is-so-special-about-mut-c_void">Question: Why Part 1 works but not Part 2? What is so special about *mut c_void?</a></li>
-            <li><a href="#answerfrom-chatgpt">Answer(From ChatGPT):</a></li>
+            <li><a href="#why-part-1-works">Why Part 1 Works?</a></li>
+            <li><a href="#why-part-2-fails">Why Part 2 Fails?</a></li>
+            <li><a href="#key-takeaway">Key Takeaway</a></li>
           </ul>
         </li>
       </ul>
     </li>
   </ul>
 </nav>
-    </aside>
+        </aside>
+    
 
 
 <main>
-<h2 id="rust-sharing-a-single-object-across-multiple-owners">Rust: Sharing a Single Object Across Multiple Owners</h2>
+<h1 id="rust-sharing-a-single-object-across-multiple-owners">Rust: Sharing a Single Object Across Multiple Owners</h1>
 <p>Today, I found an interesting way to share a single object(C) among multiple
 owners(A and B)</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">use</span><span style="color:#bbb"> </span>std::ffi::c_void;<span style="color:#bbb">
@@ -127,7 +131,7 @@ owners(A and B)</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span>println!(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>b_obj.mut_ref.val);<span style="color:#bbb"> </span><span style="color:#888">// 4000
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span>}<span style="color:#bbb">
 </span></span></span></code></pre></div><p>Got curious and asked ChatGPT below question:</p>
-<h3 id="question-why-part-1-works-but-not-part-2-what-is-so-special-about-mut-c_void">Question: Why Part 1 works but not Part 2? What is so special about *mut c_void?</h3>
+<h2 id="question-why-part-1-works-but-not-part-2-what-is-so-special-about-mut-c_void">Question: Why Part 1 works but not Part 2? What is so special about *mut c_void?</h2>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#888">// Part 1
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>common<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>C<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>val: <span style="color:#00d;font-weight:bold">100</span><span style="color:#bbb"> </span>};<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>c<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>&amp;<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>common;<span style="color:#bbb">
@@ -145,10 +149,10 @@ owners(A and B)</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>b<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>B<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>mut_ref: <span style="color:#080">&amp;</span><span style="color:#b06;font-weight:bold">mut</span><span style="color:#bbb"> </span>c<span style="color:#bbb"> </span>};<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>a_ptr<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>&amp;<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>a<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>A<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>c_void;<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>b_ptr<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>&amp;<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>b<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>B<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>c_void;<span style="color:#bbb">
-</span></span></span></code></pre></div><h3 id="answerfrom-chatgpt">Answer(From ChatGPT):</h3>
+</span></span></span></code></pre></div><h2 id="answerfrom-chatgpt">Answer(From ChatGPT):</h2>
 <p>The distinction lies in how the Rust borrow checker analyzes the lifetimes
 and mutability of references during compilation. Let&rsquo;s break this down:</p>
-<h4 id="why-part-1-works">Why Part 1 Works?</h4>
+<h3 id="why-part-1-works">Why Part 1 Works?</h3>
 <ol>
 <li>
 <p>Order of Operations:</p>
@@ -177,7 +181,7 @@ the borrow checker treats the mutable borrow in <code>a</code> as no longer acti
 </ul>
 </li>
 </ol>
-<h4 id="why-part-2-fails">Why Part 2 Fails?</h4>
+<h3 id="why-part-2-fails">Why Part 2 Fails?</h3>
 <ol>
 <li>
 <p>Simultaneous Mutable Borrows:</p>
@@ -207,7 +211,7 @@ compile-time error.</li>
 </ul>
 </li>
 </ol>
-<h4 id="key-takeaway">Key Takeaway</h4>
+<h3 id="key-takeaway">Key Takeaway</h3>
 <p>The difference comes down to when the mutable borrow is considered
 invalidated:
 - In the working code, converting <code>A</code> to a raw pointer before creating <code>B</code>

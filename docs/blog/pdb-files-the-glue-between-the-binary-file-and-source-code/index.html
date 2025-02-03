@@ -33,14 +33,19 @@
 <h3 class="date">
     2019/01/10
     
+        |
+        <a href="/tags/compilers">Compilers</a>
+        
+    
 </h3>
 
 </div>
 
 
-    <aside class="toc">
-        <h2>Table of Contents</h2>
-        <nav id="TableOfContents">
+    
+        <aside class="toc">
+            <h2>Table of Contents</h2>
+            <nav id="TableOfContents">
   <ul>
     <li><a href="#introduction">Introduction</a></li>
     <li><a href="#how-do-windbg-identify-the-correct-symbol-file">How do Windbg identify the correct symbol file?</a></li>
@@ -49,7 +54,8 @@
     <li><a href="#references">References</a></li>
   </ul>
 </nav>
-    </aside>
+        </aside>
+    
 
 
 <main>
@@ -307,7 +313,7 @@ respectively.</p>
 </span></span><span style="display:flex;"><span>00007ff9<span style="color:#d20;background-color:#fff0f0">`</span>2f400000 00007ff9<span style="color:#d20;background-color:#fff0f0">`</span>2f5e0000   ntdll      (<span style="color:#038">export</span> symbols)
 </span></span><span style="display:flex;"><span>C:<span style="color:#04d;background-color:#fff0f0">\W</span>INDOWS<span style="color:#04d;background-color:#fff0f0">\S</span>YSTEM32<span style="color:#04d;background-color:#fff0f0">\n</span>tdll.dll
 </span></span></code></pre></div><p>Looking at the .reload command output we can say Windbg expects symbol files to
-be present inside the same directory as the application or the folder named &rsquo;exe&rsquo;
+be present inside the same directory as the application or the folder named &rsquo;exe'
 inside .sympath directory or the folder named &lsquo;dll&rsquo; inside the .sympath directory
 or at the actual embedded path. Running lm confirms that symbols are recognized
 for Win32Sample.exe</p>

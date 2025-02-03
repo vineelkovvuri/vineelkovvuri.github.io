@@ -2,6 +2,7 @@
 title: "Lib Files 101"
 date: 2018-11-10T18:33:07-07:00
 toc: true
+tags: ['Compilers']
 ---
 
 # Introduction

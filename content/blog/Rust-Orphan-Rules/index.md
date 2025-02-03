@@ -1,10 +1,11 @@
 ---
 title: "Rust: Orphan Rules"
 date: 2025-01-26 23:01:20
+toc: true
 tags: ['Rust']
 ---
 
-## Rust: Orphan Rules
+# Rust: Orphan Rules
 
 ```rust
 use std::fmt;

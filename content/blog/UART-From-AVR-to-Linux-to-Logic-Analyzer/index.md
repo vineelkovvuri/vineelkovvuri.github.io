@@ -2,6 +2,7 @@
 title: "UART - From AVR to Linux to Logic Analyzer"
 date: 2019-09-20T18:33:07-07:00
 toc: true
+tags: ['Embedded']
 ---
 
 # UART - From AVR to Linux to Logic Analyzer

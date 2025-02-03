@@ -1,10 +1,11 @@
 ---
 title: "Rust: From vs Into traits"
 date: 2025-01-06T06:17:07-07:00
+toc: true
 tags: ['Rust']
 ---
 
-## Why does implementing `From<T>` on `U` enable calling `T.into()` to get `U`?
+# Why does implementing `From<T>` on `U` enable calling `T.into()` to get `U`?
 
 ```rust
 impl From<A> for B {
@@ -27,7 +28,7 @@ However, in practice, we often avoid using this directly, as it isn't considered
 let b: B = a.into();
 ```
 
-### Q: Wait a second, where does this `.into()` come from? We didn't implement any `into()` function on `A`.
+## Q: Wait a second, where does this `.into()` come from? We didn't implement any `into()` function on `A`.
 
 A: Correct, you didn't implement it yourself. Rust provides it automatically. How?
 

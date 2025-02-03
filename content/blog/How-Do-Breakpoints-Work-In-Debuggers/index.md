@@ -2,6 +2,7 @@
 title: "How Do Breakpoints Work In Debuggers?"
 date: 2018-10-10T18:33:07-07:00
 toc: true
+tags: ['Debuggers', 'WinDbg']
 ---
 
 # Introduction

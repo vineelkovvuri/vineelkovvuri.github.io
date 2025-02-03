@@ -1,10 +1,11 @@
 ---
 title: "Rust: Aligned vs Unaligned Memory Access"
 date: 2025-01-14 19:05:52
+toc: true
 tags: ['Rust']
 ---
 
-## Rust: Rust Aligned vs Unaligned Memory Access
+# Rust: Rust Aligned vs Unaligned Memory Access
 
 Unlike C, Rust enforces some rules when trying to access memory. Mainly it
 requires consideration to alignment of the data that we are trying to read.
