@@ -58,8 +58,12 @@ pre tr:nth-child(even) { background: #fff; }
   text-align: center;
 }
 
-.social a {
+a {
   text-decoration: none;
+  color: #0645ad;
+}
+a:hover {
+  text-decoration: underline;
 }
 
 mark {
