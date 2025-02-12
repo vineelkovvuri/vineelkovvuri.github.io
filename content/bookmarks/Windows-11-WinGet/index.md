@@ -26,6 +26,7 @@ winget install -h --id "Microsoft.PowerToys"                       --accept-sour
 winget install -h --id "9MSPC6MP8FM4"                              --accept-source-agreements   --accept-package-agreements & REM Microsoft Whiteboard
 winget install -h --id "tailscale.tailscale"                       --accept-source-agreements   --accept-package-agreements
 winget install -h --id "Discord.Discord"                           --accept-source-agreements   --accept-package-agreements
+winget install -h --id "Flow-Launcher.Flow-Launcher"               --accept-source-agreements   --accept-package-agreements
 
 
 # Development
