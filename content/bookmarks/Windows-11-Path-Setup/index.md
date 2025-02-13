@@ -43,4 +43,10 @@ dism /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all
 dism /online /enable-feature /featurename:Containers-DisposableClientVM /all /norestart
 dism /online /enable-feature /featurename:Microsoft-Hyper-V-All /all /norestart
 dism /online /enable-feature /featurename:HypervisorPlatform /all /norestart
+
+# Replace notepad.exe with Notepad4.exe to work from Run prompt
+# Should use notepad4.exe from cmd and other places
+$registryPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\notepad.exe"
+$exePath = "$($env:USERPROFILE)\OneDrive\Softs\Tools\rg\Notepad4.exe"
+Set-ItemProperty -Path $registryPath -Name "(Default)" -Value $exePath
 ```
