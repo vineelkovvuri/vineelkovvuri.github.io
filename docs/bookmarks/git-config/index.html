@@ -70,6 +70,41 @@
 </span></span><span style="display:flex;"><span>    <span style="color:#369">autocorrect</span> = <span style="color:#d20;background-color:#fff0f0">1</span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[safe]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#369">directory</span> = <span style="color:#d20;background-color:#fff0f0">*</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># https://blog.gitbutler.com/how-git-core-devs-configure-git/</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[column]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">ui</span> = <span style="color:#d20;background-color:#fff0f0">auto</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[branch]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">sort</span> = <span style="color:#d20;background-color:#fff0f0">-committerdate</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[tag]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">sort</span> = <span style="color:#d20;background-color:#fff0f0">version:refname</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[init]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">defaultBranch</span> = <span style="color:#d20;background-color:#fff0f0">main</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[diff]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">algorithm</span> = <span style="color:#d20;background-color:#fff0f0">histogram
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    colorMoved = plain
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    mnemonicPrefix = true
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    renames = true</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[push]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">default</span> = <span style="color:#d20;background-color:#fff0f0">simple
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    autoSetupRemote = true
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    followTags = true</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[fetch]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">prune</span> = <span style="color:#d20;background-color:#fff0f0">true
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    pruneTags = true
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    all = true</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[commit]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">verbose</span> = <span style="color:#d20;background-color:#fff0f0">true</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[rerere]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">enabled</span> = <span style="color:#d20;background-color:#fff0f0">true
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    autoupdate = true</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[rebase]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">autoSquash</span> = <span style="color:#d20;background-color:#fff0f0">true
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    autoStash = true
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    updateRefs = true</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[remote &#34;origin&#34;]</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#369">fetch</span> = <span style="color:#d20;background-color:#fff0f0">&#39;+refs/pull/*:refs/remotes/origin/pull/*&#39;</span>
 </span></span></code></pre></div>
 </main>
 
