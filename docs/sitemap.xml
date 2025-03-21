@@ -127,6 +127,8 @@
   </url><url>
     <loc>/courses/python/</loc>
   </url><url>
+    <loc>/tags/terminal/</loc>
+  </url><url>
     <loc>/presentations/vscode/</loc>
   </url><url>
     <loc>/vlog/</loc>
@@ -142,6 +144,8 @@
     <loc>/bookmarks/windows-11-registry-tweaks/</loc>
   </url><url>
     <loc>/bookmarks/windows-11-winget/</loc>
+  </url><url>
+    <loc>/bookmarks/windows-terminal-setting-json/</loc>
   </url><url>
     <loc>/tags/windowssetup/</loc>
   </url>
