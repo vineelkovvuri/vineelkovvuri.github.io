@@ -1,7 +1,7 @@
 # Serve the website
 `hugo server --disableFastRender -p 9999`
 
-# Generate the content to `docs` folder
+# Generate the content to `docs` folder (Always use below command before upload)
 `hugo`
 
 # Useful commands

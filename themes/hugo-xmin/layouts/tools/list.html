@@ -1,0 +1,18 @@
+{{ partial "header.html" . }}
+
+{{ .Content }}
+
+<h1>Tools</h1>
+
+<ul>
+  {{ $pages := .Pages }}
+  {{ if .IsHome }}{{ $pages = .Site.RegularPages }}{{ end }}
+  {{ range (where $pages "Section" "!=" "") }}
+    <li>
+      {{ $toolName := (path.Base (path.Dir .RelPermalink)) | lower | title }}
+      <a href="{{ .RelPermalink }}">{{ $toolName }}</a>
+    </li>
+  {{ end }}
+</ul>
+
+{{ partial "footer.html" . }}
