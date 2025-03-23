@@ -38,6 +38,10 @@ AppendPathVariable -Path "C:\msys64\ucrt64\bin"
 AppendPathVariable -Path "C:\Program Files\GitHub CLI\"
 AppendPathVariable -Path "C:\Program Files\LLVM\bin"
 
+# Exclude some paths from Windows Defender Scans
+Add-MpPreference -ExclusionPath "$($env:USERPROFILE)\.cargo"
+Add-MpPreference -ExclusionPath "$($env:USERPROFILE)\.rustup"
+
 # Manually restart after installing below optional packages
 dism /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
 dism /online /enable-feature /featurename:Containers-DisposableClientVM /all /norestart
