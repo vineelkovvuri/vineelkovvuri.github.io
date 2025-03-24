@@ -6,7 +6,7 @@
     <title>{{ .Title }} | {{ .Site.Title }}</title>
     <link rel="stylesheet" href="{{ "css/style.css" | relURL }}" />
     <link rel="stylesheet" href="{{ "css/fonts.css" | relURL }}" />
-    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="shortcut icon" href="{{ "images/favicon.ico" | relURL }}" />
     {{ partial "head_custom.html" . }}
   </head>
 
