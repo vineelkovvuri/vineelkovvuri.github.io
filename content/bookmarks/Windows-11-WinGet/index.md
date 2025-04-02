@@ -31,6 +31,7 @@ winget install -h --id "Flow-Launcher.Flow-Launcher"               --accept-sour
 
 # Development
 winget install -h --id "Git.Git"                                   --accept-source-agreements   --accept-package-agreements
+winget install -h --id "SourceGear.DiffMerge"                      --accept-source-agreements   --accept-package-agreements
 winget install -h --id "Github.cli"                                --accept-source-agreements   --accept-package-agreements
 winget install -h --id "Microsoft.VisualStudio.2022.Community"     --accept-source-agreements   --accept-package-agreements
 winget install -h --id "Rustlang.Rustup"                           --accept-source-agreements   --accept-package-agreements

@@ -43,11 +43,14 @@
 </span></span><span style="display:flex;"><span>    <span style="color:#369">st</span> = <span style="color:#d20;background-color:#fff0f0">status
 </span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    br = branch -vv
 </span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    co = checkout
-</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    cp = cherry-pick</span>
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    cp = cherry-pick
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    staash = stash --all</span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[diff]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#369">tool</span> = <span style="color:#d20;background-color:#fff0f0">meld
 </span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    colormoved = &#34;default&#34;
-</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    colormovedws = &#34;allow-indentation-change&#34;</span>
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    colormovedws = &#34;allow-indentation-change&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    colorWords = true</span>
+</span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[difftool]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#369">prompt</span> = <span style="color:#d20;background-color:#fff0f0">false</span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[merge]</span>
@@ -56,16 +59,27 @@
 </span></span><span style="display:flex;"><span>    <span style="color:#369">prompt</span> = <span style="color:#d20;background-color:#fff0f0">false</span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[color]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#369">ui</span> = <span style="color:#d20;background-color:#fff0f0">auto</span>
+</span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[difftool &#34;bc&#34;]</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#369">path</span> = <span style="color:#d20;background-color:#fff0f0">c:/Program Files/Beyond Compare 4/bcomp.exe</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">path</span> = <span style="color:#d20;background-color:#fff0f0">C:/Program Files/Beyond Compare 4/bcomp.exe</span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[mergetool &#34;bc&#34;]</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#369">path</span> = <span style="color:#d20;background-color:#fff0f0">c:/Program Files/Beyond Compare 4/bcomp.exe
+</span></span><span style="display:flex;"><span>    <span style="color:#369">path</span> = <span style="color:#d20;background-color:#fff0f0">C:/Program Files/Beyond Compare 4/bcomp.exe
 </span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    keepBackup = false</span>
+</span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[difftool &#34;meld&#34;]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#369">path</span> = <span style="color:#d20;background-color:#fff0f0">&#34;C:/Program Files (x86)/Meld/meld/meld.exe&#34;</span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[mergetool &#34;meld&#34;]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#369">path</span> = <span style="color:#d20;background-color:#fff0f0">&#34;C:/Program Files (x86)/Meld/meld/meld.exe&#34;
 </span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    keepBackup = false</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[difftool &#34;diffmerge&#34;]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">path</span> = <span style="color:#d20;background-color:#fff0f0">C:/Program Files/SourceGear/Common/DiffMerge/sgdm.exe
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    cmd = \&#34;C:/Program Files/SourceGear/Common/DiffMerge/sgdm.exe\&#34; \&#34;$LOCAL\&#34; \&#34;$REMOTE\&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[mergetool &#34;diffmerge&#34;]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">path</span> = <span style="color:#d20;background-color:#fff0f0">C:/Program Files/SourceGear/Common/DiffMerge/sgdm.exe
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    cmd = \&#34;C:/Program Files/SourceGear/Common/DiffMerge/sgdm.exe\&#34; -merge -result=\&#34;$MERGED\&#34; \&#34;$LOCAL\&#34; \&#34;$BASE\&#34; \&#34;$REMOTE\&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    keepBackup = false</span>
+</span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[core]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#369">editor</span> = <span style="color:#d20;background-color:#fff0f0">notepad4
 </span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    autocrlf = false</span>
@@ -108,6 +122,9 @@
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[remote &#34;origin&#34;]</span>
 </span></span><span style="display:flex;"><span>	<span style="color:#369">fetch</span> = <span style="color:#d20;background-color:#fff0f0">&#39;+refs/pull/*:refs/remotes/origin/pull/*&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># You Don&#39;t Know Git - Edward Thomson - NDC London 2025</span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># https://www.youtube.com/watch?v=DZI0Zl-1JqQ</span>
 </span></span></code></pre></div>
 </main>
 
