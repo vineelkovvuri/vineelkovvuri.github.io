@@ -14,17 +14,20 @@ tags: ['Git', 'WindowsSetup']
     cp = cherry-pick
     staash = stash --all
 [diff]
-    tool = meld
+    tool = winmerge
+	guitool = winmerge
     colormoved = "default"
     colormovedws = "allow-indentation-change"
     colorWords = true
 
 [difftool]
-    prompt = false
+	prompt = false
 [merge]
-    tool = meld
+	tool = winmerge
+	guitool = winmerge
 [mergetool]
-    prompt = false
+	prompt = false
+    keepBackup = false
 [color]
     ui = auto
 
@@ -40,17 +43,10 @@ tags: ['Git', 'WindowsSetup']
     path = "C:/Program Files (x86)/Meld/meld/meld.exe"
     keepBackup = false
 
-[difftool "diffmerge"]
-    path = C:/Program Files/SourceGear/Common/DiffMerge/sgdm.exe
-    cmd = \"C:/Program Files/SourceGear/Common/DiffMerge/sgdm.exe\" \"$LOCAL\" \"$REMOTE\"
-[mergetool "diffmerge"]
-    path = C:/Program Files/SourceGear/Common/DiffMerge/sgdm.exe
-    cmd = \"C:/Program Files/SourceGear/Common/DiffMerge/sgdm.exe\" -merge -result=\"$MERGED\" \"$LOCAL\" \"$BASE\" \"$REMOTE\"
-    keepBackup = false
-
 [core]
     editor = notepad4
     autocrlf = false
+    commentChar = ";"
 [help]
     autocorrect = 1
 [safe]
