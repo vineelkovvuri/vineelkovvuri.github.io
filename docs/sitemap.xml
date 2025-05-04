@@ -3,15 +3,24 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>/blog/</loc>
-    <lastmod>2025-03-25T20:27:07+00:00</lastmod>
+    <lastmod>2025-05-03T19:04:18+00:00</lastmod>
+  </url><url>
+    <loc>/</loc>
+    <lastmod>2025-05-03T19:04:18+00:00</lastmod>
+  </url><url>
+    <loc>/tags/rust/</loc>
+    <lastmod>2025-05-03T19:04:18+00:00</lastmod>
+  </url><url>
+    <loc>/blog/rust-type-conversion/</loc>
+    <lastmod>2025-05-03T19:04:18+00:00</lastmod>
+  </url><url>
+    <loc>/tags/</loc>
+    <lastmod>2025-05-03T19:04:18+00:00</lastmod>
   </url><url>
     <loc>/tags/git/</loc>
     <lastmod>2025-03-25T20:27:07+00:00</lastmod>
   </url><url>
     <loc>/tags/github/</loc>
-    <lastmod>2025-03-25T20:27:07+00:00</lastmod>
-  </url><url>
-    <loc>/</loc>
     <lastmod>2025-03-25T20:27:07+00:00</lastmod>
   </url><url>
     <loc>/blog/how-to-use-multiple-github-accounts-with-ssh-keys-on-a-single-computer/</loc>
@@ -20,17 +29,11 @@
     <loc>/tags/ssh/</loc>
     <lastmod>2025-03-25T20:27:07+00:00</lastmod>
   </url><url>
-    <loc>/tags/</loc>
-    <lastmod>2025-03-25T20:27:07+00:00</lastmod>
-  </url><url>
     <loc>/tags/operating-systems/</loc>
     <lastmod>2025-03-14T23:27:20+00:00</lastmod>
   </url><url>
     <loc>/blog/paging-101/</loc>
     <lastmod>2025-03-14T23:27:20+00:00</lastmod>
-  </url><url>
-    <loc>/tags/rust/</loc>
-    <lastmod>2025-01-30T18:26:41+00:00</lastmod>
   </url><url>
     <loc>/blog/rust-formatting-wrapper-types/</loc>
     <lastmod>2025-01-30T18:26:41+00:00</lastmod>
