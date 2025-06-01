@@ -6,8 +6,15 @@
     <description>Recent content in Blogs on Vineel Kovvuri</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 03 May 2025 19:04:18 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 31 May 2025 19:36:44 +0000</lastBuildDate>
     <atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Self-Hosting RustDesk Server on an Azure Ubuntu VM</title>
+      <link>/blog/self-hosting-rustdesk-server-on-an-azure-ubuntu-vm/</link>
+      <pubDate>Sat, 31 May 2025 19:36:44 +0000</pubDate>
+      <guid>/blog/self-hosting-rustdesk-server-on-an-azure-ubuntu-vm/</guid>
+      <description>&lt;h1 id=&#34;self-hosting-rustdesk-server-on-an-azure-ubuntu-vm&#34;&gt;Self-Hosting RustDesk Server on an Azure Ubuntu VM&lt;/h1&gt;&#xA;&lt;p&gt;I&amp;rsquo;ve been a heavy user of TeamViewer and AnyDesk for over 15 years, primarily to&#xA;help my family and friends with troubleshooting. Over time, these tools have&#xA;become increasingly buggy and locked behind paywalls. I recently started looking&#xA;for a free alternative—and that&amp;rsquo;s when I found&#xA;&lt;a href=&#34;https://github.com/rustdesk/rustdesk&#34;&gt;RustDesk&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;p&gt;One of the best things about RustDesk is that it’s open source and completely&#xA;free. Like other remote desktop tools, RustDesk relies on intermediate servers&#xA;(relay servers) to connect computers over the internet (with the user&amp;rsquo;s&#xA;consent). While it comes pre-configured to use public relay servers, RustDesk&#xA;strongly recommends setting up your own server for improved performance and&#xA;control.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Rust: Type Conversion - From one type to other</title>
       <link>/blog/rust-type-conversion/</link>
