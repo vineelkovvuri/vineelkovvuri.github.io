@@ -6,8 +6,15 @@
     <description>Recent content in Blogs on Vineel Kovvuri</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 31 May 2025 19:36:44 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 12 Jun 2025 20:25:13 +0000</lastBuildDate>
     <atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rust: Cargo: Profiles</title>
+      <link>/blog/rust-cargo-profiles/</link>
+      <pubDate>Thu, 12 Jun 2025 20:25:13 +0000</pubDate>
+      <guid>/blog/rust-cargo-profiles/</guid>
+      <description>&lt;h1 id=&#34;rust-cargo-profiles&#34;&gt;Rust: Cargo: Profiles&lt;/h1&gt;&#xA;&lt;p&gt;Cargo has a concept called&#xA;&lt;a href=&#34;https://doc.rust-lang.org/cargo/reference/profiles.html&#34;&gt;&lt;strong&gt;profiles&lt;/strong&gt;&lt;/a&gt;, mainly&#xA;&lt;code&gt;dev&lt;/code&gt; and &lt;code&gt;release&lt;/code&gt; (in the .NET/Windows world, these are equivalent to &lt;code&gt;debug&lt;/code&gt;&#xA;and &lt;code&gt;release&lt;/code&gt;). Today, we&amp;rsquo;re not going to talk about the specific details of&#xA;these profiles, but instead focus on their interaction between a binary crate&#xA;and a library crate.&lt;/p&gt;&#xA;&lt;p&gt;At work, we have a library crate that contains the core implementation of our&#xA;product, and a binary crate that pulls in this library. To guarantee&#xA;correctness, we wanted the library crate to use certain predetermined compiler&#xA;switches. That led me to wonder how the &lt;code&gt;[profile.dev]&lt;/code&gt; settings are actually&#xA;used. As part of that investigation, I discovered something surprising. Spoiler:&#xA;I didn’t find a solution to the original problem, but I did learn something&#xA;useful that’s worth sharing.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Self-Hosting RustDesk Server on an Azure Ubuntu VM</title>
       <link>/blog/self-hosting-rustdesk-server-on-an-azure-ubuntu-vm/</link>
