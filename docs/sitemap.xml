@@ -3,18 +3,21 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>/blog/</loc>
-    <lastmod>2025-06-14T18:10:57+00:00</lastmod>
+    <lastmod>2025-06-15T14:25:20+00:00</lastmod>
   </url><url>
     <loc>/</loc>
-    <lastmod>2025-06-14T18:10:57+00:00</lastmod>
+    <lastmod>2025-06-15T14:25:20+00:00</lastmod>
   </url><url>
     <loc>/tags/rust/</loc>
-    <lastmod>2025-06-14T18:10:57+00:00</lastmod>
+    <lastmod>2025-06-15T14:25:20+00:00</lastmod>
   </url><url>
-    <loc>/blog/rust-toolchains-vs-targets/</loc>
-    <lastmod>2025-06-14T18:10:57+00:00</lastmod>
+    <loc>/blog/rust-deref-vs-asref-traits/</loc>
+    <lastmod>2025-06-15T14:25:20+00:00</lastmod>
   </url><url>
     <loc>/tags/</loc>
+    <lastmod>2025-06-15T14:25:20+00:00</lastmod>
+  </url><url>
+    <loc>/blog/rust-toolchains-vs-targets/</loc>
     <lastmod>2025-06-14T18:10:57+00:00</lastmod>
   </url><url>
     <loc>/blog/rust-cargo-profiles/</loc>
