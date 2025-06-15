@@ -6,8 +6,15 @@
     <description>Recent content in Rust on Vineel Kovvuri</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 12 Jun 2025 20:25:13 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 14 Jun 2025 18:10:57 +0000</lastBuildDate>
     <atom:link href="/tags/rust/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rust: Toolchains vs Targets</title>
+      <link>/blog/rust-toolchains-vs-targets/</link>
+      <pubDate>Sat, 14 Jun 2025 18:10:57 +0000</pubDate>
+      <guid>/blog/rust-toolchains-vs-targets/</guid>
+      <description>&lt;h1 id=&#34;rust-toolchains-vs-targets&#34;&gt;Rust: Toolchains vs Targets&lt;/h1&gt;&#xA;&lt;p&gt;I&amp;rsquo;ve been using Rust for a year but never took the time to understand the&#xA;difference between a &lt;em&gt;toolchain&lt;/em&gt; and a &lt;em&gt;target&lt;/em&gt;. For most people, this&#xA;distinction isn&amp;rsquo;t necessary—but I work on UEFI, which is not a typical&#xA;environment for Rust development.&lt;/p&gt;&#xA;&lt;p&gt;I finally found time today to dig into this and understand the difference.&lt;/p&gt;&#xA;&lt;p&gt;To get started, I make heavy use of Windows Sandbox to try things out. I&#xA;launched Windows Sandbox and downloaded &lt;code&gt;rustup-init.exe&lt;/code&gt;. When the installer&#xA;runs, it detects the host operating system and architecture, and tries to&#xA;install the &lt;code&gt;stable-x86_64-pc-windows-msvc&lt;/code&gt; toolchain. The first part,&#xA;&lt;code&gt;stable-&lt;/code&gt;, refers to the &lt;em&gt;channel&lt;/em&gt; (Rust has &lt;code&gt;stable&lt;/code&gt;, &lt;code&gt;beta&lt;/code&gt;, &lt;code&gt;nightly&lt;/code&gt;, etc.),&#xA;and the rest of the toolchain name is self-explanatory. This installs the&#xA;relevant binaries to &lt;code&gt;~\.rustup\toolchains\stable-x86_64-pc-windows-msvc&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Rust: Cargo: Profiles</title>
       <link>/blog/rust-cargo-profiles/</link>
