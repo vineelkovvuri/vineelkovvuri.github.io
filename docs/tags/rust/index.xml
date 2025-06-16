@@ -6,8 +6,15 @@
     <description>Recent content in Rust on Vineel Kovvuri</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 15 Jun 2025 14:25:20 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 15 Jun 2025 18:58:12 +0000</lastBuildDate>
     <atom:link href="/tags/rust/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rust: Trait Objects, Dynamic Dispatch and VTables</title>
+      <link>/blog/rust-trait-objects-dynamic-dispatch-and-vtables/</link>
+      <pubDate>Sun, 15 Jun 2025 18:58:12 +0000</pubDate>
+      <guid>/blog/rust-trait-objects-dynamic-dispatch-and-vtables/</guid>
+      <description>&lt;h1 id=&#34;rust-trait-objects-dynamic-dispatch-and-vtables&#34;&gt;Rust: Trait Objects, Dynamic Dispatch and VTables&lt;/h1&gt;&#xA;&lt;p&gt;Even though Rust do not support the traditional inheritance/virtual function to&#xA;enable dynamic dispatch(runtime polymorphism). It does support traits based&#xA;runtime polymorphism, which may seems drastically different superficially when&#xA;compared to other OOP languages, under the hood it is all the same(virtual&#xA;functions/vtables etc).&lt;/p&gt;&#xA;&lt;p&gt;First of all, Rust based polymorphism is done via Trait objects(aka &amp;amp;dyn T),&#xA;where T is the trait. So lets say we want a function to accept an object that&#xA;implement say an interface I, usually in C# we do below&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Rust: Deref vs AsRef Traits</title>
       <link>/blog/rust-deref-vs-asref-traits/</link>
