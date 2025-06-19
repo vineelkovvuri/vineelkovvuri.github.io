@@ -6,8 +6,15 @@
     <description>Recent content in Home on Vineel Kovvuri</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 15 Jun 2025 18:58:12 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 18 Jun 2025 23:22:57 +0000</lastBuildDate>
     <atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rust: Self Referential Structures</title>
+      <link>/blog/rust-self-referential-structures/</link>
+      <pubDate>Wed, 18 Jun 2025 23:22:57 +0000</pubDate>
+      <guid>/blog/rust-self-referential-structures/</guid>
+      <description>&lt;h1 id=&#34;rust-self-referential-structures&#34;&gt;Rust: Self-Referential Structures&lt;/h1&gt;&#xA;&lt;p&gt;Today, I learned something very interesting about Rust references—specifically,&#xA;fields of a structure referring to other fields in the same structure.&#xA;Apparently, this is not possible. At first, it didn’t make much sense to me&#xA;because I assumed all fields are owned by the struct, so what’s the problem if&#xA;one field holds a reference to another?&lt;/p&gt;&#xA;&lt;p&gt;However, when I tried to construct such a structure, things became clearer.&#xA;Let’s look at the code sample below:&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Rust: Trait Objects, Dynamic Dispatch and VTables</title>
       <link>/blog/rust-trait-objects-dynamic-dispatch-and-vtables/</link>
