@@ -85,7 +85,7 @@ implement say an interface I, usually in C# we do below</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>istack.push(...);<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
-</span></span></span></code></pre></div><p>both examples look the same except in the function signature. In Rust <code>istack: IStack</code> do not make sense because <code>IStack</code> do not have size defined at compile
+</span></span></span></code></pre></div><p>both examples look the same except in the function signature. In Rust <code>istack: IStack</code> do not make sense because <code>IStack</code> do not have size defined at compile
 time. So Rust instead takes only reference to the Trait which is a fat pointer
 whose size is defined at compile time.</p>
 <h3 id="why-dyn-t-why-not-t">Why <code>&amp;dyn T</code> why not <code>&amp;T</code>?</h3>

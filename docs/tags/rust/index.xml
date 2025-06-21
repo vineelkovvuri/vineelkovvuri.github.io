@@ -6,8 +6,15 @@
     <description>Recent content in Rust on Vineel Kovvuri</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 18 Jun 2025 23:22:57 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 20 Jun 2025 15:17:28 +0000</lastBuildDate>
     <atom:link href="/tags/rust/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rust: Lifetimes</title>
+      <link>/blog/rust-lifetimes/</link>
+      <pubDate>Fri, 20 Jun 2025 15:17:28 +0000</pubDate>
+      <guid>/blog/rust-lifetimes/</guid>
+      <description>&lt;h1 id=&#34;rust-lifetimes&#34;&gt;Rust: Lifetimes&lt;/h1&gt;&#xA;&lt;p&gt;&amp;ldquo;Lifetimes, Lifetimes, Lifetimes. I don&amp;rsquo;t like it. I avoid it. But Lifetimes&#xA;likes me. I cannot avoid it&amp;rdquo; - &lt;a href=&#34;https://www.youtube.com/shorts/zE5NDOCSm4g&#34;&gt;KGF 2&lt;/a&gt;&lt;/p&gt;&#xA;&lt;p&gt;Jokes apart, Rust lifetimes are notoriously difficult to master. I have to&#xA;confess — I don&amp;rsquo;t fully understand them either. But today’s article will shed&#xA;some light on the topic.&lt;/p&gt;&#xA;&lt;p&gt;The concept of lifetimes in programming languages is not new — every variable in&#xA;C, for instance, has a lifetime associated with it. In simple terms, a&#xA;&lt;strong&gt;lifetime&lt;/strong&gt; indicates how long a variable remains alive and can be safely used.&#xA;However, in most other languages, this concept is hidden, and we generally do&#xA;not have the tools to explicitly express it. While this may often seem&#xA;unnecessary, it&amp;rsquo;s precisely the kind of topic that, when mishandled, can lead to&#xA;hard-to-debug crashes or bugs — such as dangling references.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Rust: Self Referential Structures</title>
       <link>/blog/rust-self-referential-structures/</link>
