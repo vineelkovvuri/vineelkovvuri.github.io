@@ -10,7 +10,7 @@
 <ul>
   {{ $pages := .Pages }}
   {{ if .IsHome }}{{ $pages = .Site.RegularPages }}{{ end }}
-  {{ range first 10 (where $pages "Section" "!=" "") }}
+  {{ range first 20 (where $pages "Section" "!=" "") }}
     {{if eq .Section "blog"}}
     <li>
       <span class="date">{{ .Date.Format "2006/01/02" }}</span>
