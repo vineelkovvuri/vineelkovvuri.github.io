@@ -6,8 +6,15 @@
     <description>Recent content in Blogs on Vineel Kovvuri</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 20 Jun 2025 15:17:28 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 21 Jun 2025 21:11:47 +0000</lastBuildDate>
     <atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rust: Trait Bounds</title>
+      <link>/blog/rust-trait-bounds/</link>
+      <pubDate>Sat, 21 Jun 2025 21:11:47 +0000</pubDate>
+      <guid>/blog/rust-trait-bounds/</guid>
+      <description>&lt;h1 id=&#34;rust-trait-bounds&#34;&gt;Rust: Trait Bounds&lt;/h1&gt;&#xA;&lt;p&gt;Traits in Rust is one of core features of the language. But it deserve some&#xA;explanation. Though they may sometimes be called similar to interfaces they are&#xA;far more flexible. Lets try to understand what they are and how they can be&#xA;used.&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#080;font-weight:bold&#34;&gt;trait&lt;/span&gt;&lt;span style=&#34;color:#bbb&#34;&gt; &lt;/span&gt;Book&lt;span style=&#34;color:#bbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color:#bbb&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#bbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color:#080;font-weight:bold&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#06b;font-weight:bold&#34;&gt;get_type&lt;/span&gt;(&amp;amp;self)&lt;span style=&#34;color:#bbb&#34;&gt; &lt;/span&gt;-&amp;gt; &lt;span style=&#34;color:#038&#34;&gt;String&lt;/span&gt;;&lt;span style=&#34;color:#bbb&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#bbb&#34;&gt;&lt;/span&gt;}&lt;span style=&#34;color:#bbb&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This defines trait not a type. traits != types. Traits can be thought of a&#xA;collection of features that are applicable to the implementing type. Traits&#xA;themselves are not very useful unless they are implemented by types.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Rust: Lifetimes</title>
       <link>/blog/rust-lifetimes/</link>
