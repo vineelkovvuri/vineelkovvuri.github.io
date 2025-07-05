@@ -253,7 +253,7 @@ This is the default behavior.</p>
 <li><code>x86_64-unknown-linux-gnu</code></li>
 </ul>
 <p>Now, back to the question—can we install, say, <code>stable-aarch64-apple-darwin</code> on a Windows machine?</p>
-<p>The short answer: <strong>Yes</strong>, you can install it <code>rustup toolchain install stable-aarch64-apple-darwin</code>. But the long answer is: you <strong>can&rsquo;t run</strong> the
+<p>The short answer: <strong>Yes</strong>, you can install it <code>rustup toolchain install stable-aarch64-apple-darwin</code>. But the long answer is: you <strong>can&rsquo;t run</strong> the
 binaries in that toolchain (like <code>rustc</code>) on Windows because they&rsquo;re not PE
 executables. <code>rustup</code> will even warn you:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cmd" data-lang="cmd"><span style="display:flex;"><span>C:<span style="color:#369;font-style:italic">\</span><span style="color:#888">&gt;rustup toolchain install stable-aarch64-apple-darwin</span>

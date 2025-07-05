@@ -175,7 +175,7 @@ it still doesn’t break Rust’s borrow checker guarantees.</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
 </span></span></span></code></pre></div><p>By annotating <code>&amp;mut self</code> with <code>'a</code>, the compiler is satisfied. But what exactly
 is going on?</p>
-<p>By adding <code>'a</code>, we’re telling the compiler: &ldquo;The mutable reference to self (<code>&amp;'a mut self</code>) must live as long as <code>'a</code>, the struct’s lifetime.&rdquo; As a result, this
+<p>By adding <code>'a</code>, we’re telling the compiler: &ldquo;The mutable reference to self (<code>&amp;'a mut self</code>) must live as long as <code>'a</code>, the struct’s lifetime.&rdquo; As a result, this
 mutable borrow now lives far beyond the duration of the function—it is tied to
 the entire lifetime of the struct. That effectively <em>locks</em> the struct into a
 state where the mutable borrow never ends, which makes the struct unusable

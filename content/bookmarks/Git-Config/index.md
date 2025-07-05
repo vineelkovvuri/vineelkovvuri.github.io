@@ -12,24 +12,20 @@ tags: ['Git', 'WindowsSetup']
     br = branch -vv
     co = checkout
     cp = cherry-pick
-    staash = stash --all
+    lg = log --pretty=format:'%C(auto)%h %Cgreen%an%Creset %C(yellow)%d%Creset %s' --abbrev-commit
 [diff]
     tool = winmerge
-	guitool = winmerge
+    guitool = winmerge
     colormoved = "default"
     colormovedws = "allow-indentation-change"
     colorWords = true
 
-[difftool]
-	prompt = false
 [merge]
-	tool = winmerge
-	guitool = winmerge
+    tool = winmerge
+    guitool = winmerge
 [mergetool]
-	prompt = false
+    prompt = false
     keepBackup = false
-[color]
-    ui = auto
 
 [difftool "bc"]
     path = C:/Program Files/Beyond Compare 4/bcomp.exe
@@ -47,14 +43,14 @@ tags: ['Git', 'WindowsSetup']
     editor = notepad4
     autocrlf = false
     commentChar = ";"
+    longpaths = true
 [help]
     autocorrect = 1
+
 [safe]
     directory = *
 
 # https://blog.gitbutler.com/how-git-core-devs-configure-git/
-[column]
-    ui = auto
 [branch]
     sort = -committerdate
 [tag]
@@ -79,15 +75,10 @@ tags: ['Git', 'WindowsSetup']
 [rerere]
     enabled = true
     autoupdate = true
-[rebase]
-    autoSquash = true
-    autoStash = true
-    updateRefs = true
 
 [remote "origin"]
-	fetch = '+refs/pull/*:refs/remotes/origin/pull/*'
+    fetch = '+refs/pull/*:refs/remotes/origin/pull/*'
 
 # You Don't Know Git - Edward Thomson - NDC London 2025
 # https://www.youtube.com/watch?v=DZI0Zl-1JqQ
-
 ```
