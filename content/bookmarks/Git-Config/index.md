@@ -12,56 +12,40 @@ tags: ['Git', 'WindowsSetup']
     br = branch -vv
     co = checkout
     cp = cherry-pick
-    lg = log --pretty=format:'%C(auto)%h %Cgreen%an%Creset %C(yellow)%d%Creset %s' --abbrev-commit
+    lg = log --oneline --left-right --date=short --pretty=format:'%m %C(auto)%<(7)%h %C(blue)%<(10)%ad %C(green)%<(20,trunc)%an%Creset %Creset %s%C(yellow)%d%Creset'
+    dd = difftool -d --no-symlinks
 [diff]
     tool = winmerge
     guitool = winmerge
-    colormoved = "default"
-    colormovedws = "allow-indentation-change"
     colorWords = true
-
+    algorithm = histogram
+    colorMoved = plain
+    mnemonicPrefix = true
+    renames = true
 [merge]
     tool = winmerge
     guitool = winmerge
 [mergetool]
     prompt = false
     keepBackup = false
-
 [difftool "bc"]
-    path = C:/Program Files/Beyond Compare 4/bcomp.exe
-[mergetool "bc"]
-    path = C:/Program Files/Beyond Compare 4/bcomp.exe
-    keepBackup = false
-
-[difftool "meld"]
-    path = "C:/Program Files (x86)/Meld/meld/meld.exe"
-[mergetool "meld"]
-    path = "C:/Program Files (x86)/Meld/meld/meld.exe"
-    keepBackup = false
-
+    cmd = \"C:/Program Files/Beyond Compare 4/BCompare.exe\" \"$LOCAL\" \"$REMOTE\"
 [core]
     editor = notepad4
     autocrlf = false
     commentChar = ";"
     longpaths = true
+    symlinks = true
 [help]
     autocorrect = 1
-
 [safe]
     directory = *
-
-# https://blog.gitbutler.com/how-git-core-devs-configure-git/
 [branch]
     sort = -committerdate
 [tag]
     sort = version:refname
 [init]
     defaultBranch = main
-[diff]
-    algorithm = histogram
-    colorMoved = plain
-    mnemonicPrefix = true
-    renames = true
 [push]
     default = simple
     autoSetupRemote = true
@@ -75,6 +59,12 @@ tags: ['Git', 'WindowsSetup']
 [rerere]
     enabled = true
     autoupdate = true
+[pull]
+    rebase = false
+[rebase]
+    autoStash = false
+    autosquash = false
+    updateRefs = false
 
 [remote "origin"]
     fetch = '+refs/pull/*:refs/remotes/origin/pull/*'

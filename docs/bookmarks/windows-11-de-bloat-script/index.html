@@ -132,8 +132,26 @@
 </span></span><span style="display:flex;"><span>    <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.YourPhone&#34;</span>, <span style="color:#888"># Phone link</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.ZuneMusic&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#d20;background-color:#fff0f0">&#34;MicrosoftWindows.CrossDevice&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.MSPaint&#34;</span>                      <span style="color:#888"># Paint 3D</span>
-</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.WindowsNotepad&#34;</span>, <span style="color:#888"># Don&#39;t like the new Notepad with AI crap</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.MSPaint&#34;</span>,                      <span style="color:#888"># Paint 3D</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#d20;background-color:#fff0f0">&#34;Clipchamp.Clipchamp&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.TeamsXboxGameBarWidget&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.Windows.Cortana&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.Windows.DevHome&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.Windows.DevHomeGitHubExtension&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.M365Companions&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.GamingApp&#34;</span>,                    <span style="color:#888"># Modern Xbox Gaming App, required for installing some PC games</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.OutlookForWindows&#34;</span>,            <span style="color:#888"># New mail app: Outlook for Windows</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.People&#34;</span>,                       <span style="color:#888"># Required for &amp; included with Mail &amp; Calendar</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.Windows.DevHome&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.windowscommunicationsapps&#34;</span>,    <span style="color:#888"># Mail &amp; Calendar</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.XboxGameOverlay&#34;</span>,              <span style="color:#888"># Game overlay, required/useful for some games</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.XboxGamingOverlay&#34;</span>,            <span style="color:#888"># Game overlay, required/useful for some games</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.Copilot&#34;</span>,                      <span style="color:#888"># New Windows Copilot app</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.Windows.Photos&#34;</span>,               <span style="color:#888"># Use FastStone Image viewer</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.Paint&#34;</span>,                        <span style="color:#888"># Classic Paint</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#d20;background-color:#fff0f0">&#34;Microsoft.ScreenSketch&#34;</span>                  <span style="color:#888"># Snipping Tool. Use FSCapture</span>
+</span></span><span style="display:flex;"><span>    )
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#888"># Iterate over each app name and try to remove it</span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">foreach</span> (<span style="color:#369">$appName</span> <span style="color:#080;font-weight:bold">in</span> <span style="color:#369">$appList</span>) {
@@ -147,17 +165,12 @@
 </span></span><span style="display:flex;"><span><span style="color:#888">#   want to UNINSTALL by default.                                                                               #</span>
 </span></span><span style="display:flex;"><span><span style="color:#888"># ------------------------------------------------------------------------------------------------------------- #</span>
 </span></span><span style="display:flex;"><span><span style="color:#888">#Microsoft.BingSearch                   # Web Search from Microsoft Bing (Integrates into Windows Search)</span>
-</span></span><span style="display:flex;"><span><span style="color:#888">#Microsoft.Copilot                      # New Windows Copilot app</span>
 </span></span><span style="display:flex;"><span><span style="color:#888">#Microsoft.Edge                         # Edge browser (Can only be uninstalled in European Economic Area)</span>
 </span></span><span style="display:flex;"><span><span style="color:#888">#Microsoft.GetHelp                      # Required for some Windows 11 Troubleshooters</span>
 </span></span><span style="display:flex;"><span><span style="color:#888">#Microsoft.OneDrive                     # OneDrive consumer</span>
-</span></span><span style="display:flex;"><span><span style="color:#888">#Microsoft.Paint                        # Classic Paint</span>
-</span></span><span style="display:flex;"><span><span style="color:#888">#Microsoft.ScreenSketch                 # Snipping Tool</span>
 </span></span><span style="display:flex;"><span><span style="color:#888">#Microsoft.Whiteboard                   # Only preinstalled on devices with touchscreen and/or pen support</span>
-</span></span><span style="display:flex;"><span><span style="color:#888">#Microsoft.Windows.Photos</span>
 </span></span><span style="display:flex;"><span><span style="color:#888">#Microsoft.WindowsCalculator</span>
 </span></span><span style="display:flex;"><span><span style="color:#888">#Microsoft.WindowsCamera</span>
-</span></span><span style="display:flex;"><span><span style="color:#888">#Microsoft.WindowsNotepad</span>
 </span></span><span style="display:flex;"><span><span style="color:#888">#Microsoft.WindowsStore                 # Microsoft Store, WARNING: This app cannot be reinstalled!</span>
 </span></span><span style="display:flex;"><span><span style="color:#888">#Microsoft.WindowsTerminal              # New default terminal app in windows 11</span>
 </span></span><span style="display:flex;"><span><span style="color:#888">#Microsoft.Xbox.TCUI                    # UI framework, seems to be required for MS store, photos and certain games</span>
@@ -170,14 +183,7 @@
 </span></span><span style="display:flex;"><span><span style="color:#888">#   or when launching the script with the specific parameters found in the README.md. Remove the # character in   #</span>
 </span></span><span style="display:flex;"><span><span style="color:#888">#   front of any app you want to UNINSTALL by default.                                                            #</span>
 </span></span><span style="display:flex;"><span><span style="color:#888"># --------------------------------------------------------------------------------------------------------------- #</span>
-</span></span><span style="display:flex;"><span><span style="color:#888">#Microsoft.GamingApp                    # Modern Xbox Gaming App, required for installing some PC games</span>
-</span></span><span style="display:flex;"><span><span style="color:#888">#Microsoft.OutlookForWindows            # New mail app: Outlook for Windows</span>
-</span></span><span style="display:flex;"><span><span style="color:#888">#Microsoft.People                       # Required for &amp; included with Mail &amp; Calendar</span>
 </span></span><span style="display:flex;"><span><span style="color:#888">#Microsoft.RemoteDesktop</span>
-</span></span><span style="display:flex;"><span><span style="color:#888">#Microsoft.Windows.DevHome</span>
-</span></span><span style="display:flex;"><span><span style="color:#888">#Microsoft.windowscommunicationsapps    # Mail &amp; Calendar</span>
-</span></span><span style="display:flex;"><span><span style="color:#888">#Microsoft.XboxGameOverlay              # Game overlay, required/useful for some games</span>
-</span></span><span style="display:flex;"><span><span style="color:#888">#Microsoft.XboxGamingOverlay            # Game overlay, required/useful for some games</span>
 </span></span></code></pre></div>
 </main>
 

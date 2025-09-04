@@ -44,56 +44,40 @@
 </span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    br = branch -vv
 </span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    co = checkout
 </span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    cp = cherry-pick
-</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    lg = log --pretty=format:&#39;%C(auto)%h %Cgreen%an%Creset %C(yellow)%d%Creset %s&#39; --abbrev-commit</span>
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    lg = log --oneline --left-right --date=short --pretty=format:&#39;%m %C(auto)%&lt;(7)%h %C(blue)%&lt;(10)%ad %C(green)%&lt;(20,trunc)%an%Creset %Creset %s%C(yellow)%d%Creset&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    dd = difftool -d --no-symlinks</span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[diff]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#369">tool</span> = <span style="color:#d20;background-color:#fff0f0">winmerge
 </span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    guitool = winmerge
-</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    colormoved = &#34;default&#34;
-</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    colormovedws = &#34;allow-indentation-change&#34;
-</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    colorWords = true</span>
-</span></span><span style="display:flex;"><span>
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    colorWords = true
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    algorithm = histogram
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    colorMoved = plain
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    mnemonicPrefix = true
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    renames = true</span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[merge]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#369">tool</span> = <span style="color:#d20;background-color:#fff0f0">winmerge
 </span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    guitool = winmerge</span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[mergetool]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#369">prompt</span> = <span style="color:#d20;background-color:#fff0f0">false
 </span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    keepBackup = false</span>
-</span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[difftool &#34;bc&#34;]</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#369">path</span> = <span style="color:#d20;background-color:#fff0f0">C:/Program Files/Beyond Compare 4/bcomp.exe</span>
-</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[mergetool &#34;bc&#34;]</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#369">path</span> = <span style="color:#d20;background-color:#fff0f0">C:/Program Files/Beyond Compare 4/bcomp.exe
-</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    keepBackup = false</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[difftool &#34;meld&#34;]</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#369">path</span> = <span style="color:#d20;background-color:#fff0f0">&#34;C:/Program Files (x86)/Meld/meld/meld.exe&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[mergetool &#34;meld&#34;]</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#369">path</span> = <span style="color:#d20;background-color:#fff0f0">&#34;C:/Program Files (x86)/Meld/meld/meld.exe&#34;
-</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    keepBackup = false</span>
-</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">cmd</span> = <span style="color:#d20;background-color:#fff0f0">\&#34;C:/Program Files/Beyond Compare 4/BCompare.exe\&#34; \&#34;$LOCAL\&#34; \&#34;$REMOTE\&#34;</span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[core]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#369">editor</span> = <span style="color:#d20;background-color:#fff0f0">notepad4
 </span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    autocrlf = false
 </span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    commentChar = &#34;;&#34;
-</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    longpaths = true</span>
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    longpaths = true
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    symlinks = true</span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[help]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#369">autocorrect</span> = <span style="color:#d20;background-color:#fff0f0">1</span>
-</span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[safe]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#369">directory</span> = <span style="color:#d20;background-color:#fff0f0">*</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#888"># https://blog.gitbutler.com/how-git-core-devs-configure-git/</span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[branch]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#369">sort</span> = <span style="color:#d20;background-color:#fff0f0">-committerdate</span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[tag]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#369">sort</span> = <span style="color:#d20;background-color:#fff0f0">version:refname</span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[init]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#369">defaultBranch</span> = <span style="color:#d20;background-color:#fff0f0">main</span>
-</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[diff]</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#369">algorithm</span> = <span style="color:#d20;background-color:#fff0f0">histogram
-</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    colorMoved = plain
-</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    mnemonicPrefix = true
-</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    renames = true</span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[push]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#369">default</span> = <span style="color:#d20;background-color:#fff0f0">simple
 </span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    autoSetupRemote = true
@@ -107,6 +91,12 @@
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[rerere]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#369">enabled</span> = <span style="color:#d20;background-color:#fff0f0">true
 </span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    autoupdate = true</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[pull]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">rebase</span> = <span style="color:#d20;background-color:#fff0f0">false</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[rebase]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">autoStash</span> = <span style="color:#d20;background-color:#fff0f0">false
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    autosquash = false
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    updateRefs = false</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[remote &#34;origin&#34;]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#369">fetch</span> = <span style="color:#d20;background-color:#fff0f0">&#39;+refs/pull/*:refs/remotes/origin/pull/*&#39;</span>
