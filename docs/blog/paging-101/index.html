@@ -228,8 +228,8 @@ page table). Once this is done, we move to the next PD page table, and so on.</p
 </span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> <span style="color:#00d;font-weight:bold">0</span>;
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>The limitation of a simple identity mapping setup is that if page tables for new
-memory regions are not pre-allocated and mapped, adding new mappings becomes
-difficult. This makes identity mapping more rigid compared to more flexible
+memory regions are not pre-allocated and mapped, adding new mappings is not
+possible. This makes identity mapping more rigid compared to more flexible
 memory mapping schemes.</p>
 <h2 id="what-is-non-identity-mapping">What is Non-Identity Mapping?</h2>
 <p>In this scheme, the internal wiring of page tables works very similar to
@@ -241,9 +241,9 @@ region compared to the bottom PT page table. This causes the VA to not map
 exactly to its PA.</p>
 <p><img src="non_identity_mapping.png" alt="Non-Identity Mapping"></p>
 <h2 id="what-is-self-mapping">What is Self mapping?</h2>
-<p><strong>Self-mapping</strong> is a clever way to create page tables that removes the
-restriction of identity mapping. In other words, page tables for new memory
-regions need not be pre-allocated and mapped.</p>
+<p><strong>Self-mapping</strong> is a clever way to create page tables and map them on the fly
+removing the restriction of identity mapping. In other words, page tables for
+new memory regions need not be pre-allocated and mapped. How is this achieved?</p>
 <p>Firstly, Self-mapping does not change the way the CPU resolves the <em>&ldquo;normal&rdquo;</em> VA
 to PA translations once it is enabled. But it does change how the page tables
 themselves are access and operated on. Meaning, how the page tables base address
@@ -258,12 +258,12 @@ not they don&rsquo;t work.</p>
 no VA-to-PA translation exists for that page table&rsquo;s base address). In order to
 have read/write access to that page, we need to <strong>trick</strong> the CPU in such a way
 that, when it resolves a specially crafted virtual address (VA), <em>the CPU&rsquo;s page
-walk ultimately lands on the physical base address of the desired page table</em>.
-What this means is that the CPU finishes translating the VA, but the page walk
-itself ends at the desired page table. In other words, the CPU effectively maps
-the page table for us, and we can then have R/W access to its entries. Remember what
-&ldquo;mapping&rdquo; really mean? This paragraph definitely requires multiple readings to
-fully grasp!</p>
+walk ultimately lands on the physical base address of that allocated page</em>. What
+this means is that the CPU finishes translating the VA, and the page walk itself
+ends at the desired page table. In other words, the CPU effectively maps the
+page table for us, and we can then have R/W access to its entries. Recollect
+what &ldquo;mapping&rdquo; really mean from the first paragraph? If not read it again. Also
+the current paragraph definitely requires multiple readings to fully grasp!</p>
 <h2 id="what-tricks-are-we-playing-with-the-cpu-here">What tricks are we playing with the CPU here?</h2>
 <p>Lets recap the usual VA to PA translation: Nothing new. Just follow Step 1 to
 Step 12 in the below illustration. <img src="va_to_pa_steps.png" alt="Usual VA to PA Mapping"></p>
@@ -279,18 +279,28 @@ at other levels unchanged. Now, if we try to access a special virtual address
 </span></span><span style="display:flex;"><span>1111111|111111111|000000000|000000000|000000000|000000000|000000000000
 </span></span><span style="display:flex;"><span>     7F|      1FF|        0|        0|        0|        0|           0 Hex
 </span></span><span style="display:flex;"><span>    127|      511|        0|        0|        0|        0|           0 Decimal
+</span></span><span style="display:flex;"><span>                                              ^--------
 </span></span></code></pre></div><p>Compared to the previous illustration, in the self-mapping case, the final
 address translation lands on the base address of the 0th PT (Page Table) instead
 of landing on the physical frame. What does this mean? This means the CPU has
 effectively mapped the <strong>0th PT Page Table itself</strong> using the special VA
-<code>0xFFFF000000000000</code>. Take a deep breath and reread the previous sentence again!
-Furthermore, the same logic can be applied to map the <strong>2nd PT Page Table base</strong> by
-using the VA <code>0xFFFF000000200000</code>. So, <strong>with just one self-referencing
+<code>0xFFFF000000000000</code>. Take a deep breath and reread the previous sentence again!</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>0xFFFF000000200000 :
+</span></span><span style="display:flex;"><span>       |     PML5|     PML4| PDP/PML3|  PD/PML2|  PT/PML1|    Physical
+</span></span><span style="display:flex;"><span>6666555|555555544|444444443|333333333|222222222|211111111|110000000000
+</span></span><span style="display:flex;"><span>3210987|654321098|765432109|876543210|987654321|098765432|109876543210
+</span></span><span style="display:flex;"><span>1111111|111111111|000000000|000000000|000000001|000000000|000000000000
+</span></span><span style="display:flex;"><span>     7F|      1FF|        0|        0|        1|        0|           0 Hex
+</span></span><span style="display:flex;"><span>    127|      511|        0|        0|        1|        0|           0 Decimal
+</span></span><span style="display:flex;"><span>                                              ^--------
+</span></span></code></pre></div><p>Furthermore, the same logic can be applied to map the <strong>2nd PT Page Table base</strong>
+by using the VA <code>0xFFFF000000200000</code>. So, <strong>with just one self-referencing
 (self-loop) entry in the PML5 page table, we gain access to all PT page tables</strong>
 simply by crafting appropriate virtual addresses. If we were to craft a VA like
 <code>0xFFFFFF8000000000</code>, which loops back into the PML5 page table twice (why?
-because <code>0xFFFFFF8000000000 = |1FF|1FF|0|0|0</code>), we would be able to <strong>locate the PD
-(Page Directory) page tables</strong>, and so on for higher levels.</p>
+because <code>0xFFFFFF8000000000 = |1FF|1FF|0|0|0</code>), we would be able to <strong>locate the
+PD (Page Directory) page tables</strong>, and so on for higher levels.</p>
 <p>Let&rsquo;s walk through the page tables for these special VAs with some
 illustrations.</p>
 <p>Steps involved in mapping the unmapped PT Base address: Loop once
@@ -313,11 +323,11 @@ corresponding page tables to be mapped.</p>
 an easier to understand formula if we perform a page walk with it manually.
 Remember, &lsquo;va&rsquo; is the new address that we are trying to map, and as part of the
 process, we are trying to locate or map any necessary intermediate page tables.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>PT Base PA   = 1FF|PML5(va)|PML4(va)|PDPE(va)| PDE(va)| &lt;--- If we loop 1 time and decode the rest of the address, we will get to appropriate PA base
-</span></span><span style="display:flex;"><span>PD Base PA   = 1FF|     1FF|PML5(va)|PML4(va)|PDPE(va)| &lt;--- If we loop 2 times and decode the rest of the address, we will get to appropriate PD base
-</span></span><span style="display:flex;"><span>PDP Base PA  = 1FF|     1FF|     1FF|PML5(va)|PML4(va)| &lt;--- If we loop 3 times and decode the rest of the address, we will get to appropriate PDP base
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>PML5 Base PA = 1FF|     1FF|     1FF|     1FF|     1FF| &lt;--- If we loop 5 times and decode the rest of the address, we will get to appropriate PML5 base
 </span></span><span style="display:flex;"><span>PML4 Base PA = 1FF|     1FF|     1FF|     1FF|PML5(va)| &lt;--- If we loop 4 times and decode the rest of the address, we will get to appropriate PML4 base
-</span></span><span style="display:flex;"><span>PML5 Base PA = 1FF|     1FF|     1FF|     1FF|     1FF| &lt;--- If we loop 5 times and decode the rest of the address, we will get to appropriate PML5 base
+</span></span><span style="display:flex;"><span>PDP Base PA  = 1FF|     1FF|     1FF|PML5(va)|PML4(va)| &lt;--- If we loop 3 times and decode the rest of the address, we will get to appropriate PDP base
+</span></span><span style="display:flex;"><span>PD Base PA   = 1FF|     1FF|PML5(va)|PML4(va)|PDPE(va)| &lt;--- If we loop 2 times and decode the rest of the address, we will get to appropriate PD base
+</span></span><span style="display:flex;"><span>PT Base PA   = 1FF|PML5(va)|PML4(va)|PDPE(va)| PDE(va)| &lt;--- If we loop 1 time and decode the rest of the address, we will get to appropriate PA base
 </span></span></code></pre></div><p>The key idea in the above formulas is that access to a lower-level page table
 base depends only on the higher-level components of the va being mapped, not on
 the physical address of the lower-level page table itself.</p>
