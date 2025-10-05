@@ -48,6 +48,7 @@ allow access to those ports from inside the VM as well.
 ```bash
 sudo ufw allow 21114:21119/tcp
 sudo ufw allow 8000/tcp
+sudo ufw allow 22/tcp       # for ssh
 sudo ufw allow 21116/udp
 sudo ufw enable
 ```
