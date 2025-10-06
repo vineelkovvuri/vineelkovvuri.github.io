@@ -53,6 +53,9 @@ sudo ufw allow 21116/udp
 sudo ufw enable
 ```
 
+Make sure to disable VM Auto shutdown feature.
+![Disable Azure VM Auto Shutdown](autoshutdown.png)
+
 Next, download and run the installation script:
 
 ```bash

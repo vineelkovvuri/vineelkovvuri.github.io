@@ -94,7 +94,9 @@ allow access to those ports from inside the VM as well.</p>
 </span></span><span style="display:flex;"><span>sudo ufw allow 22/tcp       <span style="color:#888"># for ssh</span>
 </span></span><span style="display:flex;"><span>sudo ufw allow 21116/udp
 </span></span><span style="display:flex;"><span>sudo ufw <span style="color:#038">enable</span>
-</span></span></code></pre></div><p>Next, download and run the installation script:</p>
+</span></span></code></pre></div><p>Make sure to disable VM Auto shutdown feature.
+<img src="autoshutdown.png" alt="Disable Azure VM Auto Shutdown"></p>
+<p>Next, download and run the installation script:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>wget https://raw.githubusercontent.com/techahold/rustdeskinstall/master/install.sh
 </span></span><span style="display:flex;"><span>chmod +x install.sh
 </span></span><span style="display:flex;"><span>./install.sh
