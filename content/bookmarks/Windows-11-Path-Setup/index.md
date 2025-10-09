@@ -19,6 +19,7 @@ Function AppendPathVariable {
     }
 }
 
+[Environment]::SetEnvironmentVariable("PROMPT", "`$e]9;9;`$P`$e\`$P`$G", [System.EnvironmentVariableTarget]::User)
 [Environment]::SetEnvironmentVariable("_NT_SOURCE_PATH", "SRV*C:\Sources", [System.EnvironmentVariableTarget]::User)
 [Environment]::SetEnvironmentVariable("_NT_SYMBOL_PATH", "SRV*C:\Symbols*https://symweb.azurefd.net;SRV*C:\Symbols*https://msdl.microsoft.com/download/symbols", [System.EnvironmentVariableTarget]::User)
 
@@ -36,11 +37,11 @@ AppendPathVariable -Path "C:\Program Files (x86)\Meld\meld"
 AppendPathVariable -Path "C:\msys64\ucrt64\bin"
 AppendPathVariable -Path "C:\Program Files\GitHub CLI\"
 AppendPathVariable -Path "C:\Program Files\LLVM\bin"
-AppendPathVariable -Path "C:\Program Files\LLVM\bin"
 
 # Exclude some paths from Windows Defender Scans
 Add-MpPreference -ExclusionPath "$($env:USERPROFILE)\.cargo"
 Add-MpPreference -ExclusionPath "$($env:USERPROFILE)\.rustup"
+Add-MpPreference -ExclusionPath "C:\repos"
 
 # Manually restart after installing below optional packages
 dism /online /Enable-Feature /FeatureName:Microsoft-Windows-Subsystem-Linux /All /norestart
@@ -50,8 +51,8 @@ dism /online /Enable-Feature /FeatureName:HypervisorPlatform /All /norestart
 
 # Replace notepad.exe with Notepad4.exe to work from Run prompt
 # Should use notepad4.exe from cmd and other places
-$registryPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\notepad.exe"
-$exePath = "$($env:USERPROFILE)\OneDrive\Softs\Tools\rg\Notepad4.exe"
-Set-ItemProperty -Path $registryPath -Name "(Default)" -Value $exePath
+# $registryPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\notepad.exe"
+# $exePath = "$($env:USERPROFILE)\OneDrive\Softs\Tools\rg\Notepad4.exe"
+# Set-ItemProperty -Path $registryPath -Name "(Default)" -Value $exePath
 
 ```

@@ -13,7 +13,15 @@ tags: ['Git', 'WindowsSetup']
     co = checkout
     cp = cherry-pick
     lg = log --oneline --left-right --date=short --pretty=format:'%m %C(auto)%<(7)%h %C(blue)%<(10)%ad %C(green)%<(20,trunc)%an%Creset %Creset %s%C(yellow)%d%Creset'
+    llg = log --oneline --left-right --date=short --pretty=format:'%m %C(auto)%<(7)%h %Creset %s%Creset'
     dd = difftool -d --no-symlinks
+[pager]
+    # Install riff https://github.com/walles/riff
+    diff = riff
+    show = riff
+    log = riff
+[interactive]
+    diffFilter = riff --color=on
 [diff]
     tool = winmerge
     guitool = winmerge
@@ -25,17 +33,34 @@ tags: ['Git', 'WindowsSetup']
 [merge]
     tool = winmerge
     guitool = winmerge
+    conflictstyle=diff3
 [mergetool]
     prompt = false
     keepBackup = false
 [difftool "bc"]
     cmd = \"C:/Program Files/Beyond Compare 4/BCompare.exe\" \"$LOCAL\" \"$REMOTE\"
+[difftool "winmerge"]
+    path = C:/Users/vineelko/AppData/Local/Programs/WinMerge/winmergeu.exe
+    cmd = \"C:/Users/vineelko/AppData/Local/Programs/WinMerge/winmergeu.exe\" -e -u \"$LOCAL\" \"$REMOTE\"
+[mergetool "winmerge"]
+    path = C:/Users/vineelko/AppData/Local/Programs/WinMerge/winmergeu.exe
+    cmd = \"C:/Users/vineelko/AppData/Local/Programs/WinMerge/winmergeu.exe\" -e -u  -wl -wr -fm -dl \"Mine: $LOCAL\" -dm \"Merged: $BASE\" -dr \"Theirs: $REMOTE\" \"$LOCAL\" \"$BASE\" \"$REMOTE\" -o \"$MERGED\"
+[pull]
+    rebase = false
+[rebase]
+    autoStash = false
+    autosquash = false
+    updateRefs = false
 [core]
     editor = notepad4
     autocrlf = false
     commentChar = ";"
     longpaths = true
     symlinks = true
+    pager = moor  # Install moor: https://github.com/walles/moor
+[grep]
+    patternType = perl
+    lineNumber = true
 [help]
     autocorrect = 1
 [safe]
@@ -59,13 +84,6 @@ tags: ['Git', 'WindowsSetup']
 [rerere]
     enabled = true
     autoupdate = true
-[pull]
-    rebase = false
-[rebase]
-    autoStash = false
-    autosquash = false
-    updateRefs = false
-
 [remote "origin"]
     fetch = '+refs/pull/*:refs/remotes/origin/pull/*'
 

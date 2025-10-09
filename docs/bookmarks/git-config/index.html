@@ -45,7 +45,15 @@
 </span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    co = checkout
 </span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    cp = cherry-pick
 </span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    lg = log --oneline --left-right --date=short --pretty=format:&#39;%m %C(auto)%&lt;(7)%h %C(blue)%&lt;(10)%ad %C(green)%&lt;(20,trunc)%an%Creset %Creset %s%C(yellow)%d%Creset&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    llg = log --oneline --left-right --date=short --pretty=format:&#39;%m %C(auto)%&lt;(7)%h %Creset %s%Creset&#39;
 </span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    dd = difftool -d --no-symlinks</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[pager]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#888"># Install riff https://github.com/walles/riff</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">diff</span> = <span style="color:#d20;background-color:#fff0f0">riff
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    show = riff
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    log = riff</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[interactive]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">diffFilter</span> = <span style="color:#d20;background-color:#fff0f0">riff --color=on</span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[diff]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#369">tool</span> = <span style="color:#d20;background-color:#fff0f0">winmerge
 </span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    guitool = winmerge
@@ -56,18 +64,35 @@
 </span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    renames = true</span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[merge]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#369">tool</span> = <span style="color:#d20;background-color:#fff0f0">winmerge
-</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    guitool = winmerge</span>
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    guitool = winmerge
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    conflictstyle=diff3</span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[mergetool]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#369">prompt</span> = <span style="color:#d20;background-color:#fff0f0">false
 </span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    keepBackup = false</span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[difftool &#34;bc&#34;]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#369">cmd</span> = <span style="color:#d20;background-color:#fff0f0">\&#34;C:/Program Files/Beyond Compare 4/BCompare.exe\&#34; \&#34;$LOCAL\&#34; \&#34;$REMOTE\&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[difftool &#34;winmerge&#34;]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">path</span> = <span style="color:#d20;background-color:#fff0f0">C:/Users/vineelko/AppData/Local/Programs/WinMerge/winmergeu.exe
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    cmd = \&#34;C:/Users/vineelko/AppData/Local/Programs/WinMerge/winmergeu.exe\&#34; -e -u \&#34;$LOCAL\&#34; \&#34;$REMOTE\&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[mergetool &#34;winmerge&#34;]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">path</span> = <span style="color:#d20;background-color:#fff0f0">C:/Users/vineelko/AppData/Local/Programs/WinMerge/winmergeu.exe
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    cmd = \&#34;C:/Users/vineelko/AppData/Local/Programs/WinMerge/winmergeu.exe\&#34; -e -u  -wl -wr -fm -dl \&#34;Mine: $LOCAL\&#34; -dm \&#34;Merged: $BASE\&#34; -dr \&#34;Theirs: $REMOTE\&#34; \&#34;$LOCAL\&#34; \&#34;$BASE\&#34; \&#34;$REMOTE\&#34; -o \&#34;$MERGED\&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[pull]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">rebase</span> = <span style="color:#d20;background-color:#fff0f0">false</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[rebase]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">autoStash</span> = <span style="color:#d20;background-color:#fff0f0">false
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    autosquash = false
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    updateRefs = false</span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[core]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#369">editor</span> = <span style="color:#d20;background-color:#fff0f0">notepad4
 </span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    autocrlf = false
 </span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    commentChar = &#34;;&#34;
 </span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    longpaths = true
-</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    symlinks = true</span>
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    symlinks = true
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    pager = moor  # Install moor: https://github.com/walles/moor</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[grep]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">patternType</span> = <span style="color:#d20;background-color:#fff0f0">perl
+</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    lineNumber = true</span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[help]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#369">autocorrect</span> = <span style="color:#d20;background-color:#fff0f0">1</span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[safe]</span>
@@ -91,13 +116,6 @@
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[rerere]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#369">enabled</span> = <span style="color:#d20;background-color:#fff0f0">true
 </span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    autoupdate = true</span>
-</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[pull]</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#369">rebase</span> = <span style="color:#d20;background-color:#fff0f0">false</span>
-</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[rebase]</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#369">autoStash</span> = <span style="color:#d20;background-color:#fff0f0">false
-</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    autosquash = false
-</span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    updateRefs = false</span>
-</span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[remote &#34;origin&#34;]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#369">fetch</span> = <span style="color:#d20;background-color:#fff0f0">&#39;+refs/pull/*:refs/remotes/origin/pull/*&#39;</span>
 </span></span><span style="display:flex;"><span>
