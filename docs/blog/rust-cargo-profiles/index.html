@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=9999&amp;path=livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Rust: Cargo: Profiles | Vineel Kovvuri</title>
@@ -113,7 +113,7 @@ in the library crate. Meanwhile, the binary crate that depends on it has
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">main</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>result<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>add(<span style="color:#00d;font-weight:bold">11</span>);<span style="color:#bbb"> </span><span style="color:#888">// 250 + 11 = 261, wraps to 5
-</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span>assert_eq!(result,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">5</span>);<span style="color:#bbb"> </span><span style="color:#888">// Should not panic if mylib settings are used
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#06b;font-weight:bold">assert_eq!</span>(result,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">5</span>);<span style="color:#bbb"> </span><span style="color:#888">// Should not panic if mylib settings are used
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span>}<span style="color:#bbb">
 </span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-toml" data-lang="toml"><span style="display:flex;"><span><span style="color:#888"># myexe/Cargo.toml</span>
 </span></span><span style="display:flex;"><span>[package]
@@ -175,6 +175,27 @@ scripts, CI, or external tooling — not just Cargo profiles.</p>
 
 </main>
 
+<hr/>
+
+<section id="comments" class="giscus">
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
+
   <footer>
   
 <script defer src="/js/center-img.js"></script>
@@ -189,6 +210,23 @@ scripts, CI, or external tooling — not just Cargo profiles.</p>
   <hr/>
   © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2025 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
   
+
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
   </footer>
   </body>
 </html>

@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>GitHub on Vineel Kovvuri</title>
-    <link>/tags/github/</link>
+    <link>//localhost:9999/tags/github/</link>
     <description>Recent content in GitHub on Vineel Kovvuri</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 25 Mar 2025 20:27:07 +0000</lastBuildDate>
-    <atom:link href="/tags/github/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="//localhost:9999/tags/github/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>How to Use Multiple GitHub Accounts with SSH Keys on a Single Computer</title>
-      <link>/blog/how-to-use-multiple-github-accounts-with-ssh-keys-on-a-single-computer/</link>
+      <link>//localhost:9999/blog/how-to-use-multiple-github-accounts-with-ssh-keys-on-a-single-computer/</link>
       <pubDate>Tue, 25 Mar 2025 20:27:07 +0000</pubDate>
-      <guid>/blog/how-to-use-multiple-github-accounts-with-ssh-keys-on-a-single-computer/</guid>
+      <guid>//localhost:9999/blog/how-to-use-multiple-github-accounts-with-ssh-keys-on-a-single-computer/</guid>
       <description>&lt;h1 id=&#34;how-to-use-multiple-github-accounts-with-ssh-keys-on-a-single-computer&#34;&gt;How to Use Multiple GitHub Accounts with SSH Keys on a Single Computer?&lt;/h1&gt;&#xA;&lt;p&gt;For a long time, I wanted to access both my personal account (&lt;code&gt;vineelkovvuri&lt;/code&gt;)&#xA;and my Microsoft work account (&lt;code&gt;vineelko&lt;/code&gt;) from my work laptop. Naturally, using&#xA;the same &lt;code&gt;.ssh/id_rsa.pub&lt;/code&gt; key for both GitHub accounts wouldn&amp;rsquo;t work. This&#xA;article explains the workaround I came across.&lt;/p&gt;&#xA;&lt;h2 id=&#34;step-1-generate-separate-ssh-keys&#34;&gt;Step 1: Generate Separate SSH Keys&lt;/h2&gt;&#xA;&lt;p&gt;First, generate different SSH key pairs for each account:&lt;/p&gt;</description>
     </item>
   </channel>

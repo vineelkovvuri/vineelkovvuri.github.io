@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=9999&amp;path=livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Rust: Sharing a Single Object Across Multiple Owners | Vineel Kovvuri</title>
@@ -92,7 +92,7 @@ owners(A and B)</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">main</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// - Using stack objects
-</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span>println!(<span style="color:#d20;background-color:#fff0f0">&#34;Object c shared b/w multiple stack based objects&#34;</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;Object c shared b/w multiple stack based objects&#34;</span>);<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>common<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>C<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>val: <span style="color:#00d;font-weight:bold">100</span><span style="color:#bbb"> </span>};<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>c<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>&amp;<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>common;<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">
@@ -105,15 +105,15 @@ owners(A and B)</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>b_obj<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">unsafe</span><span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>&amp;<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>*(b_ptr<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>B)<span style="color:#bbb"> </span>};<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>a_obj.mut_ref.val<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">2000</span>;<span style="color:#bbb"> </span><span style="color:#888">// mutate c from a
-</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span>println!(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>a_obj.mut_ref.val);<span style="color:#bbb"> </span><span style="color:#888">// 2000
-</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span>println!(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>b_obj.mut_ref.val);<span style="color:#bbb"> </span><span style="color:#888">// 2000
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>a_obj.mut_ref.val);<span style="color:#bbb"> </span><span style="color:#888">// 2000
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>b_obj.mut_ref.val);<span style="color:#bbb"> </span><span style="color:#888">// 2000
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>b_obj.mut_ref.val<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">4000</span>;<span style="color:#bbb"> </span><span style="color:#888">// mutate c from b
-</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span>println!(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>a_obj.mut_ref.val);<span style="color:#bbb"> </span><span style="color:#888">// 4000
-</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span>println!(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>b_obj.mut_ref.val);<span style="color:#bbb"> </span><span style="color:#888">// 4000
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>a_obj.mut_ref.val);<span style="color:#bbb"> </span><span style="color:#888">// 4000
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>b_obj.mut_ref.val);<span style="color:#bbb"> </span><span style="color:#888">// 4000
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// - Using heap objects
-</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span>println!(<span style="color:#d20;background-color:#fff0f0">&#34;Object c shared b/w multiple heap based objects&#34;</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;Object c shared b/w multiple heap based objects&#34;</span>);<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>common<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>C<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>val: <span style="color:#00d;font-weight:bold">100</span><span style="color:#bbb"> </span>};<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>c<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>&amp;<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>common;<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">
@@ -126,12 +126,12 @@ owners(A and B)</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>b_obj<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">unsafe</span><span style="color:#bbb"> </span>{<span style="color:#bbb"> </span><span style="color:#038">Box</span>::&lt;B&gt;::from_raw(b_ptr<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>B)<span style="color:#bbb"> </span>};<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>a_obj.mut_ref.val<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">2000</span>;<span style="color:#bbb"> </span><span style="color:#888">// mutate c from a
-</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span>println!(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>a_obj.mut_ref.val);<span style="color:#bbb"> </span><span style="color:#888">// 2000
-</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span>println!(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>b_obj.mut_ref.val);<span style="color:#bbb"> </span><span style="color:#888">// 2000
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>a_obj.mut_ref.val);<span style="color:#bbb"> </span><span style="color:#888">// 2000
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>b_obj.mut_ref.val);<span style="color:#bbb"> </span><span style="color:#888">// 2000
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>b_obj.mut_ref.val<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">4000</span>;<span style="color:#bbb"> </span><span style="color:#888">// mutate c from b
-</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span>println!(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>a_obj.mut_ref.val);<span style="color:#bbb"> </span><span style="color:#888">// 4000
-</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span>println!(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>b_obj.mut_ref.val);<span style="color:#bbb"> </span><span style="color:#888">// 4000
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>a_obj.mut_ref.val);<span style="color:#bbb"> </span><span style="color:#888">// 4000
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>b_obj.mut_ref.val);<span style="color:#bbb"> </span><span style="color:#888">// 4000
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span>}<span style="color:#bbb">
 </span></span></span></code></pre></div><p>Got curious and asked ChatGPT below question:</p>
 <h2 id="question-why-part-1-works-but-not-part-2-what-is-so-special-about-mut-c_void">Question: Why Part 1 works but not Part 2? What is so special about *mut c_void?</h2>
@@ -226,6 +226,27 @@ creating <code>B</code>.</p>
 
 </main>
 
+<hr/>
+
+<section id="comments" class="giscus">
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
+
   <footer>
   
 <script defer src="/js/center-img.js"></script>
@@ -240,6 +261,23 @@ creating <code>B</code>.</p>
   <hr/>
   © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2025 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
   
+
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
   </footer>
   </body>
 </html>

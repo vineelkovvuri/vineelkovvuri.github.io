@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=9999&amp;path=livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Rust: Orphan Rules | Vineel Kovvuri</title>
@@ -83,8 +83,8 @@
 </span></span></span><span style="display:flex;"><span><span style="color:#888">//    |
 </span></span></span><span style="display:flex;"><span><span style="color:#888">//    = note: define and implement a trait or new type instead
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span>fmt::Display<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span><span style="color:#038">Vec</span>&lt;<span style="color:#888;font-weight:bold">u32</span>&gt;<span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">fmt</span>(&amp;self,<span style="color:#bbb"> </span>f: <span style="color:#080">&amp;</span><span style="color:#b06;font-weight:bold">mut</span><span style="color:#bbb"> </span>fmt::Formatter&lt;<span style="color:#038">&#39;_</span>&gt;)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">fmt</span>::<span style="color:#038">Result</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>write!(f,<span style="color:#bbb"> </span><span style="color:#d20;background-color:#fff0f0">&#34;{:?}&#34;</span>,<span style="color:#bbb"> </span>self)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">fmt</span>(&amp;<span style="color:#038">self</span>,<span style="color:#bbb"> </span>f: <span style="color:#080">&amp;</span><span style="color:#b06;font-weight:bold">mut</span><span style="color:#bbb"> </span>fmt::Formatter&lt;<span style="color:#038">&#39;_</span>&gt;)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">fmt</span>::<span style="color:#038">Result</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#06b;font-weight:bold">write!</span>(f,<span style="color:#bbb"> </span><span style="color:#d20;background-color:#fff0f0">&#34;{:?}&#34;</span>,<span style="color:#bbb"> </span><span style="color:#038">self</span>)<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">
@@ -108,8 +108,8 @@
 </span></span></span><span style="display:flex;"><span><span style="color:#888">//    = note: define and implement a trait or new type instead
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span>ops::Add&lt;<span style="color:#888;font-weight:bold">u32</span>&gt;<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span><span style="color:#038">Vec</span>&lt;<span style="color:#888;font-weight:bold">u32</span>&gt;<span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">type</span> <span style="color:#b06;font-weight:bold">Output</span><span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">u32</span>;<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">add</span>(self,<span style="color:#bbb"> </span>rhs: <span style="color:#888;font-weight:bold">u32</span>)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">Self</span>::Output<span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>todo!()<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">add</span>(<span style="color:#038">self</span>,<span style="color:#bbb"> </span>rhs: <span style="color:#888;font-weight:bold">u32</span>)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">Self</span>::Output<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#06b;font-weight:bold">todo!</span>()<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">
@@ -118,12 +118,33 @@
 </span></span></span><span style="display:flex;"><span><span style="color:#888">// trait(Add&lt;Foo&gt;) local.
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span>ops::Add&lt;Foo&gt;<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span><span style="color:#038">Vec</span>&lt;<span style="color:#888;font-weight:bold">u32</span>&gt;<span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">type</span> <span style="color:#b06;font-weight:bold">Output</span><span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>Foo;<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">add</span>(self,<span style="color:#bbb"> </span>rhs: <span style="color:#b06;font-weight:bold">Foo</span>)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">Self</span>::Output<span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>todo!()<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">add</span>(<span style="color:#038">self</span>,<span style="color:#bbb"> </span>rhs: <span style="color:#b06;font-weight:bold">Foo</span>)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">Self</span>::Output<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#06b;font-weight:bold">todo!</span>()<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
 </span></span></span></code></pre></div>
 </main>
+
+<hr/>
+
+<section id="comments" class="giscus">
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
 
   <footer>
   
@@ -139,6 +160,23 @@
   <hr/>
   © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2025 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
   
+
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
   </footer>
   </body>
 </html>

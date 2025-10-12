@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=9999&amp;path=livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Rust: Type Conversion - From one type to other | Vineel Kovvuri</title>
@@ -54,8 +54,8 @@
       <ul>
         <li><a href="#1-the-basics-converting-strings-to-numbers"><strong>1. The Basics: Converting Strings to Numbers</strong></a>
           <ul>
-            <li><a href="#cs-approach-static-parse-methods"><strong>C#’s Approach: Static <code>Parse()</code> Methods</strong></a></li>
-            <li><a href="#rusts-approach-the-fromstr-trait"><strong>Rust’s Approach: The <code>FromStr</code> Trait</strong></a></li>
+            <li><a href="#cs-approach-static"><strong>C#’s Approach: Static <code>Parse()</code> Methods</strong></a></li>
+            <li><a href="#rusts-approach-the"><strong>Rust’s Approach: The <code>FromStr</code> Trait</strong></a></li>
           </ul>
         </li>
         <li><a href="#2-extending-rusts-approach-custom-type-conversions"><strong>2. Extending Rust’s Approach: Custom Type Conversions</strong></a>
@@ -94,7 +94,7 @@ uniform APIs, and better composability</strong>.</p>
 <hr>
 <h2 id="1-the-basics-converting-strings-to-numbers"><strong>1. The Basics: Converting Strings to Numbers</strong></h2>
 <p>A common conversion is parsing a string into a number. Let’s see how Rust and C# handle this differently.</p>
-<h3 id="cs-approach-static-parse-methods"><strong>C#’s Approach: Static <code>Parse()</code> Methods</strong></h3>
+<h3 id="cs-approach-static"><strong>C#’s Approach: Static <code>Parse()</code> Methods</strong></h3>
 <p>In C#, parsing is done via <strong>static methods</strong> on the target type:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span><span style="color:#888;font-weight:bold">string</span> input = <span style="color:#d20;background-color:#fff0f0">&#34;100&#34;</span>;
 </span></span><span style="display:flex;"><span><span style="color:#888;font-weight:bold">int</span> x = <span style="color:#888;font-weight:bold">int</span>.Parse(input);       <span style="color:#888">// Convert to int</span>
@@ -108,7 +108,7 @@ uniform APIs, and better composability</strong>.</p>
 </ul>
 </li>
 </ul>
-<h3 id="rusts-approach-the-fromstr-trait"><strong>Rust’s Approach: The <code>FromStr</code> Trait</strong></h3>
+<h3 id="rusts-approach-the"><strong>Rust’s Approach: The <code>FromStr</code> Trait</strong></h3>
 <p>In Rust, parsing is done via the <strong><code>FromStr</code> trait</strong>, implemented on the <strong>input type (<code>&amp;str</code>)</strong>:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>input<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#d20;background-color:#fff0f0">&#34;100&#34;</span>;<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>x: <span style="color:#888;font-weight:bold">u32</span> =<span style="color:#bbb"> </span>input.parse().unwrap();<span style="color:#bbb"> </span><span style="color:#888">// Convert to u32
@@ -151,18 +151,18 @@ uniform APIs, and better composability</strong>.</p>
 </span></span></span></code></pre></div><h3 id="adding-a-helper-method-for-chaining"><strong>Adding a Helper Method for Chaining</strong></h3>
 <p>To make conversion more ergonomic, we can add a <code>.convert()</code> method to <code>MyType</code>:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span>MyType<span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">convert</span>&lt;F&gt;(&amp;self)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">F</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">convert</span>&lt;F&gt;(&amp;<span style="color:#038">self</span>)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">F</span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">where</span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>F: <span style="color:#b06;font-weight:bold">FromMyType</span>,<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>{<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>F::from_mytype(self)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>F::from_mytype(<span style="color:#038">self</span>)<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
 </span></span></span></code></pre></div><h3 id="usage-example"><strong>Usage Example</strong></h3>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">main</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>my_type<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>MyType<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>x: <span style="color:#00d;font-weight:bold">10</span>,<span style="color:#bbb"> </span>y: <span style="color:#00d;font-weight:bold">20</span><span style="color:#bbb"> </span>};<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>my_type2: <span style="color:#b06;font-weight:bold">MyType2</span><span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>my_type.convert();<span style="color:#bbb"> </span><span style="color:#888">// Converts to MyType2
-</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span>println!(<span style="color:#d20;background-color:#fff0f0">&#34;Converted: </span><span style="color:#33b;background-color:#fff0f0">{}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>my_type2.point);<span style="color:#bbb"> </span><span style="color:#888">// Output: &#34;(10, 20)&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;Converted: </span><span style="color:#33b;background-color:#fff0f0">{}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>my_type2.point);<span style="color:#bbb"> </span><span style="color:#888">// Output: &#34;(10, 20)&#34;
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span>}<span style="color:#bbb">
 </span></span></span></code></pre></div><ul>
 <li><strong>Key Benefit</strong>:
@@ -249,11 +249,11 @@ uniform APIs, and better composability</strong>.</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// This method is used to convert MyType to another type that implements the
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// FromMyType trait. It takes a reference to self and returns an instance of
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// the implementing type.
-</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">convert</span>&lt;F&gt;(&amp;self)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">F</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">convert</span>&lt;F&gt;(&amp;<span style="color:#038">self</span>)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">F</span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">where</span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>F: <span style="color:#b06;font-weight:bold">FromMyType</span>,<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>{<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>F::from_mytype(self)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>F::from_mytype(<span style="color:#038">self</span>)<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">
@@ -315,6 +315,27 @@ uniform APIs, and better composability</strong>.</p>
 </span></span></span></code></pre></div>
 </main>
 
+<hr/>
+
+<section id="comments" class="giscus">
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
+
   <footer>
   
 <script defer src="/js/center-img.js"></script>
@@ -329,6 +350,23 @@ uniform APIs, and better composability</strong>.</p>
   <hr/>
   © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2025 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
   
+
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
   </footer>
   </body>
 </html>

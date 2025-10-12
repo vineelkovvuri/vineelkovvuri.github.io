@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=9999&amp;path=livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Rust: Usage of Cow(Clone on Write) | Vineel Kovvuri</title>
@@ -98,14 +98,14 @@ relevant comments.</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// not work even though we can access the object fields via the `Deref`
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// trait:
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// updated_book.price = 200;
-</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span>println!(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>updated_book);<span style="color:#bbb"> </span><span style="color:#888">// Book { name: &#34;Rust programming&#34;, price: 100 }
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>updated_book);<span style="color:#bbb"> </span><span style="color:#888">// Book { name: &#34;Rust programming&#34;, price: 100 }
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// If we ever need to own the above object (e.g., for modifying it), we can
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// call `into_owned()` on `Cow` to get a cloned version of the book.
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// This cloned object will be mutable.
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>updated_book: <span style="color:#b06;font-weight:bold">Book</span><span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>updated_book.into_owned();<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>updated_book.price<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">200</span>;<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>println!(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>updated_book);<span style="color:#bbb"> </span><span style="color:#888">// Book { name: &#34;Rust programming&#34;, price: 200 }
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>updated_book);<span style="color:#bbb"> </span><span style="color:#888">// Book { name: &#34;Rust programming&#34;, price: 200 }
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// ========================================
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">
@@ -116,7 +116,7 @@ relevant comments.</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// Again, the returned object is immutable, so the following line will not
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// work:
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// updated_book.price = 400;
-</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span>println!(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>updated_book);<span style="color:#bbb"> </span><span style="color:#888">// Book { name: &#34;Rust programming-updated&#34;, price: 300 }
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>updated_book);<span style="color:#bbb"> </span><span style="color:#888">// Book { name: &#34;Rust programming-updated&#34;, price: 300 }
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// If we ever need to own this object (e.g., for modifying it), we can call
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// `into_owned()` on `Cow` to get the owned object. Importantly, in this
@@ -124,7 +124,7 @@ relevant comments.</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// it. The returned object will be mutable.
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>updated_book: <span style="color:#b06;font-weight:bold">Book</span><span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>updated_book.into_owned();<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>updated_book.price<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">400</span>;<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>println!(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>updated_book);<span style="color:#bbb"> </span><span style="color:#888">// Book { name: &#34;Rust programming-updated&#34;, price: 400 }
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>updated_book);<span style="color:#bbb"> </span><span style="color:#888">// Book { name: &#34;Rust programming-updated&#34;, price: 400 }
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// Takeaway 1: `Cow` allows us to defer cloning a borrowed object until it
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// is required for modification (ownership). When ownership is needed, `Cow`
@@ -147,6 +147,27 @@ relevant comments.</p>
 </span></span></span></code></pre></div>
 </main>
 
+<hr/>
+
+<section id="comments" class="giscus">
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
+
   <footer>
   
 <script defer src="/js/center-img.js"></script>
@@ -161,6 +182,23 @@ relevant comments.</p>
   <hr/>
   © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2025 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
   
+
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
   </footer>
   </body>
 </html>

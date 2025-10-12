@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Emulator on Vineel Kovvuri</title>
-    <link>/tags/emulator/</link>
+    <link>//localhost:9999/tags/emulator/</link>
     <description>Recent content in Emulator on Vineel Kovvuri</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 10 Apr 2019 18:33:07 -0700</lastBuildDate>
-    <atom:link href="/tags/emulator/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="//localhost:9999/tags/emulator/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>What Does It Take To Write An Emulator In Java?</title>
-      <link>/blog/what-does-it-take-to-write-an-emulator-in-java/</link>
+      <link>//localhost:9999/blog/what-does-it-take-to-write-an-emulator-in-java/</link>
       <pubDate>Wed, 10 Apr 2019 18:33:07 -0700</pubDate>
-      <guid>/blog/what-does-it-take-to-write-an-emulator-in-java/</guid>
+      <guid>//localhost:9999/blog/what-does-it-take-to-write-an-emulator-in-java/</guid>
       <description>&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;&#xA;&lt;p&gt;I am proud, This weekend I did some productive work. I was able to code Chip&#xA;8 emulator in Java over a night. I have always been fascinated by them and&#xA;finally I was able to get the damn thing to work! For those of you who are&#xA;not familiar with software emulator, It is a software which can emulate the&#xA;functionality of other hardware or software components. Notable examples are&#xA;video game emulators(&lt;a href=&#34;https://en.wikipedia.org/wiki/DOSBox&#34;&gt;Dosbox&lt;/a&gt; ,&lt;a href=&#34;https://en.wikipedia.org/wiki/List_of_video_game_emulators&#34;&gt;NES Emulator&lt;/a&gt;),&#xA;general purpose software emulators(&lt;a href=&#34;https://en.wikipedia.org/wiki/QEMU&#34;&gt;QEmu&lt;/a&gt;)&lt;/p&gt;</description>
     </item>
   </channel>

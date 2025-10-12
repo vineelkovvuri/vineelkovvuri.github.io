@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=9999&amp;path=livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Rust: Trait Objects, Dynamic Dispatch and VTables | Vineel Kovvuri</title>
@@ -116,24 +116,24 @@ vtables at the call sites in <code>main()</code>.</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">trait</span><span style="color:#bbb"> </span>FileType<span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">get_file_type</span>(&amp;self)<span style="color:#bbb"> </span>-&gt; <span style="color:#080">&amp;</span><span style="color:#038">&#39;static</span> <span style="color:#888;font-weight:bold">str</span>;<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">get_file_type2</span>(&amp;self)<span style="color:#bbb"> </span>-&gt; <span style="color:#080">&amp;</span><span style="color:#038">&#39;static</span> <span style="color:#888;font-weight:bold">str</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">get_file_type</span>(&amp;<span style="color:#038">self</span>)<span style="color:#bbb"> </span>-&gt; <span style="color:#080">&amp;</span><span style="color:#038">&#39;static</span> <span style="color:#888;font-weight:bold">str</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">get_file_type2</span>(&amp;<span style="color:#038">self</span>)<span style="color:#bbb"> </span>-&gt; <span style="color:#080">&amp;</span><span style="color:#038">&#39;static</span> <span style="color:#888;font-weight:bold">str</span>;<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span>FileType<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span>HardBook<span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">get_file_type</span>(&amp;self)<span style="color:#bbb"> </span>-&gt; <span style="color:#080">&amp;</span><span style="color:#038">&#39;static</span> <span style="color:#888;font-weight:bold">str</span> {<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">get_file_type</span>(&amp;<span style="color:#038">self</span>)<span style="color:#bbb"> </span>-&gt; <span style="color:#080">&amp;</span><span style="color:#038">&#39;static</span> <span style="color:#888;font-weight:bold">str</span> {<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#d20;background-color:#fff0f0">&#34;pdf&#34;</span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">get_file_type2</span>(&amp;self)<span style="color:#bbb"> </span>-&gt; <span style="color:#080">&amp;</span><span style="color:#038">&#39;static</span> <span style="color:#888;font-weight:bold">str</span> {<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">get_file_type2</span>(&amp;<span style="color:#038">self</span>)<span style="color:#bbb"> </span>-&gt; <span style="color:#080">&amp;</span><span style="color:#038">&#39;static</span> <span style="color:#888;font-weight:bold">str</span> {<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#d20;background-color:#fff0f0">&#34;chm&#34;</span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span>FileType<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span>EBook<span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">get_file_type</span>(&amp;self)<span style="color:#bbb"> </span>-&gt; <span style="color:#080">&amp;</span><span style="color:#038">&#39;static</span> <span style="color:#888;font-weight:bold">str</span> {<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">get_file_type</span>(&amp;<span style="color:#038">self</span>)<span style="color:#bbb"> </span>-&gt; <span style="color:#080">&amp;</span><span style="color:#038">&#39;static</span> <span style="color:#888;font-weight:bold">str</span> {<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#d20;background-color:#fff0f0">&#34;pdf&#34;</span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">get_file_type2</span>(&amp;self)<span style="color:#bbb"> </span>-&gt; <span style="color:#080">&amp;</span><span style="color:#038">&#39;static</span> <span style="color:#888;font-weight:bold">str</span> {<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">get_file_type2</span>(&amp;<span style="color:#038">self</span>)<span style="color:#bbb"> </span>-&gt; <span style="color:#080">&amp;</span><span style="color:#038">&#39;static</span> <span style="color:#888;font-weight:bold">str</span> {<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#d20;background-color:#fff0f0">&#34;chm&#34;</span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
@@ -222,6 +222,27 @@ vtables at the call sites in <code>main()</code>.</p>
 </span></span></span></code></pre></div>
 </main>
 
+<hr/>
+
+<section id="comments" class="giscus">
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
+
   <footer>
   
 <script defer src="/js/center-img.js"></script>
@@ -236,6 +257,23 @@ vtables at the call sites in <code>main()</code>.</p>
   <hr/>
   © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2025 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
   
+
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
   </footer>
   </body>
 </html>

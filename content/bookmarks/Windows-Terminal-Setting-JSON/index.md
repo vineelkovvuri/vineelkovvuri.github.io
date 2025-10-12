@@ -37,7 +37,7 @@ tags: ['Windows', 'Terminal', 'WindowsSetup']
     {
         "defaults": 
         {
-            "backgroundImage": "C:\\Users\\vineelko\\OneDrive\\Softs\\Terminal\\animated-tux.gif",
+            "backgroundImage": "C:\\Users\\vineel\\OneDrive\\Softs\\Terminal\\animated-tux.gif",
             "backgroundImageAlignment": "bottomRight",
             "backgroundImageStretchMode": "none",
             "font": 

@@ -2,136 +2,136 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on Vineel Kovvuri</title>
-    <link>/tags/</link>
+    <link>//localhost:9999/tags/</link>
     <description>Recent content in Tags on Vineel Kovvuri</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 21 Jun 2025 21:11:47 +0000</lastBuildDate>
-    <atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="//localhost:9999/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Rust</title>
-      <link>/tags/rust/</link>
+      <link>//localhost:9999/tags/rust/</link>
       <pubDate>Sat, 21 Jun 2025 21:11:47 +0000</pubDate>
-      <guid>/tags/rust/</guid>
+      <guid>//localhost:9999/tags/rust/</guid>
       <description></description>
     </item>
     <item>
       <title>Git</title>
-      <link>/tags/git/</link>
+      <link>//localhost:9999/tags/git/</link>
       <pubDate>Tue, 25 Mar 2025 20:27:07 +0000</pubDate>
-      <guid>/tags/git/</guid>
+      <guid>//localhost:9999/tags/git/</guid>
       <description></description>
     </item>
     <item>
       <title>GitHub</title>
-      <link>/tags/github/</link>
+      <link>//localhost:9999/tags/github/</link>
       <pubDate>Tue, 25 Mar 2025 20:27:07 +0000</pubDate>
-      <guid>/tags/github/</guid>
+      <guid>//localhost:9999/tags/github/</guid>
       <description></description>
     </item>
     <item>
       <title>SSH</title>
-      <link>/tags/ssh/</link>
+      <link>//localhost:9999/tags/ssh/</link>
       <pubDate>Tue, 25 Mar 2025 20:27:07 +0000</pubDate>
-      <guid>/tags/ssh/</guid>
+      <guid>//localhost:9999/tags/ssh/</guid>
       <description></description>
     </item>
     <item>
       <title>Operating Systems</title>
-      <link>/tags/operating-systems/</link>
+      <link>//localhost:9999/tags/operating-systems/</link>
       <pubDate>Fri, 14 Mar 2025 23:27:20 +0000</pubDate>
-      <guid>/tags/operating-systems/</guid>
+      <guid>//localhost:9999/tags/operating-systems/</guid>
       <description></description>
     </item>
     <item>
       <title>Compilers</title>
-      <link>/tags/compilers/</link>
+      <link>//localhost:9999/tags/compilers/</link>
       <pubDate>Fri, 01 Nov 2019 18:33:07 -0700</pubDate>
-      <guid>/tags/compilers/</guid>
+      <guid>//localhost:9999/tags/compilers/</guid>
       <description></description>
     </item>
     <item>
       <title>Embedded</title>
-      <link>/tags/embedded/</link>
+      <link>//localhost:9999/tags/embedded/</link>
       <pubDate>Fri, 20 Sep 2019 18:33:07 -0700</pubDate>
-      <guid>/tags/embedded/</guid>
+      <guid>//localhost:9999/tags/embedded/</guid>
       <description></description>
     </item>
     <item>
       <title>Emulator</title>
-      <link>/tags/emulator/</link>
+      <link>//localhost:9999/tags/emulator/</link>
       <pubDate>Wed, 10 Apr 2019 18:33:07 -0700</pubDate>
-      <guid>/tags/emulator/</guid>
+      <guid>//localhost:9999/tags/emulator/</guid>
       <description></description>
     </item>
     <item>
       <title>Java</title>
-      <link>/tags/java/</link>
+      <link>//localhost:9999/tags/java/</link>
       <pubDate>Wed, 10 Apr 2019 18:33:07 -0700</pubDate>
-      <guid>/tags/java/</guid>
+      <guid>//localhost:9999/tags/java/</guid>
       <description></description>
     </item>
     <item>
       <title>WinDbg</title>
-      <link>/tags/windbg/</link>
+      <link>//localhost:9999/tags/windbg/</link>
       <pubDate>Sun, 10 Mar 2019 18:33:07 -0700</pubDate>
-      <guid>/tags/windbg/</guid>
+      <guid>//localhost:9999/tags/windbg/</guid>
       <description></description>
     </item>
     <item>
       <title>Windows</title>
-      <link>/tags/windows/</link>
+      <link>//localhost:9999/tags/windows/</link>
       <pubDate>Sun, 10 Mar 2019 18:33:07 -0700</pubDate>
-      <guid>/tags/windows/</guid>
+      <guid>//localhost:9999/tags/windows/</guid>
       <description></description>
     </item>
     <item>
       <title>C</title>
-      <link>/tags/c/</link>
+      <link>//localhost:9999/tags/c/</link>
       <pubDate>Sun, 10 Feb 2019 18:33:07 -0700</pubDate>
-      <guid>/tags/c/</guid>
+      <guid>//localhost:9999/tags/c/</guid>
       <description></description>
     </item>
     <item>
       <title>Debuggers</title>
-      <link>/tags/debuggers/</link>
+      <link>//localhost:9999/tags/debuggers/</link>
       <pubDate>Wed, 10 Oct 2018 18:33:07 -0700</pubDate>
-      <guid>/tags/debuggers/</guid>
+      <guid>//localhost:9999/tags/debuggers/</guid>
       <description></description>
     </item>
     <item>
       <title>Asm</title>
-      <link>/tags/asm/</link>
+      <link>//localhost:9999/tags/asm/</link>
       <pubDate>Fri, 10 Aug 2018 18:33:07 -0700</pubDate>
-      <guid>/tags/asm/</guid>
+      <guid>//localhost:9999/tags/asm/</guid>
       <description></description>
     </item>
     <item>
       <title>Reversing</title>
-      <link>/tags/reversing/</link>
+      <link>//localhost:9999/tags/reversing/</link>
       <pubDate>Fri, 10 Aug 2018 18:33:07 -0700</pubDate>
-      <guid>/tags/reversing/</guid>
+      <guid>//localhost:9999/tags/reversing/</guid>
       <description></description>
     </item>
     <item>
       <title>Terminal</title>
-      <link>/tags/terminal/</link>
+      <link>//localhost:9999/tags/terminal/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/tags/terminal/</guid>
+      <guid>//localhost:9999/tags/terminal/</guid>
       <description></description>
     </item>
     <item>
       <title>VSCode</title>
-      <link>/tags/vscode/</link>
+      <link>//localhost:9999/tags/vscode/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/tags/vscode/</guid>
+      <guid>//localhost:9999/tags/vscode/</guid>
       <description></description>
     </item>
     <item>
       <title>WindowsSetup</title>
-      <link>/tags/windowssetup/</link>
+      <link>//localhost:9999/tags/windowssetup/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/tags/windowssetup/</guid>
+      <guid>//localhost:9999/tags/windowssetup/</guid>
       <description></description>
     </item>
   </channel>

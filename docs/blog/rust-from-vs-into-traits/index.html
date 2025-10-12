@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=9999&amp;path=livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Rust: From vs Into traits | Vineel Kovvuri</title>
@@ -52,7 +52,7 @@
   <ul>
     <li><a href="#why-does-implementing-fromt-on-u-enable-calling-tinto-to-get-u">Why does implementing <code>From&lt;T&gt;</code> on <code>U</code> enable calling <code>T.into()</code> to get <code>U</code>?</a>
       <ul>
-        <li><a href="#q-wait-a-second-where-does-this-into-come-from-we-didnt-implement-any-into-function-on-a">Q: Wait a second, where does this <code>.into()</code> come from? We didn&rsquo;t implement any <code>into()</code> function on <code>A</code>.</a></li>
+        <li><a href="#q-wait-a-second-where-does-this-into-come-from-we-didnt-implement-any-into-function-on-a">Q: Wait a second, where does this <code>.into()</code> come from? We didn’t implement any <code>into()</code> function on <code>A</code>.</a></li>
       </ul>
     </li>
   </ul>
@@ -84,20 +84,41 @@
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">where</span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>U: <span style="color:#038">From</span>&lt;T&gt;,<span style="color:#bbb">           </span><span style="color:#888">// If U already implements From&lt;T&gt;
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span>{<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">into</span>(self)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">U</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>U::from(self)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">into</span>(<span style="color:#038">self</span>)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">U</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>U::from(<span style="color:#038">self</span>)<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
 </span></span></span></code></pre></div><p>This means that the standard library provides a blanket implementation of the <code>Into&lt;U&gt;</code> trait for all <code>T</code> where <code>U</code> already has an implementation of <code>From&lt;T&gt;</code>. In simpler terms, the compiler automatically implements the counterpart <code>Into</code> for you.</p>
 <p>Effectively, it is as if the compiler wrote this for you:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span><span style="color:#038">Into</span>&lt;B&gt;<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span>A<span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">into</span>(self)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">B</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>B::from(self)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">into</span>(<span style="color:#038">self</span>)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">B</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>B::from(<span style="color:#038">self</span>)<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
 </span></span></span></code></pre></div><p>Thus, for any instance of <code>A</code>, you can call <code>.into()</code> to convert it to <code>B</code>.</p>
 
 </main>
+
+<hr/>
+
+<section id="comments" class="giscus">
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
 
   <footer>
   
@@ -113,6 +134,23 @@
   <hr/>
   © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2025 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
   
+
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
   </footer>
   </body>
 </html>

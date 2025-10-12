@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=9999&amp;path=livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Rust: Formatting Wrapper Types | Vineel Kovvuri</title>
@@ -84,28 +84,28 @@ helped me grasp it better.</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">struct</span> <span style="color:#b06;font-weight:bold">Hour</span>(<span style="color:#888;font-weight:bold">u8</span>);<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span>fmt::Display<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span>FancyHour<span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">fmt</span>(&amp;self,<span style="color:#bbb"> </span>fmtr: <span style="color:#080">&amp;</span><span style="color:#b06;font-weight:bold">mut</span><span style="color:#bbb"> </span>fmt::Formatter)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">fmt</span>::<span style="color:#038">Result</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">fmt</span>(&amp;<span style="color:#038">self</span>,<span style="color:#bbb"> </span>fmtr: <span style="color:#080">&amp;</span><span style="color:#b06;font-weight:bold">mut</span><span style="color:#bbb"> </span>fmt::Formatter)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">fmt</span>::<span style="color:#038">Result</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#888">// This {:02} is not used because self.hour uses its own {} formatting
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">        </span><span style="color:#888">// operation instead.
-</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">        </span>write!(fmtr,<span style="color:#bbb"> </span><span style="color:#d20;background-color:#fff0f0">&#34;{:02}&#34;</span>,<span style="color:#bbb"> </span>self.hour)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">        </span><span style="color:#06b;font-weight:bold">write!</span>(fmtr,<span style="color:#bbb"> </span><span style="color:#d20;background-color:#fff0f0">&#34;{:02}&#34;</span>,<span style="color:#bbb"> </span><span style="color:#038">self</span>.hour)<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span>fmt::Display<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span>Hour<span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">fmt</span>(&amp;self,<span style="color:#bbb"> </span>fmtr: <span style="color:#080">&amp;</span><span style="color:#b06;font-weight:bold">mut</span><span style="color:#bbb"> </span>fmt::Formatter)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">fmt</span>::<span style="color:#038">Result</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">fmt</span>(&amp;<span style="color:#038">self</span>,<span style="color:#bbb"> </span>fmtr: <span style="color:#080">&amp;</span><span style="color:#b06;font-weight:bold">mut</span><span style="color:#bbb"> </span>fmt::Formatter)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">fmt</span>::<span style="color:#038">Result</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#888">// Apparently, because we are using write!(), any &#34;{}&#34; will start a new
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">        </span><span style="color:#888">// formatting operation, which means we don&#39;t honor FancyHour&#39;s &#34;{:02}&#34;
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">        </span><span style="color:#888">// write!(fmtr, &#34;{}&#34;, self.0)
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#888">// Correct way is to forward the printing
-</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">        </span>self.<span style="color:#00d;font-weight:bold">0.</span>fmt(fmtr)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">        </span><span style="color:#038">self</span>.<span style="color:#00d;font-weight:bold">0.</span>fmt(fmtr)<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">main</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>hour<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>Hour(<span style="color:#00d;font-weight:bold">2</span>);<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>hour_of_day<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>FancyHour<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>hour<span style="color:#bbb"> </span>};<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>println!(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>hour_of_day);<span style="color:#bbb"> </span><span style="color:#888">// This not printing 02 instead prints 2
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>hour_of_day);<span style="color:#bbb"> </span><span style="color:#888">// This not printing 02 instead prints 2
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span>}<span style="color:#bbb">
 </span></span></span></code></pre></div><p>DeepSeek R1 has given the best explanation:</p>
 <p>The issue lies in how formatting traits forward formatting parameters. Let&rsquo;s
@@ -124,13 +124,13 @@ passed to <code>Hour</code>&rsquo;s <code>Display</code> implementation. However
 <ol start="2">
 <li><strong>The Mistake in <code>Hour::fmt</code></strong>:</li>
 </ol>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span>write!(fmtr,<span style="color:#bbb"> </span><span style="color:#d20;background-color:#fff0f0">&#34;{}&#34;</span>,<span style="color:#bbb"> </span>self.<span style="color:#00d;font-weight:bold">0</span>)<span style="color:#bbb"> </span><span style="color:#888">// ❌ Creates NEW formatting operation
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#06b;font-weight:bold">write!</span>(fmtr,<span style="color:#bbb"> </span><span style="color:#d20;background-color:#fff0f0">&#34;{}&#34;</span>,<span style="color:#bbb"> </span><span style="color:#038">self</span>.<span style="color:#00d;font-weight:bold">0</span>)<span style="color:#bbb"> </span><span style="color:#888">// ❌ Creates NEW formatting operation
 </span></span></span></code></pre></div><p>This starts a fresh formatting operation with <code>{}</code> (default formatting),
 discarding the <code>:02</code> specifier.</p>
 <ol start="3">
 <li><strong>The Fix</strong>:</li>
 </ol>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span>self.<span style="color:#00d;font-weight:bold">0.</span>fmt(fmtr)<span style="color:#bbb"> </span><span style="color:#888">// ✅ Forwards existing formatting parameters
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#038">self</span>.<span style="color:#00d;font-weight:bold">0.</span>fmt(fmtr)<span style="color:#bbb"> </span><span style="color:#888">// ✅ Forwards existing formatting parameters
 </span></span></span></code></pre></div><p>This forwards the <em>existing</em> <code>Formatter</code> with its <code>:02</code> specifier to the
 <code>u8</code>&rsquo;s implementation.</p>
 <h1 id="fixed-code">Fixed Code</h1>
@@ -143,22 +143,22 @@ discarding the <code>:02</code> specifier.</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">struct</span> <span style="color:#b06;font-weight:bold">Hour</span>(<span style="color:#888;font-weight:bold">u8</span>);<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span>fmt::Display<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span>FancyHour<span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">fmt</span>(&amp;self,<span style="color:#bbb"> </span>fmtr: <span style="color:#080">&amp;</span><span style="color:#b06;font-weight:bold">mut</span><span style="color:#bbb"> </span>fmt::Formatter)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">fmt</span>::<span style="color:#038">Result</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>write!(fmtr,<span style="color:#bbb"> </span><span style="color:#d20;background-color:#fff0f0">&#34;{:02}&#34;</span>,<span style="color:#bbb"> </span>self.hour)<span style="color:#bbb"> </span><span style="color:#888">// Passes :02 to Hour::fmt
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">fmt</span>(&amp;<span style="color:#038">self</span>,<span style="color:#bbb"> </span>fmtr: <span style="color:#080">&amp;</span><span style="color:#b06;font-weight:bold">mut</span><span style="color:#bbb"> </span>fmt::Formatter)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">fmt</span>::<span style="color:#038">Result</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#06b;font-weight:bold">write!</span>(fmtr,<span style="color:#bbb"> </span><span style="color:#d20;background-color:#fff0f0">&#34;{:02}&#34;</span>,<span style="color:#bbb"> </span><span style="color:#038">self</span>.hour)<span style="color:#bbb"> </span><span style="color:#888">// Passes :02 to Hour::fmt
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span>fmt::Display<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span>Hour<span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">fmt</span>(&amp;self,<span style="color:#bbb"> </span>fmtr: <span style="color:#080">&amp;</span><span style="color:#b06;font-weight:bold">mut</span><span style="color:#bbb"> </span>fmt::Formatter)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">fmt</span>::<span style="color:#038">Result</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">fmt</span>(&amp;<span style="color:#038">self</span>,<span style="color:#bbb"> </span>fmtr: <span style="color:#080">&amp;</span><span style="color:#b06;font-weight:bold">mut</span><span style="color:#bbb"> </span>fmt::Formatter)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">fmt</span>::<span style="color:#038">Result</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#888">// Forward formatting parameters to the inner u8
-</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">        </span>self.<span style="color:#00d;font-weight:bold">0.</span>fmt(fmtr)<span style="color:#bbb"> </span><span style="color:#888">// ✅ Uses the existing Formatter with :02
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">        </span><span style="color:#038">self</span>.<span style="color:#00d;font-weight:bold">0.</span>fmt(fmtr)<span style="color:#bbb"> </span><span style="color:#888">// ✅ Uses the existing Formatter with :02
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">main</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>hour<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>Hour(<span style="color:#00d;font-weight:bold">2</span>);<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>hour_of_day<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>FancyHour<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>hour<span style="color:#bbb"> </span>};<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>println!(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>hour_of_day);<span style="color:#bbb"> </span><span style="color:#888">// Now prints &#34;02&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>hour_of_day);<span style="color:#bbb"> </span><span style="color:#888">// Now prints &#34;02&#34;
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span>}<span style="color:#bbb">
 </span></span></span></code></pre></div><h1 id="why-this-works">Why This Works</h1>
 <ul>
@@ -193,16 +193,16 @@ arguments, using the specifiers in its own format string.</li>
 <h1 id="why-02-doesnt-propagate">Why <code>{:02}</code> Doesn’t Propagate</h1>
 <p>In your code:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span>fmt::Display<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span>FancyHour<span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">fmt</span>(&amp;self,<span style="color:#bbb"> </span>fmtr: <span style="color:#080">&amp;</span><span style="color:#b06;font-weight:bold">mut</span><span style="color:#bbb"> </span>fmt::Formatter)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">fmt</span>::<span style="color:#038">Result</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">fmt</span>(&amp;<span style="color:#038">self</span>,<span style="color:#bbb"> </span>fmtr: <span style="color:#080">&amp;</span><span style="color:#b06;font-weight:bold">mut</span><span style="color:#bbb"> </span>fmt::Formatter)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">fmt</span>::<span style="color:#038">Result</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#888">// Intends to pass `:02` to `self.hour`
-</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">        </span>write!(fmtr,<span style="color:#bbb"> </span><span style="color:#d20;background-color:#fff0f0">&#34;{:02}&#34;</span>,<span style="color:#bbb"> </span>self.hour)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">        </span><span style="color:#06b;font-weight:bold">write!</span>(fmtr,<span style="color:#bbb"> </span><span style="color:#d20;background-color:#fff0f0">&#34;{:02}&#34;</span>,<span style="color:#bbb"> </span><span style="color:#038">self</span>.hour)<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span>fmt::Display<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span>Hour<span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">fmt</span>(&amp;self,<span style="color:#bbb"> </span>fmtr: <span style="color:#080">&amp;</span><span style="color:#b06;font-weight:bold">mut</span><span style="color:#bbb"> </span>fmt::Formatter)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">fmt</span>::<span style="color:#038">Result</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">fmt</span>(&amp;<span style="color:#038">self</span>,<span style="color:#bbb"> </span>fmtr: <span style="color:#080">&amp;</span><span style="color:#b06;font-weight:bold">mut</span><span style="color:#bbb"> </span>fmt::Formatter)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">fmt</span>::<span style="color:#038">Result</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#888">// ❌ Starts a NEW formatting operation with `{}`, overriding `:02`
-</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">        </span>write!(fmtr,<span style="color:#bbb"> </span><span style="color:#d20;background-color:#fff0f0">&#34;{}&#34;</span>,<span style="color:#bbb"> </span>self.<span style="color:#00d;font-weight:bold">0</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">        </span><span style="color:#06b;font-weight:bold">write!</span>(fmtr,<span style="color:#bbb"> </span><span style="color:#d20;background-color:#fff0f0">&#34;{}&#34;</span>,<span style="color:#bbb"> </span><span style="color:#038">self</span>.<span style="color:#00d;font-weight:bold">0</span>)<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
 </span></span></span></code></pre></div><ul>
@@ -215,9 +215,9 @@ which resets the specifier to default (ignoring <code>:02</code>).</li>
 <p>Instead of starting a new formatting operation with <code>write!</code>, directly
 delegate formatting to the inner <code>u8</code>’s <code>fmt</code> method:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span>fmt::Display<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span>Hour<span style="color:#bbb"> </span>{<span style="color:#bbb">
-</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">fmt</span>(&amp;self,<span style="color:#bbb"> </span>fmtr: <span style="color:#080">&amp;</span><span style="color:#b06;font-weight:bold">mut</span><span style="color:#bbb"> </span>fmt::Formatter)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">fmt</span>::<span style="color:#038">Result</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">fmt</span>(&amp;<span style="color:#038">self</span>,<span style="color:#bbb"> </span>fmtr: <span style="color:#080">&amp;</span><span style="color:#b06;font-weight:bold">mut</span><span style="color:#bbb"> </span>fmt::Formatter)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">fmt</span>::<span style="color:#038">Result</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#888">// ✅ Forwards the EXISTING formatter (with `:02`) to `self.0`
-</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">        </span>self.<span style="color:#00d;font-weight:bold">0.</span>fmt(fmtr)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">        </span><span style="color:#038">self</span>.<span style="color:#00d;font-weight:bold">0.</span>fmt(fmtr)<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
 </span></span></span></code></pre></div><p>This preserves the original formatting parameters (like <code>:02</code>) because it
@@ -247,6 +247,27 @@ formatting parameters across nested types.</p>
 
 </main>
 
+<hr/>
+
+<section id="comments" class="giscus">
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
+
   <footer>
   
 <script defer src="/js/center-img.js"></script>
@@ -261,6 +282,23 @@ formatting parameters across nested types.</p>
   <hr/>
   © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2025 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
   
+
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
   </footer>
   </body>
 </html>

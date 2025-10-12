@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=9999&amp;path=livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SSH Config to Use Multiple GitHub Accounts with SSH Keys on a Single Computer | Vineel Kovvuri</title>
@@ -36,29 +36,29 @@
 </div>
 
 <main>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span># This should be copied as ~/.ssh/config
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ini" data-lang="ini"><span style="display:flex;"><span><span style="color:#888"># This should be copied as ~/.ssh/config</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Host 192.168.1.22
-</span></span><span style="display:flex;"><span>  HostName 192.168.1.22
-</span></span><span style="display:flex;"><span>  User vineelko
-</span></span><span style="display:flex;"><span>  ForwardAgent yes
+</span></span><span style="display:flex;"><span><span style="color:#369">Host 192.168.1.22</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#369">HostName 192.168.1.22</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#369">User vineelko</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#369">ForwardAgent yes</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span># For Account 1 (vineelkovvuri)
-</span></span><span style="display:flex;"><span># when cloning a repo we should use
-</span></span><span style="display:flex;"><span># git clone git@github-vineelkovvuri:vineelkovvuri/vin-pro.git instead of below
-</span></span><span style="display:flex;"><span># git clone git@github.com:vineelkovvuri/vin-pro.git
-</span></span><span style="display:flex;"><span># git config user.name &#34;Vineel Kovvuri&#34;
-</span></span><span style="display:flex;"><span># git config user.email &#34;vineelkovvuri@gmail.com&#34;
-</span></span><span style="display:flex;"><span>Host github-vineelkovvuri
-</span></span><span style="display:flex;"><span>    HostName github.com
-</span></span><span style="display:flex;"><span>    User git
-</span></span><span style="display:flex;"><span>    IdentityFile ~/.ssh/id_rsa_vineelkovvuri_github
+</span></span><span style="display:flex;"><span><span style="color:#888"># For Account 1 (vineelkovvuri)</span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># when cloning a repo we should use</span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># git clone git@github-vineelkovvuri:vineelkovvuri/vin-pro.git instead of below</span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># git clone git@github.com:vineelkovvuri/vin-pro.git</span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># git config user.name &#34;Vineel Kovvuri&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># git config user.email &#34;vineelkovvuri@gmail.com&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">Host github-vineelkovvuri</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">HostName github.com</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">User git</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">IdentityFile ~/.ssh/id_rsa_vineelkovvuri_github</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span># For Account 2 (vineelko)
-</span></span><span style="display:flex;"><span>Host github-vineelko
-</span></span><span style="display:flex;"><span>    HostName github.com
-</span></span><span style="display:flex;"><span>    User git
-</span></span><span style="display:flex;"><span>    IdentityFile ~/.ssh/id_rsa_vineelko_github
+</span></span><span style="display:flex;"><span><span style="color:#888"># For Account 2 (vineelko)</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">Host github-vineelko</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">HostName github.com</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">User git</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">IdentityFile ~/.ssh/id_rsa_vineelko_github</span>
 </span></span></code></pre></div>
 </main>
 
@@ -76,6 +76,23 @@
   <hr/>
   © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2025 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
   
+
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
   </footer>
   </body>
 </html>

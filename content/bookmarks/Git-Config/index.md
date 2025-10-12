@@ -16,8 +16,7 @@ tags: ['Git', 'WindowsSetup']
     llg = log --oneline --left-right --date=short --pretty=format:'%m %C(auto)%<(7)%h %Creset %s%Creset'
     dd = difftool -d --no-symlinks
 [pager]
-    # Install riff https://github.com/walles/riff
-    diff = riff
+    diff = riff  # Install riff https://github.com/walles/riff
     show = riff
     log = riff
 [interactive]
@@ -87,6 +86,4 @@ tags: ['Git', 'WindowsSetup']
 [remote "origin"]
     fetch = '+refs/pull/*:refs/remotes/origin/pull/*'
 
-# You Don't Know Git - Edward Thomson - NDC London 2025
-# https://www.youtube.com/watch?v=DZI0Zl-1JqQ
 ```

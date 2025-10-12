@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=9999&amp;path=livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Rust: Lifetimes | Vineel Kovvuri</title>
@@ -90,12 +90,10 @@ We’ll discuss them in more detail later.</p>
 <p><strong>Tip 1:</strong> Rust Analyzer in VS Code helps display inlay hints for
 compiler-inferred lifetimes. You can enable this by going to <strong>Settings &gt;
 Extensions &gt; Rust Analyzer &gt; Inlay Hints &gt; Lifetime Elision Hints</strong>. This can
-be quite handy at times.</p>
-</blockquote>
+be quite handy at times.</p></blockquote>
 <blockquote>
 <p><strong>Tip 2:</strong> Always rely on <code>cargo check</code> to get detailed information about any
-lifetime parameter violations.</p>
-</blockquote>
+lifetime parameter violations.</p></blockquote>
 <p>Now lets look at some cases to understand the lifetimes better.</p>
 <p><strong>Case 1: References confined to a single scope:</strong></p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>x<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">10</span>;<span style="color:#bbb">
@@ -220,14 +218,12 @@ struct’s fields can live as long as the input parameters.</p>
 <p>One thing to note here is that the output parameter is not a reference itself,
 unlike in our previous examples. However, the output parameter <strong>does</strong>
 require lifetime information to manage its fields. So, we are <strong>not</strong>
-returning <code>&amp;BookView</code>.</p>
-</blockquote>
+returning <code>&amp;BookView</code>.</p></blockquote>
 <blockquote>
 <p>The lifetime parameter of the output is <strong>only</strong> inferred when there is
 exactly one input to the function. When the function has more than one
 parameter, even if the lifetimes of those parameters are explicitly specified,
-the lifetime of the output parameter must be explicitly specified as well.</p>
-</blockquote>
+the lifetime of the output parameter must be explicitly specified as well.</p></blockquote>
 <p>Let&rsquo;s look at some more examples of this</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">create_book_view3</span>(bv: <span style="color:#b06;font-weight:bold">BookView</span>)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">BookView</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>BookView<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>price: <span style="color:#b06;font-weight:bold">bv</span>.price,<span style="color:#bbb"> </span>pages: <span style="color:#b06;font-weight:bold">bv</span>.pages<span style="color:#bbb"> </span>}<span style="color:#bbb">
@@ -246,7 +242,7 @@ them to be the same lifetime.</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// one thing to note is, &amp;self itself will have a new lifetime parameter it
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// is not the same as `&#39;a`. Think of below
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// fn clone_book_view&lt;&#39;0&gt;(&amp;&#39;0 self) -&gt; BookView&lt;&#39;0&gt; {
-</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">clone_book_view</span>(&amp;self)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">BookView</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">clone_book_view</span>(&amp;<span style="color:#038">self</span>)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">BookView</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>BookView<span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span>price: <span style="color:#b06;font-weight:bold">self</span>.price,<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span>pages: <span style="color:#b06;font-weight:bold">self</span>.pages,<span style="color:#bbb">
@@ -266,7 +262,7 @@ them to be the same lifetime.</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">//     }
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// }
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// we have to explicitly specify that self and pages have same lifetime
-</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">copy_book_view_update</span>&lt;<span style="color:#369">&#39;x</span>&gt;(&amp;<span style="color:#369">&#39;x</span><span style="color:#bbb"> </span>self,<span style="color:#bbb"> </span>pages: <span style="color:#080">&amp;</span><span style="color:#369">&#39;x</span> <span style="color:#888;font-weight:bold">u32</span>)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">BookView</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">copy_book_view_update</span>&lt;<span style="color:#369">&#39;x</span>&gt;(&amp;<span style="color:#369">&#39;x</span><span style="color:#bbb"> </span><span style="color:#038">self</span>,<span style="color:#bbb"> </span>pages: <span style="color:#080">&amp;</span><span style="color:#369">&#39;x</span> <span style="color:#888;font-weight:bold">u32</span>)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">BookView</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>BookView<span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span>price: <span style="color:#b06;font-weight:bold">self</span>.price,<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span>pages,<span style="color:#bbb">
@@ -286,6 +282,27 @@ lifetime of <code>self</code>.</li>
 
 </main>
 
+<hr/>
+
+<section id="comments" class="giscus">
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
+
   <footer>
   
 <script defer src="/js/center-img.js"></script>
@@ -300,6 +317,23 @@ lifetime of <code>self</code>.</li>
   <hr/>
   © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2025 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
   
+
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
   </footer>
   </body>
 </html>

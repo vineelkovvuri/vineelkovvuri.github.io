@@ -3,7 +3,7 @@ title: "SSH Config to Use Multiple GitHub Accounts with SSH Keys on a Single Com
 tags: ['Windows', 'SSH', 'WindowsSetup']
 ---
 
-```text
+```ini
 # This should be copied as ~/.ssh/config
 
 Host 192.168.1.22
@@ -27,6 +27,5 @@ Host github-vineelko
     HostName github.com
     User git
     IdentityFile ~/.ssh/id_rsa_vineelko_github
-
 
 ```
