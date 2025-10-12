@@ -3,124 +3,138 @@ title: "Windows 11 WinGet"
 tags: ['WindowsSetup']
 ---
 
-```powershell
+## Tweak winget defaults using `winget settings`
 
-# Install winget from store
-# winget search -q ""
-
-# Essentials
-winget install -h --id "voidtools.Everything"                      --accept-source-agreements   --accept-package-agreements
-winget install -h --id "WinsiderSS.SystemInformer"                 --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Google.Chrome"                             --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Mozilla.Firefox"                           --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Microsoft.VisualStudioCode"                --accept-source-agreements   --accept-package-agreements --override "/VERYSILENT /SP- /MERGETASKS='!runcode,!desktopicon,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath'"
-winget install -h --id "SublimeHQ.SublimeText.4"                   --accept-source-agreements   --accept-package-agreements --override  "/VERYSILENT /SP- /MERGETASKS=contextentry"
-winget install -h --id "SumatraPDF.SumatraPDF"                     --accept-source-agreements   --accept-package-agreements
-winget install -h --id "AndrewZhezherun.WinDjView"                 --accept-source-agreements   --accept-package-agreements
-winget install -h --id "7zip.7zip"                                 --accept-source-agreements   --accept-package-agreements
-winget install -h --id "FastStone.Capture"                         --accept-source-agreements   --accept-package-agreements  & REM vineel XPCMI-ICDFU-JVKNW-OGZLO
-winget install -h --id "9NKSQGP7F2NH"                              --accept-source-agreements   --accept-package-agreements & REM Whatsapp
-winget install -h --id "mRemoteNG.mRemoteNG"                       --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Daum.PotPlayer"                            --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Microsoft.PowerToys"                       --accept-source-agreements   --accept-package-agreements
-winget install -h --id "9MSPC6MP8FM4"                              --accept-source-agreements   --accept-package-agreements & REM Microsoft Whiteboard
-winget install -h --id "tailscale.tailscale"                       --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Discord.Discord"                           --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Flow-Launcher.Flow-Launcher"               --accept-source-agreements   --accept-package-agreements
-
-
-# Development
-winget install -h --id "Git.Git"                                   --accept-source-agreements   --accept-package-agreements
-winget install -h --id "SourceGear.DiffMerge"                      --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Github.cli"                                --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Microsoft.VisualStudio.2022.Community"     --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Rustlang.Rustup"                           --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Embarcadero.Dev-C++"                       --accept-source-agreements   --accept-package-agreements
-winget install -h --id "JetBrains.IntelliJIDEA.Community"          --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Insomnia.Insomnia"                         --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Meld.Meld"                                 --accept-source-agreements   --accept-package-agreements
-winget install -h "python3"                                        --accept-source-agreements   --accept-package-agreements
-winget install -h --id "LLVM.LLVM"                                 --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Kitware.CMake"                             --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Microsoft.Azure.StorageExplorer"           --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Microsoft.PerfView"                        --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Microsoft.WinDbg"                          --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Microsoft.TimeTravelDebugging"             --accept-source-agreements   --accept-package-agreements
-winget install -h --id "MSYS2.MSYS2"                               --accept-source-agreements   --accept-package-agreements
-# pacman -S mingw-w64-ucrt-x86_64-toolchain
-winget install -h --id "Nlitesoft.NTLite"                          --accept-source-agreements   --accept-package-agreements
-winget install -h --id "OpenJS.NodeJS.LTS"                         --accept-source-agreements   --accept-package-agreements
-winget install -h --id "ScooterSoftware.BeyondCompare4"            --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Telerik.Fiddler.Classic"                   --accept-source-agreements   --accept-package-agreements
-winget install -h --id "WiresharkFoundation.Wireshark"             --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Zoom.Zoom"                                 --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Hex-Rays.IDA.Free"                         --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Oracle.JDK.23"                             --accept-source-agreements   --accept-package-agreements
-rem winget install -h --id "MITMediaLab.Scratch.3"                     --accept-source-agreements   --accept-package-agreements
-
-winget install -h --id "eSpeak-NG.eSpeak-NG"                       --accept-source-agreements   --accept-package-agreements
-
-# Entertainment
-winget install -h --id "VideoLAN.VLC"                              --accept-source-agreements   --accept-package-agreements
-
-# Utilities
-winget install -h --id "AntibodySoftware.WizTree"                  --accept-source-agreements   --accept-package-agreements
-winget install -h --id "HandBrake.HandBrake"                       --accept-source-agreements   --accept-package-agreements
-winget install -h --id "REALiX.HWiNFO"                             --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Rufus.Rufus"                               --accept-source-agreements   --accept-package-agreements
-winget install -h --id "ventoy.Ventoy"                             --accept-source-agreements   --accept-package-agreements
-
-# Restricted
-# winget install -h --id "qBittorrent.qBittorrent"                  --accept-source-agreements   --accept-package-agreements
-# winget install -h --id "TeamViewer.TeamViewer"                    --accept-source-agreements   --accept-package-agreements
-# winget install -h --id "TorProject.TorBrowser"                    --accept-source-agreements   --accept-package-agreements
-
-# Optional
-winget install -h --id "Microsoft.AzureCLI"                        --accept-source-agreements   --accept-package-agreements
-winget install -h --id "9P7KNL5RWT25"                              --accept-source-agreements   --accept-package-agreements & REM Sysinternals Suite
-winget install -h --id "Alacritty.Alacritty"                       --accept-source-agreements   --accept-package-agreements
-winget install -h --id "CrystalDewWorld.CrystalDiskMark"           --accept-source-agreements   --accept-package-agreements
-winget install -h --id "GIMP.GIMP"                                 --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Postman.Postman"                           --accept-source-agreements   --accept-package-agreements
-winget install -h --id "HeidiSQL.HeidiSQL"                         --accept-source-agreements   --accept-package-agreements
-winget install -h --id "DBBrowserForSQLite.DBBrowserForSQLite"     --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Apple.iTunes"                              --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Inkscape.Inkscape"                         --accept-source-agreements   --accept-package-agreements
-winget install -h --id "KDE.Krita"                                 --accept-source-agreements   --accept-package-agreements
-winget install -h --id "KiCad.KiCad"                               --accept-source-agreements   --accept-package-agreements
-winget install -h --id "WinSCP.WinSCP"                             --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Microsoft.PerfView"                        --accept-source-agreements   --accept-package-agreements
-winget install -h --id "SoftwareFreedomConservancy.QEMU"           --accept-source-agreements   --accept-package-agreements
-winget install -h --id "AngusJohnson.ResourceHacker"               --accept-source-agreements   --accept-package-agreements
-winget install -h --id "DigiDNA.iMazingHEICConverter"              --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Audacity.Audacity"                         --accept-source-agreements   --accept-package-agreements
-winget install -h --id "XK72.Charles"                              --accept-source-agreements   --accept-package-agreements
-winget install -h --id "LIGHTNINGUK.ImgBurn"                       --accept-source-agreements   --accept-package-agreements
-winget install -h --id "icsharpcode.ILSpy"                         --accept-source-agreements   --accept-package-agreements
-winget install -h --id "TechPowerUp.GPU-Z"                         --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Microsoft.Azure.AZCopy.10"                 --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Mp3tag.Mp3tag"                             --accept-source-agreements   --accept-package-agreements
-winget install -h --id "cURL.cURL"                                 --accept-source-agreements   --accept-package-agreements
-winget install -h --id "sharkdp.fd"                                --accept-source-agreements   --accept-package-agreements
-winget install -h --id "BurntSushi.ripgrep.MSVC"                   --accept-source-agreements   --accept-package-agreements
-winget install -h --id "zyedidia.micro"                            --accept-source-agreements   --accept-package-agreements
-winget install -h --id "yt-dlp.yt-dlp"                             --accept-source-agreements   --accept-package-agreements
-winget install -h --id "jqlang.jq"                                 --accept-source-agreements   --accept-package-agreements
-winget install -h --id "zufuliu.notepad4"                          --accept-source-agreements   --accept-package-agreements
-winget install -h --id "CPUID.CPU-Z"                               --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Gyan.FFmpeg"                               --accept-source-agreements   --accept-package-agreements
-winget install -h --id "junegunn.fzf"                              --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Cockos.LICEcap"                            --accept-source-agreements   --accept-package-agreements
-winget install -h --id "MHNexus.HxD"                               --accept-source-agreements   --accept-package-agreements
-winget install -h --id "Microsoft.PowerShell"                      --accept-source-agreements   --accept-package-agreements
-
-
-winget install -h --id "Oracle.VirtualBox"                         --accept-source-agreements   --accept-package-agreements
-
-# winget upgrade --all
-
-# Not needed anymore
-winget install -h --id "Adobe.Acrobat.Reader.64-bit"               --accept-source-agreements   --accept-package-agreements
-winget install -h --id "PuTTY.PuTTY"                               --accept-source-agreements   --accept-package-agreements
-winget install -h --id "TTYPlus.MTPutty"                           --accept-source-agreements   --accept-package-agreements
+```json
+{
+    "$schema": "https://aka.ms/winget-settings.schema.json",
+    "installBehavior": {
+        "preferences": {
+            "acceptPackageAgreements": true,
+            "acceptSourceAgreements": true,
+            "silent": true
+        }
+    }
+}
 ```
+
+## Essentials
+
+```powershell
+winget install --id "voidtools.Everything"
+winget install --id "WinsiderSS.SystemInformer"
+winget install --id "Google.Chrome"
+winget install --id "Mozilla.Firefox"
+winget install --id "Microsoft.VisualStudioCode" --override "/VERYSILENT /SP- /MERGETASKS='!runcode,!desktopicon,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath'"
+winget install --id "SublimeHQ.SublimeText.4" --override  "/VERYSILENT /SP- /MERGETASKS=contextentry"
+winget install --id "SumatraPDF.SumatraPDF"
+winget install --id "AndrewZhezherun.WinDjView"
+winget install --id "7zip.7zip"
+winget install --id "FastStone.Capture"
+winget install --id "9NKSQGP7F2NH" # Whatsapp
+winget install --id "Microsoft.PowerToys"
+winget install --id "9MSPC6MP8FM4" # Microsoft Whiteboard
+winget install --id "Discord.Discord"
+winget install --id "mRemoteNG.mRemoteNG"
+winget install --id "Daum.PotPlayer"
+winget install --id "VideoLAN.VLC"
+```
+
+## Compilers
+
+```powershell
+winget install --id "MSYS2.MSYS2" # pacman -S mingw-w64-ucrt-x86_64-toolchain
+winget install --id "LLVM.LLVM"
+winget install --id "Microsoft.VisualStudio.2022.Community"
+winget install --id "Oracle.JDK.23"
+winget install --id "OpenJS.NodeJS.LTS"
+winget install --id "Rustlang.Rustup"
+winget install --id "JetBrains.IntelliJIDEA.Community"
+winget install "python3"
+```
+
+## Development Tools and Debuggers
+
+```powershell
+winget install --id "Git.Git"
+winget install --id "Github.cli"
+winget install --id "Kitware.CMake"
+winget install --id "WinMerge.WinMerge"
+winget install --id "ScooterSoftware.BeyondCompare4"
+winget install --id "Microsoft.WinDbg"
+winget install --id "Microsoft.TimeTravelDebugging"
+winget install --id "x64dbg.x64dbg"
+winget install --id "Hex-Rays.IDA.Free"
+winget install --id "Microsoft.Azure.StorageExplorer"
+winget install --id "Microsoft.PerfView"
+winget install --id "Telerik.Fiddler.Classic"
+winget install --id "WiresharkFoundation.Wireshark"
+winget install --id "Nlitesoft.NTLite"
+```
+
+## Utilities
+
+```powershell
+winget install --id "AntibodySoftware.WizTree"
+winget install --id "HandBrake.HandBrake"
+winget install --id "REALiX.HWiNFO"
+winget install --id "Rufus.Rufus"
+winget install --id "ventoy.Ventoy"
+```
+
+## Restricted
+
+```powershell
+winget install --id "RustDesk.RustDesk"
+winget install --id "Tailscale.Tailscale"
+winget install --id "qBittorrent.qBittorrent"
+winget install --id "TorProject.TorBrowser"
+```
+
+## Optional
+
+```powershell
+winget install --id "Microsoft.AzureCLI"
+winget install --id "9P7KNL5RWT25" # Sysinternals Suite
+winget install --id "Alacritty.Alacritty"
+winget install --id "CrystalDewWorld.CrystalDiskMark"
+winget install --id "GIMP.GIMP"
+winget install --id "Postman.Postman"
+winget install --id "HeidiSQL.HeidiSQL"
+winget install --id "DBBrowserForSQLite.DBBrowserForSQLite"
+winget install --id "Inkscape.Inkscape"
+winget install --id "KiCad.KiCad"
+winget install --id "WinSCP.WinSCP"
+winget install --id "SoftwareFreedomConservancy.QEMU"
+winget install --id "AngusJohnson.ResourceHacker"
+winget install --id "DigiDNA.iMazingHEICConverter"
+winget install --id "Audacity.Audacity"
+winget install --id "XK72.Charles"
+winget install --id "LIGHTNINGUK.ImgBurn"
+winget install --id "icsharpcode.ILSpy"
+winget install --id "CPUID.CPU-Z"
+winget install --id "TechPowerUp.GPU-Z"
+winget install --id "Microsoft.Azure.AZCopy.10"
+winget install --id "Mp3tag.Mp3tag"
+winget install --id "cURL.cURL"
+winget install --id "sharkdp.fd"
+winget install --id "BurntSushi.ripgrep.MSVC"
+winget install --id "zyedidia.micro"
+winget install --id "yt-dlp.yt-dlp"
+winget install --id "jqlang.jq"
+winget install --id "zufuliu.notepad4"
+winget install --id "Gyan.FFmpeg"
+winget install --id "junegunn.fzf"
+winget install --id "Cockos.LICEcap"
+winget install --id "MHNexus.HxD"
+winget install --id "Microsoft.PowerShell"
+winget install --id "Embarcadero.Dev-C++"
+winget install --id "Oracle.VirtualBox"
+winget install --id "Adobe.Acrobat.Reader.64-bit"
+winget install --id "PuTTY.PuTTY"
+winget install --id "TTYPlus.MTPutty"
+winget install --id "eSpeak-NG.eSpeak-NG"
+winget install --id "Zoom.Zoom"
+```
+
+## winget upgrade --all
