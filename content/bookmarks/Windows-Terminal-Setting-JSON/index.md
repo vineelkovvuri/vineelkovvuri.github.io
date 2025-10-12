@@ -7,76 +7,47 @@ tags: ['Windows', 'Terminal', 'WindowsSetup']
 {
     "$help": "https://aka.ms/terminal-documentation",
     "$schema": "https://aka.ms/terminal-profiles-schema",
-    "actions":
-    [
-        {
-            "command":
-            {
-                "action": "copy",
-                "singleLine": false
-            },
-            "id": "User.copy.644BA8F2"
-        },
-        {
-            "command": "paste",
-            "id": "User.paste"
-        },
-        {
-            "command": "find",
-            "id": "User.find"
-        },
-        {
-            "command":
-            {
-                "action": "splitPane",
-                "split": "auto",
-                "splitMode": "duplicate"
-            },
-            "id": "User.splitPane.A6751878"
-        }
-    ],
+    "actions": [],
     "copyFormatting": "none",
     "copyOnSelect": false,
     "defaultProfile": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
-    "keybindings":
+    "firstWindowPreference": "persistedWindowLayout",
+    "keybindings": 
     [
         {
-            "id": "User.copy.644BA8F2",
+            "id": "Terminal.CopyToClipboard",
             "keys": "ctrl+c"
         },
         {
-            "id": "User.find",
-            "keys": "ctrl+shift+f"
-        },
-        {
-            "id": "User.paste",
+            "id": "Terminal.PasteFromClipboard",
             "keys": "ctrl+v"
         },
         {
-            "id": "User.splitPane.A6751878",
+            "id": "Terminal.DuplicatePaneAuto",
             "keys": "alt+shift+d"
         }
     ],
-    "newTabMenu":
+    "newTabMenu": 
     [
         {
             "type": "remainingProfiles"
         }
     ],
-    "profiles":
+    "profiles": 
     {
-        "defaults":
+        "defaults": 
         {
-            "backgroundImage": "C:\\Users\\vineel\\OneDrive\\Softs\\Terminal\\animated-tux.gif",
+            "backgroundImage": "C:\\Users\\vineelko\\OneDrive\\Softs\\Terminal\\animated-tux.gif",
             "backgroundImageAlignment": "bottomRight",
             "backgroundImageStretchMode": "none",
-            "font":
+            "font": 
             {
                 "face": "FiraMono Nerd Font Mono"
             },
-            "historySize": 50000
+            "historySize": 50000,
+            "closeOnExit": "graceful"
         },
-        "list":
+        "list": 
         [
             {
                 "commandline": "%SystemRoot%\\System32\\cmd.exe",
@@ -86,23 +57,29 @@ tags: ['Windows', 'Terminal', 'WindowsSetup']
                 "tabTitle": "CMD"
             },
             {
-                "commandline": "wt -w 0 -d C:\\r\\paging; sp -V -d C:\\r\\qemu_rust_bins; mf left; sp -H -d C:\\r\\uefi-dxe-core;mf right;sp -H -d C:\\r\\uefi-core; mf first",
-                "guid": "{2caa0dad-35be-5f56-a8ff-afceeeaa6101}",
+                "commandline": "wt -w 0 -d C:\\; sp -V -d C:\\; mf left",
+                "guid": "{2caa0dad-35be-5f56-a8ff-afceeeaa6102}",
                 "hidden": false,
-                "name": "UEFI - Rust Github Work",
-                "tabTitle": "UEFI - Rust Github Work"
+                "name": "Split 1x2",
+                "tabTitle": "Split 1x2"
+            },
+            {
+                "commandline": "wt -w 0 -d C:\\; sp -V -d C:\\; mf left; sp -H -d C:\\;mf right;sp -H -d C:\\; mf first",
+                "guid": "{2caa0dad-35be-5f56-a8ff-afceeeaa6103}",
+                "hidden": false,
+                "name": "Split 2x2",
+                "tabTitle": "Split 2x2"
             },
             {
                 "guid": "{963ff2f7-6aed-5ce3-9d91-90d99571f53a}",
                 "hidden": true,
                 "name": "Ubuntu-24.04",
                 "source": "Windows.Terminal.Wsl"
-            },
+            }
         ]
     },
     "schemes": [],
     "themes": [],
-    // "wordDelimiters": " \\()\"'-.,:;<>~!@#$%^&*|+=[]{}~?\u2502"
     "wordDelimiters": " ()\"',;<>~!@#$%^&*|+=[]{}~?\u2502"
 }
 ```
