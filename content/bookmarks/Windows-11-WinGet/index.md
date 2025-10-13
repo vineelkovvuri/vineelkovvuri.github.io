@@ -30,13 +30,15 @@ winget install --id "SublimeHQ.SublimeText.4" --override  "/VERYSILENT /SP- /MER
 winget install --id "SumatraPDF.SumatraPDF"
 winget install --id "AndrewZhezherun.WinDjView"
 winget install --id "7zip.7zip"
-winget install --id "FastStone.Capture"
-winget install --id "FastStone.Viewer"
-winget install --id "9NKSQGP7F2NH" # Whatsapp
 winget install --id "Microsoft.PowerToys"
 winget install --id "9MSPC6MP8FM4" # Microsoft Whiteboard
+winget install --id "9NKSQGP7F2NH" # Whatsapp
+winget install --id "Telegram.TelegramDesktop"
+winget install --id "Microsoft.Teams"
 winget install --id "Discord.Discord"
 winget install --id "mRemoteNG.mRemoteNG"
+winget install --id "FastStone.Capture"
+winget install --id "FastStone.Viewer"
 winget install --id "Daum.PotPlayer"
 winget install --id "VideoLAN.VLC"
 ```
@@ -73,8 +75,9 @@ winget install --id "Microsoft.PerfView"
 ## Virtual Machines and Emulators
 
 ```powershell
-winget install --id "SoftwareFreedomConservancy.QEMU"
 winget install --id "Oracle.VirtualBox"
+winget install --id "SoftwareFreedomConservancy.QEMU"
+winget install --id "Bochs.Bochs"
 winget install --id "86Box.86Box"
 ```
 
