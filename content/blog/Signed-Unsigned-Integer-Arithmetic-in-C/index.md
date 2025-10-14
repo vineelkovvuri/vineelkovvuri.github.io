@@ -495,7 +495,7 @@ Figure 4: Resulting type of the expression
 4. [Should I use Signed or Unsigned Ints In C? (Part 2)](http://blog.robertelder.org/signed-or-unsigned-part-2/)
 5. [X86 Opcode and Instruction Reference](http://ref.nasm.net/coder-abc.html)
 6. [Why is imul used for multiplying unsigned numbers?](https://stackoverflow.com/a/42589535/2407966)
-7. [System V Application Binary Interface AMD64 Architecture Processor Supplement](https://software.intel.com/sites/default/files/article/402129/mpx-linux64-abi.pdf)
+7. [System V Application Binary Interface AMD64 Architecture Processor Supplement](https://cs61.seas.harvard.edu/site/2022/pdf/x86-64-abi-20210928.pdf)
 8. [64-Bit Programming Models: Why LP64?](http://www.unix.org/version2/whatsnew/lp64_wp.html)
 9. [Why did the Win64 team choose the LLP64 model?](https://blogs.msdn.microsoft.com/oldnewthing/20050131-00/?p=36563)
 10. [Abstract Data Models](https://docs.microsoft.com/en-us/windows/desktop/winprog64/abstract-data-models)

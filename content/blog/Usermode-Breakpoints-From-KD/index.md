@@ -38,7 +38,7 @@ Below are the steps involved for a break point to work in debugging a user mode 
   causes the debugger to break in and debugger puts back the original byte
   as if nothing has happened to the program
 - More details:
-  http://vineelkovvuri.com/posts/how-do-breakpoints-work-in-debuggers/
+  https://vineelkovvuri.github.io/blog/how-do-breakpoints-work-in-debuggers/
 
 # User mode break points from KD
 

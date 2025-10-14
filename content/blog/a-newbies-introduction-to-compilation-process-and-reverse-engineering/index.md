@@ -541,7 +541,7 @@ remembrance/tribute to Turbo C running in DOSBox emulator!
 - [GCC Options](https://gcc.gnu.org/onlinedocs/gcc/Overall-Options.html)
 - [PE File Format](https://msdn.microsoft.com/en-us/library/ms809762.aspx)
 - [Code to browse PE File](https://github.com/vineelkovvuri/Projects/tree/master/PeLib)
-- [Linkers and Loaders by John R Levine](https://www.amazon.com/dp/1558604960/ref=cm_sw_su_dp)
-- [Engineering A Compiler by Keith Cooper, Linda Torczon](https://www.amazon.com/dp/012088478X/ref=cm_sw_su_dp)
-- [Awesome Reverse Engineering Playground/Community - http://crackmes.de/](http://crackmes.cf/)
+- [Linkers and Loaders by John R Levine](https://www.amazon.com/dp/1558604960)
+- [Engineering A Compiler by Keith Cooper, Linda Torczon](https://www.amazon.com/dp/012088478X)
+- [Awesome Reverse Engineering Playground/Community - https://crackmes.one/](https://crackmes.one/)
 
