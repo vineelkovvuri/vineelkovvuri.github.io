@@ -21,49 +21,52 @@ tags: ['WindowsSetup']
 ## Essentials
 
 ```powershell
-winget install --id "voidtools.Everything"
-winget install --id "WinsiderSS.SystemInformer"
-winget install --id "Google.Chrome"
-winget install --id "Mozilla.Firefox"
+winget install ` # Essentials
+               "voidtools.Everything" `
+               "WinsiderSS.SystemInformer" `
+               "Google.Chrome" `
+               "Mozilla.Firefox" `
+               "SumatraPDF.SumatraPDF" `
+               "7zip.7zip" `
+               "Microsoft.PowerToys" `
+               "9MSPC6MP8FM4" ` # Microsoft Whiteboard
+               "9NKSQGP7F2NH" ` # Whatsapp
+               "Telegram.TelegramDesktop" `
+               "Microsoft.Teams" `
+               "Discord.Discord" `
+               "mRemoteNG.mRemoteNG" `
+               "FastStone.Capture" `
+               "FastStone.Viewer" `
+               "Daum.PotPlayer" `
+               "VideoLAN.VLC" `
+               ` # Compilers
+               "NASM.NASM" `
+               "MSYS2.MSYS2" ` # pacman -S mingw-w64-ucrt-x86_64-toolchain
+               "Oracle.JDK.25" `
+               "Rustlang.Rustup" `
+               "python3" `
+               "OpenJS.NodeJS.LTS" `
+               "JetBrains.IntelliJIDEA.Community" `
+               ` # Development Tools, Emulators, Debuggers
+               "Github.cli" `
+               "WinMerge.WinMerge" `
+               "SoftwareFreedomConservancy.QEMU" `
+               # Done
+
+# Custom Installers
 winget install --id "Microsoft.VisualStudioCode" --override "/VERYSILENT /SP- /MERGETASKS='!runcode,!desktopicon,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath'"
 winget install --id "SublimeHQ.SublimeText.4" --override  "/VERYSILENT /SP- /MERGETASKS=contextentry"
-winget install --id "SumatraPDF.SumatraPDF"
-winget install --id "AndrewZhezherun.WinDjView"
-winget install --id "7zip.7zip"
-winget install --id "Microsoft.PowerToys"
-winget install --id "9MSPC6MP8FM4" # Microsoft Whiteboard
-winget install --id "9NKSQGP7F2NH" # Whatsapp
-winget install --id "Telegram.TelegramDesktop"
-winget install --id "Microsoft.Teams"
-winget install --id "Discord.Discord"
-winget install --id "mRemoteNG.mRemoteNG"
-winget install --id "FastStone.Capture"
-winget install --id "FastStone.Viewer"
-winget install --id "Daum.PotPlayer"
-winget install --id "VideoLAN.VLC"
+winget install --id "Git.Git" --override  "/VERYSILENT /SP- /COMPONENTS='gitlfs,assoc,assoc_sh,scalar'"
+winget install --id "LLVM.LLVM" --override "/S /D=C:\LLVM"
+winget install --id "Microsoft.VisualStudio.2022.Community" -e --override "--quiet --wait --norestart --add Microsoft.VisualStudio.Component.VC.CoreBuildTools --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64  --add Microsoft.VisualStudio.Component.Windows11SDK.22621 --add Microsoft.VisualStudio.Component.VC.Tools.ARM  --add Microsoft.VisualStudio.Component.VC.Tools.ARM64"
 ```
 
-## Compilers
+## Other Packages
+
+### Development Tools and Debuggers
 
 ```powershell
-winget install --id "MSYS2.MSYS2" # pacman -S mingw-w64-ucrt-x86_64-toolchain
-winget install --id "LLVM.LLVM"
-winget install --id "Microsoft.VisualStudio.2022.Community"
-winget install --id "Oracle.JDK.25"
-winget install --id "Rustlang.Rustup"
-winget install --id "NASM.NASM"
-winget install --id "JetBrains.IntelliJIDEA.Community"
-winget install "python3"
-winget install --id "OpenJS.NodeJS.LTS"
-```
-
-## Development Tools and Debuggers
-
-```powershell
-winget install --id "Git.Git"
-winget install --id "Github.cli"
 winget install --id "Kitware.CMake"
-winget install --id "WinMerge.WinMerge"
 winget install --id "ScooterSoftware.BeyondCompare4"
 winget install --id "Microsoft.WinDbg"
 winget install --id "Microsoft.TimeTravelDebugging"
@@ -72,7 +75,7 @@ winget install --id "Hex-Rays.IDA.Free"
 winget install --id "Microsoft.PerfView"
 ```
 
-## Virtual Machines and Emulators
+### Virtual Machines and Emulators
 
 ```powershell
 winget install --id "Oracle.VirtualBox"
@@ -81,7 +84,7 @@ winget install --id "Bochs.Bochs"
 winget install --id "86Box.86Box"
 ```
 
-## Networking and Web
+### Networking and Web
 
 ```powershell
 winget install --id "Telerik.Fiddler.Classic"
@@ -92,7 +95,7 @@ winget install --id "TTYPlus.MTPutty"
 winget install --id "WinSCP.WinSCP"
 ```
 
-## Utilities
+### Utilities
 
 ```powershell
 winget install --id "Nlitesoft.NTLite"
@@ -103,7 +106,7 @@ winget install --id "Rufus.Rufus"
 winget install --id "ventoy.Ventoy"
 ```
 
-## Cloud
+### Cloud
 
 ```powershell
 winget install --id "Microsoft.Azure.AZCopy.10"
@@ -111,7 +114,7 @@ winget install --id "Microsoft.AzureCLI"
 winget install --id "Microsoft.Azure.StorageExplorer"
 ```
 
-## Restricted
+### Restricted
 
 ```powershell
 winget install --id "qBittorrent.qBittorrent"
@@ -119,7 +122,7 @@ winget install --id "RustDesk.RustDesk"
 winget install --id "Tailscale.Tailscale"
 ```
 
-## Optional
+### Optional
 
 ```powershell
 winget install --id "9P7KNL5RWT25" # Sysinternals Suite
@@ -157,4 +160,4 @@ winget install --id "zufuliu.notepad4"
 winget install --id "zyedidia.micro"
 ```
 
-## winget upgrade --all
+### winget upgrade --all
