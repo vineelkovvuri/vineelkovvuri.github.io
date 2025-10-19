@@ -3,7 +3,7 @@ title: "Windows 11 WinGet"
 tags: ['WindowsSetup']
 ---
 
-## Tweak winget defaults using `winget settings`
+## Tweak winget defaults usingwinget settings`
 
 ```json
 {
@@ -21,44 +21,43 @@ tags: ['WindowsSetup']
 ## Essentials
 
 ```powershell
-winget install ` # Essentials
-               "voidtools.Everything" `
-               "WinsiderSS.SystemInformer" `
-               "Google.Chrome" `
-               "Mozilla.Firefox" `
-               "SumatraPDF.SumatraPDF" `
-               "7zip.7zip" `
-               "Microsoft.PowerToys" `
-               "9MSPC6MP8FM4" ` # Microsoft Whiteboard
-               "9NKSQGP7F2NH" ` # Whatsapp
-               "Telegram.TelegramDesktop" `
-               "Microsoft.Teams" `
-               "Discord.Discord" `
-               "mRemoteNG.mRemoteNG" `
-               "FastStone.Capture" `
-               "FastStone.Viewer" `
-               "Daum.PotPlayer" `
-               "VideoLAN.VLC" `
-               ` # Compilers
-               "NASM.NASM" `
-               "MSYS2.MSYS2" ` # pacman -S mingw-w64-ucrt-x86_64-toolchain
-               "Oracle.JDK.25" `
-               "Rustlang.Rustup" `
-               "python3" `
-               "OpenJS.NodeJS.LTS" `
-               "JetBrains.IntelliJIDEA.Community" `
-               ` # Development Tools, Emulators, Debuggers
-               "Github.cli" `
-               "WinMerge.WinMerge" `
-               "SoftwareFreedomConservancy.QEMU" `
-               # Done
-
-# Custom Installers
+# Essentials
+winget install "voidtools.Everything"
+winget install "WinsiderSS.SystemInformer"
 winget install --id "Microsoft.VisualStudioCode" --override "/VERYSILENT /SP- /MERGETASKS='!runcode,!desktopicon,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath'"
 winget install --id "SublimeHQ.SublimeText.4" --override  "/VERYSILENT /SP- /MERGETASKS=contextentry"
-winget install --id "Git.Git" --override  "/VERYSILENT /SP- /COMPONENTS='gitlfs,assoc,assoc_sh,scalar'"
+winget install "Google.Chrome"
+winget install "Mozilla.Firefox"
+winget install "SumatraPDF.SumatraPDF"
+winget install "7zip.7zip"
+winget install "Microsoft.PowerToys"
+winget install "9MSPC6MP8FM4" # Microsoft Whiteboard
+winget install "9NKSQGP7F2NH" # Whatsapp
+winget install "Telegram.TelegramDesktop"
+winget install "Microsoft.Teams"
+winget install "Discord.Discord"
+winget install "mRemoteNG.mRemoteNG"
+winget install "FastStone.Capture"
+winget install "FastStone.Viewer"
+winget install "Daum.PotPlayer"
+winget install "VideoLAN.VLC"
+
+# Compilers
+winget install "NASM.NASM"
+winget install "MSYS2.MSYS2" # pacman -S mingw-w64-ucrt-x86_64-toolchain
 winget install --id "LLVM.LLVM" --override "/S /D=C:\LLVM"
 winget install --id "Microsoft.VisualStudio.2022.Community" -e --override "--quiet --wait --norestart --add Microsoft.VisualStudio.Component.VC.CoreBuildTools --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64  --add Microsoft.VisualStudio.Component.Windows11SDK.22621 --add Microsoft.VisualStudio.Component.VC.Tools.ARM  --add Microsoft.VisualStudio.Component.VC.Tools.ARM64"
+winget install "Oracle.JDK.25"
+winget install "Rustlang.Rustup"
+winget install "python3"
+winget install "OpenJS.NodeJS.LTS"
+winget install "JetBrains.IntelliJIDEA.Community"
+
+# Development Tools, Emulators, Debuggers
+winget install --id "Git.Git" --override  "/VERYSILENT /SP- /COMPONENTS='gitlfs,assoc,assoc_sh,scalar'"
+winget install "Github.cli"
+winget install "WinMerge.WinMerge"
+winget install "SoftwareFreedomConservancy.QEMU"
 ```
 
 ## Other Packages
