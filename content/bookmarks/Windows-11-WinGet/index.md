@@ -31,8 +31,10 @@ winget install "Mozilla.Firefox"
 winget install "SumatraPDF.SumatraPDF"
 winget install "7zip.7zip"
 winget install "Microsoft.PowerToys"
-winget install "9MSPC6MP8FM4" # Microsoft Whiteboard
-winget install "9NKSQGP7F2NH" # Whatsapp
+# Microsoft Whiteboard
+winget install "9MSPC6MP8FM4"
+# Whatsapp
+winget install "9NKSQGP7F2NH"
 winget install "Telegram.TelegramDesktop"
 winget install "Microsoft.Teams"
 winget install "Discord.Discord"
@@ -44,7 +46,8 @@ winget install "VideoLAN.VLC"
 
 # Compilers
 winget install "NASM.NASM"
-winget install "MSYS2.MSYS2" # pacman -S mingw-w64-ucrt-x86_64-toolchain
+# pacman -S mingw-w64-ucrt-x86_64-toolchain
+winget install "MSYS2.MSYS2"
 winget install --id "LLVM.LLVM" --override "/S /D=C:\LLVM"
 winget install --id "Microsoft.VisualStudio.2022.Community" -e --override "--quiet --wait --norestart --add Microsoft.VisualStudio.Component.VC.CoreBuildTools --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64  --add Microsoft.VisualStudio.Component.Windows11SDK.22621 --add Microsoft.VisualStudio.Component.VC.Tools.ARM  --add Microsoft.VisualStudio.Component.VC.Tools.ARM64"
 winget install "Oracle.JDK.25"
