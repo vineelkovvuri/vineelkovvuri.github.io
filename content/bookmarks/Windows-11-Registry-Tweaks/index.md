@@ -14,6 +14,14 @@ Windows Registry Editor Version 5.00
 [HKEY_CURRENT_USER\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32]
 @=""
 
+; Dont show tabs from apps when snapping or Alt+Tab for all users
+[HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer]
+"MultiTaskingAltTabFilter"=dword:00000004
+
+; Dont show tabs from apps when snapping or Alt+Tab for all users
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer]
+"MultiTaskingAltTabFilter"=dword:00000004
+
 ; Disable Search box suggestions in start menu
 [HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Explorer]
 "DisableSearchBoxSuggestions"=dword:00000001

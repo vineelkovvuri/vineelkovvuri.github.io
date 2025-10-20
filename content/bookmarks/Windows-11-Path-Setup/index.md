@@ -42,6 +42,7 @@ AppendPathVariable -Path "C:\Program Files\NASM"
 # Exclude some paths from Windows Defender Scans
 Add-MpPreference -ExclusionPath "$($env:USERPROFILE)\.cargo"
 Add-MpPreference -ExclusionPath "$($env:USERPROFILE)\.rustup"
+Add-MpPreference -ExclusionPath "$($env:USERPROFILE)\OneDrive\Softs\Tools\"
 Add-MpPreference -ExclusionPath "C:\repos"
 
 # Manually restart after installing below optional packages
