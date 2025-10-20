@@ -94,8 +94,8 @@ Windows Registry Editor Version 5.00
 "AllowTelemetry"=dword:00000000
 
 ; Disable Let Windows improve Start and search results by tracking app launches
-[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
-"Start_TrackProgs"=dword:00000000
+; [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
+; "Start_TrackProgs"=dword:00000000
 
 ; Disable Activity History
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System]

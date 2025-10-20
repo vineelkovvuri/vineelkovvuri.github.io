@@ -66,8 +66,8 @@ On my work laptop, I keep my work email and username in the global
 project-specific configurations:
 
 ```powershell
-C:\repos\vin-pro> git config user.name "Vineel Kovvuri"
-C:\repos\vin-pro> git config user.email "vineel.kovvuri@gmail.com"
+git config user.name "Vineel Kovvuri"
+git config user.email "vineel.kovvuri@gmail.com"
 ```
 
 Because we cloned the repository using the modified URL, the remotes are
