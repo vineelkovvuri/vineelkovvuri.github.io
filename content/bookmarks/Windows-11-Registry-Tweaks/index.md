@@ -10,6 +10,10 @@ Windows Registry Editor Version 5.00
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem]
 "LongPathsEnabled"=dword:00000001
 
+; Enable Developer Mode - Required for Git symlink support
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock]
+"AllowDevelopmentWithoutDevLicense"=dword:00000001
+
 ; Disable_Show_More_Options_Context_Menu
 [HKEY_CURRENT_USER\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32]
 @=""
