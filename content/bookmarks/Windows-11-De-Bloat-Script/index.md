@@ -119,7 +119,8 @@ $appList = @(
     "Microsoft.Copilot",                      # New Windows Copilot app
     "Microsoft.Windows.Photos",               # Use FastStone Image viewer
     "Microsoft.Paint",                        # Classic Paint
-    "Microsoft.ScreenSketch"                  # Snipping Tool. Use FSCapture
+    "Microsoft.ScreenSketch",                 # Snipping Tool. Use FSCapture
+    "Microsoft.BingSearch"                    # Web Search from Microsoft Bing (Integrates into Windows Search)
     )
 
 # Iterate over each app name and try to remove it
@@ -133,7 +134,6 @@ foreach ($appName in $appList) {
 #  The apps below this line will NOT be uninstalled by default. Remove the # character in front of any app you  #
 #   want to UNINSTALL by default.                                                                               #
 # ------------------------------------------------------------------------------------------------------------- #
-#Microsoft.BingSearch                   # Web Search from Microsoft Bing (Integrates into Windows Search)
 #Microsoft.Edge                         # Edge browser (Can only be uninstalled in European Economic Area)
 #Microsoft.GetHelp                      # Required for some Windows 11 Troubleshooters
 #Microsoft.OneDrive                     # OneDrive consumer

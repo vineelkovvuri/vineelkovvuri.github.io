@@ -51,12 +51,11 @@ tags: ['Git', 'WindowsSetup']
     autosquash = false
     updateRefs = false
 [core]
-    editor = notepad4
+	editor = subl -n -w
     autocrlf = false
     commentChar = ";"
     longpaths = true
     symlinks = true
-    pager = moor  # Install moor: https://github.com/walles/moor
 [grep]
     patternType = perl
     lineNumber = true
