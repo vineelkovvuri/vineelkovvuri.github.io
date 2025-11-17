@@ -74,8 +74,6 @@ tags: ['Git', 'WindowsSetup']
     autoSetupRemote = true
     followTags = true
 [fetch]
-    prune = true
-    pruneTags = true
     all = true
 [commit]
     verbose = true
