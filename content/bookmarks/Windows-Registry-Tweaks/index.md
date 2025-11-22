@@ -1,5 +1,5 @@
 ﻿---
-title: "Windows 11 Registry Tweaks"
+title: "Windows Registry Tweaks"
 tags: ['WindowsSetup']
 ---
 
@@ -61,8 +61,10 @@ Windows Registry Editor Version 5.00
 ; Disable_AI_Recall
 [HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\WindowsAI]
 "DisableAIDataAnalysis"=dword:00000001
+"DisableClickToDo"=dword:00000001
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI]
 "DisableAIDataAnalysis"=dword:00000001
+"DisableClickToDo"=dword:00000001
 
 ; Disable Windows Spotlight on Windows 11
 [HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\CloudContent]
@@ -246,4 +248,116 @@ Windows Registry Editor Version 5.00
 ; Show_Extensions_For_Known_File_Types
 [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
 "HideFileExt"=dword:00000000
+
+; Disable_Edge_AI_Features
+; Disable Microsoft Edge MSN news feed, sponsored links, shopping assistant and more.
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge]
+"CopilotCDPPageContext"=dword:00000000
+"CopilotPageContext"=dword:00000000
+"HubsSidebarEnabled"=dword:00000000
+"EdgeEntraCopilotPageContext"=dword:00000000
+"EdgeHistoryAISearchEnabled"=dword:00000000
+"ComposeInlineEnabled"=dword:00000000
+"GenAILocalFoundationalModelSettings"=dword:00000001
+"NewTabPageBingChatEnabled"=dword:00000000
+"NewTabPageContentEnabled"=dword:00000000
+"NewTabPageHideDefaultTopSites"=dword:00000001
+"EdgeShoppingAssistantEnabled"=dword:00000000
+"TabServicesEnabled"=dword:00000000
+"AlternateErrorPagesEnabled"=dword:00000000
+
+; Disable_Notepad_AI_Features
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\WindowsNotepad]
+"DisableAIFeatures"=dword:00000001
+
+; Disable_Paint_AI_Features
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Paint]
+"DisableCocreator"=dword:00000001
+"DisableGenerativeFill"=dword:00000001
+"DisableImageCreator"=dword:00000001
+"DisableGenerativeErase"=dword:00000001
+"DisableRemoveBackground"=dword:00000001
+
+; Disable Show mobile device in Start
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Start\Companions\Microsoft.YourPhone_8wekyb3d8bbwe]
+"IsEnabled"=dword:00000000
+
+; Disable MS 365 Ads in Settings Home
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent]
+"DisableConsumerAccountStateContent"=dword:00000001
+
+; Disable_Start_Recommended
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer]
+"HideRecommendedSection"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\current\device\Start]
+"HideRecommendedSection"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\current\device\Education]
+"IsEducationEnvironment"=dword:00000001
+
+; Change start menu layout to show more pins
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
+"Start_Layout"=dword:00000001
+
+; Disable_Sticky_Keys_Shortcut
+[HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys]
+"Flags"="506"
+
+; Show me the Windows welcome experience after updates and occasionally when I sign in to highlight what's new and suggested
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager]
+"SubscribedContent-310093Enabled"=dword:00000000
+
+; Occasionally show suggestions in Start
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager]
+"SubscribedContent-338388Enabled"=dword:00000000
+"SystemPaneSuggestionsEnabled"=dword:00000000
+
+; Show recommendations for tips, shortcuts, new apps, and more in start
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
+"Start_IrisRecommendations"=dword:00000000
+
+; Get tips, tricks, and suggestions as you use Windows
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager]
+"SubscribedContent-338389Enabled"=dword:00000000
+"SoftLandingEnabled"=dword:00000000
+
+; Show me suggested content in the Settings app
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager]
+"SubscribedContent-338393Enabled"=dword:00000000
+"SubscribedContent-353694Enabled"=dword:00000000
+"SubscribedContent-353696Enabled"=dword:00000000
+"SubscribedContent-353698Enabled"=dword:00000000
+
+; Disable Show me notifications in the Settings app
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SystemSettings\AccountNotifications]
+"EnableAccountNotifications"=dword:00000000
+
+; Suggest ways I can finish setting up my device to get the most out of Windows
+[HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\UserProfileEngagement]
+"ScoobeSystemSettingEnabled"=dword:00000000
+
+; Sync provider ads
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
+"ShowSyncProviderNotifications"=dword:00000000
+
+; Automatic Installation of Suggested Apps
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager]
+"SilentInstalledAppsEnabled"=dword:00000000
+
+; Disable "Suggested" app notifications (Ads for MS services)
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.Suggested]
+"Enabled"=dword:00000000
+
+; Disable Show me suggestions for using my mobile device with Windows (Phone Link suggestions)
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Mobility]
+"OptedIn"=dword:00000000
+
+; Disable Show account-related notifications
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
+"Start_AccountNotifications"=dword:00000000
+
+; Disable Windows Backup reminder notifications
+[HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.BackupReminder]
+"Enabled"=dword:00000000
 ```

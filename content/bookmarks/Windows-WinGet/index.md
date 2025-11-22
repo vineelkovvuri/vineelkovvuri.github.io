@@ -1,5 +1,5 @@
 ﻿---
-title: "Windows 11 WinGet"
+title: "Windows WinGet"
 tags: ['WindowsSetup']
 ---
 

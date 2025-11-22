@@ -1,5 +1,5 @@
 ﻿---
-title: "Windows 11 Path Setup"
+title: "Windows Path Setup"
 tags: ['WindowsSetup']
 ---
 

@@ -1,5 +1,5 @@
 ﻿---
-title: "Windows 11 De Bloat Script"
+title: "Windows De-bloat Script"
 tags: ['WindowsSetup']
 ---
 

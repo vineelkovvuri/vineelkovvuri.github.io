@@ -152,19 +152,21 @@
   </url><url>
     <loc>/courses/</loc>
   </url><url>
-    <loc>/bookmarks/git-config/</loc>
-  </url><url>
     <loc>/presentations/git/</loc>
   </url><url>
     <loc>/courses/java/</loc>
   </url><url>
     <loc>/courses/linux/</loc>
   </url><url>
+    <loc>/bookmarks/linux-setup/</loc>
+  </url><url>
+    <loc>/tags/linuxsetup/</loc>
+  </url><url>
     <loc>/presentations/</loc>
   </url><url>
     <loc>/courses/python/</loc>
   </url><url>
-    <loc>/bookmarks/ssh-config/</loc>
+    <loc>/bookmarks/windows-ssh-config/</loc>
   </url><url>
     <loc>/tags/terminal/</loc>
   </url><url>
@@ -176,17 +178,19 @@
   </url><url>
     <loc>/tags/vscode/</loc>
   </url><url>
-    <loc>/bookmarks/vscode-setting-json/</loc>
+    <loc>/bookmarks/windows-debloat-script/</loc>
   </url><url>
-    <loc>/bookmarks/windows-11-de-bloat-script/</loc>
+    <loc>/bookmarks/windows-git-config/</loc>
   </url><url>
-    <loc>/bookmarks/windows-11-path-setup/</loc>
+    <loc>/bookmarks/windows-path-setup/</loc>
   </url><url>
-    <loc>/bookmarks/windows-11-registry-tweaks/</loc>
-  </url><url>
-    <loc>/bookmarks/windows-11-winget/</loc>
+    <loc>/bookmarks/windows-registry-tweaks/</loc>
   </url><url>
     <loc>/bookmarks/windows-terminal-setting-json/</loc>
+  </url><url>
+    <loc>/bookmarks/windows-vscode-setting-json/</loc>
+  </url><url>
+    <loc>/bookmarks/windows-winget/</loc>
   </url><url>
     <loc>/tags/windowssetup/</loc>
   </url>

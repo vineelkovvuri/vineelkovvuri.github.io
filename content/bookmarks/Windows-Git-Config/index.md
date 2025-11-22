@@ -1,5 +1,5 @@
 ﻿---
-title: "Git Config"
+title: "Windows Git Config"
 tags: ['Git', 'WindowsSetup']
 ---
 

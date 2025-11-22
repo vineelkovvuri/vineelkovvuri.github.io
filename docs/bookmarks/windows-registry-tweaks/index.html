@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Windows 11 Registry Tweaks | Vineel Kovvuri</title>
+    <title>Windows Registry Tweaks | Vineel Kovvuri</title>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,7 +33,7 @@
     </nav>
 
 <div class="article-meta">
-<h1><span class="title">Windows 11 Registry Tweaks</span></h1>
+<h1><span class="title">Windows Registry Tweaks</span></h1>
 
 
 </div>
@@ -96,8 +96,10 @@
 </span></span><span style="display:flex;"><span><span style="color:#888">; Disable_AI_Recall</span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CURRENT_USER</span><span style="color:#080;font-weight:bold">\Software\Policies\Microsoft\Windows\WindowsAI]</span>
 </span></span><span style="display:flex;"><span><span style="color:#369">&#34;DisableAIDataAnalysis&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000001</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;DisableClickToDo&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000001</span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_LOCAL_MACHINE</span><span style="color:#080;font-weight:bold">\SOFTWARE\Policies\Microsoft\Windows\WindowsAI]</span>
 </span></span><span style="display:flex;"><span><span style="color:#369">&#34;DisableAIDataAnalysis&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000001</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;DisableClickToDo&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000001</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#888">; Disable Windows Spotlight on Windows 11</span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CURRENT_USER</span><span style="color:#080;font-weight:bold">\Software\Policies\Microsoft\Windows\CloudContent]</span>
@@ -281,6 +283,118 @@
 </span></span><span style="display:flex;"><span><span style="color:#888">; Show_Extensions_For_Known_File_Types</span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CURRENT_USER</span><span style="color:#080;font-weight:bold">\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]</span>
 </span></span><span style="display:flex;"><span><span style="color:#369">&#34;HideFileExt&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">; Disable_Edge_AI_Features</span>
+</span></span><span style="display:flex;"><span><span style="color:#888">; Disable Microsoft Edge MSN news feed, sponsored links, shopping assistant and more.</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_LOCAL_MACHINE</span><span style="color:#080;font-weight:bold">\SOFTWARE\Policies\Microsoft\Edge]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;CopilotCDPPageContext&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;CopilotPageContext&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;HubsSidebarEnabled&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;EdgeEntraCopilotPageContext&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;EdgeHistoryAISearchEnabled&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;ComposeInlineEnabled&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;GenAILocalFoundationalModelSettings&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000001</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;NewTabPageBingChatEnabled&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;NewTabPageContentEnabled&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;NewTabPageHideDefaultTopSites&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000001</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;EdgeShoppingAssistantEnabled&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;TabServicesEnabled&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;AlternateErrorPagesEnabled&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">; Disable_Notepad_AI_Features</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_LOCAL_MACHINE</span><span style="color:#080;font-weight:bold">\SOFTWARE\Policies\WindowsNotepad]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;DisableAIFeatures&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000001</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">; Disable_Paint_AI_Features</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_LOCAL_MACHINE</span><span style="color:#080;font-weight:bold">\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Paint]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;DisableCocreator&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000001</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;DisableGenerativeFill&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000001</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;DisableImageCreator&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000001</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;DisableGenerativeErase&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000001</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;DisableRemoveBackground&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000001</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">; Disable Show mobile device in Start</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CURRENT_USER</span><span style="color:#080;font-weight:bold">\Software\Microsoft\Windows\CurrentVersion\Start\Companions\Microsoft.YourPhone_8wekyb3d8bbwe]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;IsEnabled&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">; Disable MS 365 Ads in Settings Home</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_LOCAL_MACHINE</span><span style="color:#080;font-weight:bold">\SOFTWARE\Policies\Microsoft\Windows\CloudContent]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;DisableConsumerAccountStateContent&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000001</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">; Disable_Start_Recommended</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_LOCAL_MACHINE</span><span style="color:#080;font-weight:bold">\SOFTWARE\Policies\Microsoft\Windows\Explorer]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;HideRecommendedSection&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000001</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_LOCAL_MACHINE</span><span style="color:#080;font-weight:bold">\SOFTWARE\Microsoft\PolicyManager\current\device\Start]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;HideRecommendedSection&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000001</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_LOCAL_MACHINE</span><span style="color:#080;font-weight:bold">\SOFTWARE\Microsoft\PolicyManager\current\device\Education]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;IsEducationEnvironment&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000001</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">; Change start menu layout to show more pins</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CURRENT_USER</span><span style="color:#080;font-weight:bold">\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;Start_Layout&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000001</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">; Disable_Sticky_Keys_Shortcut</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CURRENT_USER</span><span style="color:#080;font-weight:bold">\Control Panel\Accessibility\StickyKeys]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;Flags&#34;</span>=<span style="color:#d20;background-color:#fff0f0">&#34;506&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">; Show me the Windows welcome experience after updates and occasionally when I sign in to highlight what&#39;s new and suggested</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CURRENT_USER</span><span style="color:#080;font-weight:bold">\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;SubscribedContent-310093Enabled&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">; Occasionally show suggestions in Start</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CURRENT_USER</span><span style="color:#080;font-weight:bold">\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;SubscribedContent-338388Enabled&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;SystemPaneSuggestionsEnabled&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">; Show recommendations for tips, shortcuts, new apps, and more in start</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CURRENT_USER</span><span style="color:#080;font-weight:bold">\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;Start_IrisRecommendations&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">; Get tips, tricks, and suggestions as you use Windows</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CURRENT_USER</span><span style="color:#080;font-weight:bold">\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;SubscribedContent-338389Enabled&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;SoftLandingEnabled&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">; Show me suggested content in the Settings app</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CURRENT_USER</span><span style="color:#080;font-weight:bold">\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;SubscribedContent-338393Enabled&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;SubscribedContent-353694Enabled&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;SubscribedContent-353696Enabled&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;SubscribedContent-353698Enabled&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">; Disable Show me notifications in the Settings app</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CURRENT_USER</span><span style="color:#080;font-weight:bold">\Software\Microsoft\Windows\CurrentVersion\SystemSettings\AccountNotifications]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;EnableAccountNotifications&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">; Suggest ways I can finish setting up my device to get the most out of Windows</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CURRENT_USER</span><span style="color:#080;font-weight:bold">\SOFTWARE\Microsoft\Windows\CurrentVersion\UserProfileEngagement]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;ScoobeSystemSettingEnabled&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">; Sync provider ads</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CURRENT_USER</span><span style="color:#080;font-weight:bold">\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;ShowSyncProviderNotifications&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">; Automatic Installation of Suggested Apps</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CURRENT_USER</span><span style="color:#080;font-weight:bold">\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;SilentInstalledAppsEnabled&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">; Disable &#34;Suggested&#34; app notifications (Ads for MS services)</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CURRENT_USER</span><span style="color:#080;font-weight:bold">\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.Suggested]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;Enabled&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">; Disable Show me suggestions for using my mobile device with Windows (Phone Link suggestions)</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CURRENT_USER</span><span style="color:#080;font-weight:bold">\Software\Microsoft\Windows\CurrentVersion\Mobility]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;OptedIn&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">; Disable Show account-related notifications</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CURRENT_USER</span><span style="color:#080;font-weight:bold">\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;Start_AccountNotifications&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">; Disable Windows Backup reminder notifications</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CURRENT_USER</span><span style="color:#080;font-weight:bold">\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.BackupReminder]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;Enabled&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
 </span></span></code></pre></div>
 </main>
 
