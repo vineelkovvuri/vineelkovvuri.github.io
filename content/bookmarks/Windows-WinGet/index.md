@@ -3,7 +3,7 @@ title: "Windows WinGet"
 tags: ['WindowsSetup']
 ---
 
-## Tweak winget defaults usingwinget settings`
+## Tweak winget defaults using `winget settings`
 
 ```json
 {
