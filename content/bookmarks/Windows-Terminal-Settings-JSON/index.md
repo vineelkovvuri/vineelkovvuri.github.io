@@ -12,7 +12,7 @@ tags: ['Windows', 'Terminal', 'WindowsSetup']
     "copyOnSelect": false,
     "defaultProfile": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
     "firstWindowPreference": "persistedWindowLayout",
-    "keybindings": 
+    "keybindings":
     [
         {
             "id": "Terminal.CopyToClipboard",
@@ -27,27 +27,27 @@ tags: ['Windows', 'Terminal', 'WindowsSetup']
             "keys": "alt+shift+d"
         }
     ],
-    "newTabMenu": 
+    "newTabMenu":
     [
         {
             "type": "remainingProfiles"
         }
     ],
-    "profiles": 
+    "profiles":
     {
-        "defaults": 
+        "defaults":
         {
             "backgroundImage": "C:\\Users\\vineel\\OneDrive\\Softs\\Terminal\\animated-tux.gif",
             "backgroundImageAlignment": "bottomRight",
             "backgroundImageStretchMode": "none",
-            "font": 
+            "font":
             {
                 "face": "FiraMono Nerd Font Mono"
             },
             "historySize": 50000,
             "closeOnExit": "graceful"
         },
-        "list": 
+        "list":
         [
             {
                 "commandline": "%SystemRoot%\\System32\\cmd.exe",

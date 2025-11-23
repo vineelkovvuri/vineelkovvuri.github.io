@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Linux Tmux Settings | Vineel Kovvuri</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/presentations/">Presentations</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+      <li><a href="/tools/">Tools</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Linux Tmux Settings</span></h1>
+
+
+</div>
+
+<main>
+<h2 id="tmuxconf">~/.tmux.conf</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#888"># remap prefix from &#39;C-b&#39; to &#39;C-a&#39;</span>
+</span></span><span style="display:flex;"><span>unbind C-b
+</span></span><span style="display:flex;"><span>set-option -g prefix C-a
+</span></span><span style="display:flex;"><span>bind-key C-a send-prefix
+</span></span><span style="display:flex;"><span><span style="color:#888">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># start with window 1 (instead of 0)</span>
+</span></span><span style="display:flex;"><span><span style="color:#038">set</span> -g base-index <span style="color:#00d;font-weight:bold">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># start with pane 1</span>
+</span></span><span style="display:flex;"><span><span style="color:#038">set</span> -g pane-base-index <span style="color:#00d;font-weight:bold">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># shorten command delay</span>
+</span></span><span style="display:flex;"><span><span style="color:#038">set</span> -sg escape-time <span style="color:#00d;font-weight:bold">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># split panes using | and -</span>
+</span></span><span style="display:flex;"><span><span style="color:#038">bind</span> | split-window -h -c <span style="color:#d20;background-color:#fff0f0">&#39;#{pane_current_path}&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#038">bind</span> - split-window -v -c <span style="color:#d20;background-color:#fff0f0">&#39;#{pane_current_path}&#39;</span>
+</span></span><span style="display:flex;"><span>unbind <span style="color:#d20;background-color:#fff0f0">&#39;&#34;&#39;</span>
+</span></span><span style="display:flex;"><span>unbind %
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># reload config file (change file location to your the tmux.conf you want to use)</span>
+</span></span><span style="display:flex;"><span><span style="color:#038">bind</span> r source-file ~/.tmux.conf
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># This will make ctrl + left/right arrow work</span>
+</span></span><span style="display:flex;"><span>set-window-option -g xterm-keys on
+</span></span><span style="display:flex;"><span><span style="color:#888"># switch panes using Alt-arrow without prefix</span>
+</span></span><span style="display:flex;"><span><span style="color:#038">bind</span> -n M-Left <span style="color:#080;font-weight:bold">select</span>-pane -L
+</span></span><span style="display:flex;"><span><span style="color:#038">bind</span> -n M-Right <span style="color:#080;font-weight:bold">select</span>-pane -R
+</span></span><span style="display:flex;"><span><span style="color:#038">bind</span> -n M-Up <span style="color:#080;font-weight:bold">select</span>-pane -U
+</span></span><span style="display:flex;"><span><span style="color:#038">bind</span> -n M-Down <span style="color:#080;font-weight:bold">select</span>-pane -D
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># Enable mouse control (clickable windows, panes, resizable panes)</span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># set -g mouse-select-window on</span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># set -g mouse-select-pane on</span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># set -g mouse-resize-pane on</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># Enable mouse mode (tmux 2.1 and above)</span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># set -g mouse on</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># don&#39;t rename windows automatically</span>
+</span></span><span style="display:flex;"><span>set-option -g allow-rename off
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">#### COLOUR (Solarized 256)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># default statusbar colors</span>
+</span></span><span style="display:flex;"><span>set-option -g status-bg colour235 <span style="color:#888">#base02</span>
+</span></span><span style="display:flex;"><span>set-option -g status-fg colour136 <span style="color:#888">#yellow</span>
+</span></span><span style="display:flex;"><span>set-option -g status-attr default
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># default window title colors</span>
+</span></span><span style="display:flex;"><span>set-window-option -g window-status-fg colour244 <span style="color:#888">#base0</span>
+</span></span><span style="display:flex;"><span>set-window-option -g window-status-bg default
+</span></span><span style="display:flex;"><span><span style="color:#888">#set-window-option -g window-status-attr dim</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># active window title colors</span>
+</span></span><span style="display:flex;"><span>set-window-option -g window-status-current-fg colour166 <span style="color:#888">#orange</span>
+</span></span><span style="display:flex;"><span>set-window-option -g window-status-current-bg default
+</span></span><span style="display:flex;"><span><span style="color:#888">#set-window-option -g window-status-current-attr bright</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># pane border</span>
+</span></span><span style="display:flex;"><span>set-option -g pane-border-fg colour235 <span style="color:#888">#base02</span>
+</span></span><span style="display:flex;"><span>set-option -g pane-active-border-fg colour240 <span style="color:#888">#base01</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># message text</span>
+</span></span><span style="display:flex;"><span>set-option -g message-bg colour235 <span style="color:#888">#base02</span>
+</span></span><span style="display:flex;"><span>set-option -g message-fg colour166 <span style="color:#888">#orange</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># pane number display</span>
+</span></span><span style="display:flex;"><span>set-option -g display-panes-active-colour colour33 <span style="color:#888">#blue</span>
+</span></span><span style="display:flex;"><span>set-option -g display-panes-colour colour166 <span style="color:#888">#orange</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># clock</span>
+</span></span><span style="display:flex;"><span>set-window-option -g clock-mode-colour colour64 <span style="color:#888">#green</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># bell</span>
+</span></span><span style="display:flex;"><span>set-window-option -g window-status-bell-style <span style="color:#369">fg</span>=colour235,bg=colour160 <span style="color:#888">#base02, red</span>
+</span></span></code></pre></div>
+</main>
+
+  <footer>
+  
+<script defer src="/js/center-img.js"></script>
+
+
+
+
+
+
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2025 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+

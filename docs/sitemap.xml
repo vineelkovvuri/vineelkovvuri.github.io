@@ -148,7 +148,15 @@
   </url><url>
     <loc>/presentations/git/</loc>
   </url><url>
+    <loc>/bookmarks/linux-vimrc/</loc>
+  </url><url>
+    <loc>/bookmarks/linux-git-config/</loc>
+  </url><url>
     <loc>/bookmarks/linux-setup/</loc>
+  </url><url>
+    <loc>/bookmarks/linux-sublime-settings/</loc>
+  </url><url>
+    <loc>/bookmarks/linux-tmux-settings/</loc>
   </url><url>
     <loc>/tags/linuxsetup/</loc>
   </url><url>
@@ -157,6 +165,8 @@
     <loc>/presentations/</loc>
   </url><url>
     <loc>/bookmarks/windows-ssh-config/</loc>
+  </url><url>
+    <loc>/tags/sublime/</loc>
   </url><url>
     <loc>/tags/terminal/</loc>
   </url><url>
@@ -178,9 +188,11 @@
   </url><url>
     <loc>/bookmarks/windows-registry-tweaks/</loc>
   </url><url>
-    <loc>/bookmarks/windows-terminal-setting-json/</loc>
+    <loc>/bookmarks/windows-sublime-settings/</loc>
   </url><url>
-    <loc>/bookmarks/windows-vscode-setting-json/</loc>
+    <loc>/bookmarks/windows-terminal-settings-json/</loc>
+  </url><url>
+    <loc>/bookmarks/windows-vscode-settings-json/</loc>
   </url><url>
     <loc>/bookmarks/windows-winget/</loc>
   </url><url>

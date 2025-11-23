@@ -5,10 +5,6 @@ tags: ['WindowsSetup']
 
 ```powershell
 # https://github.com/Raphire/Win11Debloat
-# -------------------------------------------------------------------------------------------------------------- #
-#  The apps below this line WILL be uninstalled by default. Add a # character in front of any app you want to    #
-#   KEEP installed by default.                                                                                   #
-# -------------------------------------------------------------------------------------------------------------- #
 # List of app package names
 $appList = @(
     "Microsoft.3DBuilder",
