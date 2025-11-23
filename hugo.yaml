@@ -17,21 +17,12 @@ menu:
     - name: Home
       url: ""
       weight: 1
-    # - name: Courses
-    #   url: "courses/"
-    #   weight: 2
     - name: Blog
       url: "blog/"
       weight: 2
-    # - name: Vlog
-    #   url: "vlog/"
-    #   weight: 4
     - name: Presentations
       url: "presentations/"
       weight: 3
-    # - name: Tags
-    #   url: "tags/"
-    #   weight: 4
     - name: Bookmarks
       url: "bookmarks/"
       weight: 5
