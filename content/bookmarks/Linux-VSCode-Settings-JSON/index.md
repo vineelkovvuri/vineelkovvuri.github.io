@@ -1,6 +1,6 @@
 ﻿---
-title: "Windows VSCode Setting JSON"
-tags: ['VSCode', 'WindowsSetup']
+title: "Linux VSCode Setting JSON"
+tags: ['VSCode', 'LinuxSetup']
 ---
 
 ```json
