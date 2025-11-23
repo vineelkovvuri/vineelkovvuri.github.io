@@ -1,5 +1,5 @@
 ﻿---
-title: "Linux ~/.vimrc"
+title: "Linux ~/.config/nvim/init.vim"
 tags: ['LinuxSetup']
 ---
 
