@@ -73,6 +73,4 @@ alias ks='ls --color -h'
 alias tree='tree -ahC'
 alias bc='bc -l'
 
-shopt -s nocaseglob #make ls *ttl* expand to TTL Cook. To unset use shopt -u nocaseglob
-
 ```
