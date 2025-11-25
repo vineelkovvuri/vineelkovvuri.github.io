@@ -17,6 +17,12 @@ sudo apt install -y gcc nasm make pkg-config git neovim micro tree unrar \
     nvme-cli  openssh-server gpart  freefilesync
 ```
 
+```bash
+sudo snap install code --classic
+sudo snap install code-insiders --classic
+sudo snap install sublime-text --classic
+```
+
 ## Fish Shell
 
 ```bash
