@@ -14,7 +14,7 @@ sudo apt install -y gcc nasm make pkg-config git neovim micro tree unrar \
     mate-themes gtkterm bless alacritty tmux terminator dconf-editor \
     cutecom minicom gdb-multiarch xscreensaver xscreensaver-data-extra \
     xscreensaver-gl-extra qdirstat btop  sigrok dosfstools mtools \
-    nvme-cli  openssh-server gpart  freefilesync
+    nvme-cli  openssh-server gpart  freefilesync git-review
 ```
 
 ```bash
