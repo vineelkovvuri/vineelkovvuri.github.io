@@ -23,9 +23,6 @@ menu:
     - name: Bookmarks
       url: "bookmarks/"
       weight: 3
-    - name: Tools
-      url: "tools/"
-      weight: 4
     # - name: Subscribe
     #   url: "index.xml"
 

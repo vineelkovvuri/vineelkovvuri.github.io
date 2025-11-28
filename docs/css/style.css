@@ -43,7 +43,7 @@ blockquote {
 }
 
 table {
-  margin: auto;
+  margin: auto;  /* center the table */
   border-top: 1px solid #666;
   border-bottom: 1px solid #666;
 }

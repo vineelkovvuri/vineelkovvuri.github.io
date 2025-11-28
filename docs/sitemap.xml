@@ -140,8 +140,6 @@
     <loc>/tags/reversing/</loc>
     <lastmod>2018-08-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/tools/uefilog/</loc>
-  </url><url>
     <loc>/bookmarks/</loc>
   </url><url>
     <loc>/categories/</loc>
@@ -162,7 +160,7 @@
   </url><url>
     <loc>/tags/linuxsetup/</loc>
   </url><url>
-    <loc>/tools/pagetablecalculator/</loc>
+    <loc>/bookmarks/tools-page-table-calculator/</loc>
   </url><url>
     <loc>/tags/presentations/</loc>
   </url><url>
@@ -174,7 +172,7 @@
   </url><url>
     <loc>/tags/tools/</loc>
   </url><url>
-    <loc>/tools/</loc>
+    <loc>/bookmarks/tools-uefilog-guid-processor/</loc>
   </url><url>
     <loc>/bookmarks/presentations-vscode/</loc>
   </url><url>
