@@ -1,5 +1,6 @@
 ﻿---
 title: "Visual Studio Code"
+tags: ['Presentations']
 ---
 
 {{< embed-pdf url="./VSCode.pdf" >}}

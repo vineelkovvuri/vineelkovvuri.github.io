@@ -146,7 +146,7 @@
   </url><url>
     <loc>/categories/</loc>
   </url><url>
-    <loc>/presentations/git/</loc>
+    <loc>/bookmarks/presentations-git/</loc>
   </url><url>
     <loc>/bookmarks/linux-nvimrc/</loc>
   </url><url>
@@ -164,7 +164,7 @@
   </url><url>
     <loc>/tools/pagetablecalculator/</loc>
   </url><url>
-    <loc>/presentations/</loc>
+    <loc>/tags/presentations/</loc>
   </url><url>
     <loc>/bookmarks/windows-ssh-config/</loc>
   </url><url>
@@ -176,9 +176,7 @@
   </url><url>
     <loc>/tools/</loc>
   </url><url>
-    <loc>/presentations/vscode/</loc>
-  </url><url>
-    <loc>/vlog/</loc>
+    <loc>/bookmarks/presentations-vscode/</loc>
   </url><url>
     <loc>/tags/vscode/</loc>
   </url><url>

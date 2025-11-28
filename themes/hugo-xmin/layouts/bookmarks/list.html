@@ -28,6 +28,19 @@
   {{ end }}
 </ul>
 
+<h1>Presentations</h1>
+<ul>
+  {{ $pages := .Pages }}
+  {{ if .IsHome }}{{ $pages = .Site.RegularPages }}{{ end }}
+  {{ range (where $pages "Section" "!=" "") }}
+    {{ if and (eq .Section "bookmarks") (intersect .Params.tags (slice "Presentations") | len) }}
+      <li>
+        <a href="{{ .RelPermalink }}">{{ .Title | markdownify }}</a>
+      </li>
+    {{ end }}
+  {{ end }}
+</ul>
+
 <h1>Others</h1>
 <ul>
   {{ $pages := .Pages }}

@@ -20,15 +20,12 @@ menu:
     - name: Blog
       url: "blog/"
       weight: 2
-    - name: Presentations
-      url: "presentations/"
-      weight: 3
     - name: Bookmarks
       url: "bookmarks/"
-      weight: 5
+      weight: 3
     - name: Tools
       url: "tools/"
-      weight: 6
+      weight: 4
     # - name: Subscribe
     #   url: "index.xml"
 
