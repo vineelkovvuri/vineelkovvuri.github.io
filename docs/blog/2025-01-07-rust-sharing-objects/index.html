@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rust: Sharing a Single Object Across Multiple Owners | Vineel Kovvuri</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/copy-button.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/presentations/">Presentations</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+      <li><a href="/tools/">Tools</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Rust: Sharing a Single Object Across Multiple Owners</span></h1>
+
+
+<h3 class="date">
+    2025/01/07
+    
+        |
+        <a href="/tags/rust">Rust</a>
+        
+    
+</h3>
+
+</div>
+
+
+    
+        <aside class="toc">
+            <h2>Table of Contents</h2>
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#rust-sharing-a-single-object-across-multiple-owners">Rust: Sharing a Single Object Across Multiple Owners</a>
+      <ul>
+        <li><a href="#question-why-part-1-works-but-not-part-2-what-is-so-special-about-mut-c_void">Question: Why Part 1 works but not Part 2? What is so special about *mut c_void?</a></li>
+        <li><a href="#answerfrom-chatgpt">Answer(From ChatGPT):</a>
+          <ul>
+            <li><a href="#why-part-1-works">Why Part 1 Works?</a></li>
+            <li><a href="#why-part-2-fails">Why Part 2 Fails?</a></li>
+            <li><a href="#key-takeaway">Key Takeaway</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+        </aside>
+    
+
+
+<main>
+<h1 id="rust-sharing-a-single-object-across-multiple-owners">Rust: Sharing a Single Object Across Multiple Owners</h1>
+<p>Today, I found an interesting way to share a single object(C) among multiple
+owners(A and B)</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">use</span><span style="color:#bbb"> </span>std::ffi::c_void;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#c00;font-weight:bold">#[derive(Debug)]</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">pub</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">struct</span> <span style="color:#b06;font-weight:bold">A</span>&lt;<span style="color:#369">&#39;a</span>&gt;<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>mut_ref: <span style="color:#080">&amp;</span><span style="color:#369">&#39;a</span> <span style="color:#b06;font-weight:bold">mut</span><span style="color:#bbb"> </span>C,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#c00;font-weight:bold">#[derive(Debug)]</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">pub</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">struct</span> <span style="color:#b06;font-weight:bold">B</span>&lt;<span style="color:#369">&#39;a</span>&gt;<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>mut_ref: <span style="color:#080">&amp;</span><span style="color:#369">&#39;a</span> <span style="color:#b06;font-weight:bold">mut</span><span style="color:#bbb"> </span>C,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#888">// Common object C shared between object A and object B
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#c00;font-weight:bold">#[derive(Debug)]</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">struct</span> <span style="color:#b06;font-weight:bold">C</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>val: <span style="color:#888;font-weight:bold">u32</span>,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">main</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// - Using stack objects
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;Object c shared b/w multiple stack based objects&#34;</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>common<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>C<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>val: <span style="color:#00d;font-weight:bold">100</span><span style="color:#bbb"> </span>};<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>c<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>&amp;<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>common;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>a<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>A<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>mut_ref: <span style="color:#080">&amp;</span><span style="color:#b06;font-weight:bold">mut</span><span style="color:#bbb"> </span>c<span style="color:#bbb"> </span>};<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>a_ptr<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>&amp;<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>a<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>A<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>c_void;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>b<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>B<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>mut_ref: <span style="color:#080">&amp;</span><span style="color:#b06;font-weight:bold">mut</span><span style="color:#bbb"> </span>c<span style="color:#bbb"> </span>};<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>b_ptr<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>&amp;<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>b<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>B<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>c_void;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>a_obj<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">unsafe</span><span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>&amp;<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>*(a_ptr<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>A)<span style="color:#bbb"> </span>};<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>b_obj<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">unsafe</span><span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>&amp;<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>*(b_ptr<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>B)<span style="color:#bbb"> </span>};<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>a_obj.mut_ref.val<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">2000</span>;<span style="color:#bbb"> </span><span style="color:#888">// mutate c from a
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>a_obj.mut_ref.val);<span style="color:#bbb"> </span><span style="color:#888">// 2000
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>b_obj.mut_ref.val);<span style="color:#bbb"> </span><span style="color:#888">// 2000
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>b_obj.mut_ref.val<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">4000</span>;<span style="color:#bbb"> </span><span style="color:#888">// mutate c from b
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>a_obj.mut_ref.val);<span style="color:#bbb"> </span><span style="color:#888">// 4000
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>b_obj.mut_ref.val);<span style="color:#bbb"> </span><span style="color:#888">// 4000
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// - Using heap objects
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;Object c shared b/w multiple heap based objects&#34;</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>common<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>C<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>val: <span style="color:#00d;font-weight:bold">100</span><span style="color:#bbb"> </span>};<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>c<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>&amp;<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>common;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>a<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>A<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>mut_ref: <span style="color:#080">&amp;</span><span style="color:#b06;font-weight:bold">mut</span><span style="color:#bbb"> </span>c<span style="color:#bbb"> </span>};<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>a_ptr<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#038">Box</span>::into_raw(<span style="color:#038">Box</span>::new(a))<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>c_void;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>b<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>B<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>mut_ref: <span style="color:#080">&amp;</span><span style="color:#b06;font-weight:bold">mut</span><span style="color:#bbb"> </span>c<span style="color:#bbb"> </span>};<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>b_ptr<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#038">Box</span>::into_raw(<span style="color:#038">Box</span>::new(b))<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>c_void;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>a_obj<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">unsafe</span><span style="color:#bbb"> </span>{<span style="color:#bbb"> </span><span style="color:#038">Box</span>::&lt;A&gt;::from_raw(a_ptr<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>A)<span style="color:#bbb"> </span>};<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>b_obj<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">unsafe</span><span style="color:#bbb"> </span>{<span style="color:#bbb"> </span><span style="color:#038">Box</span>::&lt;B&gt;::from_raw(b_ptr<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>B)<span style="color:#bbb"> </span>};<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>a_obj.mut_ref.val<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">2000</span>;<span style="color:#bbb"> </span><span style="color:#888">// mutate c from a
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>a_obj.mut_ref.val);<span style="color:#bbb"> </span><span style="color:#888">// 2000
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>b_obj.mut_ref.val);<span style="color:#bbb"> </span><span style="color:#888">// 2000
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>b_obj.mut_ref.val<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">4000</span>;<span style="color:#bbb"> </span><span style="color:#888">// mutate c from b
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>a_obj.mut_ref.val);<span style="color:#bbb"> </span><span style="color:#888">// 4000
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{:?}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span>b_obj.mut_ref.val);<span style="color:#bbb"> </span><span style="color:#888">// 4000
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><p>Got curious and asked ChatGPT below question:</p>
+<h2 id="question-why-part-1-works-but-not-part-2-what-is-so-special-about-mut-c_void">Question: Why Part 1 works but not Part 2? What is so special about *mut c_void?</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#888">// Part 1
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>common<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>C<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>val: <span style="color:#00d;font-weight:bold">100</span><span style="color:#bbb"> </span>};<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>c<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>&amp;<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>common;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>a<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>A<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>mut_ref: <span style="color:#080">&amp;</span><span style="color:#b06;font-weight:bold">mut</span><span style="color:#bbb"> </span>c<span style="color:#bbb"> </span>};<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>a_ptr<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>&amp;<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>a<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>A<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>c_void;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>b<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>B<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>mut_ref: <span style="color:#080">&amp;</span><span style="color:#b06;font-weight:bold">mut</span><span style="color:#bbb"> </span>c<span style="color:#bbb"> </span>};<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>b_ptr<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>&amp;<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>b<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>B<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>c_void;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#888">// Part 2
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>common<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>C<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>val: <span style="color:#00d;font-weight:bold">100</span><span style="color:#bbb"> </span>};<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>c<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>&amp;<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>common;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>a<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>A<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>mut_ref: <span style="color:#080">&amp;</span><span style="color:#b06;font-weight:bold">mut</span><span style="color:#bbb"> </span>c<span style="color:#bbb"> </span>};<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>b<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>B<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>mut_ref: <span style="color:#080">&amp;</span><span style="color:#b06;font-weight:bold">mut</span><span style="color:#bbb"> </span>c<span style="color:#bbb"> </span>};<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>a_ptr<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>&amp;<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>a<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>A<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>c_void;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>b_ptr<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>&amp;<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>b<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>B<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>c_void;<span style="color:#bbb">
+</span></span></span></code></pre></div><h2 id="answerfrom-chatgpt">Answer(From ChatGPT):</h2>
+<p>The distinction lies in how the Rust borrow checker analyzes the lifetimes
+and mutability of references during compilation. Let&rsquo;s break this down:</p>
+<h3 id="why-part-1-works">Why Part 1 Works?</h3>
+<ol>
+<li>
+<p>Order of Operations:</p>
+<ul>
+<li><code>a</code> is created with a mutable reference to <code>c</code>.</li>
+<li><code>a_ptr</code> is cast to a <code>*mut c_void</code>. At this point, the borrow checker no
+longer tracks the borrow because it has been converted to a raw pointer.</li>
+<li>After this, <code>b</code> is created with a mutable reference to <code>c</code>.</li>
+<li>Finally, <code>b_ptr</code> is cast to a <code>*mut c_void</code>.</li>
+</ul>
+</li>
+<li>
+<p>Temporary Escape from Borrow Checking:</p>
+<ul>
+<li><mark>The cast to <code>*mut c_void</code> removes the borrow checker’s visibility into how
+the mutable reference (<code>mut_ref</code>) in <code>A</code> is being used. Rust assumes you
+are responsible for managing aliasing and mutability safety when you use
+raw pointers.</mark></li>
+</ul>
+</li>
+<li>
+<p>Sequential Mutability:</p>
+<ul>
+<li>Since <code>a</code> is converted to <code>a_ptr</code> (a raw pointer) before <code>b</code> is created,
+the borrow checker treats the mutable borrow in <code>a</code> as no longer active.</li>
+</ul>
+</li>
+</ol>
+<h3 id="why-part-2-fails">Why Part 2 Fails?</h3>
+<ol>
+<li>
+<p>Simultaneous Mutable Borrows:</p>
+<ul>
+<li>In this case, both <code>A</code> and <code>B</code> are holding mutable references to <code>c</code> at
+the same time. This violates Rust&rsquo;s borrowing rules, which prohibit
+multiple mutable borrows of the same data simultaneously.</li>
+</ul>
+</li>
+<li>
+<p>Borrow Checker Enforcement:</p>
+<ul>
+<li>When you write <code>let mut b = B { mut_ref: &amp;mut c };</code>, the borrow checker
+detects that there is already an outstanding mutable borrow of <code>c</code> held
+by <code>A</code>. Even though you intend to cast <code>a</code> and <code>b</code> to raw pointers
+later, the borrow checker enforces its rules at the point of assignment,
+not at the point of casting.</li>
+</ul>
+</li>
+<li>
+<p>Raw Pointer Cast Comes Too Late:</p>
+<ul>
+<li>Unlike in the first case, the raw pointer cast (<code>a_ptr</code> and <code>b_ptr</code>)
+happens after the violation has already occurred. At the point where <code>b</code>
+is created, the mutable borrow in <code>A</code> is still active, leading to a
+compile-time error.</li>
+</ul>
+</li>
+</ol>
+<h3 id="key-takeaway">Key Takeaway</h3>
+<p>The difference comes down to when the mutable borrow is considered
+invalidated:
+- In the working code, converting <code>A</code> to a raw pointer before creating <code>B</code>
+invalidates the borrow in <code>A</code> in the borrow checker&rsquo;s view.
+- In the non-working code, both <code>A</code> and <code>B</code> are created before any cast to
+raw pointers, so the borrow checker detects overlapping mutable borrows.</p>
+<p>Part 1 ensures that the borrow associated with <code>A</code> is no longer tracked before
+creating <code>B</code>.</p>
+
+</main>
+
+<hr/>
+
+<section id="comments" class="giscus">
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
+
+  <footer>
+  
+<script defer src="/js/center-img.js"></script>
+<script defer src="/js/pre-tag.js"></script>
+
+
+
+
+
+
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2025 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+

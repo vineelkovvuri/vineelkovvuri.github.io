@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Setting User Mode Break Points From Kd Aka .process /i Vs .process /r /p | Vineel Kovvuri</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/copy-button.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/presentations/">Presentations</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+      <li><a href="/tools/">Tools</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Setting User Mode Break Points From Kd Aka .process /i Vs .process /r /p</span></h1>
+
+
+<h3 class="date">
+    2019/03/10
+    
+        |
+        <a href="/tags/windbg">WinDbg</a>
+        , <a href="/tags/windows">Windows</a>
+        
+    
+</h3>
+
+</div>
+
+
+    
+        <aside class="toc">
+            <h2>Table of Contents</h2>
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#how-do-break-points-work-in-user-mode-debugging">How do break points work in user mode debugging</a></li>
+    <li><a href="#user-mode-break-points-from-kd">User mode break points from KD</a></li>
+    <li><a href="#setting-breakpoints-in-system-dlls">Setting breakpoints in system dlls</a></li>
+    <li><a href="#references">References</a></li>
+  </ul>
+</nav>
+        </aside>
+    
+
+
+<main>
+<h1 id="introduction">Introduction</h1>
+<p>When performing KD(Kernel Debugging) in Windows with Windbg if you have to set a
+break point in a user mode process we should always use <strong>.process /i address;
+g; .reload /user</strong>. Lot of good content is written on the
+<a href="https://www.osronline.com/article.cfm%5Earticle=576.htm">internet</a> on this
+command, but nothing seemed to explain why this command should be used instead
+of the familiar <strong>.process /r /p address</strong>. I would like to shed some light on
+this. Before reading any further I would strongly encourage you to read about it
+from above link. In this article I assume some basic knowledge on how kernel
+debugging is done with Windbg. Also, I would like to start with the following
+question.</p>
+<blockquote>
+<p>If the debugger has read/write access to the user mode process via .process /r
+/p why cannot it insert int 3 in user mode process when performing KD? Why do we
+have to make the user mode process the current process context by running
+.process /i ?</p></blockquote>
+<p>To explain this we need to quickly understand how break points work.</p>
+<h1 id="how-do-break-points-work-in-user-mode-debugging">How do break points work in user mode debugging</h1>
+<p>Below are the steps involved for a break point to work in debugging a user mode process.</p>
+<ul>
+<li>bp address - you are just instructing the debugger to make a note of
+&ldquo;address&rdquo; and replace the byte at that address with 0xcc (int 3) when
+target resumes to execute</li>
+<li>g - when you hit &ldquo;g&rdquo; the debugger replaces the byte with 0xcc and stores
+the original byte with it</li>
+<li>After execution when processor execute the modified byte (0xcc) this
+causes the debugger to break in and debugger puts back the original byte
+as if nothing has happened to the program</li>
+<li>More details:
+<a href="https://vineelkovvuri.github.io/blog/how-do-breakpoints-work-in-debuggers/">https://vineelkovvuri.github.io/blog/how-do-breakpoints-work-in-debuggers/</a></li>
+</ul>
+<h1 id="user-mode-break-points-from-kd">User mode break points from KD</h1>
+<p>When debugging a user mode process from KD the steps works exactly same as above
+but with a slight twist.</p>
+<ul>
+<li>Let&rsquo;s assume during KD, when the debugger broke, the processor is
+executing a process named mulithasher.exe(see note below)</li>
+<li>When you switch the windbg&rsquo;s view to a different process(fscapture.exe) by
+.process /r /p fscaptureaddress, you are not changing the underlying
+execution of the processor. !process -1 0 still shows multihasher.exe</li>
+<li>With /r /p you now have read/write access to the fscapture process. This
+confirms the first part of the question</li>
+<li>bp address - same as above, you are instructing the debugger to make a
+note of &ldquo;address&rdquo; and replace the byte at that address with 0xcc (int 3)
+when target resumes to execute</li>
+<li>when you hit &ldquo;g&rdquo; the debugger replaces the byte at address with 0xcc in
+the currently executing process which happens to be multihasher.exe not
+fscapture.exe!</li>
+</ul>
+<p><img src="UsermodeBreakPointFromKD1.png" alt="">
+Before break point getting updated</p>
+<p><img src="UsermodeBreakPointFromKD2.png" alt="">
+Setting the break point</p>
+<p><img src="UsermodeBreakPointFromKD3.png" alt="">
+After break point is updated</p>
+<ul>
+<li>This means, &ldquo;g&rdquo; command used to resume the target is the culprit(may be it
+is by design). This answers the second part of the question</li>
+<li>So by using .process /i address;g; windbg will break under your process
+context(how?). After which setting a break point and hitting &ldquo;g&rdquo; will
+cause the debugger to actually put int 3 in your process not somewhere
+else</li>
+</ul>
+<p>NOTE: I initially made multihasher.exe the process context by using .process /i
+multihasher address;g;</p>
+<h1 id="setting-breakpoints-in-system-dlls">Setting breakpoints in system dlls</h1>
+<p>This .process /i is not required if you are putting breakpoints in system dlls
+like kernelbase, ntdll etc because these dlls are loaded at the same virtual
+address in all the user mode processes and they have a single copy in the
+physical memory. So once a break point set in a process the break point is
+visible in all other processes which uses that system dll. Below we illustrate
+this by setting a break point in ntdll.dll. (Even here just make sure when you
+broke initially you are not in System process as it will not have ntdll!)</p>
+<p><img src="UsermodeBreakPointFromKD4.png" alt="">
+Break point is set only in ntdll of explorer process</p>
+<p><img src="UsermodeBreakPointFromKD5.png" alt="">
+Break point set in ntdll of explorer gets reflected in ntdll of notepad also</p>
+<h1 id="references">References</h1>
+<ul>
+<li><a href="https://www.osronline.com/article.cfm%5Earticle=576.htm">Analyst&rsquo;s Perspective: Analyzing User Mode State from a Kernel Connection</a></li>
+<li><a href="https://www.microsoftpressstore.com/articles/article.aspx?p=2201303&amp;seqNum=2">How Windows Debuggers Work?</a></li>
+</ul>
+
+</main>
+
+<hr/>
+
+<section id="comments" class="giscus">
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
+
+  <footer>
+  
+<script defer src="/js/center-img.js"></script>
+<script defer src="/js/pre-tag.js"></script>
+
+
+
+
+
+
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2025 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+

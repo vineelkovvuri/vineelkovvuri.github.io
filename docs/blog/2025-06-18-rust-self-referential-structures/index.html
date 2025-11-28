@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rust: Self Referential Structures | Vineel Kovvuri</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/copy-button.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/presentations/">Presentations</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+      <li><a href="/tools/">Tools</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Rust: Self Referential Structures</span></h1>
+
+
+<h3 class="date">
+    2025/06/18
+    
+        |
+        <a href="/tags/rust">Rust</a>
+        
+    
+</h3>
+
+</div>
+
+
+    
+        <aside class="toc">
+            <h2>Table of Contents</h2>
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#rust-self-referential-structures">Rust: Self-Referential Structures</a></li>
+  </ul>
+</nav>
+        </aside>
+    
+
+
+<main>
+<h1 id="rust-self-referential-structures">Rust: Self-Referential Structures</h1>
+<p>Today, I learned something very interesting about Rust references—specifically,
+fields of a structure referring to other fields in the same structure.
+Apparently, this is not possible. At first, it didn’t make much sense to me
+because I assumed all fields are owned by the struct, so what’s the problem if
+one field holds a reference to another?</p>
+<p>However, when I tried to construct such a structure, things became clearer.
+Let’s look at the code sample below:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">struct</span> <span style="color:#b06;font-weight:bold">BadOne</span>&lt;<span style="color:#369">&#39;a</span>&gt;<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>age: <span style="color:#888;font-weight:bold">u32</span>,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>reference: <span style="color:#080">&amp;</span><span style="color:#369">&#39;a</span> <span style="color:#888;font-weight:bold">u32</span>,<span style="color:#bbb"> </span><span style="color:#888">// This tries to hold a reference to the value of `age`.
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">impl</span>&lt;<span style="color:#369">&#39;a</span>&gt;<span style="color:#bbb"> </span>BadOne&lt;<span style="color:#369">&#39;a</span>&gt;<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">new</span>()<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">BadOne</span>&lt;<span style="color:#369">&#39;a</span>&gt;<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>age<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">10</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>reference<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>&amp;age;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>BadOne<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>age,<span style="color:#bbb"> </span>reference<span style="color:#bbb"> </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><p>VSCode’s Rust Analyzer immediately reported the following error at the line
+<code>BadOne { age, reference }</code>:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span>cannot<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">return</span><span style="color:#bbb"> </span>value<span style="color:#bbb"> </span>referencing<span style="color:#bbb"> </span>local<span style="color:#bbb"> </span>variable<span style="color:#bbb"> </span>`age`<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>returns<span style="color:#bbb"> </span>a<span style="color:#bbb"> </span>value<span style="color:#bbb"> </span>referencing<span style="color:#bbb"> </span>data<span style="color:#bbb"> </span>owned<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">by</span><span style="color:#bbb"> </span>the<span style="color:#bbb"> </span>current<span style="color:#bbb"> </span>function<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>main.<span style="color:#06b;font-weight:bold">rs</span>(<span style="color:#00d;font-weight:bold">10</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">35</span>):<span style="color:#bbb"> </span>`age`<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">is</span><span style="color:#bbb"> </span>borrowed<span style="color:#bbb"> </span>here<span style="color:#bbb">
+</span></span></span></code></pre></div><p>Unfortunately, the error message is not very comprehensible. When working with
+lifetimes and references, it’s better to use <code>cargo check</code> instead of relying
+solely on Rust Analyzer. Below is the much clearer output from <code>cargo check</code>:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span>error[E0515]:<span style="color:#bbb"> </span>cannot<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">return</span><span style="color:#bbb"> </span>value<span style="color:#bbb"> </span>referencing<span style="color:#bbb"> </span>local<span style="color:#bbb"> </span>variable<span style="color:#bbb"> </span>`age`<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">  </span>--&gt;<span style="color:#bbb"> </span>src/main.rs:<span style="color:#00d;font-weight:bold">11</span>:<span style="color:#00d;font-weight:bold">9</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">   </span>|<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#00d;font-weight:bold">10</span><span style="color:#bbb"> </span>|<span style="color:#bbb">         </span>let<span style="color:#bbb"> </span>reference<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>&amp;age;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">   </span>|<span style="color:#bbb">                         </span>--<span style="color:#888">-- `age` is borrowed here
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#00d;font-weight:bold">11</span><span style="color:#bbb"> </span>|<span style="color:#bbb">         </span>BadOne<span style="color:#bbb"> </span><span style="color:#a61717;background-color:#e3d2d2">{</span><span style="color:#bbb"> </span>age,<span style="color:#bbb"> </span>reference<span style="color:#bbb"> </span><span style="color:#a61717;background-color:#e3d2d2">}</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">   </span>|<span style="color:#bbb">         </span>^^^^^^^^^^^^^^^^^^^^^^^^^<span style="color:#bbb"> </span>returns<span style="color:#bbb"> </span>a<span style="color:#bbb"> </span>value<span style="color:#bbb"> </span>referencing<span style="color:#bbb"> </span>data<span style="color:#bbb"> </span>owned<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">by</span><span style="color:#bbb"> </span>the<span style="color:#bbb"> </span>current<span style="color:#bbb"> </span>function<span style="color:#bbb">
+</span></span></span></code></pre></div><p>After pondering this for a while, it became evident that:</p>
+<ol>
+<li><code>age</code> is owned by the function <code>new()</code>.</li>
+<li>We take an immutable reference to <code>age</code>.</li>
+<li>Then we try to move <code>age</code> into the <code>BadOne</code> struct while still holding a
+reference to it.</li>
+</ol>
+<p><strong>In short, there’s no way to transfer ownership of <code>age</code> to the new <code>BadOne</code>
+instance while simultaneously storing a reference to it in another field of the
+same struct.</strong> In other words, we cannot create structs where one field refers
+to another field of the same instance.</p>
+<p>Let’s look at a slightly more advanced example that might make it seem like we
+can overcome this limitation:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">struct</span> <span style="color:#b06;font-weight:bold">BadTwo</span>&lt;<span style="color:#369">&#39;a</span>&gt;<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>age: <span style="color:#888;font-weight:bold">u32</span>,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>reference: <span style="color:#038">Vec</span>&lt;&amp;<span style="color:#369">&#39;a</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">u32</span>&gt;,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">impl</span>&lt;<span style="color:#369">&#39;a</span>&gt;<span style="color:#bbb"> </span>BadTwo&lt;<span style="color:#369">&#39;a</span>&gt;<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">new</span>()<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">BadTwo</span>&lt;<span style="color:#369">&#39;a</span>&gt;<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>age<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">10</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>BadTwo<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>age,<span style="color:#bbb"> </span>reference: <span style="color:#b06;font-weight:bold">vec</span>![]<span style="color:#bbb"> </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">take_ref</span>(&amp;<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span><span style="color:#038">self</span>)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>age_ref<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>&amp;<span style="color:#038">self</span>.age;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#038">self</span>.reference.push(age_ref);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><p>In this example, we try to hide the fact that a reference to <code>age</code> is taken—not
+during construction—but later, in the <code>take_ref()</code> method. However, trying to
+compile this will still result in an error:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>error: lifetime may not live long enough
+</span></span><span style="display:flex;"><span>  --&gt; src/main.rs:14:9
+</span></span><span style="display:flex;"><span>   |
+</span></span><span style="display:flex;"><span>6  | impl&lt;&#39;a&gt; BadTwo&lt;&#39;a&gt; {
+</span></span><span style="display:flex;"><span>   |      -- lifetime `&#39;a` defined here
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>12 |     fn take_ref(&amp;mut self) {
+</span></span><span style="display:flex;"><span>   |                 - let&#39;s call the lifetime of this reference `&#39;1`
+</span></span><span style="display:flex;"><span>13 |         let age_ref = &amp;self.age;
+</span></span><span style="display:flex;"><span>14 |         self.reference.push(age_ref);
+</span></span><span style="display:flex;"><span>   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ argument requires that `&#39;1` must outlive `&#39;a`
+</span></span></code></pre></div><p>Once again, the error messages are informative but still require some
+interpretation. When we enter the <code>take_ref()</code> function, <code>&amp;mut self</code> has a new
+short-lived lifetime, let’s say <code>'1</code>, which is typically shorter than <code>'a</code> (the
+struct’s lifetime). The compiler is saying: “You’re creating a reference
+(<code>&amp;self.age</code>) that lives only as long as the function call, but you’re trying to
+store it in a vector that must live as long as the struct (<code>'a</code>).&quot; This is not
+allowed.</p>
+<p>In other words, no matter how we try, it is (almost) impossible to create a
+reference to a field within the same struct.</p>
+<p>I say “almost” because there’s one more slightly more advanced example. Spoiler:
+it still doesn’t break Rust’s borrow checker guarantees.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">struct</span> <span style="color:#b06;font-weight:bold">BadTwo</span>&lt;<span style="color:#369">&#39;a</span>&gt;<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>age: <span style="color:#888;font-weight:bold">u32</span>,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>reference: <span style="color:#038">Vec</span>&lt;&amp;<span style="color:#369">&#39;a</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">u32</span>&gt;,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">impl</span>&lt;<span style="color:#369">&#39;a</span>&gt;<span style="color:#bbb"> </span>BadTwo&lt;<span style="color:#369">&#39;a</span>&gt;<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">new</span>()<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">BadTwo</span>&lt;<span style="color:#369">&#39;a</span>&gt;<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>age<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">10</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>BadTwo<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>age,<span style="color:#bbb"> </span>reference: <span style="color:#b06;font-weight:bold">vec</span>![]<span style="color:#bbb"> </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">take_ref</span>(&amp;<span style="color:#369">&#39;a</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span><span style="color:#038">self</span>)<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span><span style="color:#888">// &lt;--- Notice the `&#39;a` on `&amp;&#39;a mut self`
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">        </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>age_ref<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>&amp;<span style="color:#038">self</span>.age;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#038">self</span>.reference.push(age_ref);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">print</span>(&amp;<span style="color:#038">self</span>)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span><span style="color:#038">self</span>.age);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">pub</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">main</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>b2<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>BadTwo::new();<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>b2.take_ref();<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>b2.print();<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><p>By annotating <code>&amp;mut self</code> with <code>'a</code>, the compiler is satisfied. But what exactly
+is going on?</p>
+<p>By adding <code>'a</code>, we’re telling the compiler: &ldquo;The mutable reference to self (<code>&amp;'a mut self</code>) must live as long as <code>'a</code>, the struct’s lifetime.&rdquo; As a result, this
+mutable borrow now lives far beyond the duration of the function—it is tied to
+the entire lifetime of the struct. That effectively <em>locks</em> the struct into a
+state where the mutable borrow never ends, which makes the struct unusable
+afterward.</p>
+<p>So in the <code>main()</code> function, once we call <code>b2.take_ref()</code>, we cannot call
+<code>b2.print()</code> anymore:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-mysql" data-lang="mysql"><span style="display:flex;"><span>error[E0502]:<span style="color:#bbb"> </span>cannot<span style="color:#bbb"> </span>borrow<span style="color:#bbb"> </span>`b2`<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>immutable<span style="color:#bbb"> </span>because<span style="color:#bbb"> </span>it<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">is</span><span style="color:#bbb"> </span>also<span style="color:#bbb"> </span>borrowed<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>mutable<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">  </span>--&gt;<span style="color:#bbb"> </span>src/main.rs:<span style="color:#00d;font-weight:bold">28</span>:<span style="color:#00d;font-weight:bold">5</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">   </span>|<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#00d;font-weight:bold">26</span><span style="color:#bbb"> </span>|<span style="color:#bbb">         </span>b2.<span style="color:#06b;font-weight:bold">take_ref</span>();<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">   </span>|<span style="color:#bbb">         </span><span style="color:#888">-- mutable borrow occurs here
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#00d;font-weight:bold">27</span><span style="color:#bbb"> </span>|<span style="color:#bbb">     </span><span style="color:#a61717;background-color:#e3d2d2">}</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#00d;font-weight:bold">28</span><span style="color:#bbb"> </span>|<span style="color:#bbb">     </span>b2.<span style="color:#06b;font-weight:bold">print</span>();<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">   </span>|<span style="color:#bbb">     </span>^^<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">   </span>|<span style="color:#bbb">     </span>|<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">   </span>|<span style="color:#bbb">     </span>immutable<span style="color:#bbb"> </span>borrow<span style="color:#bbb"> </span>occurs<span style="color:#bbb"> </span>here<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">   </span>|<span style="color:#bbb">     </span>mutable<span style="color:#bbb"> </span>borrow<span style="color:#bbb"> </span>later<span style="color:#bbb"> </span>used<span style="color:#bbb"> </span>here<span style="color:#bbb">
+</span></span></span></code></pre></div><hr>
+<p>In conclusion, Rust does <strong>not</strong> allow self-referential structures—whether
+linked lists, binary trees, or even simpler cases <strong>where one field refers to
+another field of the same instance</strong>.</p>
+
+</main>
+
+<hr/>
+
+<section id="comments" class="giscus">
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
+
+  <footer>
+  
+<script defer src="/js/center-img.js"></script>
+<script defer src="/js/pre-tag.js"></script>
+
+
+
+
+
+
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2025 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rust: Aligned vs Unaligned Memory Access | Vineel Kovvuri</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/copy-button.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/presentations/">Presentations</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+      <li><a href="/tools/">Tools</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Rust: Aligned vs Unaligned Memory Access</span></h1>
+
+
+<h3 class="date">
+    2025/01/14
+    
+        |
+        <a href="/tags/rust">Rust</a>
+        
+    
+</h3>
+
+</div>
+
+
+    
+        <aside class="toc">
+            <h2>Table of Contents</h2>
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#rust-rust-aligned-vs-unaligned-memory-access">Rust: Rust Aligned vs Unaligned Memory Access</a></li>
+  </ul>
+</nav>
+        </aside>
+    
+
+
+<main>
+<h1 id="rust-rust-aligned-vs-unaligned-memory-access">Rust: Rust Aligned vs Unaligned Memory Access</h1>
+<p>Unlike C, Rust enforces some rules when trying to access memory. Mainly it
+requires consideration to alignment of the data that we are trying to read.
+Below code will illustrate the details.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">main</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>data: [<span style="color:#888;font-weight:bold">u8</span>;<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">10</span>]<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>[<span style="color:#00d;font-weight:bold">0x11</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0x22</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0x33</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0x44</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0x55</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0x66</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0x77</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0x88</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0x99</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0xAA</span>];<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// Alignment Tidbit: Alignment depends on the data type we are using. u8 has
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// an alignment of 1, so u8 values can be accessed at any address. In
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// contrast, u16 has an alignment of 2, so they can only be accessed at
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// addresses aligned by 2.
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// Case 1: unaligned u16 access from raw pointer. This will panic
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>data_ptr<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>data.as_ptr();<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">unsafe</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>ptr<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>data_ptr.add(<span style="color:#00d;font-weight:bold">1</span>)<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">const</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">u16</span>;<span style="color:#bbb"> </span><span style="color:#888">// interpreting the underlying address as u16
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">        </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>x<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>*ptr;<span style="color:#bbb"> </span><span style="color:#888">// This dereference will panic: misaligned pointer dereference: address must be a multiple of 0x2 but is 0x7ffdec94efcd
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">        </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;x: </span><span style="color:#33b;background-color:#fff0f0">{x}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// Slices: Accessing elements through a slice will have the same alignment
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// as its underlying data. So this prevent unaligned access. Also we cannot
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// interpret a u8 array as a u16 slice unlike raw pointer access
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// Case 2: aligned u8 access from slice
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>slice<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>&amp;data[<span style="color:#00d;font-weight:bold">1</span>..<span style="color:#00d;font-weight:bold">2</span>];<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>value<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>slice[<span style="color:#00d;font-weight:bold">0</span>];<span style="color:#bbb"> </span><span style="color:#888">// This works
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;slice: </span><span style="color:#33b;background-color:#fff0f0">{value}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// Case 3: unaligned u16 access from a slice using unsafe. This will panic
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">unsafe</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>data_ptr: *<span style="color:#080;font-weight:bold">const</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">u8</span><span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>data.as_ptr();<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>unaligned_data_ptr: *<span style="color:#080;font-weight:bold">const</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">u8</span><span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>data_ptr.add(<span style="color:#00d;font-weight:bold">1</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">         </span><span style="color:#888">// slice::from_raw_parts will panic as unaligned *const u8 is being
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">         </span><span style="color:#888">// interpreted as *const u16 .
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">        </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>unaligned_slice<span style="color:#bbb"> </span>=<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span><span style="color:#080;font-weight:bold">unsafe</span><span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>core::slice::from_raw_parts(data_ptr<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">const</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">u16</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">2</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">usize</span>)<span style="color:#bbb"> </span>};<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>value<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>slice[<span style="color:#00d;font-weight:bold">0</span>];<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;unaligned_slice: </span><span style="color:#33b;background-color:#fff0f0">{value}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// Takeaway 1: The takeaway here is that when interpreting *const u8 as u16
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// or u32, we cannot simply cast *const u8 as *const u16 and dereference
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// that location and except u16. Instead, we can only access the *const u8
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// as two u8 values and then use bit math to combine those bytes to form a
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// u16.
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// Takeaway 2: When creating an array of u8(with odd number of elements),
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// the address at which the array starts in memory need not be a power of 2.
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// Because u8&#39;s have an alignment of 1. If that is the case, and trying to
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// interpret data + 1 address location as u16 will not trigger a panic. Be
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// aware of that!
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>data: [<span style="color:#888;font-weight:bold">u8</span>;<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">5</span>]<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>[<span style="color:#00d;font-weight:bold">0x11</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0x22</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0x33</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0x44</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0x55</span>];<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>data_ptr<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>data.as_ptr();<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">unsafe</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>ptr<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>data_ptr.add(<span style="color:#00d;font-weight:bold">1</span>)<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">const</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">u16</span>;<span style="color:#bbb"> </span><span style="color:#888">// interpreting the underlying address as u16
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">        </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>x<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>*ptr;<span style="color:#bbb"> </span><span style="color:#888">// This dereference will NOT trigger a panic!
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">        </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;</span><span style="color:#33b;background-color:#fff0f0">{x}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div>
+</main>
+
+<hr/>
+
+<section id="comments" class="giscus">
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
+
+  <footer>
+  
+<script defer src="/js/center-img.js"></script>
+<script defer src="/js/pre-tag.js"></script>
+
+
+
+
+
+
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2025 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+

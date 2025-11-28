@@ -11,34 +11,34 @@
     <loc>/tags/rust/</loc>
     <lastmod>2025-06-21T21:11:47+00:00</lastmod>
   </url><url>
-    <loc>/blog/rust-trait-bounds/</loc>
+    <loc>/blog/2025-06-21-rust-trait-bounds/</loc>
     <lastmod>2025-06-21T21:11:47+00:00</lastmod>
   </url><url>
     <loc>/tags/</loc>
     <lastmod>2025-06-21T21:11:47+00:00</lastmod>
   </url><url>
-    <loc>/blog/rust-lifetimes/</loc>
+    <loc>/blog/2025-06-20-rust-lifetimes/</loc>
     <lastmod>2025-06-20T15:17:28+00:00</lastmod>
   </url><url>
-    <loc>/blog/rust-self-referential-structures/</loc>
+    <loc>/blog/2025-06-18-rust-self-referential-structures/</loc>
     <lastmod>2025-06-18T23:22:57+00:00</lastmod>
   </url><url>
-    <loc>/blog/rust-trait-objects-dynamic-dispatch-and-vtables/</loc>
+    <loc>/blog/2025-06-15-rust-trait-objects-dynamic-dispatch-and-vtables/</loc>
     <lastmod>2025-06-15T18:58:12+00:00</lastmod>
   </url><url>
-    <loc>/blog/rust-deref-vs-asref-traits/</loc>
+    <loc>/blog/2025-06-15-rust-deref-vs-asref-traits/</loc>
     <lastmod>2025-06-15T14:25:20+00:00</lastmod>
   </url><url>
-    <loc>/blog/rust-toolchains-vs-targets/</loc>
+    <loc>/blog/2025-06-14-rust-toolchains-vs-targets/</loc>
     <lastmod>2025-06-14T18:10:57+00:00</lastmod>
   </url><url>
-    <loc>/blog/rust-cargo-profiles/</loc>
+    <loc>/blog/2025-06-12-rust-cargo-profiles/</loc>
     <lastmod>2025-06-12T20:25:13+00:00</lastmod>
   </url><url>
-    <loc>/blog/self-hosting-rustdesk-server-on-an-azure-ubuntu-vm/</loc>
+    <loc>/blog/2025-05-31-self-hosting-rustdesk-server-on-an-azure-ubuntu-vm/</loc>
     <lastmod>2025-05-31T19:36:44+00:00</lastmod>
   </url><url>
-    <loc>/blog/rust-type-conversion/</loc>
+    <loc>/blog/2025-05-03-rust-type-conversion/</loc>
     <lastmod>2025-05-03T19:04:18+00:00</lastmod>
   </url><url>
     <loc>/tags/git/</loc>
@@ -47,7 +47,7 @@
     <loc>/tags/github/</loc>
     <lastmod>2025-03-25T20:27:07+00:00</lastmod>
   </url><url>
-    <loc>/blog/how-to-use-multiple-github-accounts-with-ssh-keys-on-a-single-computer/</loc>
+    <loc>/blog/2025-03-25-how-to-use-multiple-github-accounts-with-ssh-keys-on-a-single-computer/</loc>
     <lastmod>2025-03-25T20:27:07+00:00</lastmod>
   </url><url>
     <loc>/tags/ssh/</loc>
@@ -56,34 +56,34 @@
     <loc>/tags/operating-systems/</loc>
     <lastmod>2025-03-14T23:27:20+00:00</lastmod>
   </url><url>
-    <loc>/blog/paging-101/</loc>
+    <loc>/blog/2025-03-14-paging-101/</loc>
     <lastmod>2025-03-14T23:27:20+00:00</lastmod>
   </url><url>
-    <loc>/blog/rust-formatting-wrapper-types/</loc>
+    <loc>/blog/2025-01-30-rust-formatting-wrapper-types/</loc>
     <lastmod>2025-01-30T18:26:41+00:00</lastmod>
   </url><url>
-    <loc>/blog/rust-orphan-rules/</loc>
+    <loc>/blog/2025-01-26-rust-orphan-rules/</loc>
     <lastmod>2025-01-26T23:01:20+00:00</lastmod>
   </url><url>
-    <loc>/blog/rust-function-lifetime-ellison-rules/</loc>
+    <loc>/blog/2025-01-23-rust-function-lifetime-ellison-rules/</loc>
     <lastmod>2025-01-23T00:34:26+00:00</lastmod>
   </url><url>
-    <loc>/blog/rust-usage-of-cow/</loc>
+    <loc>/blog/2025-01-17-rust-usage-of-cow/</loc>
     <lastmod>2025-01-17T14:03:43+00:00</lastmod>
   </url><url>
-    <loc>/blog/rust-from-vs-into-traits-part-2/</loc>
+    <loc>/blog/2025-01-14-rust-from-vs-into-traits-part-2/</loc>
     <lastmod>2025-01-14T23:33:54+00:00</lastmod>
   </url><url>
-    <loc>/blog/rust-aligned-vs-unaligned-memory-access/</loc>
+    <loc>/blog/2025-01-14-rust-aligned-vs-unaligned-memory-access/</loc>
     <lastmod>2025-01-14T19:05:52+00:00</lastmod>
   </url><url>
-    <loc>/blog/rust-sharing-objects/</loc>
+    <loc>/blog/2025-01-07-rust-sharing-objects/</loc>
     <lastmod>2025-01-07T00:17:07-07:00</lastmod>
   </url><url>
-    <loc>/blog/rust-from-vs-into-traits/</loc>
+    <loc>/blog/2025-01-06-rust-from-vs-into-traits/</loc>
     <lastmod>2025-01-06T06:17:07-07:00</lastmod>
   </url><url>
-    <loc>/blog/compiler-internals/</loc>
+    <loc>/blog/2019-11-01-compiler-internals/</loc>
     <lastmod>2019-11-01T18:33:07-07:00</lastmod>
   </url><url>
     <loc>/tags/compilers/</loc>
@@ -92,7 +92,7 @@
     <loc>/tags/embedded/</loc>
     <lastmod>2019-09-20T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/blog/uart-from-avr-to-linux-to-logic-analyzer/</loc>
+    <loc>/blog/2019-09-20-uart-from-avr-to-linux-to-logic-analyzer/</loc>
     <lastmod>2019-09-20T18:33:07-07:00</lastmod>
   </url><url>
     <loc>/tags/emulator/</loc>
@@ -101,10 +101,10 @@
     <loc>/tags/java/</loc>
     <lastmod>2019-04-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/blog/what-does-it-take-to-write-an-emulator-in-java/</loc>
+    <loc>/blog/2019-04-10-what-does-it-take-to-write-an-emulator-in-java/</loc>
     <lastmod>2019-04-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/blog/usermode-breakpoints-from-kd/</loc>
+    <loc>/blog/2019-03-10-usermode-breakpoints-from-kd/</loc>
     <lastmod>2019-03-10T18:33:07-07:00</lastmod>
   </url><url>
     <loc>/tags/windbg/</loc>
@@ -116,22 +116,22 @@
     <loc>/tags/c/</loc>
     <lastmod>2019-02-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/blog/signed-unsigned-integer-arithmetic-in-c/</loc>
+    <loc>/blog/2019-02-10-signed-unsigned-integer-arithmetic-in-c/</loc>
     <lastmod>2019-02-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/blog/pdb-files-the-glue-between-the-binary-file-and-source-code/</loc>
+    <loc>/blog/2019-01-10-pdb-files-the-glue-between-the-binary-file-and-source-code/</loc>
     <lastmod>2019-01-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/blog/lib-files-101/</loc>
+    <loc>/blog/2018-11-10-lib-files-101/</loc>
     <lastmod>2018-11-10T18:33:07-07:00</lastmod>
   </url><url>
     <loc>/tags/debuggers/</loc>
     <lastmod>2018-10-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/blog/how-do-breakpoints-work-in-debuggers/</loc>
+    <loc>/blog/2018-10-10-how-do-breakpoints-work-in-debuggers/</loc>
     <lastmod>2018-10-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/blog/a-newbies-introduction-to-compilation-process-and-reverse-engineering/</loc>
+    <loc>/blog/2018-08-10-a-newbies-introduction-to-compilation-process-and-reverse-engineering/</loc>
     <lastmod>2018-08-10T18:33:07-07:00</lastmod>
   </url><url>
     <loc>/tags/asm/</loc>

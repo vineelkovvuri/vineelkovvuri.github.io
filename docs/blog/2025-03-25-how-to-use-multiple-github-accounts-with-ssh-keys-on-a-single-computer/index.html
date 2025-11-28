@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>How to Use Multiple GitHub Accounts with SSH Keys on a Single Computer | Vineel Kovvuri</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/copy-button.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/presentations/">Presentations</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+      <li><a href="/tools/">Tools</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">How to Use Multiple GitHub Accounts with SSH Keys on a Single Computer</span></h1>
+
+
+<h3 class="date">
+    2025/03/25
+    
+        |
+        <a href="/tags/git">Git</a>
+        , <a href="/tags/ssh">SSH</a>
+        , <a href="/tags/github">GitHub</a>
+        
+    
+</h3>
+
+</div>
+
+
+    
+        <aside class="toc">
+            <h2>Table of Contents</h2>
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#how-to-use-multiple-github-accounts-with-ssh-keys-on-a-single-computer">How to Use Multiple GitHub Accounts with SSH Keys on a Single Computer?</a>
+      <ul>
+        <li><a href="#step-1-generate-separate-ssh-keys">Step 1: Generate Separate SSH Keys</a></li>
+        <li><a href="#step-2-configure-ssh">Step 2: Configure SSH</a></li>
+        <li><a href="#step-3-clone-repositories-with-modified-urls">Step 3: Clone Repositories with Modified URLs</a></li>
+        <li><a href="#step-4-configure-repository-specific-git-settings">Step 4: Configure Repository-Specific Git Settings</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+        </aside>
+    
+
+
+<main>
+<h1 id="how-to-use-multiple-github-accounts-with-ssh-keys-on-a-single-computer">How to Use Multiple GitHub Accounts with SSH Keys on a Single Computer?</h1>
+<p>For a long time, I wanted to access both my personal account (<code>vineelkovvuri</code>)
+and my Microsoft work account (<code>vineelko</code>) from my work laptop. Naturally, using
+the same <code>.ssh/id_rsa.pub</code> key for both GitHub accounts wouldn&rsquo;t work. This
+article explains the workaround I came across.</p>
+<h2 id="step-1-generate-separate-ssh-keys">Step 1: Generate Separate SSH Keys</h2>
+<p>First, generate different SSH key pairs for each account:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cmd" data-lang="cmd"><span style="display:flex;"><span>C:<span style="color:#369;font-style:italic">\</span><span style="color:#888">&gt; ssh-keygen -t rsa -b 4096 -C &#34;vineel.kovvuri@gmail.com&#34;</span>
+</span></span><span style="display:flex;"><span>Generating public/private rsa key pair.
+</span></span><span style="display:flex;"><span>Enter file in which to save the key (C:\Users\vineelko/.ssh/id_rsa): C:\Users\vineelko/.ssh/id_rsa_vineelkovvuri_github
+</span></span></code></pre></div><p>The crucial part here is saving the RSA file with a distinct name (<code>id_rsa_vineelkovvuri_github</code>).</p>
+<p>Repeat this process for your work account, saving it as <code>C:\Users\vineelko/.ssh/id_rsa_vineelko_github</code>.</p>
+<h2 id="step-2-configure-ssh">Step 2: Configure SSH</h2>
+<p>Add the following configuration to <code>C:\Users\vineelko\.ssh\config</code>:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ini" data-lang="ini"><span style="display:flex;"><span><span style="color:#888"># Personal Account (vineelkovvuri)</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">Host github-vineelkovvuri</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">HostName github.com</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">User git</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">IdentityFile ~/.ssh/id_rsa_vineelkovvuri_github</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># Work Account (vineelko)</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">Host github-vineelko</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">HostName github.com</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">User git</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">IdentityFile ~/.ssh/id_rsa_vineelko_github</span>
+</span></span></code></pre></div><h2 id="step-3-clone-repositories-with-modified-urls">Step 3: Clone Repositories with Modified URLs</h2>
+<p>When cloning repositories from your personal account, instead of:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>git clone git<span style="color:#369">@github</span>.com<span style="color:#a61717;background-color:#e3d2d2">:</span>vineelkovvuri/<span style="color:#038">vin-pro</span>.<span style="color:#369;font-weight:bold">git</span>
+</span></span></code></pre></div><p>Use:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>git clone git<span style="color:#369">@github</span>-vineelkovvuri:vineelkovvuri/<span style="color:#038">vin-pro</span>.<span style="color:#369;font-weight:bold">git</span>
+</span></span></code></pre></div><p>The modified hostname (<code>github-vineelkovvuri</code>) tells SSH which key file to use
+when authenticating with GitHub.com.</p>
+<h2 id="step-4-configure-repository-specific-git-settings">Step 4: Configure Repository-Specific Git Settings</h2>
+<p>On my work laptop, I keep my work email and username in the global
+<code>~/.gitconfig</code> since that&rsquo;s my primary account. For personal repositories, I set
+project-specific configurations:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>git config user.<span style="color:#369;font-weight:bold">name</span> <span style="color:#d20;background-color:#fff0f0">&#34;Vineel Kovvuri&#34;</span>
+</span></span><span style="display:flex;"><span>git config user.<span style="color:#369;font-weight:bold">email</span> <span style="color:#d20;background-color:#fff0f0">&#34;vineel.kovvuri@gmail.com&#34;</span>
+</span></span></code></pre></div><p>Because we cloned the repository using the modified URL, the remotes are
+automatically configured correctly:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>C:\repos\<span style="color:#038">vin-pro</span>&gt; git remote -vv
+</span></span><span style="display:flex;"><span>origin  git<span style="color:#369">@github</span>-vineelkovvuri:vineelkovvuri/<span style="color:#038">vin-pro</span>.<span style="color:#369;font-weight:bold">git</span> (fetch)
+</span></span><span style="display:flex;"><span>origin  git<span style="color:#369">@github</span>-vineelkovvuri:vineelkovvuri/<span style="color:#038">vin-pro</span>.<span style="color:#369;font-weight:bold">git</span> (push)
+</span></span></code></pre></div><p>No more WSL or multiple Windows users or complicated <code>includeIf</code> dance. Hope
+this helps.</p>
+
+</main>
+
+<hr/>
+
+<section id="comments" class="giscus">
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
+
+  <footer>
+  
+<script defer src="/js/center-img.js"></script>
+<script defer src="/js/pre-tag.js"></script>
+
+
+
+
+
+
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2025 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+

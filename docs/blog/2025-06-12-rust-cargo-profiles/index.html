@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rust: Cargo: Profiles | Vineel Kovvuri</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/copy-button.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/presentations/">Presentations</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+      <li><a href="/tools/">Tools</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Rust: Cargo: Profiles</span></h1>
+
+
+<h3 class="date">
+    2025/06/12
+    
+        |
+        <a href="/tags/rust">Rust</a>
+        
+    
+</h3>
+
+</div>
+
+
+    
+        <aside class="toc">
+            <h2>Table of Contents</h2>
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#rust-cargo-profiles">Rust: Cargo: Profiles</a>
+      <ul>
+        <li><a href="#example-demonstration">Example Demonstration</a></li>
+        <li><a href="#digging-deeper-with---verbose">Digging Deeper with <code>--verbose</code></a></li>
+        <li><a href="#what-about-workspaces">What About Workspaces?</a></li>
+        <li><a href="#conclusion">Conclusion</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+        </aside>
+    
+
+
+<main>
+<h1 id="rust-cargo-profiles">Rust: Cargo: Profiles</h1>
+<p>Cargo has a concept called
+<a href="https://doc.rust-lang.org/cargo/reference/profiles.html"><strong>profiles</strong></a>, mainly
+<code>dev</code> and <code>release</code> (in the .NET/Windows world, these are equivalent to <code>debug</code>
+and <code>release</code>). Today, we&rsquo;re not going to talk about the specific details of
+these profiles, but instead focus on their interaction between a binary crate
+and a library crate.</p>
+<p>At work, we have a library crate that contains the core implementation of our
+product, and a binary crate that pulls in this library. To guarantee
+correctness, we wanted the library crate to use certain predetermined compiler
+switches. That led me to wonder how the <code>[profile.dev]</code> settings are actually
+used. As part of that investigation, I discovered something surprising. Spoiler:
+I didn’t find a solution to the original problem, but I did learn something
+useful that’s worth sharing.</p>
+<p><strong>TL;DR:</strong> The <code>[profile.*]</code> section in a library crate is mostly ignored for
+normal library crates(excluding other types of library crates). When Cargo
+builds the binary crate, it compiles all dependent library crates using the
+binary crate&rsquo;s profile settings.</p>
+<hr>
+<h2 id="example-demonstration">Example Demonstration</h2>
+<p>To verify this, I ran a small experiment.</p>
+<p>I created a simple library crate that intentionally causes an integer overflow.
+Normally, Rust panics on overflow in debug builds. You can disable this behavior
+by setting <code>overflow-checks = false</code> in the profile section. That’s what I did
+in the library crate. Meanwhile, the binary crate that depends on it has
+<code>overflow-checks = true</code>.</p>
+<p>Now let’s observe what happens when overflow occurs.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#888">// mylib/src/lib.rs
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">pub</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">add</span>(inc: <span style="color:#888;font-weight:bold">u8</span>)<span style="color:#bbb"> </span>-&gt; <span style="color:#888;font-weight:bold">u8</span> {<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>x: <span style="color:#888;font-weight:bold">u8</span> =<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">250</span><span style="color:#bbb"> </span>+<span style="color:#bbb"> </span>inc;<span style="color:#bbb">  </span><span style="color:#888">// This can trigger a runtime panic
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span>x<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-toml" data-lang="toml"><span style="display:flex;"><span><span style="color:#888"># mylib/Cargo.toml</span>
+</span></span><span style="display:flex;"><span>[package]
+</span></span><span style="display:flex;"><span>name = <span style="color:#d20;background-color:#fff0f0">&#34;mylib&#34;</span>
+</span></span><span style="display:flex;"><span>version = <span style="color:#d20;background-color:#fff0f0">&#34;0.1.0&#34;</span>
+</span></span><span style="display:flex;"><span>edition = <span style="color:#d20;background-color:#fff0f0">&#34;2021&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>[dependencies]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>[profile.dev]
+</span></span><span style="display:flex;"><span>overflow-checks = <span style="color:#080;font-weight:bold">false</span>  <span style="color:#888"># Disable overflow checks</span>
+</span></span></code></pre></div><p>The binary crate looks like this:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#888">// myexe/src/main.rs
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">use</span><span style="color:#bbb"> </span>mylib::add;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">main</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>result<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>add(<span style="color:#00d;font-weight:bold">11</span>);<span style="color:#bbb"> </span><span style="color:#888">// 250 + 11 = 261, wraps to 5
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#06b;font-weight:bold">assert_eq!</span>(result,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">5</span>);<span style="color:#bbb"> </span><span style="color:#888">// Should not panic if mylib settings are used
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-toml" data-lang="toml"><span style="display:flex;"><span><span style="color:#888"># myexe/Cargo.toml</span>
+</span></span><span style="display:flex;"><span>[package]
+</span></span><span style="display:flex;"><span>name = <span style="color:#d20;background-color:#fff0f0">&#34;myexe&#34;</span>
+</span></span><span style="display:flex;"><span>version = <span style="color:#d20;background-color:#fff0f0">&#34;0.1.0&#34;</span>
+</span></span><span style="display:flex;"><span>edition = <span style="color:#d20;background-color:#fff0f0">&#34;2021&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>[dependencies]
+</span></span><span style="display:flex;"><span>mylib = { path = <span style="color:#d20;background-color:#fff0f0">&#34;../mylib&#34;</span> }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>[profile.dev]
+</span></span><span style="display:flex;"><span>overflow-checks = <span style="color:#080;font-weight:bold">true</span>  <span style="color:#888"># Enable overflow checks</span>
+</span></span></code></pre></div><p>Now let’s compile and run:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cmd" data-lang="cmd"><span style="display:flex;"><span>D:<span style="color:#369;font-style:italic">\repos\testing\myexe</span><span style="color:#888">&gt;cargo run</span>
+</span></span><span style="display:flex;"><span>   Compiling mylib v0.1.0 (D:\repos\testing\mylib)
+</span></span><span style="display:flex;"><span>   Compiling myexe v0.1.0 (D:\repos\testing\myexe)
+</span></span><span style="display:flex;"><span>    Finished dev [unoptimized + debuginfo] target(s) in 0.31s
+</span></span><span style="display:flex;"><span>     Running `target\debug\myexe.exe`
+</span></span><span style="display:flex;"><span>thread &#39;main&#39; panicked at D:\repos\testing\mylib\src\lib.rs:2:17:
+</span></span><span style="display:flex;"><span>attempt to add with overflow
+</span></span><span style="display:flex;"><span>note: run with `RUST_BACKTRACE=1` to display a backtrace
+</span></span><span style="display:flex;"><span>error: process didn&#39;t exit successfully: `target\debug\myexe.exe` (exit code: 101)
+</span></span></code></pre></div><p>Despite the library disabling overflow checks, the binary still panics. This
+confirms that the library&rsquo;s <code>[profile.dev]</code> settings were not respected.</p>
+<p>If we flip the scenario — enabling overflow checks in the library and disabling
+them in the binary — the panic does <strong>not</strong> occur:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cmd" data-lang="cmd"><span style="display:flex;"><span>D:<span style="color:#369;font-style:italic">\repos\testing\myexe</span><span style="color:#888">&gt;cargo run</span>
+</span></span><span style="display:flex;"><span>    Finished dev [unoptimized + debuginfo] target(s) in 0.01s
+</span></span><span style="display:flex;"><span>     Running `target\debug\myexe.exe`
+</span></span></code></pre></div><hr>
+<h2 id="digging-deeper-with---verbose">Digging Deeper with <code>--verbose</code></h2>
+<p>To understand what’s happening under the hood, we can inspect the compiler flags using <code>cargo build --verbose</code>.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cmd" data-lang="cmd"><span style="display:flex;"><span>cargo clean
+</span></span><span style="display:flex;"><span>cargo build --verbose
+</span></span></code></pre></div><p>Here’s the relevant output:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Compiling mylib v0.1.0 (D:\repos\testing\mylib)
+</span></span><span style="display:flex;"><span>Running `...rustc.exe ... -C overflow-checks=off ...`
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Compiling myexe v0.1.0 (D:\repos\testing\myexe)
+</span></span><span style="display:flex;"><span>Running `...rustc.exe ... -C overflow-checks=off ...`
+</span></span></code></pre></div><p>Both <code>mylib</code> and <code>myexe</code> are compiled with <code>-C overflow-checks=off</code>, even though
+the binary crate’s Cargo.toml explicitly had <code>overflow-checks=true</code>. This shows
+that the binary crate&rsquo;s profile settings <strong>are applied across the board</strong>, even
+to dependent libraries.</p>
+<hr>
+<h2 id="what-about-workspaces">What About Workspaces?</h2>
+<p>The behavior doesn&rsquo;t change even if the library crate is inside the same
+workspace. The profile settings declared at the workspace level mainly apply to
+test targets, examples, benchmarks, and binaries. Regular libraries will still
+inherit the settings from the crate that depends on them.</p>
+<hr>
+<h2 id="conclusion">Conclusion</h2>
+<p>Library-specific profile settings are mostly <strong>ignored</strong> during normal
+compilation. The consuming binary crate&rsquo;s profile dictates how all dependencies
+are compiled. If you need strict guarantees for how a library is compiled (e.g.,
+turning on or off overflow checks), you&rsquo;ll have to enforce those via build
+scripts, CI, or external tooling — not just Cargo profiles.</p>
+<p>Let me know if you&rsquo;ve found any workarounds, because I’m still hunting for one!</p>
+
+</main>
+
+<hr/>
+
+<section id="comments" class="giscus">
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
+
+  <footer>
+  
+<script defer src="/js/center-img.js"></script>
+<script defer src="/js/pre-tag.js"></script>
+
+
+
+
+
+
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2025 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Compiler Internals | Vineel Kovvuri</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/copy-button.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/presentations/">Presentations</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+      <li><a href="/tools/">Tools</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Compiler Internals</span></h1>
+
+
+<h3 class="date">
+    2019/11/01
+    
+        |
+        <a href="/tags/compilers">Compilers</a>
+        
+    
+</h3>
+
+</div>
+
+
+    
+        <aside class="toc">
+            <h2>Table of Contents</h2>
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#basics">Basics</a></li>
+    <li><a href="#elimination-of-unused-static-functions">Elimination of unused static functions</a></li>
+    <li><a href="#comdat-and-gy-switch">COMDAT and /Gy switch</a></li>
+    <li><a href="#elimination-of-unused-functions-by-the-linker">Elimination of unused functions by the linker</a></li>
+  </ul>
+</nav>
+        </aside>
+    
+
+
+<main>
+<h1 id="basics">Basics</h1>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#888">//a.c
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">myadd</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">int</span> sum = <span style="color:#00d;font-weight:bold">10</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">for</span> (<span style="color:#888;font-weight:bold">int</span> i = <span style="color:#00d;font-weight:bold">0</span>; i &lt; <span style="color:#00d;font-weight:bold">100</span>; i++)
+</span></span><span style="display:flex;"><span>        sum += i;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> sum;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">myadd2</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">int</span> sum = <span style="color:#00d;font-weight:bold">10</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">for</span> (<span style="color:#888;font-weight:bold">int</span> i = <span style="color:#00d;font-weight:bold">0</span>; i &lt; <span style="color:#00d;font-weight:bold">100</span>; i++)
+</span></span><span style="display:flex;"><span>        sum += i*i;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> sum;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> <span style="color:#06b;font-weight:bold">myadd</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&gt;cl /c a.c
+</span></span><span style="display:flex;"><span>&gt;link /dump /symbols a.obj
+</span></span><span style="display:flex;"><span><span style="color:#00d;font-weight:bold">008</span> <span style="color:#00d;font-weight:bold">00000000</span> SECT3  notype ()    External     | myadd
+</span></span><span style="display:flex;"><span><span style="color:#00d;font-weight:bold">009</span> <span style="color:#00d;font-weight:bold">00000050</span> SECT3  notype ()    External     | myadd2
+</span></span><span style="display:flex;"><span>00A 000000A0 SECT3  notype ()    External     | main
+</span></span></code></pre></div><p>The <strong>link /dump</strong> command dumps the symbols that are part of the obj file. The
+compiler cannot optimize myadd2 because technically these unused functions can
+be accessed by functions in other libs.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&gt;link /dump /section:.text<span style="color:#369">$mn</span> a.obj
+</span></span><span style="display:flex;"><span>Dump of file a.obj
+</span></span><span style="display:flex;"><span>File Type: COFF OBJECT
+</span></span><span style="display:flex;"><span>SECTION HEADER <span style="color:#888">#3</span>
+</span></span><span style="display:flex;"><span>.text<span style="color:#369">$mn</span> name
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> physical address
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> virtual address
+</span></span><span style="display:flex;"><span>      5E size of raw data
+</span></span><span style="display:flex;"><span>     1BF file pointer to raw data (000001BF to 0000021C)
+</span></span><span style="display:flex;"><span>     21D file pointer to relocation table
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> file pointer to line numbers
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">1</span> number of relocations
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> number of line numbers
+</span></span><span style="display:flex;"><span><span style="color:#00d;font-weight:bold">60500020</span> flags
+</span></span><span style="display:flex;"><span>         Code
+</span></span><span style="display:flex;"><span>         <span style="color:#00d;font-weight:bold">16</span> byte align
+</span></span><span style="display:flex;"><span>         Execute Read
+</span></span><span style="display:flex;"><span>  Summary
+</span></span><span style="display:flex;"><span>          5E .text<span style="color:#369">$mn</span>
+</span></span></code></pre></div><p>All 3 functions are groups inside the <strong>.text$mn</strong> section and hence <strong>link
+/dump /section:.text$mn</strong> will have only one header.</p>
+<h1 id="elimination-of-unused-static-functions">Elimination of unused static functions</h1>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#888">//a.c
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">myadd</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">int</span> sum = <span style="color:#00d;font-weight:bold">10</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">for</span> (<span style="color:#888;font-weight:bold">int</span> i = <span style="color:#00d;font-weight:bold">0</span>; i &lt; <span style="color:#00d;font-weight:bold">100</span>; i++)
+</span></span><span style="display:flex;"><span>        sum += i;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> sum;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">static</span> <span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">myadd2</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">int</span> sum = <span style="color:#00d;font-weight:bold">10</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">for</span> (<span style="color:#888;font-weight:bold">int</span> i = <span style="color:#00d;font-weight:bold">0</span>; i &lt; <span style="color:#00d;font-weight:bold">100</span>; i++)
+</span></span><span style="display:flex;"><span>        sum += i*i;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> sum;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> <span style="color:#06b;font-weight:bold">myadd</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&gt;cl /c a.c
+</span></span><span style="display:flex;"><span>&gt;link /dump /symbols a.obj
+</span></span><span style="display:flex;"><span><span style="color:#00d;font-weight:bold">008</span> <span style="color:#00d;font-weight:bold">00000000</span> SECT3  notype ()    External     | myadd
+</span></span><span style="display:flex;"><span><span style="color:#00d;font-weight:bold">009</span> <span style="color:#00d;font-weight:bold">00000050</span> SECT3  notype ()    External     | main
+</span></span></code></pre></div><p>Since myadd2 is made static the compiler can for sure know it cannot be used by
+other functions external to this .obj so it removed that function.</p>
+<h1 id="comdat-and-gy-switch">COMDAT and /Gy switch</h1>
+<p>With /Gy switch the compiler now spits 3 more headers in .text$mn. This is also
+called COMDAT and will be helpful for linker to eliminate dead code more easily.
+The need for this section will come clear once we look at how linker optimizes
+code. From the output it is clear that each function has got it own section
+header with <strong>COMDAT; sym=</strong> line</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#888">//a.c
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">myadd</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">int</span> sum = <span style="color:#00d;font-weight:bold">10</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">for</span> (<span style="color:#888;font-weight:bold">int</span> i = <span style="color:#00d;font-weight:bold">0</span>; i &lt; <span style="color:#00d;font-weight:bold">100</span>; i++)
+</span></span><span style="display:flex;"><span>        sum += i;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> sum;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">myadd2</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">int</span> sum = <span style="color:#00d;font-weight:bold">10</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">for</span> (<span style="color:#888;font-weight:bold">int</span> i = <span style="color:#00d;font-weight:bold">0</span>; i &lt; <span style="color:#00d;font-weight:bold">100</span>; i++)
+</span></span><span style="display:flex;"><span>        sum += i*i;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> sum;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> <span style="color:#06b;font-weight:bold">myadd</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&gt;cl /c /Gy a.c
+</span></span><span style="display:flex;"><span>&gt;link /dump /section:.text<span style="color:#369">$mn</span> a.obj
+</span></span><span style="display:flex;"><span>Dump of file a.obj
+</span></span><span style="display:flex;"><span>File Type: COFF OBJECT
+</span></span><span style="display:flex;"><span>SECTION HEADER <span style="color:#888">#3</span>
+</span></span><span style="display:flex;"><span>.text<span style="color:#369">$mn</span> name
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> physical address
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> virtual address
+</span></span><span style="display:flex;"><span>       E size of raw data
+</span></span><span style="display:flex;"><span>     2AF file pointer to raw data (000002AF to 000002BC)
+</span></span><span style="display:flex;"><span>     2BD file pointer to relocation table
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> file pointer to line numbers
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">1</span> number of relocations
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> number of line numbers
+</span></span><span style="display:flex;"><span><span style="color:#00d;font-weight:bold">60501020</span> flags
+</span></span><span style="display:flex;"><span>         Code
+</span></span><span style="display:flex;"><span>         COMDAT; <span style="color:#369">sym</span>= main
+</span></span><span style="display:flex;"><span>         <span style="color:#00d;font-weight:bold">16</span> byte align
+</span></span><span style="display:flex;"><span>         Execute Read
+</span></span><span style="display:flex;"><span>SECTION HEADER <span style="color:#888">#4</span>
+</span></span><span style="display:flex;"><span>.text<span style="color:#369">$mn</span> name
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> physical address
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> virtual address
+</span></span><span style="display:flex;"><span>      3D size of raw data
+</span></span><span style="display:flex;"><span>     2C7 file pointer to raw data (000002C7 to 00000303)
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> file pointer to relocation table
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> file pointer to line numbers
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> number of relocations
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> number of line numbers
+</span></span><span style="display:flex;"><span><span style="color:#00d;font-weight:bold">60501020</span> flags
+</span></span><span style="display:flex;"><span>         Code
+</span></span><span style="display:flex;"><span>         COMDAT; <span style="color:#369">sym</span>= myadd
+</span></span><span style="display:flex;"><span>         <span style="color:#00d;font-weight:bold">16</span> byte align
+</span></span><span style="display:flex;"><span>         Execute Read
+</span></span><span style="display:flex;"><span>SECTION HEADER <span style="color:#888">#5</span>
+</span></span><span style="display:flex;"><span>.text<span style="color:#369">$mn</span> name
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> physical address
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> virtual address
+</span></span><span style="display:flex;"><span>      <span style="color:#00d;font-weight:bold">41</span> size of raw data
+</span></span><span style="display:flex;"><span>     <span style="color:#00d;font-weight:bold">304</span> file pointer to raw data (<span style="color:#00d;font-weight:bold">00000304</span> to 00000344)
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> file pointer to relocation table
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> file pointer to line numbers
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> number of relocations
+</span></span><span style="display:flex;"><span>       <span style="color:#00d;font-weight:bold">0</span> number of line numbers
+</span></span><span style="display:flex;"><span><span style="color:#00d;font-weight:bold">60501020</span> flags
+</span></span><span style="display:flex;"><span>         Code
+</span></span><span style="display:flex;"><span>         COMDAT; <span style="color:#369">sym</span>= myadd2
+</span></span><span style="display:flex;"><span>         <span style="color:#00d;font-weight:bold">16</span> byte align
+</span></span><span style="display:flex;"><span>         Execute Read
+</span></span><span style="display:flex;"><span>  Summary
+</span></span><span style="display:flex;"><span>          8C .text<span style="color:#369">$mn</span>
+</span></span></code></pre></div><h1 id="elimination-of-unused-functions-by-the-linker">Elimination of unused functions by the linker</h1>
+<p>The complete elimination of unused functions in a program can only be done by
+linker because it is the only component which can see through all the
+intermediatory files like .objs. But interestingly linker only works on sections
+not on functions themselfs. Because of this if a .obj contain one used and one
+unused function inside .text section, the linker will not eliminate the unused
+function. Hence in the below example we still see all the functions</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#888">//a.c
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">myadd</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">int</span> sum = <span style="color:#00d;font-weight:bold">10</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">for</span> (<span style="color:#888;font-weight:bold">int</span> i = <span style="color:#00d;font-weight:bold">0</span>; i &lt; <span style="color:#00d;font-weight:bold">100</span>; i++)
+</span></span><span style="display:flex;"><span>        sum += i;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> sum;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#888">//unused function
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">myadd2</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">int</span> sum = <span style="color:#00d;font-weight:bold">10</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">for</span> (<span style="color:#888;font-weight:bold">int</span> i = <span style="color:#00d;font-weight:bold">0</span>; i &lt; <span style="color:#00d;font-weight:bold">100</span>; i++)
+</span></span><span style="display:flex;"><span>        sum += i*i;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> sum;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">//b.c
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">sub</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#888;font-weight:bold">int</span> diff = <span style="color:#00d;font-weight:bold">10</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">for</span> (<span style="color:#888;font-weight:bold">int</span> i = <span style="color:#00d;font-weight:bold">0</span>; i &lt; <span style="color:#00d;font-weight:bold">100</span>; i++)
+</span></span><span style="display:flex;"><span>        diff -= i;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> diff;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">//main.c
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> <span style="color:#06b;font-weight:bold">myadd</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&gt;cl /c a.c b.c main.c
+</span></span><span style="display:flex;"><span>This will produce a.obj, b.obj, main.obj files.
+</span></span><span style="display:flex;"><span>- myadd/myadd2 in .text<span style="color:#369">$mn</span> section of a.obj
+</span></span><span style="display:flex;"><span>- sub in .text<span style="color:#369">$mn</span> section of b.obj
+</span></span><span style="display:flex;"><span>- main in .text<span style="color:#369">$mn</span> section of main.obj
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&gt;link a.obj b.obj main.obj /nodefaultlib /entry:main /map /opt:ref
+</span></span></code></pre></div><p>Since the linker works at multiple objs collectively it has the opportunity to
+remove any unused functions(/opt:ref) when they are not referenced. So we should
+expect myadd2 and sub to be removed from final executable and we get this info
+by using /map. This will produce a .map file. But unfortunately when you look at
+the .map file for the above case we still see myadd2 and sub.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>0001:00000000       myadd                      <span style="color:#00d;font-weight:bold">0000000140001000</span> f   a.obj
+</span></span><span style="display:flex;"><span>0001:00000050       myadd2                     <span style="color:#00d;font-weight:bold">0000000140001050</span> f   a.obj
+</span></span><span style="display:flex;"><span>0001:000000a0       sub                        00000001400010a0 f   b.obj
+</span></span><span style="display:flex;"><span>0001:000000e0       main                       00000001400010e0 f   main.obj
+</span></span></code></pre></div><p>The reason for this is linker like I said before works at section level not
+function level. To help linker in this case, we need to compile the objs with
+/Gy flag which as we saw before will produce the functions in their own COMDAT
+sections.</p>
+<p>This is exactly where <strong>/Gy</strong> and COMDAT feature come in handy. When compiled
+with /Gy like we saw before, each function will be part of a different section
+and hence linker can eliminate unused functions</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&gt;cl /c /Gy a.c b.c main.c
+</span></span><span style="display:flex;"><span>&gt;link a.obj b.obj main.obj /nodefaultlib /entry:main /map /opt:ref
+</span></span><span style="display:flex;"><span>0001:00000000       myadd                      <span style="color:#00d;font-weight:bold">0000000140001000</span> f   a.obj
+</span></span><span style="display:flex;"><span>0001:00000040       main                       <span style="color:#00d;font-weight:bold">0000000140001040</span> f   main.obj
+</span></span></code></pre></div><p>Now we can see the binary indeed optimized to not contain myadd2 and sub
+functions</p>
+
+</main>
+
+<hr/>
+
+<section id="comments" class="giscus">
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
+
+  <footer>
+  
+<script defer src="/js/center-img.js"></script>
+<script defer src="/js/pre-tag.js"></script>
+
+
+
+
+
+
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2025 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+
