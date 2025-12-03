@@ -131,7 +131,7 @@ requested by the caller.
 **DeepSeek R1:** You’re absolutely correct to question this—it’s a subtle
 aspect of how Rust’s formatting machinery works. Let’s break it down:
 
-# The Core Issue: **Formatting Contexts**
+# The Core Issue: Formatting Contexts
 When you use `write!(fmtr, "{}", self.0)`, you’re **starting a new
 formatting operation** with its own *format specifier* (`{}`), even though
 you’re reusing the same `Formatter` (`fmtr`). This new operation overrides
@@ -165,7 +165,7 @@ impl fmt::Display for Hour {
 - But `Hour::fmt` then starts a **new formatting operation** with `"{}"`,
 which resets the specifier to default (ignoring `:02`).
 
-# The Fix: **Forward the Existing Formatter**
+# The Fix: Forward the Existing Formatter
 Instead of starting a new formatting operation with `write!`, directly
 delegate formatting to the inner `u8`’s `fmt` method:
 ```rust

@@ -59,9 +59,9 @@
     <li><a href="#why-this-works">Why This Works</a></li>
     <li><a href="#key-takeaway">Key Takeaway</a></li>
     <li><a href="#vineel-q-how-is-writefmtr--self0--creating-new-formatting-operation-isnt-the-first-argument-fmtr-the-existing-formatter-with-02-">Vineel: Q: how is write!(fmtr, &ldquo;{}&rdquo;, self.0)  creating new formatting operation isn&rsquo;t the first argument fmtr the existing formatter with :02 ?</a></li>
-    <li><a href="#the-core-issue-formatting-contexts">The Core Issue: <strong>Formatting Contexts</strong></a></li>
+    <li><a href="#the-core-issue-formatting-contexts">The Core Issue: Formatting Contexts</a></li>
     <li><a href="#why-02-doesnt-propagate">Why <code>{:02}</code> Doesn’t Propagate</a></li>
-    <li><a href="#the-fix-forward-the-existing-formatter">The Fix: <strong>Forward the Existing Formatter</strong></a></li>
+    <li><a href="#the-fix-forward-the-existing-formatter">The Fix: Forward the Existing Formatter</a></li>
     <li><a href="#analogy-a-chain-of-commands">Analogy: A Chain of Commands</a></li>
     <li><a href="#key-takeaway-1">Key Takeaway</a></li>
   </ul>
@@ -181,7 +181,7 @@ requested by the caller.</p>
 <h1 id="vineel-q-how-is-writefmtr--self0--creating-new-formatting-operation-isnt-the-first-argument-fmtr-the-existing-formatter-with-02-">Vineel: Q: how is write!(fmtr, &ldquo;{}&rdquo;, self.0)  creating new formatting operation isn&rsquo;t the first argument fmtr the existing formatter with :02 ?</h1>
 <p><strong>DeepSeek R1:</strong> You’re absolutely correct to question this—it’s a subtle
 aspect of how Rust’s formatting machinery works. Let’s break it down:</p>
-<h1 id="the-core-issue-formatting-contexts">The Core Issue: <strong>Formatting Contexts</strong></h1>
+<h1 id="the-core-issue-formatting-contexts">The Core Issue: Formatting Contexts</h1>
 <p>When you use <code>write!(fmtr, &quot;{}&quot;, self.0)</code>, you’re <strong>starting a new
 formatting operation</strong> with its own <em>format specifier</em> (<code>{}</code>), even though
 you’re reusing the same <code>Formatter</code> (<code>fmtr</code>). This new operation overrides
@@ -213,7 +213,7 @@ arguments, using the specifiers in its own format string.</li>
 <li>But <code>Hour::fmt</code> then starts a <strong>new formatting operation</strong> with <code>&quot;{}&quot;</code>,
 which resets the specifier to default (ignoring <code>:02</code>).</li>
 </ul>
-<h1 id="the-fix-forward-the-existing-formatter">The Fix: <strong>Forward the Existing Formatter</strong></h1>
+<h1 id="the-fix-forward-the-existing-formatter">The Fix: Forward the Existing Formatter</h1>
 <p>Instead of starting a new formatting operation with <code>write!</code>, directly
 delegate formatting to the inner <code>u8</code>’s <code>fmt</code> method:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span>fmt::Display<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span>Hour<span style="color:#bbb"> </span>{<span style="color:#bbb">
