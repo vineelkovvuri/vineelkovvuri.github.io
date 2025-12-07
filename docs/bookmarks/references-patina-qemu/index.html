@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Patina QEMU Cheat Sheet | Vineel Kovvuri</title>
+    
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/copy-button.css" />
+    <link rel="stylesheet" href="/css/forms.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Patina QEMU Cheat Sheet</span></h1>
+
+
+</div>
+
+<main>
+<h2 id="patina-qemu-host-toolchains">Patina QEMU Host Toolchains</h2>
+<p><img src="Patina-QEMU-Host-Toolchains.svg" alt="Patina QEMU Host Toolchains"></p>
+<p>Some of the commands below may be redundant, but they are included for
+completeness. On Linux, the toolchain tag must be specified explicitly for SBSA
+builds; otherwise, the build will fail and need to be repeated.</p>
+<h2 id="windows">Windows</h2>
+<h3 id="q35msvc">Q35/MSVC</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>python -m venv q35
+</span></span><span style="display:flex;"><span>q35<span style="color:#04d;background-color:#fff0f0">\S</span>cripts<span style="color:#04d;background-color:#fff0f0">\a</span>ctivate.bat
+</span></span><span style="display:flex;"><span>pip install --upgrade -r pip-requirements.txt
+</span></span><span style="display:flex;"><span>stuart_setup  -c Platforms/QemuQ35Pkg/PlatformBuild.py
+</span></span><span style="display:flex;"><span>stuart_update -c Platforms/QemuQ35Pkg/PlatformBuild.py
+</span></span><span style="display:flex;"><span>stuart_build  -c Platforms/QemuQ35Pkg/PlatformBuild.py <span style="color:#369">TOOL_CHAIN_TAG</span>=VS2022
+</span></span><span style="display:flex;"><span>stuart_build  -c Platforms/QemuQ35Pkg/PlatformBuild.py <span style="color:#369">TOOL_CHAIN_TAG</span>=VS2022 --flashrom BLD_*_DXE_CORE_BINARY_OVERRIDE=<span style="color:#d20;background-color:#fff0f0">&#34;E:\repos\patina-dxe-core-qemu\target\x86_64-unknown-uefi\debug\qemu_q35_dxe_core.efi&#34;</span>        <span style="color:#888"># Build + QEMU</span>
+</span></span><span style="display:flex;"><span>stuart_build  -c Platforms/QemuQ35Pkg/PlatformBuild.py <span style="color:#369">TOOL_CHAIN_TAG</span>=VS2022 --flashrom BLD_*_DXE_CORE_BINARY_OVERRIDE=<span style="color:#d20;background-color:#fff0f0">&#34;E:\repos\patina-dxe-core-qemu\target\x86_64-unknown-uefi\debug\qemu_q35_dxe_core.efi&#34;</span> <span style="color:#369">PATH_TO_OS</span>=<span style="color:#d20;background-color:#fff0f0">&#34;C:\foo.qcow2&#34;</span>  <span style="color:#888"># Build + QEMU + Boot to OS</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>python .<span style="color:#04d;background-color:#fff0f0">\b</span>uild_and_run_rust_binary.py --fw-patch-repo E:<span style="color:#04d;background-color:#fff0f0">\r</span>epos<span style="color:#04d;background-color:#fff0f0">\p</span>atina-fw-patcher --custom-efi E:<span style="color:#04d;background-color:#fff0f0">\r</span>epos<span style="color:#04d;background-color:#fff0f0">\p</span>atina-dxe-core-qemu<span style="color:#04d;background-color:#fff0f0">\t</span>arget<span style="color:#04d;background-color:#fff0f0">\x</span>86_64-unknown-uefi<span style="color:#04d;background-color:#fff0f0">\d</span>ebug<span style="color:#04d;background-color:#fff0f0">\q</span>emu_q35_dxe_core.efi -s <span style="color:#00d;font-weight:bold">56789</span>
+</span></span><span style="display:flex;"><span>python build_and_run_rust_binary.py -t VS2022 -p q35 -g <span style="color:#00d;font-weight:bold">50002</span>
+</span></span></code></pre></div><h2 id="linux">Linux</h2>
+<h3 id="q35gcc5">Q35/GCC5</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>python -m venv q35
+</span></span><span style="display:flex;"><span>. q35<span style="color:#04d;background-color:#fff0f0">\b</span>in<span style="color:#04d;background-color:#fff0f0">\a</span>ctivate
+</span></span><span style="display:flex;"><span>pip install --upgrade -r pip-requirements.txt
+</span></span><span style="display:flex;"><span>stuart_setup  -c Platforms/QemuQ35Pkg/PlatformBuild.py
+</span></span><span style="display:flex;"><span>stuart_update -c Platforms/QemuQ35Pkg/PlatformBuild.py
+</span></span><span style="display:flex;"><span>stuart_build  -c Platforms/QemuQ35Pkg/PlatformBuild.py <span style="color:#369">TOOL_CHAIN_TAG</span>=GCC5
+</span></span><span style="display:flex;"><span>stuart_build  -c Platforms/QemuQ35Pkg/PlatformBuild.py <span style="color:#369">TOOL_CHAIN_TAG</span>=GCC5 --flashrom BLD_*_DXE_CORE_BINARY_OVERRIDE=<span style="color:#d20;background-color:#fff0f0">&#34;/home/vineel/repos/patina-dxe-core-qemu/target/x86_64-unknown-uefi/debug/qemu_q35_dxe_core.efi&#34;</span>        <span style="color:#888"># Build + QEMU</span>
+</span></span><span style="display:flex;"><span>stuart_build  -c Platforms/QemuQ35Pkg/PlatformBuild.py <span style="color:#369">TOOL_CHAIN_TAG</span>=GCC5 --flashrom BLD_*_DXE_CORE_BINARY_OVERRIDE=<span style="color:#d20;background-color:#fff0f0">&#34;/home/vineel/repos/patina-dxe-core-qemu/target/x86_64-unknown-uefi/debug/qemu_q35_dxe_core.efi&#34;</span> <span style="color:#369">PATH_TO_OS</span>=<span style="color:#d20;background-color:#fff0f0">&#34;/home/vineel/foo.qcow2&#34;</span>  <span style="color:#888"># Build + QEMU + Boot to OS</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>python ./build_and_run_rust_binary.py --fw-patch-repo /home/vineel/repos/patina-fw-patcher --custom-efi /home/vineel/repos/patina-dxe-core-qemu/target/x86_64-unknown-uefi/debug/qemu_q35_dxe_core.efi -s <span style="color:#00d;font-weight:bold">56789</span>
+</span></span><span style="display:flex;"><span>python build_and_run_rust_binary.py -t GCC5 -p q35 -g <span style="color:#00d;font-weight:bold">50002</span>
+</span></span></code></pre></div><h3 id="q35clangpdb">Q35/CLANGPDB</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>python -m venv q35
+</span></span><span style="display:flex;"><span>. q35<span style="color:#04d;background-color:#fff0f0">\b</span>in<span style="color:#04d;background-color:#fff0f0">\a</span>ctivate
+</span></span><span style="display:flex;"><span>pip install --upgrade -r pip-requirements.txt
+</span></span><span style="display:flex;"><span>stuart_setup  -c Platforms/QemuQ35Pkg/PlatformBuild.py
+</span></span><span style="display:flex;"><span>stuart_update -c Platforms/QemuQ35Pkg/PlatformBuild.py
+</span></span><span style="display:flex;"><span>stuart_build  -c Platforms/QemuQ35Pkg/PlatformBuild.py <span style="color:#369">TOOL_CHAIN_TAG</span>=CLANGPDB
+</span></span><span style="display:flex;"><span>stuart_build  -c Platforms/QemuQ35Pkg/PlatformBuild.py <span style="color:#369">TOOL_CHAIN_TAG</span>=CLANGPDB --flashrom BLD_*_DXE_CORE_BINARY_OVERRIDE=<span style="color:#d20;background-color:#fff0f0">&#34;/home/vineel/repos/patina-dxe-core-qemu/target/x86_64-unknown-uefi/debug/qemu_q35_dxe_core.efi&#34;</span>        <span style="color:#888"># Build + QEMU</span>
+</span></span><span style="display:flex;"><span>stuart_build  -c Platforms/QemuQ35Pkg/PlatformBuild.py <span style="color:#369">TOOL_CHAIN_TAG</span>=CLANGPDB --flashrom BLD_*_DXE_CORE_BINARY_OVERRIDE=<span style="color:#d20;background-color:#fff0f0">&#34;/home/vineel/repos/patina-dxe-core-qemu/target/x86_64-unknown-uefi/debug/qemu_q35_dxe_core.efi&#34;</span> <span style="color:#369">PATH_TO_OS</span>=<span style="color:#d20;background-color:#fff0f0">&#34;/home/vineel/foo.qcow2&#34;</span>  <span style="color:#888"># Build + QEMU + Boot to OS</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>python ./build_and_run_rust_binary.py --fw-patch-repo /home/vineel/repos/patina-fw-patcher --custom-efi /home/vineel/repos/patina-dxe-core-qemu/target/x86_64-unknown-uefi/debug/qemu_q35_dxe_core.efi -s <span style="color:#00d;font-weight:bold">56789</span>
+</span></span><span style="display:flex;"><span>python build_and_run_rust_binary.py -t CLANGPDB -p q35 -g <span style="color:#00d;font-weight:bold">50002</span>
+</span></span></code></pre></div><h3 id="q35clangdwarf">Q35/CLANGDWARF</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>python -m venv q35
+</span></span><span style="display:flex;"><span>. q35<span style="color:#04d;background-color:#fff0f0">\b</span>in<span style="color:#04d;background-color:#fff0f0">\a</span>ctivate
+</span></span><span style="display:flex;"><span>pip install --upgrade -r pip-requirements.txt
+</span></span><span style="display:flex;"><span>stuart_setup  -c Platforms/QemuQ35Pkg/PlatformBuild.py
+</span></span><span style="display:flex;"><span>stuart_update -c Platforms/QemuQ35Pkg/PlatformBuild.py
+</span></span><span style="display:flex;"><span>stuart_build  -c Platforms/QemuQ35Pkg/PlatformBuild.py <span style="color:#369">TOOL_CHAIN_TAG</span>=CLANGDWARF
+</span></span><span style="display:flex;"><span>stuart_build  -c Platforms/QemuQ35Pkg/PlatformBuild.py <span style="color:#369">TOOL_CHAIN_TAG</span>=CLANGDWARF --flashrom BLD_*_DXE_CORE_BINARY_OVERRIDE=<span style="color:#d20;background-color:#fff0f0">&#34;/home/vineel/repos/patina-dxe-core-qemu/target/x86_64-unknown-uefi/debug/qemu_q35_dxe_core.efi&#34;</span>        <span style="color:#888"># Build + QEMU</span>
+</span></span><span style="display:flex;"><span>stuart_build  -c Platforms/QemuQ35Pkg/PlatformBuild.py <span style="color:#369">TOOL_CHAIN_TAG</span>=CLANGDWARF --flashrom BLD_*_DXE_CORE_BINARY_OVERRIDE=<span style="color:#d20;background-color:#fff0f0">&#34;/home/vineel/repos/patina-dxe-core-qemu/target/x86_64-unknown-uefi/debug/qemu_q35_dxe_core.efi&#34;</span> <span style="color:#369">PATH_TO_OS</span>=<span style="color:#d20;background-color:#fff0f0">&#34;/home/vineel/foo.qcow2&#34;</span>  <span style="color:#888"># Build + QEMU + Boot to OS</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>python ./build_and_run_rust_binary.py --fw-patch-repo /home/vineel/repos/patina-fw-patcher --custom-efi /home/vineel/repos/patina-dxe-core-qemu/target/x86_64-unknown-uefi/debug/qemu_q35_dxe_core.efi -s <span style="color:#00d;font-weight:bold">56789</span>
+</span></span><span style="display:flex;"><span>python build_and_run_rust_binary.py -t CLANGDWARF -p q35 -g <span style="color:#00d;font-weight:bold">50002</span>
+</span></span></code></pre></div><h3 id="sbsagcc5">SBSA/GCC5</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>python -m venv sbsa
+</span></span><span style="display:flex;"><span>. sbsa<span style="color:#04d;background-color:#fff0f0">\b</span>in<span style="color:#04d;background-color:#fff0f0">\a</span>ctivate
+</span></span><span style="display:flex;"><span>pip install --upgrade -r pip-requirements.txt
+</span></span><span style="display:flex;"><span>stuart_setup  -c Platforms/QemuSbsaPkg/PlatformBuild.py
+</span></span><span style="display:flex;"><span>stuart_update -c Platforms/QemuSbsaPkg/PlatformBuild.py
+</span></span><span style="display:flex;"><span>stuart_build  -c Platforms/QemuSbsaPkg/PlatformBuild.py <span style="color:#369">TOOL_CHAIN_TAG</span>=GCC5
+</span></span><span style="display:flex;"><span>stuart_build  -c Platforms/QemuSbsaPkg/PlatformBuild.py <span style="color:#369">TOOL_CHAIN_TAG</span>=GCC5 --flashrom BLD_*_DXE_CORE_BINARY_OVERRIDE=<span style="color:#d20;background-color:#fff0f0">&#34;/home/vineel/repos/patina-dxe-core-qemu/target/aarch64-unknown-uefi/debug/qemu_sbsa_dxe_core.efi&#34;</span>        <span style="color:#888"># Build + QEMU</span>
+</span></span><span style="display:flex;"><span>stuart_build  -c Platforms/QemuSbsaPkg/PlatformBuild.py <span style="color:#369">TOOL_CHAIN_TAG</span>=GCC5 --flashrom BLD_*_DXE_CORE_BINARY_OVERRIDE=<span style="color:#d20;background-color:#fff0f0">&#34;/home/vineel/repos/patina-dxe-core-qemu/target/aarch64-unknown-uefi/debug/qemu_sbsa_dxe_core.efi&#34;</span> <span style="color:#369">PATH_TO_OS</span>=<span style="color:#d20;background-color:#fff0f0">&#34;/home/vineel/foo.qcow2&#34;</span>  <span style="color:#888"># Build + QEMU + Boot to OS</span>
+</span></span><span style="display:flex;"><span>python ./build_and_run_rust_binary.py --fw-patch-repo /home/vineel/repos/patina-fw-patcher --custom-efi /home/vineel/repos/patina-dxe-core-qemu/target/aarch64-unknown-uefi/debug/qemu_sbsa_dxe_core.efi -s <span style="color:#00d;font-weight:bold">56789</span>
+</span></span><span style="display:flex;"><span>python build_and_run_rust_binary.py -t GCC5 -p sbsa -g <span style="color:#00d;font-weight:bold">50002</span>
+</span></span></code></pre></div><h3 id="sbsaclangpdb">SBSA/CLANGPDB</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>python -m venv sbsa
+</span></span><span style="display:flex;"><span>. sbsa<span style="color:#04d;background-color:#fff0f0">\b</span>in<span style="color:#04d;background-color:#fff0f0">\a</span>ctivate
+</span></span><span style="display:flex;"><span>pip install --upgrade -r pip-requirements.txt
+</span></span><span style="display:flex;"><span>stuart_setup  -c Platforms/QemuSbsaPkg/PlatformBuild.py
+</span></span><span style="display:flex;"><span>stuart_update -c Platforms/QemuSbsaPkg/PlatformBuild.py
+</span></span><span style="display:flex;"><span>stuart_build  -c Platforms/QemuSbsaPkg/PlatformBuild.py <span style="color:#369">TOOL_CHAIN_TAG</span>=CLANGPDB
+</span></span><span style="display:flex;"><span>stuart_build  -c Platforms/QemuSbsaPkg/PlatformBuild.py <span style="color:#369">TOOL_CHAIN_TAG</span>=CLANGPDB --flashrom BLD_*_DXE_CORE_BINARY_OVERRIDE=<span style="color:#d20;background-color:#fff0f0">&#34;/home/vineel/repos/patina-dxe-core-qemu/target/aarch64-unknown-uefi/debug/qemu_sbsa_dxe_core.efi&#34;</span>        <span style="color:#888"># Build + QEMU</span>
+</span></span><span style="display:flex;"><span>stuart_build  -c Platforms/QemuSbsaPkg/PlatformBuild.py <span style="color:#369">TOOL_CHAIN_TAG</span>=CLANGPDB --flashrom BLD_*_DXE_CORE_BINARY_OVERRIDE=<span style="color:#d20;background-color:#fff0f0">&#34;/home/vineel/repos/patina-dxe-core-qemu/target/aarch64-unknown-uefi/debug/qemu_sbsa_dxe_core.efi&#34;</span> <span style="color:#369">PATH_TO_OS</span>=<span style="color:#d20;background-color:#fff0f0">&#34;/home/vineel/foo.qcow2&#34;</span>  <span style="color:#888"># Build + QEMU + Boot to OS</span>
+</span></span><span style="display:flex;"><span>python ./build_and_run_rust_binary.py --fw-patch-repo /home/vineel/repos/patina-fw-patcher --custom-efi /home/vineel/repos/patina-dxe-core-qemu/target/aarch64-unknown-uefi/debug/qemu_sbsa_dxe_core.efi -s <span style="color:#00d;font-weight:bold">56789</span>
+</span></span><span style="display:flex;"><span>python build_and_run_rust_binary.py -t CLANGPDB -p sbsa -g <span style="color:#00d;font-weight:bold">50002</span>
+</span></span></code></pre></div><h3 id="sbsaclangdwarf">SBSA/CLANGDWARF</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>python -m venv sbsa
+</span></span><span style="display:flex;"><span>. sbsa<span style="color:#04d;background-color:#fff0f0">\b</span>in<span style="color:#04d;background-color:#fff0f0">\a</span>ctivate
+</span></span><span style="display:flex;"><span>pip install --upgrade -r pip-requirements.txt
+</span></span><span style="display:flex;"><span>stuart_setup  -c Platforms/QemuSbsaPkg/PlatformBuild.py
+</span></span><span style="display:flex;"><span>stuart_update -c Platforms/QemuSbsaPkg/PlatformBuild.py
+</span></span><span style="display:flex;"><span>stuart_build  -c Platforms/QemuSbsaPkg/PlatformBuild.py <span style="color:#369">TOOL_CHAIN_TAG</span>=CLANGDWARF
+</span></span><span style="display:flex;"><span>stuart_build  -c Platforms/QemuSbsaPkg/PlatformBuild.py <span style="color:#369">TOOL_CHAIN_TAG</span>=CLANGDWARF --flashrom BLD_*_DXE_CORE_BINARY_OVERRIDE=<span style="color:#d20;background-color:#fff0f0">&#34;/home/vineel/repos/patina-dxe-core-qemu/target/aarch64-unknown-uefi/debug/qemu_sbsa_dxe_core.efi&#34;</span>        <span style="color:#888"># Build + QEMU</span>
+</span></span><span style="display:flex;"><span>stuart_build  -c Platforms/QemuSbsaPkg/PlatformBuild.py <span style="color:#369">TOOL_CHAIN_TAG</span>=CLANGDWARF --flashrom BLD_*_DXE_CORE_BINARY_OVERRIDE=<span style="color:#d20;background-color:#fff0f0">&#34;/home/vineel/repos/patina-dxe-core-qemu/target/aarch64-unknown-uefi/debug/qemu_sbsa_dxe_core.efi&#34;</span> <span style="color:#369">PATH_TO_OS</span>=<span style="color:#d20;background-color:#fff0f0">&#34;/home/vineel/foo.qcow2&#34;</span>  <span style="color:#888"># Build + QEMU + Boot to OS</span>
+</span></span><span style="display:flex;"><span>python ./build_and_run_rust_binary.py --fw-patch-repo /home/vineel/repos/patina-fw-patcher --custom-efi /home/vineel/repos/patina-dxe-core-qemu/target/aarch64-unknown-uefi/debug/qemu_sbsa_dxe_core.efi -s <span style="color:#00d;font-weight:bold">56789</span>
+</span></span><span style="display:flex;"><span>python build_and_run_rust_binary.py -t CLANGDWARF -p sbsa -g <span style="color:#00d;font-weight:bold">50002</span>
+</span></span></code></pre></div>
+</main>
+
+  <footer>
+  
+<script defer src="/js/center-img.js"></script>
+<script defer src="/js/pre-tag.js"></script>
+
+
+
+
+
+
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2025 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+
