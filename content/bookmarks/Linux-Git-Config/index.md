@@ -70,3 +70,11 @@ tags: ['Git', 'LinuxSetup']
     fetch = '+refs/pull/*:refs/remotes/origin/pull/*'
 
 ```
+
+### Install Git Credential Manager
+```bash
+wget https://github.com/GitCredentialManager/git-credential-manager/releases/download/v2.6.1/gcm-linux_amd64.2.6.1.deb
+sudo dpkg -i gcm-linux_amd64.2.6.1.deb
+git-credential-manager configure
+git config --global credential.credentialStore secretservice
+```

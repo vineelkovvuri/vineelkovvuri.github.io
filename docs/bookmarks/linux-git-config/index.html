@@ -102,6 +102,11 @@
 </span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">    autoupdate = true</span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[remote &#34;origin&#34;]</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#369">fetch</span> = <span style="color:#d20;background-color:#fff0f0">&#39;+refs/pull/*:refs/remotes/origin/pull/*&#39;</span>
+</span></span></code></pre></div><h3 id="install-git-credential-manager">Install Git Credential Manager</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>wget https://github.com/GitCredentialManager/git-credential-manager/releases/download/v2.6.1/gcm-linux_amd64.2.6.1.deb
+</span></span><span style="display:flex;"><span>sudo dpkg -i gcm-linux_amd64.2.6.1.deb
+</span></span><span style="display:flex;"><span>git-credential-manager configure
+</span></span><span style="display:flex;"><span>git config --global credential.credentialStore secretservice
 </span></span></code></pre></div>
 </main>
 
