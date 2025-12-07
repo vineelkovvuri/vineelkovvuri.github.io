@@ -96,6 +96,16 @@
 </span></span><span style="display:flex;"><span>    mods = <span style="color:#d20;background-color:#fff0f0">&#39;CTRL|SHIFT&#39;</span>,
 </span></span><span style="display:flex;"><span>    action = wezterm.action.PasteFrom(<span style="color:#d20;background-color:#fff0f0">&#39;Clipboard&#39;</span>),
 </span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#888">-- Ctrl+Alt+S: Show SSH connection menu (interactive)</span>
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    key = <span style="color:#d20;background-color:#fff0f0">&#39;s&#39;</span>,
+</span></span><span style="display:flex;"><span>    mods = <span style="color:#d20;background-color:#fff0f0">&#39;CTRL|ALT&#39;</span>,
+</span></span><span style="display:flex;"><span>    action = wezterm.action.ShowLauncherArgs {
+</span></span><span style="display:flex;"><span>      flags = <span style="color:#d20;background-color:#fff0f0">&#39;FUZZY|LAUNCH_MENU_ITEMS&#39;</span>,
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>  },
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#888">-- Word delimiters for double-click selection (Windows Terminal style)</span>
@@ -138,6 +148,22 @@
 </span></span><span style="display:flex;"><span>      brightness = <span style="color:#00d;font-weight:bold">1.0</span>,
 </span></span><span style="display:flex;"><span>    },
 </span></span><span style="display:flex;"><span>    attachment = { Parallax = <span style="color:#00d;font-weight:bold">0.0</span> },  <span style="color:#888">-- Fixed position</span>
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">-- SSH Launch Menu - appears when you press Ctrl+Alt+S</span>
+</span></span><span style="display:flex;"><span>config.launch_menu = {
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    label = <span style="color:#d20;background-color:#fff0f0">&#39;SSH to UbuntuTFA&#39;</span>,
+</span></span><span style="display:flex;"><span>    args = { <span style="color:#d20;background-color:#fff0f0">&#39;ssh&#39;</span>, <span style="color:#d20;background-color:#fff0f0">&#39;vineel@ubuntutfa&#39;</span> },
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    label = <span style="color:#d20;background-color:#fff0f0">&#39;Visual Studio 2022 Developer Command Prompt (x64)&#39;</span>,
+</span></span><span style="display:flex;"><span>    args = {
+</span></span><span style="display:flex;"><span>      <span style="color:#d20;background-color:#fff0f0">&#39;cmd.exe&#39;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#d20;background-color:#fff0f0">&#39;/k&#39;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#d20;background-color:#fff0f0">&#39;C:</span><span style="color:#04d;background-color:#fff0f0">\\</span><span style="color:#d20;background-color:#fff0f0">Program Files</span><span style="color:#04d;background-color:#fff0f0">\\</span><span style="color:#d20;background-color:#fff0f0">Microsoft Visual Studio</span><span style="color:#04d;background-color:#fff0f0">\\</span><span style="color:#d20;background-color:#fff0f0">2022</span><span style="color:#04d;background-color:#fff0f0">\\</span><span style="color:#d20;background-color:#fff0f0">Community</span><span style="color:#04d;background-color:#fff0f0">\\</span><span style="color:#d20;background-color:#fff0f0">VC</span><span style="color:#04d;background-color:#fff0f0">\\</span><span style="color:#d20;background-color:#fff0f0">Auxiliary</span><span style="color:#04d;background-color:#fff0f0">\\</span><span style="color:#d20;background-color:#fff0f0">Build</span><span style="color:#04d;background-color:#fff0f0">\\</span><span style="color:#d20;background-color:#fff0f0">vcvars64.bat&#39;</span>
+</span></span><span style="display:flex;"><span>    },
 </span></span><span style="display:flex;"><span>  },
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>

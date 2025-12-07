@@ -63,6 +63,16 @@ config.keys = {
     mods = 'CTRL|SHIFT',
     action = wezterm.action.PasteFrom('Clipboard'),
   },
+
+
+    -- Ctrl+Alt+S: Show SSH connection menu (interactive)
+  {
+    key = 's',
+    mods = 'CTRL|ALT',
+    action = wezterm.action.ShowLauncherArgs {
+      flags = 'FUZZY|LAUNCH_MENU_ITEMS',
+    },
+  },
 }
 
 -- Word delimiters for double-click selection (Windows Terminal style)
@@ -105,6 +115,22 @@ config.background = {
       brightness = 1.0,
     },
     attachment = { Parallax = 0.0 },  -- Fixed position
+  },
+}
+
+-- SSH Launch Menu - appears when you press Ctrl+Alt+S
+config.launch_menu = {
+  {
+    label = 'SSH to UbuntuTFA',
+    args = { 'ssh', 'vineel@ubuntutfa' },
+  },
+  {
+    label = 'Visual Studio 2022 Developer Command Prompt (x64)',
+    args = {
+      'cmd.exe',
+      '/k',
+      'C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat'
+    },
   },
 }
 
