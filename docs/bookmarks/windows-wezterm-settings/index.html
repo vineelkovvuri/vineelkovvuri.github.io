@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>WezTerm Setting | Vineel Kovvuri</title>
+    
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/copy-button.css" />
+    <link rel="stylesheet" href="/css/forms.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">WezTerm Setting</span></h1>
+
+
+</div>
+
+<main>
+<h2 id="cusersvineelkoonedrivesoftstoolsweztermweztermlua">C:\Users\vineelko\OneDrive\Softs\Tools\WezTerm\wezterm.lua</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">local</span> wezterm = require <span style="color:#d20;background-color:#fff0f0">&#39;wezterm&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">local</span> config = {}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">-- ===== Appearance =====</span>
+</span></span><span style="display:flex;"><span>config.font = wezterm.font <span style="color:#d20;background-color:#fff0f0">&#39;FiraMono Nerd Font Mono&#39;</span>
+</span></span><span style="display:flex;"><span>config.font_size = <span style="color:#00d;font-weight:bold">13</span>
+</span></span><span style="display:flex;"><span>config.color_scheme = <span style="color:#d20;background-color:#fff0f0">&#39;Campbell (Gogh)&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">-- ===== Key Bindings =====</span>
+</span></span><span style="display:flex;"><span>config.keys = {
+</span></span><span style="display:flex;"><span>  <span style="color:#888">-- Move between panes (Alt+Arrows)</span>
+</span></span><span style="display:flex;"><span>  { key = <span style="color:#d20;background-color:#fff0f0">&#34;LeftArrow&#34;</span>,  mods = <span style="color:#d20;background-color:#fff0f0">&#34;ALT&#34;</span>,        action = wezterm.action.ActivatePaneDirection(<span style="color:#d20;background-color:#fff0f0">&#34;Left&#34;</span>) },
+</span></span><span style="display:flex;"><span>  { key = <span style="color:#d20;background-color:#fff0f0">&#34;RightArrow&#34;</span>, mods = <span style="color:#d20;background-color:#fff0f0">&#34;ALT&#34;</span>,        action = wezterm.action.ActivatePaneDirection(<span style="color:#d20;background-color:#fff0f0">&#34;Right&#34;</span>) },
+</span></span><span style="display:flex;"><span>  { key = <span style="color:#d20;background-color:#fff0f0">&#34;UpArrow&#34;</span>,    mods = <span style="color:#d20;background-color:#fff0f0">&#34;ALT&#34;</span>,        action = wezterm.action.ActivatePaneDirection(<span style="color:#d20;background-color:#fff0f0">&#34;Up&#34;</span>) },
+</span></span><span style="display:flex;"><span>  { key = <span style="color:#d20;background-color:#fff0f0">&#34;DownArrow&#34;</span>,  mods = <span style="color:#d20;background-color:#fff0f0">&#34;ALT&#34;</span>,        action = wezterm.action.ActivatePaneDirection(<span style="color:#d20;background-color:#fff0f0">&#34;Down&#34;</span>) },
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#888">-- Resize panes (Shift+Alt+Arrows)</span>
+</span></span><span style="display:flex;"><span>  { key = <span style="color:#d20;background-color:#fff0f0">&#34;LeftArrow&#34;</span>,  mods = <span style="color:#d20;background-color:#fff0f0">&#34;ALT|SHIFT&#34;</span>, action = wezterm.action.AdjustPaneSize({ <span style="color:#d20;background-color:#fff0f0">&#34;Left&#34;</span>, <span style="color:#00d;font-weight:bold">5</span> }) },
+</span></span><span style="display:flex;"><span>  { key = <span style="color:#d20;background-color:#fff0f0">&#34;RightArrow&#34;</span>, mods = <span style="color:#d20;background-color:#fff0f0">&#34;ALT|SHIFT&#34;</span>, action = wezterm.action.AdjustPaneSize({ <span style="color:#d20;background-color:#fff0f0">&#34;Right&#34;</span>, <span style="color:#00d;font-weight:bold">5</span> }) },
+</span></span><span style="display:flex;"><span>  { key = <span style="color:#d20;background-color:#fff0f0">&#34;UpArrow&#34;</span>,    mods = <span style="color:#d20;background-color:#fff0f0">&#34;ALT|SHIFT&#34;</span>, action = wezterm.action.AdjustPaneSize({ <span style="color:#d20;background-color:#fff0f0">&#34;Up&#34;</span>, <span style="color:#00d;font-weight:bold">2</span> }) },
+</span></span><span style="display:flex;"><span>  { key = <span style="color:#d20;background-color:#fff0f0">&#34;DownArrow&#34;</span>,  mods = <span style="color:#d20;background-color:#fff0f0">&#34;ALT|SHIFT&#34;</span>, action = wezterm.action.AdjustPaneSize({ <span style="color:#d20;background-color:#fff0f0">&#34;Down&#34;</span>, <span style="color:#00d;font-weight:bold">2</span> }) },
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#888">-- Split panes</span>
+</span></span><span style="display:flex;"><span>  { key = <span style="color:#d20;background-color:#fff0f0">&#34;+&#34;</span>, mods = <span style="color:#d20;background-color:#fff0f0">&#34;ALT|SHIFT&#34;</span>, action = wezterm.action.SplitHorizontal({ domain = <span style="color:#d20;background-color:#fff0f0">&#34;CurrentPaneDomain&#34;</span> }) },
+</span></span><span style="display:flex;"><span>  { key = <span style="color:#d20;background-color:#fff0f0">&#34;_&#34;</span>, mods = <span style="color:#d20;background-color:#fff0f0">&#34;ALT|SHIFT&#34;</span>, action = wezterm.action.SplitVertical({ domain = <span style="color:#d20;background-color:#fff0f0">&#34;CurrentPaneDomain&#34;</span> }) },
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#888">-- Key bindings for Windows-style copy/paste</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#888">-- Ctrl+C to copy when text is selected, otherwise send Ctrl+C</span>
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    key = <span style="color:#d20;background-color:#fff0f0">&#39;c&#39;</span>,
+</span></span><span style="display:flex;"><span>    mods = <span style="color:#d20;background-color:#fff0f0">&#39;CTRL&#39;</span>,
+</span></span><span style="display:flex;"><span>    action = wezterm.action_callback(<span style="color:#080;font-weight:bold">function</span>(window, pane)
+</span></span><span style="display:flex;"><span>      <span style="color:#080;font-weight:bold">local</span> has_selection = window:get_selection_text_for_pane(pane) ~= <span style="color:#d20;background-color:#fff0f0">&#39;&#39;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#080;font-weight:bold">if</span> has_selection <span style="color:#080;font-weight:bold">then</span>
+</span></span><span style="display:flex;"><span>        window:perform_action(wezterm.action.CopyTo(<span style="color:#d20;background-color:#fff0f0">&#39;Clipboard&#39;</span>), pane)
+</span></span><span style="display:flex;"><span>      <span style="color:#080;font-weight:bold">else</span>
+</span></span><span style="display:flex;"><span>        window:perform_action(wezterm.action.SendKey({ key = <span style="color:#d20;background-color:#fff0f0">&#39;c&#39;</span>, mods = <span style="color:#d20;background-color:#fff0f0">&#39;CTRL&#39;</span> }), pane)
+</span></span><span style="display:flex;"><span>      <span style="color:#080;font-weight:bold">end</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">end</span>),
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#888">-- Ctrl+V to paste</span>
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    key = <span style="color:#d20;background-color:#fff0f0">&#39;v&#39;</span>,
+</span></span><span style="display:flex;"><span>    mods = <span style="color:#d20;background-color:#fff0f0">&#39;CTRL&#39;</span>,
+</span></span><span style="display:flex;"><span>    action = wezterm.action.PasteFrom(<span style="color:#d20;background-color:#fff0f0">&#39;Clipboard&#39;</span>),
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#888">-- Optional: Ctrl+Shift+C/V as backup (traditional terminal shortcuts)</span>
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    key = <span style="color:#d20;background-color:#fff0f0">&#39;c&#39;</span>,
+</span></span><span style="display:flex;"><span>    mods = <span style="color:#d20;background-color:#fff0f0">&#39;CTRL|SHIFT&#39;</span>,
+</span></span><span style="display:flex;"><span>    action = wezterm.action.CopyTo(<span style="color:#d20;background-color:#fff0f0">&#39;Clipboard&#39;</span>),
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    key = <span style="color:#d20;background-color:#fff0f0">&#39;v&#39;</span>,
+</span></span><span style="display:flex;"><span>    mods = <span style="color:#d20;background-color:#fff0f0">&#39;CTRL|SHIFT&#39;</span>,
+</span></span><span style="display:flex;"><span>    action = wezterm.action.PasteFrom(<span style="color:#d20;background-color:#fff0f0">&#39;Clipboard&#39;</span>),
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">-- Word delimiters for double-click selection (Windows Terminal style)</span>
+</span></span><span style="display:flex;"><span>config.selection_word_boundary = <span style="color:#d20;background-color:#fff0f0">&#34; ()</span><span style="color:#04d;background-color:#fff0f0">\&#34;</span><span style="color:#d20;background-color:#fff0f0">&#39;,;&lt;&gt;~!@#$%^&amp;*|+=[]{}~?│&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">-- Cursor configuration (Windows Terminal style)</span>
+</span></span><span style="display:flex;"><span>config.default_cursor_style = <span style="color:#d20;background-color:#fff0f0">&#39;BlinkingBar&#39;</span>  <span style="color:#888">-- Thin vertical bar that blinks</span>
+</span></span><span style="display:flex;"><span>config.cursor_blink_rate = <span style="color:#00d;font-weight:bold">530</span>              <span style="color:#888">-- Blink speed in milliseconds</span>
+</span></span><span style="display:flex;"><span>config.cursor_blink_ease_in = <span style="color:#d20;background-color:#fff0f0">&#39;Constant&#39;</span>    <span style="color:#888">-- No easing animation</span>
+</span></span><span style="display:flex;"><span>config.cursor_blink_ease_out = <span style="color:#d20;background-color:#fff0f0">&#39;Constant&#39;</span>   <span style="color:#888">-- No easing animation</span>
+</span></span><span style="display:flex;"><span>config.enable_scroll_bar = <span style="color:#080;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>config.min_scroll_bar_height = <span style="color:#d20;background-color:#fff0f0">&#39;1cell&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#888">-- config.colors = {</span>
+</span></span><span style="display:flex;"><span><span style="color:#888">--   scrollbar_thumb = &#39;silver&#39;,</span>
+</span></span><span style="display:flex;"><span><span style="color:#888">-- }</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">-- Background image Tux (Windows Terminal style)</span>
+</span></span><span style="display:flex;"><span>config.background = {
+</span></span><span style="display:flex;"><span>      <span style="color:#888">-- Solid background color layer</span>
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    source = {
+</span></span><span style="display:flex;"><span>      Color = <span style="color:#d20;background-color:#fff0f0">&#39;#000000&#39;</span>,  <span style="color:#888">-- Change to your preferred background color</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    width = <span style="color:#d20;background-color:#fff0f0">&#39;100%&#39;</span>,
+</span></span><span style="display:flex;"><span>    height = <span style="color:#d20;background-color:#fff0f0">&#39;100%&#39;</span>,
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    source = {
+</span></span><span style="display:flex;"><span>      File = <span style="color:#d20;background-color:#fff0f0">&#39;C:/Users/vineelko/OneDrive/Softs/Terminal/animated-tux.gif&#39;</span>,  <span style="color:#888">-- Change to your file path</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    horizontal_align = <span style="color:#d20;background-color:#fff0f0">&#39;Right&#39;</span>,
+</span></span><span style="display:flex;"><span>    vertical_align = <span style="color:#d20;background-color:#fff0f0">&#39;Bottom&#39;</span>,
+</span></span><span style="display:flex;"><span>    repeat_x = <span style="color:#d20;background-color:#fff0f0">&#39;NoRepeat&#39;</span>,
+</span></span><span style="display:flex;"><span>    repeat_y = <span style="color:#d20;background-color:#fff0f0">&#39;NoRepeat&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#888">-- width=&#39;139&#39;,</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#888">-- height=&#39;160&#39;,</span>
+</span></span><span style="display:flex;"><span>    width=<span style="color:#d20;background-color:#fff0f0">&#39;209&#39;</span>,
+</span></span><span style="display:flex;"><span>    height=<span style="color:#d20;background-color:#fff0f0">&#39;240&#39;</span>,
+</span></span><span style="display:flex;"><span>    hsb = {
+</span></span><span style="display:flex;"><span>      brightness = <span style="color:#00d;font-weight:bold">1.0</span>,
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    attachment = { Parallax = <span style="color:#00d;font-weight:bold">0.0</span> },  <span style="color:#888">-- Fixed position</span>
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">return</span> config
+</span></span></code></pre></div>
+</main>
+
+  <footer>
+  
+<script defer src="/js/center-img.js"></script>
+<script defer src="/js/pre-tag.js"></script>
+
+
+
+
+
+
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2025 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+
