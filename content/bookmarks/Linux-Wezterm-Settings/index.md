@@ -28,6 +28,8 @@ config.font = wezterm.font 'FiraMono Nerd Font Mono'
 config.font_size = 13
 config.color_scheme = 'Campbell (Gogh)'
 
+config.scrollback_lines = 20000
+
 -- ===== Key Bindings =====
 config.keys = {
   -- Move between panes (Alt+Arrows)
