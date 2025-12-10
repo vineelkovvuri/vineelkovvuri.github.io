@@ -124,6 +124,12 @@ config.background = {
   },
 }
 
+wezterm.on('format-tab-title', function(tab)
+  local cwd = tab.active_pane.current_working_dir
+  local dirname = cwd and cwd.file_path:match("([^/]+)/?$") or "~"
+  return string.format('%d: %s', tab.tab_index + 1, dirname)
+end)
+
 return config
 
 ```
