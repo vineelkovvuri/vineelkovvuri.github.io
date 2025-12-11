@@ -28,7 +28,10 @@ config.font = wezterm.font 'FiraMono Nerd Font Mono'
 config.font_size = 13
 config.color_scheme = 'Campbell (Gogh)'
 
-config.scrollback_lines = 20000
+config.scrollback_lines = 100000
+config.use_dead_keys = false
+config.tab_max_width = 25
+config.audible_bell = "Disabled"
 
 -- ===== Key Bindings =====
 config.keys = {
@@ -47,6 +50,12 @@ config.keys = {
   -- Split panes
   { key = "+", mods = "ALT|SHIFT", action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
   { key = "_", mods = "ALT|SHIFT", action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }) },
+
+  -- Close pane
+  { key = "w", mods = "CTRL",  action = wezterm.action.CloseCurrentPane { confirm = true }},
+
+  -- Command palette
+  { key = "P", mods = "CTRL|SHIFT", action = wezterm.action.ActivateCommandPalette },
 
     -- Key bindings for Windows-style copy/paste
     -- Ctrl+C to copy when text is selected, otherwise send Ctrl+C
