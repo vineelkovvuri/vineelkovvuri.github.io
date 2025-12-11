@@ -90,9 +90,6 @@ config.keys = {
   },
 }
 
--- Word delimiters for double-click selection (Windows Terminal style)
-config.selection_word_boundary = " ()\"',;<>~!@#$%^&*|+=[]{}~?│"
-
 -- Cursor configuration (Windows Terminal style)
 config.default_cursor_style = 'BlinkingBar'  -- Thin vertical bar that blinks
 config.cursor_blink_rate = 530              -- Blink speed in milliseconds
@@ -132,6 +129,10 @@ config.background = {
     attachment = { Parallax = 0.0 },  -- Fixed position
   },
 }
+
+-- Linux specific settings
+-- Word delimiters for double-click selection
+config.selection_word_boundary = " ()\"',;<>!@#$%^&*|+=[]{}?│"
 
 wezterm.on('format-tab-title', function(tab)
   local cwd = tab.active_pane.current_working_dir

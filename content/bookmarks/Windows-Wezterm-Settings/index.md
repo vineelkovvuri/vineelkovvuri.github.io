@@ -74,9 +74,7 @@ config.keys = {
     mods = 'CTRL|SHIFT',
     action = wezterm.action.PasteFrom('Clipboard'),
   },
-
-
-    -- Ctrl+Alt+S: Show SSH connection menu (interactive)
+  -- Ctrl+Alt+S: Show SSH connection menu (interactive)
   {
     key = 's',
     mods = 'CTRL|ALT',
@@ -85,9 +83,6 @@ config.keys = {
     },
   },
 }
-
--- Word delimiters for double-click selection (Windows Terminal style)
-config.selection_word_boundary = " ()\"',;<>~!@#$%^&*|+=[]{}~?│"
 
 -- Cursor configuration (Windows Terminal style)
 config.default_cursor_style = 'BlinkingBar'  -- Thin vertical bar that blinks
@@ -129,6 +124,10 @@ config.background = {
   },
 }
 
+-- Windows specific settings
+-- Word delimiters for double-click selection
+config.selection_word_boundary = " ()\"',;<>~!@#$%^&*|+=[]{}~?│"
+
 -- SSH Launch Menu - appears when you press Ctrl+Alt+S
 config.launch_menu = {
   {
@@ -152,4 +151,5 @@ wezterm.on('format-tab-title', function(tab)
 end)
 
 return config
+
 ```
