@@ -37,7 +37,7 @@ tags: ['Git', 'LinuxSetup']
     autosquash = false
     updateRefs = false
 [core]
-	editor = subl -n -w
+    editor = subl -n -w
     autocrlf = false
     commentChar = ";"
     longpaths = true
@@ -72,6 +72,7 @@ tags: ['Git', 'LinuxSetup']
 ```
 
 ### Install Git Credential Manager
+
 ```bash
 wget https://github.com/GitCredentialManager/git-credential-manager/releases/download/v2.6.1/gcm-linux_amd64.2.6.1.deb
 sudo dpkg -i gcm-linux_amd64.2.6.1.deb

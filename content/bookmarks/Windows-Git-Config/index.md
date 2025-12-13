@@ -15,12 +15,6 @@ tags: ['Git', 'WindowsSetup']
     lg = log --oneline --left-right --date=short --pretty=format:'%m %C(auto)%<(7)%h %C(blue)%<(10)%ad %C(green)%<(20,trunc)%an%Creset %Creset %s%C(yellow)%d%Creset'
     llg = log --oneline --left-right --date=short --pretty=format:'%m %C(auto)%<(7)%h %Creset %s%Creset'
     dd = difftool -d --no-symlinks
-[pager]
-    diff = riff  # Install riff https://github.com/walles/riff
-    show = riff
-    log = riff
-[interactive]
-    diffFilter = riff --color=on
 [diff]
     tool = winmerge
     guitool = winmerge
@@ -51,7 +45,7 @@ tags: ['Git', 'WindowsSetup']
     autosquash = false
     updateRefs = false
 [core]
-	editor = subl -n -w
+    editor = subl -n -w
     autocrlf = false
     commentChar = ";"
     longpaths = true
