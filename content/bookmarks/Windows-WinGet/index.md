@@ -52,7 +52,7 @@ winget install --id "LLVM.LLVM" --override "/S /D=C:\LLVM"
 winget install --id "Microsoft.VisualStudio.2022.Community" -e --override "--quiet --wait --norestart --add Microsoft.VisualStudio.Component.VC.CoreBuildTools --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64  --add Microsoft.VisualStudio.Component.Windows11SDK.22621 --add Microsoft.VisualStudio.Component.VC.Tools.ARM  --add Microsoft.VisualStudio.Component.VC.Tools.ARM64"
 winget install "Oracle.JDK.25"
 winget install "Rustlang.Rustup"
-winget install "python3"
+winget install "Python.PythonInstallManager"
 winget install "OpenJS.NodeJS.LTS"
 winget install "JetBrains.IntelliJIDEA.Community"
 

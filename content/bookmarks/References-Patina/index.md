@@ -1,7 +1,59 @@
 ﻿---
-title: "Patina QEMU Cheat Sheet"
+title: "Patina Cheat Sheet"
 tags: ['References', 'Patina']
 ---
+
+## Patina Repositories
+
+```
+Clone:
+gh repo clone vineelko/edk2
+gh repo clone vineelko/mu_basecore
+gh repo clone vineelko/mu_tiano_platforms
+gh repo clone vineelko/mu_devops
+gh repo clone vineelko/patina-mtrr
+gh repo clone vineelko/patina-paging
+gh repo clone vineelko/patina
+gh repo clone vineelko/patina-qemu
+gh repo clone vineelko/patina-dxe-core-qemu
+gh repo clone vineelko/patina-fw-patcher
+gh repo clone vineelko/patina-readiness-tool
+gh repo clone vineelko/patina-devops
+gh repo clone vineelko/patina-edk2
+gh repo clone vineelko/patina-apps
+
+Fork:
+gh repo fork tianocore/edk2
+gh repo fork microsoft/mu_basecore
+gh repo fork microsoft/mu_tiano_platforms
+gh repo fork microsoft/mu_devops
+gh repo fork OpenDevicePartnership/patina-mtrr
+gh repo fork OpenDevicePartnership/patina-paging
+gh repo fork OpenDevicePartnership/patina
+gh repo fork OpenDevicePartnership/patina-qemu
+gh repo fork OpenDevicePartnership/patina-dxe-core-qemu
+gh repo fork OpenDevicePartnership/patina-fw-patcher
+gh repo fork OpenDevicePartnership/patina-readiness-tool
+gh repo fork OpenDevicePartnership/patina-devops
+gh repo fork OpenDevicePartnership/patina-edk2
+gh repo fork OpenDevicePartnership/patina-apps
+
+Sync:
+gh repo sync vineelko/edk2                   --source tianocore/edk2
+gh repo sync vineelko/mu_basecore            --source microsoft/mu_basecore
+gh repo sync vineelko/mu_tiano_platforms     --source microsoft/mu_tiano_platforms
+gh repo sync vineelko/mu_devops              --source microsoft/mu_devops
+gh repo sync vineelko/patina-mtrr            --source OpenDevicePartnership/patina-mtrr
+gh repo sync vineelko/patina-paging          --source OpenDevicePartnership/patina-paging
+gh repo sync vineelko/patina                 --source OpenDevicePartnership/patina
+gh repo sync vineelko/patina-qemu            --source OpenDevicePartnership/patina-qemu
+gh repo sync vineelko/patina-dxe-core-qemu   --source OpenDevicePartnership/patina-dxe-core-qemu
+gh repo sync vineelko/patina-fw-patcher      --source OpenDevicePartnership/patina-fw-patcher
+gh repo sync vineelko/patina-readiness-tool  --source OpenDevicePartnership/patina-readiness-tool
+gh repo sync vineelko/patina-devops          --source OpenDevicePartnership/patina-devops
+gh repo sync vineelko/patina-edk2            --source OpenDevicePartnership/patina-edk2
+gh repo sync vineelko/patina-apps            --source OpenDevicePartnership/patina-apps
+```
 
 ## Patina QEMU Host Toolchains
 

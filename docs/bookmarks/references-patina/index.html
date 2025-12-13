@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Patina QEMU Cheat Sheet | Vineel Kovvuri</title>
+    <title>Patina Cheat Sheet | Vineel Kovvuri</title>
     
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
@@ -32,13 +32,61 @@
     </nav>
 
 <div class="article-meta">
-<h1><span class="title">Patina QEMU Cheat Sheet</span></h1>
+<h1><span class="title">Patina Cheat Sheet</span></h1>
 
 
 </div>
 
 <main>
-<h2 id="patina-qemu-host-toolchains">Patina QEMU Host Toolchains</h2>
+<h2 id="patina-repositories">Patina Repositories</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span>Clone:
+</span></span><span style="display:flex;"><span>gh repo clone vineelko/edk2
+</span></span><span style="display:flex;"><span>gh repo clone vineelko/mu_basecore
+</span></span><span style="display:flex;"><span>gh repo clone vineelko/mu_tiano_platforms
+</span></span><span style="display:flex;"><span>gh repo clone vineelko/mu_devops
+</span></span><span style="display:flex;"><span>gh repo clone vineelko/patina-mtrr
+</span></span><span style="display:flex;"><span>gh repo clone vineelko/patina-paging
+</span></span><span style="display:flex;"><span>gh repo clone vineelko/patina
+</span></span><span style="display:flex;"><span>gh repo clone vineelko/patina-qemu
+</span></span><span style="display:flex;"><span>gh repo clone vineelko/patina-dxe-core-qemu
+</span></span><span style="display:flex;"><span>gh repo clone vineelko/patina-fw-patcher
+</span></span><span style="display:flex;"><span>gh repo clone vineelko/patina-readiness-<span style="color:#080;font-weight:bold">tool</span>
+</span></span><span style="display:flex;"><span>gh repo clone vineelko/patina-devops
+</span></span><span style="display:flex;"><span>gh repo clone vineelko/patina-edk2
+</span></span><span style="display:flex;"><span>gh repo clone vineelko/patina-apps
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Fork:
+</span></span><span style="display:flex;"><span>gh repo fork tianocore/edk2
+</span></span><span style="display:flex;"><span>gh repo fork microsoft/mu_basecore
+</span></span><span style="display:flex;"><span>gh repo fork microsoft/mu_tiano_platforms
+</span></span><span style="display:flex;"><span>gh repo fork microsoft/mu_devops
+</span></span><span style="display:flex;"><span>gh repo fork OpenDevicePartnership/patina-mtrr
+</span></span><span style="display:flex;"><span>gh repo fork OpenDevicePartnership/patina-paging
+</span></span><span style="display:flex;"><span>gh repo fork OpenDevicePartnership/patina
+</span></span><span style="display:flex;"><span>gh repo fork OpenDevicePartnership/patina-qemu
+</span></span><span style="display:flex;"><span>gh repo fork OpenDevicePartnership/patina-dxe-core-qemu
+</span></span><span style="display:flex;"><span>gh repo fork OpenDevicePartnership/patina-fw-patcher
+</span></span><span style="display:flex;"><span>gh repo fork OpenDevicePartnership/patina-readiness-<span style="color:#080;font-weight:bold">tool</span>
+</span></span><span style="display:flex;"><span>gh repo fork OpenDevicePartnership/patina-devops
+</span></span><span style="display:flex;"><span>gh repo fork OpenDevicePartnership/patina-edk2
+</span></span><span style="display:flex;"><span>gh repo fork OpenDevicePartnership/patina-apps
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Sync:
+</span></span><span style="display:flex;"><span>gh repo sync vineelko/edk2                   --source tianocore/edk2
+</span></span><span style="display:flex;"><span>gh repo sync vineelko/mu_basecore            --source microsoft/mu_basecore
+</span></span><span style="display:flex;"><span>gh repo sync vineelko/mu_tiano_platforms     --source microsoft/mu_tiano_platforms
+</span></span><span style="display:flex;"><span>gh repo sync vineelko/mu_devops              --source microsoft/mu_devops
+</span></span><span style="display:flex;"><span>gh repo sync vineelko/patina-mtrr            --source OpenDevicePartnership/patina-mtrr
+</span></span><span style="display:flex;"><span>gh repo sync vineelko/patina-paging          --source OpenDevicePartnership/patina-paging
+</span></span><span style="display:flex;"><span>gh repo sync vineelko/patina                 --source OpenDevicePartnership/patina
+</span></span><span style="display:flex;"><span>gh repo sync vineelko/patina-qemu            --source OpenDevicePartnership/patina-qemu
+</span></span><span style="display:flex;"><span>gh repo sync vineelko/patina-dxe-core-qemu   --source OpenDevicePartnership/patina-dxe-core-qemu
+</span></span><span style="display:flex;"><span>gh repo sync vineelko/patina-fw-patcher      --source OpenDevicePartnership/patina-fw-patcher
+</span></span><span style="display:flex;"><span>gh repo sync vineelko/patina-readiness-<span style="color:#080;font-weight:bold">tool</span>  --source OpenDevicePartnership/patina-readiness-<span style="color:#080;font-weight:bold">tool</span>
+</span></span><span style="display:flex;"><span>gh repo sync vineelko/patina-devops          --source OpenDevicePartnership/patina-devops
+</span></span><span style="display:flex;"><span>gh repo sync vineelko/patina-edk2            --source OpenDevicePartnership/patina-edk2
+</span></span><span style="display:flex;"><span>gh repo sync vineelko/patina-apps            --source OpenDevicePartnership/patina-apps
+</span></span></code></pre></div><h2 id="patina-qemu-host-toolchains">Patina QEMU Host Toolchains</h2>
 <p><img src="Patina-QEMU-Host-Toolchains.svg" alt="Patina QEMU Host Toolchains"></p>
 <p>Some of the commands below may be redundant, but they are included for
 completeness. On Linux, the toolchain tag must be specified explicitly for SBSA
