@@ -14,20 +14,13 @@ sudo apt install -y gcc nasm make pkg-config git neovim micro tree unrar \
     mate-themes gtkterm bless alacritty tmux terminator dconf-editor \
     cutecom minicom gdb-multiarch xscreensaver xscreensaver-data-extra \
     xscreensaver-gl-extra qdirstat btop  sigrok dosfstools mtools \
-    nvme-cli  openssh-server gpart  freefilesync git-review
+    nvme-cli  openssh-server gpart  freefilesync git-review starship
 ```
 
 ```bash
 sudo snap install code --classic
 sudo snap install code-insiders --classic
 sudo snap install sublime-text --classic
-```
-
-## Fish Shell
-
-```bash
-chsh -s $(which fish)
-set -U fish_prompt_pwd_dir_length 0
 ```
 
 ## Disable boot logo
@@ -56,9 +49,10 @@ if [ ! -f ~/.inputrc ]; then echo '$include /etc/inputrc' > ~/.inputrc; fi
 echo 'set completion-ignore-case on' >> ~/.inputrc
 ```
 
-## Useful bash aliases(copy to ~/.bashrc)
+## Bash Shell (~/.bashrc)
 
 ```bash
+# Below goes to ~/.bashrc
 alias cd..='cd ..'
 alias c.='cd ..'
 alias c..='cd ../..'
@@ -73,4 +67,33 @@ alias ks='ls --color -h'
 alias tree='tree -ahC'
 alias bc='bc -l'
 
+shopt -s nocaseglob # make ls *ttl* expand to TTL Cook. To unset use shopt -u nocaseglob
+
+# Launch starship
+eval "$(starship init bash)"
+```
+
+## Fish Shell
+
+```bash
+chsh -s $(which fish)
+set -U fish_prompt_pwd_dir_length 0
+
+# Below goes to ~/.config/fish/config.fish
+alias cd.. 'cd ..'
+alias c. 'cd ..'
+alias c.. 'cd ../..'
+alias c... 'cd ../../..'
+alias c.... 'cd ../../../..'
+alias c..... 'cd ../../../../..'
+
+alias gti 'git'
+alias du 'du -hs'
+alias ls 'ls --color -h'
+alias ks 'ls --color -h'
+alias tree 'tree -ahC'
+alias bc 'bc -l'
+
+# Launch starship
+starship init fish | source
 ```
