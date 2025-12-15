@@ -14,7 +14,7 @@ sudo apt install -y gcc nasm make pkg-config git neovim micro tree unrar \
     mate-themes gtkterm bless alacritty tmux terminator dconf-editor \
     cutecom minicom gdb-multiarch xscreensaver xscreensaver-data-extra \
     xscreensaver-gl-extra qdirstat btop  sigrok dosfstools mtools \
-    nvme-cli  openssh-server gpart  freefilesync git-review starship
+    nvme-cli  openssh-server gpart  freefilesync git-review
 ```
 
 ```bash
@@ -69,8 +69,6 @@ alias bc='bc -l'
 
 shopt -s nocaseglob # make ls *ttl* expand to TTL Cook. To unset use shopt -u nocaseglob
 
-# Launch starship
-eval "$(starship init bash)"
 ```
 
 ## Fish Shell
@@ -94,6 +92,4 @@ alias ks 'ls --color -h'
 alias tree 'tree -ahC'
 alias bc 'bc -l'
 
-# Launch starship
-starship init fish | source
 ```
