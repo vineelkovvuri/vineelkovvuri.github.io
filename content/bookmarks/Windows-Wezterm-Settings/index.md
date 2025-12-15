@@ -38,7 +38,7 @@ config.keys = {
   { key = "_", mods = "ALT|SHIFT", action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }) },
 
   -- Close pane
-  { key = "w", mods = "CTRL",  action = wezterm.action.CloseCurrentPane { confirm = true }},
+  -- { key = "w", mods = "CTRL",  action = wezterm.action.CloseCurrentPane { confirm = true }},
 
   -- Command palette
   { key = "P", mods = "CTRL|SHIFT", action = wezterm.action.ActivateCommandPalette },

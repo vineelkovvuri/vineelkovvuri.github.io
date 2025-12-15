@@ -44,7 +44,6 @@ winget install "FastStone.Viewer"
 winget install "Daum.PotPlayer"
 winget install "VideoLAN.VLC"
 winget install "chrisant996.Clink"
-winget install "Starship.Starship"
 
 # Compilers
 winget install "NASM.NASM"
