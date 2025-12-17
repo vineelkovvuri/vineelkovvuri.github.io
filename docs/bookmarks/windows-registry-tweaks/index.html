@@ -394,6 +394,91 @@
 </span></span><span style="display:flex;"><span><span style="color:#888">; Disable Windows Backup reminder notifications</span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CURRENT_USER</span><span style="color:#080;font-weight:bold">\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.BackupReminder]</span>
 </span></span><span style="display:flex;"><span><span style="color:#369">&#34;Enabled&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00000000</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">;-------------------Make sure &#34;New text document&#34; is present on context menu new--------</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span>-<span style="color:#038">HKEY_CLASSES_ROOT</span><span style="color:#080;font-weight:bold">\.txt\ShellNew]</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CLASSES_ROOT</span><span style="color:#080;font-weight:bold">\.txt\ShellNew]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;ItemName&#34;</span>=<span style="color:#369">hex(2)</span>:<span style="color:#00d;font-weight:bold">40,00,25,00,53,00,79,00,73,00,74,00,65,00,6d,00,52,00,6f,00,</span><span style="color:#a61717;background-color:#e3d2d2">\</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a61717;background-color:#e3d2d2">6f,00,74,00,25,00,5c,00,73,00,79,00,73,00,74,00,65,00,6d,00,33,00,32,00,5c,\</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a61717;background-color:#e3d2d2">00,6e,00,6f,00,74,00,65,00,70,00,61,00,64,00,2e,00,65,00,78,00,65,00,2c,00,\</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a61717;background-color:#e3d2d2">2d,00,34,00,37,00,30,00,00,00</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;NullFile&#34;</span>=<span style="color:#d20;background-color:#fff0f0">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span>-<span style="color:#038">HKEY_CLASSES_ROOT</span><span style="color:#080;font-weight:bold">\.txt]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CLASSES_ROOT</span><span style="color:#080;font-weight:bold">\.txt]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">@</span>=<span style="color:#d20;background-color:#fff0f0">&#34;txtfile&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;Content Type&#34;</span>=<span style="color:#d20;background-color:#fff0f0">&#34;text/plain&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;PerceivedType&#34;</span>=<span style="color:#d20;background-color:#fff0f0">&#34;text&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CLASSES_ROOT</span><span style="color:#080;font-weight:bold">\.txt\PersistentHandler]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">@</span>=<span style="color:#d20;background-color:#fff0f0">&#34;{5e941d80-bf96-11cd-b579-08002b30bfeb}&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CLASSES_ROOT</span><span style="color:#080;font-weight:bold">\.txt\ShellNew]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;ItemName&#34;</span>=<span style="color:#369">hex(2)</span>:<span style="color:#00d;font-weight:bold">40,00,25,00,53,00,79,00,73,00,74,00,65,00,6d,00,52,00,6f,00,</span><span style="color:#a61717;background-color:#e3d2d2">\</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a61717;background-color:#e3d2d2">6f,00,74,00,25,00,5c,00,73,00,79,00,73,00,74,00,65,00,6d,00,33,00,32,00,5c,\</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a61717;background-color:#e3d2d2">00,6e,00,6f,00,74,00,65,00,70,00,61,00,64,00,2e,00,65,00,78,00,65,00,2c,00,\</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a61717;background-color:#e3d2d2">2d,00,34,00,37,00,30,00,00,00</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;NullFile&#34;</span>=<span style="color:#d20;background-color:#fff0f0">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span>-<span style="color:#038">HKEY_CLASSES_ROOT</span><span style="color:#080;font-weight:bold">\SystemFileAssociations\.txt]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CLASSES_ROOT</span><span style="color:#080;font-weight:bold">\SystemFileAssociations\.txt]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;PerceivedType&#34;</span>=<span style="color:#d20;background-color:#fff0f0">&#34;document&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span>-<span style="color:#038">HKEY_CLASSES_ROOT</span><span style="color:#080;font-weight:bold">\txtfile]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CLASSES_ROOT</span><span style="color:#080;font-weight:bold">\txtfile]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">@</span>=<span style="color:#d20;background-color:#fff0f0">&#34;Text Document&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;EditFlags&#34;</span>=<span style="color:#369">dword</span>:<span style="color:#00d;font-weight:bold">00210000</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;FriendlyTypeName&#34;</span>=<span style="color:#369">hex(2)</span>:<span style="color:#00d;font-weight:bold">40,00,25,00,53,00,79,00,73,00,74,00,65,00,6d,00,52,</span><span style="color:#a61717;background-color:#e3d2d2">\</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a61717;background-color:#e3d2d2">00,6f,00,6f,00,74,00,25,00,5c,00,73,00,79,00,73,00,74,00,65,00,6d,00,33,00,\</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a61717;background-color:#e3d2d2">32,00,5c,00,6e,00,6f,00,74,00,65,00,70,00,61,00,64,00,2e,00,65,00,78,00,65,\</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a61717;background-color:#e3d2d2">00,2c,00,2d,00,34,00,36,00,39,00,00,00</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CLASSES_ROOT</span><span style="color:#080;font-weight:bold">\txtfile\DefaultIcon]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">@</span>=<span style="color:#369">hex(2)</span>:<span style="color:#00d;font-weight:bold">25,00,53,00,79,00,73,00,74,00,65,00,6d,00,52,00,6f,00,6f,00,74,00,25,</span><span style="color:#a61717;background-color:#e3d2d2">\</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a61717;background-color:#e3d2d2">00,5c,00,73,00,79,00,73,00,74,00,65,00,6d,00,33,00,32,00,5c,00,69,00,6d,00,\</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a61717;background-color:#e3d2d2">61,00,67,00,65,00,72,00,65,00,73,00,2e,00,64,00,6c,00,6c,00,2c,00,2d,00,31,\</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a61717;background-color:#e3d2d2">00,30,00,32,00,00,00</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CLASSES_ROOT</span><span style="color:#080;font-weight:bold">\txtfile\shell\open\command]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">@</span>=<span style="color:#369">hex(2)</span>:<span style="color:#00d;font-weight:bold">25,00,53,00,79,00,73,00,74,00,65,00,6d,00,52,00,6f,00,6f,00,74,00,25,</span><span style="color:#a61717;background-color:#e3d2d2">\</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a61717;background-color:#e3d2d2">00,5c,00,73,00,79,00,73,00,74,00,65,00,6d,00,33,00,32,00,5c,00,4e,00,4f,00,\</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a61717;background-color:#e3d2d2">54,00,45,00,50,00,41,00,44,00,2e,00,45,00,58,00,45,00,20,00,25,00,31,00,00,\</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a61717;background-color:#e3d2d2">00</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CLASSES_ROOT</span><span style="color:#080;font-weight:bold">\txtfile\shell\print\command]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">@</span>=<span style="color:#369">hex(2)</span>:<span style="color:#00d;font-weight:bold">25,00,53,00,79,00,73,00,74,00,65,00,6d,00,52,00,6f,00,6f,00,74,00,25,</span><span style="color:#a61717;background-color:#e3d2d2">\</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a61717;background-color:#e3d2d2">00,5c,00,73,00,79,00,73,00,74,00,65,00,6d,00,33,00,32,00,5c,00,4e,00,4f,00,\</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a61717;background-color:#e3d2d2">54,00,45,00,50,00,41,00,44,00,2e,00,45,00,58,00,45,00,20,00,2f,00,70,00,20,\</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a61717;background-color:#e3d2d2">00,25,00,31,00,00,00</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CLASSES_ROOT</span><span style="color:#080;font-weight:bold">\txtfile\shell\printto\command]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">@</span>=<span style="color:#369">hex(2)</span>:<span style="color:#00d;font-weight:bold">25,00,53,00,79,00,73,00,74,00,65,00,6d,00,52,00,6f,00,6f,00,74,00,25,</span><span style="color:#a61717;background-color:#e3d2d2">\</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a61717;background-color:#e3d2d2">00,5c,00,73,00,79,00,73,00,74,00,65,00,6d,00,33,00,32,00,5c,00,6e,00,6f,00,\</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a61717;background-color:#e3d2d2">74,00,65,00,70,00,61,00,64,00,2e,00,65,00,78,00,65,00,20,00,2f,00,70,00,74,\</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a61717;background-color:#e3d2d2">00,20,00,22,00,25,00,31,00,22,00,20,00,22,00,25,00,32,00,22,00,20,00,22,00,\</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a61717;background-color:#e3d2d2">25,00,33,00,22,00,20,00,22,00,25,00,34,00,22,00,00,00</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span>-<span style="color:#038">HKEY_CURRENT_USER</span><span style="color:#080;font-weight:bold">\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.txt]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CURRENT_USER</span><span style="color:#080;font-weight:bold">\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.txt\OpenWithList]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CURRENT_USER</span><span style="color:#080;font-weight:bold">\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.txt\OpenWithProgids]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;txtfile&#34;</span>=<span style="color:#d20;background-color:#fff0f0">hex(0):</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CURRENT_USER</span><span style="color:#080;font-weight:bold">\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.txt\UserChoice]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;Hash&#34;</span>=<span style="color:#d20;background-color:#fff0f0">&#34;hyXk/CpboWw=&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;ProgId&#34;</span>=<span style="color:#d20;background-color:#fff0f0">&#34;txtfile&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span>-<span style="color:#038">HKEY_CURRENT_USER</span><span style="color:#080;font-weight:bold">\SOFTWARE\Microsoft\Windows\Roaming\OpenWith\FileExts\.txt]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">[</span><span style="color:#038">HKEY_CURRENT_USER</span><span style="color:#080;font-weight:bold">\SOFTWARE\Microsoft\Windows\Roaming\OpenWith\FileExts\.txt\UserChoice]</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;Hash&#34;</span>=<span style="color:#d20;background-color:#fff0f0">&#34;FvJcqeZpmOE=&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">&#34;ProgId&#34;</span>=<span style="color:#d20;background-color:#fff0f0">&#34;txtfile&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#888">;----------------------------------------------------</span>
 </span></span></code></pre></div>
 </main>
 
