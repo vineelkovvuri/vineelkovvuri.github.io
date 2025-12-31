@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>C on Vineel Kovvuri</title>
+    <link>//localhost:1313/tags/c/</link>
+    <description>Recent content in C on Vineel Kovvuri</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 10 Feb 2019 18:33:07 -0700</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/c/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Signed/Unsigned Integer Arithmetic In C</title>
+      <link>//localhost:1313/blog/2019-02-10-signed-unsigned-integer-arithmetic-in-c/</link>
+      <pubDate>Sun, 10 Feb 2019 18:33:07 -0700</pubDate>
+      <guid>//localhost:1313/blog/2019-02-10-signed-unsigned-integer-arithmetic-in-c/</guid>
+      <description>&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;&#xA;&lt;p&gt;This article is about understanding how integer conversions happen in C&#xA;language. The C standard defines the integer conversion rules agnostic to&#xA;any specific machine architecture. This also makes things more complicated&#xA;for programmers to understand.&lt;/p&gt;&#xA;&lt;p&gt;First of all, Why do we need integer conversions at all? The answer is&#xA;simple, we need to have single type for any given expression. Let&amp;rsquo;s say we&#xA;have an expression &lt;em&gt;&lt;expr1&gt;&lt;op&gt;&lt;expr2&gt;&lt;/em&gt; when expr1 and expr2 are of&#xA;different types, we want the resulting expression from this to have one&#xA;single type.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>A Newbie&#39;s Introduction To Compilation Process And Reverse Engineering</title>
+      <link>//localhost:1313/blog/2018-08-10-a-newbies-introduction-to-compilation-process-and-reverse-engineering/</link>
+      <pubDate>Fri, 10 Aug 2018 18:33:07 -0700</pubDate>
+      <guid>//localhost:1313/blog/2018-08-10-a-newbies-introduction-to-compilation-process-and-reverse-engineering/</guid>
+      <description>&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;&#xA;&lt;p&gt;Compilers are surely the complex programs of all times. Even today, writing a&#xA;compiler with minimum set of tools is considered to be challenging. This&#xA;tutorial scratches the surface of different compiler phases involved in&#xA;translating a given source code to executable and also shows how this&#xA;information is useful in context of reverse engineering.&lt;/p&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/GNU_Compiler_Collection&#34;&gt;GNU compiler collection&lt;/a&gt;&#xA;provides an excellent set of tools for dissecting the compilation process and to&#xA;understand the working of bits and bytes in the final executable. For this&#xA;tutorial I am using the following tools and considers C language to illustrate&#xA;the examples.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

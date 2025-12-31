@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on Vineel Kovvuri</title>
+    <link>//localhost:1313/tags/</link>
+    <description>Recent content in Tags on Vineel Kovvuri</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 28 Nov 2025 10:45:00 +0000</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>General</title>
+      <link>//localhost:1313/tags/general/</link>
+      <pubDate>Fri, 28 Nov 2025 10:45:00 +0000</pubDate>
+      <guid>//localhost:1313/tags/general/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Rust</title>
+      <link>//localhost:1313/tags/rust/</link>
+      <pubDate>Sat, 21 Jun 2025 21:11:47 +0000</pubDate>
+      <guid>//localhost:1313/tags/rust/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Git</title>
+      <link>//localhost:1313/tags/git/</link>
+      <pubDate>Tue, 25 Mar 2025 20:27:07 +0000</pubDate>
+      <guid>//localhost:1313/tags/git/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>GitHub</title>
+      <link>//localhost:1313/tags/github/</link>
+      <pubDate>Tue, 25 Mar 2025 20:27:07 +0000</pubDate>
+      <guid>//localhost:1313/tags/github/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>SSH</title>
+      <link>//localhost:1313/tags/ssh/</link>
+      <pubDate>Tue, 25 Mar 2025 20:27:07 +0000</pubDate>
+      <guid>//localhost:1313/tags/ssh/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Operating Systems</title>
+      <link>//localhost:1313/tags/operating-systems/</link>
+      <pubDate>Fri, 14 Mar 2025 23:27:20 +0000</pubDate>
+      <guid>//localhost:1313/tags/operating-systems/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Compilers</title>
+      <link>//localhost:1313/tags/compilers/</link>
+      <pubDate>Fri, 01 Nov 2019 18:33:07 -0700</pubDate>
+      <guid>//localhost:1313/tags/compilers/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Embedded</title>
+      <link>//localhost:1313/tags/embedded/</link>
+      <pubDate>Fri, 20 Sep 2019 18:33:07 -0700</pubDate>
+      <guid>//localhost:1313/tags/embedded/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Emulator</title>
+      <link>//localhost:1313/tags/emulator/</link>
+      <pubDate>Wed, 10 Apr 2019 18:33:07 -0700</pubDate>
+      <guid>//localhost:1313/tags/emulator/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Java</title>
+      <link>//localhost:1313/tags/java/</link>
+      <pubDate>Wed, 10 Apr 2019 18:33:07 -0700</pubDate>
+      <guid>//localhost:1313/tags/java/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>WinDbg</title>
+      <link>//localhost:1313/tags/windbg/</link>
+      <pubDate>Sun, 10 Mar 2019 18:33:07 -0700</pubDate>
+      <guid>//localhost:1313/tags/windbg/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Windows</title>
+      <link>//localhost:1313/tags/windows/</link>
+      <pubDate>Sun, 10 Mar 2019 18:33:07 -0700</pubDate>
+      <guid>//localhost:1313/tags/windows/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>C</title>
+      <link>//localhost:1313/tags/c/</link>
+      <pubDate>Sun, 10 Feb 2019 18:33:07 -0700</pubDate>
+      <guid>//localhost:1313/tags/c/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Debuggers</title>
+      <link>//localhost:1313/tags/debuggers/</link>
+      <pubDate>Wed, 10 Oct 2018 18:33:07 -0700</pubDate>
+      <guid>//localhost:1313/tags/debuggers/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Asm</title>
+      <link>//localhost:1313/tags/asm/</link>
+      <pubDate>Fri, 10 Aug 2018 18:33:07 -0700</pubDate>
+      <guid>//localhost:1313/tags/asm/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Reversing</title>
+      <link>//localhost:1313/tags/reversing/</link>
+      <pubDate>Fri, 10 Aug 2018 18:33:07 -0700</pubDate>
+      <guid>//localhost:1313/tags/reversing/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Linux</title>
+      <link>//localhost:1313/tags/linux/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/tags/linux/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>LinuxSetup</title>
+      <link>//localhost:1313/tags/linuxsetup/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/tags/linuxsetup/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Patina</title>
+      <link>//localhost:1313/tags/patina/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/tags/patina/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Presentations</title>
+      <link>//localhost:1313/tags/presentations/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/tags/presentations/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>References</title>
+      <link>//localhost:1313/tags/references/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/tags/references/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Sublime</title>
+      <link>//localhost:1313/tags/sublime/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/tags/sublime/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Terminal</title>
+      <link>//localhost:1313/tags/terminal/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/tags/terminal/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Tools</title>
+      <link>//localhost:1313/tags/tools/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/tags/tools/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>VSCode</title>
+      <link>//localhost:1313/tags/vscode/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/tags/vscode/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>WindowsSetup</title>
+      <link>//localhost:1313/tags/windowssetup/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/tags/windowssetup/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

@@ -7,7 +7,7 @@ disqusShortname: ""
 ignoreFiles: ["\\.Rmd$", "\\.Rmarkdown$", "_cache$"]
 footnotereturnlinkcontents: "↩"
 publishDir: docs
-disableKinds: ["taxonomy", "term"] # disable tags
+# disableKinds: ["taxonomy", "term"] # disable tags
 
 permalinks:
   note: "/note/:year/:month/:day/:slug/"

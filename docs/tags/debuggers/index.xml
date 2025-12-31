@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Debuggers on Vineel Kovvuri</title>
+    <link>//localhost:1313/tags/debuggers/</link>
+    <description>Recent content in Debuggers on Vineel Kovvuri</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 10 Oct 2018 18:33:07 -0700</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/debuggers/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How Do Breakpoints Work In Debuggers?</title>
+      <link>//localhost:1313/blog/2018-10-10-how-do-breakpoints-work-in-debuggers/</link>
+      <pubDate>Wed, 10 Oct 2018 18:33:07 -0700</pubDate>
+      <guid>//localhost:1313/blog/2018-10-10-how-do-breakpoints-work-in-debuggers/</guid>
+      <description>&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;&#xA;&lt;p&gt;It&amp;rsquo;s been a while, I have got a chance to blog about low-level stuff. In this&#xA;article, I am going to explain how breakpoints work in debuggers. I am assuming&#xA;the reader is already familiar with what a breakpoint is? and how to set it in&#xA;your debugger of choice. The goal of this post is to explain the interplay&#xA;between Debugger, Debuggee, Operating System and the CPU.&lt;/p&gt;&#xA;&lt;h1 id=&#34;breakpoints-theory&#34;&gt;Breakpoints Theory&lt;/h1&gt;&#xA;&lt;p&gt;To get there, we have to ask ourselves  What does it mean by debugging a&#xA;program/process?. To keep it simple, It&amp;rsquo;s the controlled execution of a program&#xA;by other program. The devil is in the word controlled. Whenever you open a&#xA;debugger and launch a program or attach to a running process, the OS and the CPU&#xA;guarantees that any event (like dll loading or interrupts or exceptions etc)&#xA;happening on behalf of debuggee process are notified to debugger process for it&#xA;to take necessary action. The important thing to understand here is, it&amp;rsquo;s the&#xA;execution of debuggee which is causing the debugger to take actions on behalf of&#xA;it, not the other way around.  So there should be something in the debuggee&amp;rsquo;s&#xA;code that should cause CPU to do the heavy lifting.  This is where CPU&amp;rsquo;s&#xA;breakpoint instruction comes in. Every x86/amd64 CPU provides a special&#xA;instruction called breakpoint instruction Int 3 whose mnemonic is 0xCC. When a&#xA;piece of code executes this instruction, the CPU triggers a breakpoint interrupt&#xA;and notifies it to OS and asks it what needs to be done next. Now this event&#xA;from OS gets propagated to debugger by pausing all the threads in the debuggee.&#xA;Now it&amp;rsquo;s up to debugger to handle it according to its will.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

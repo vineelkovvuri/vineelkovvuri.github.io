@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Operating Systems on Vineel Kovvuri</title>
+    <link>//localhost:1313/tags/operating-systems/</link>
+    <description>Recent content in Operating Systems on Vineel Kovvuri</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 14 Mar 2025 23:27:20 +0000</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/operating-systems/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Paging/Identity Mapping/Self-Mapping 101</title>
+      <link>//localhost:1313/blog/2025-03-14-paging-101/</link>
+      <pubDate>Fri, 14 Mar 2025 23:27:20 +0000</pubDate>
+      <guid>//localhost:1313/blog/2025-03-14-paging-101/</guid>
+      <description>&lt;h1 id=&#34;pagingidentity-mappingself-mapping-101&#34;&gt;Paging/Identity Mapping/Self Mapping 101&lt;/h1&gt;&#xA;&lt;h2 id=&#34;what-is-memory-mapping&#34;&gt;What is memory mapping?&lt;/h2&gt;&#xA;&lt;p&gt;Memory mapping, in the context of paging, refers to the ability of the CPU to&#xA;&lt;em&gt;decode&lt;/em&gt; a virtual address (VA) into a physical address (PA) by successfully&#xA;walking the page tables. When this happens, we say that the given VA has a PA&#xA;mapping. If, for some reason, the CPU is unable to walk the page tables, it will&#xA;raise a page fault exception. In other words, the VA is not mapped(unmapped).&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
