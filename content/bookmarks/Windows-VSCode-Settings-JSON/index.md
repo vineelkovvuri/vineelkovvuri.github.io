@@ -154,6 +154,9 @@ code --install-extension zachflower.uncrustify
         "editor.defaultFormatter": "vscode.json-language-features"
     },
     "terminal.integrated.fontSize": 20,
-    "workbench.experimental.enableNewProfilesUI": true
+    "workbench.experimental.enableNewProfilesUI": true,
+    "terminal.integrated.suggest.providers": {
+        "vscode.terminal-suggest": false
+    }
 }
 ```

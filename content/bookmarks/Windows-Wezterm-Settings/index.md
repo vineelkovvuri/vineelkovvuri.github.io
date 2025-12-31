@@ -9,10 +9,10 @@ tags: ['Windows', 'Terminal', 'WindowsSetup']
 local wezterm = require 'wezterm'
 local config = {}
 
-config.default_prog = {
-  'pwsh.exe',
-  '-NoLogo'
-}
+-- config.default_prog = {
+--   'pwsh.exe',
+--   '-NoLogo'
+-- }
 
 -- ===== Appearance =====
 config.font = wezterm.font 'FiraMono Nerd Font Mono'

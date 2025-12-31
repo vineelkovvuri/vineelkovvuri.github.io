@@ -36,9 +36,10 @@ AppendPathVariable -Path "C:\msys64\ucrt64\bin"
 AppendPathVariable -Path "C:\msys64\usr\bin"
 AppendPathVariable -Path "C:\Program Files\GitHub CLI\"
 AppendPathVariable -Path "C:\Program Files\LLVM\bin"
-AppendPathVariable -Path "C:\Program Files\qemu"
 AppendPathVariable -Path "C:\LLVM\bin"
+AppendPathVariable -Path "C:\Program Files\qemu"
 AppendPathVariable -Path "C:\Program Files\NASM"
+AppendPathVariable -Path "C:\Program Files\Docker\Docker\resources\bin"
 
 # Exclude some paths from Windows Defender Scans
 Add-MpPreference -ExclusionPath "$($env:USERPROFILE)\.cargo"
