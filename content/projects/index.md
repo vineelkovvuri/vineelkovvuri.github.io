@@ -5,7 +5,8 @@ tags: ['projects']
 
 ## 🕹️ Chip8 Emulator
 
-**Chip8 Emulator** is a CHIP-8 emulator written in Java that interprets and
+**Chip8 Emulator** is a [CHIP-8](https://en.wikipedia.org/wiki/CHIP-8) emulator
+written in Java that interprets and
 executes programs designed for the CHIP-8 virtual machine, a simple interpreted
 programming language from the 1970s originally used on early microcomputers. The
 emulator implements the core components of the CHIP-8 architecture including a
