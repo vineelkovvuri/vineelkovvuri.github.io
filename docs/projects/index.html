@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Projects | Vineel Kovvuri</title>
@@ -41,40 +41,60 @@
 
 <main>
 <h2 id="-chip8-emulator">🕹️ Chip8 Emulator</h2>
-<p><strong>Chip8 Emulator</strong> is a CHIP-8 virtual machine implementation designed to
-emulate classic CHIP-8 programs and games. The project focuses on low-level
-concepts such as instruction decoding, memory management, timers, and display
-rendering. It serves as a hands-on exercise in emulator development and helps
-build a deeper understanding of how simple interpreted systems work.</p>
+<p><strong>Chip8 Emulator</strong> is a CHIP-8 emulator written in Java that interprets and
+executes programs designed for the CHIP-8 virtual machine, a simple interpreted
+programming language from the 1970s originally used on early microcomputers. The
+emulator implements the core components of the CHIP-8 architecture including a
+CPU for instruction execution, 4KB of memory, a 64x32 pixel monochrome display,
+and a 16-key hexadecimal keyboard, allowing users to run classic CHIP-8 games
+and programs such as Pong, Tetris, Space Invaders, and Breakout. Built using
+Maven as a build system, the project includes over 20 ROM files for various
+games and utilities, providing a complete implementation of the CHIP-8
+specification that serves as both an educational tool for understanding emulator
+development and a functional interpreter for running vintage CHIP-8 software.</p>
 <p>🔗 <a href="https://github.com/vineelkovvuri/Projects/tree/master/Chip8Emulator">https://github.com/vineelkovvuri/Projects/tree/master/Chip8Emulator</a></p>
 <p><img src="chip8-emulator.png" alt="Chip8 Emulator Screenshot"></p>
 <hr>
 <h2 id="-extendable-desktop-search">🔍 Extendable Desktop Search</h2>
-<p><strong>Extendable Desktop Search</strong> is a desktop search tool designed with
-extensibility in mind. The project explores file system traversal, indexing, and
-search optimization, while allowing new search features or data sources to be
-plugged in easily. It highlights practical problem-solving around performance,
-scalability, and clean software architecture.</p>
+<p><strong>Extendable Desktop Search</strong> is a Windows desktop search application built in
+C# that indexes and searches various types of files on a local system using the
+Lucene.Net search engine. The project features an extensible plugin architecture
+with specialized parsers for different file formats including documents (DOC,
+PDF), multimedia files (audio, video, images), archives, HTML, text files, and
+executables, enabling efficient content extraction and indexing. It provides a
+categorized GUI interface with separate user controls for searching through
+different file types (All Files, Documents, Audio, Video, Pictures, Email), and
+includes core modules for file system crawling, real-time file system
+monitoring, indexing, and query execution, making it a comprehensive local
+search solution similar to Windows Search or Google Desktop.</p>
 <p>🔗 <a href="https://github.com/vineelkovvuri/Projects/tree/master/ExtendableDesktopSearch">https://github.com/vineelkovvuri/Projects/tree/master/ExtendableDesktopSearch</a></p>
 <p><img src="extendable-desktop-search.png" alt="Desktop Search Screenshot"></p>
 <hr>
 <h2 id="-detective-007">🕵️ Detective-007</h2>
-<p><strong>Detective-007</strong> is a themed application or game project built around
-investigative or puzzle-solving mechanics. The project emphasizes structured
-program design, user interaction, and modular logic organization. It
-demonstrates creativity in application flow while reinforcing core programming
-principles through an interactive experience.</p>
+<p><strong>Detective-007</strong> is a Windows Forms stealth monitoring application written in
+C# that functions as a keylogger and system surveillance tool. The application
+captures keyboard input through low-level hooks, monitors active window titles
+to track which applications users are accessing, and takes periodic screenshots
+at configurable intervals (default 60 seconds). It also watches for USB drive
+insertions using FileSystemWatcher to monitor all logical drives on the system.
+The application can run hidden from the user, automatically starts with Windows
+through registry modifications, and is password-protected to prevent
+unauthorized access. All captured data including keystrokes, window activity,
+and screenshots are logged for later review through a dedicated interface that
+allows viewing of pictures and recorded activity.</p>
 <p>🔗 <a href="https://github.com/vineelkovvuri/Projects/tree/master/Detective-007">https://github.com/vineelkovvuri/Projects/tree/master/Detective-007</a></p>
 <p><img src="detective-007.png" alt="Detective 007 Screenshot"></p>
 <hr>
 <h2 id="-pelib">🧩 PeLib</h2>
-<p><strong>PeLib</strong> is a library for parsing and working with Windows Portable Executable
-(PE) files. It focuses on understanding executable internals such as headers,
-sections, and metadata. This project demonstrates strong systems-level knowledge
-and is particularly useful for learning about OS loaders, binary formats, and
-reverse-engineering fundamentals.</p>
+<p><strong>PeLib</strong> is a C++ library for parsing and analyzing Windows Portable Executable
+(PE) file format, which is used for executables, DLLs, and other binary files on
+Windows systems. The library provides structured access to the various
+components of PE files including the DOS header, COFF header, optional header,
+section tables, import/export tables, and data directories, with functionality
+to read PE files, convert between relative virtual addresses (RVA) and file
+addresses (FA), and dump PE file information for inspection and analysis
+purposes.</p>
 <p>🔗 <a href="https://github.com/vineelkovvuri/Projects/tree/master/PeLib">https://github.com/vineelkovvuri/Projects/tree/master/PeLib</a></p>
-<p><img src="pelib.png" alt="PE Library Diagram"></p>
 
 </main>
 
