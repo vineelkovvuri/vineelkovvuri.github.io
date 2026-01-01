@@ -212,6 +212,8 @@
   </url><url>
     <loc>//localhost:1313/bookmarks/windows-winget/</loc>
   </url><url>
+    <loc>//localhost:1313/projects/</loc>
+  </url><url>
     <loc>//localhost:1313/tags/windowssetup/</loc>
   </url>
 </urlset>

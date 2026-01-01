@@ -21,9 +21,12 @@ menu:
     - name: Blog
       url: "blog/"
       weight: 2
+    - name: Projects
+      url: "projects/"
+      weight: 3
     - name: Bookmarks
       url: "bookmarks/"
-      weight: 3
+      weight: 4
     # - name: Subscribe
     #   url: "index.xml"
 
