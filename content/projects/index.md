@@ -5,18 +5,18 @@ tags: ['projects']
 
 ## 🕹️ Chip8 Emulator
 
-**Chip8 Emulator** is a [CHIP-8](https://en.wikipedia.org/wiki/CHIP-8) emulator
-written in Java that interprets and
-executes programs designed for the CHIP-8 virtual machine, a simple interpreted
-programming language from the 1970s originally used on early microcomputers. The
-emulator implements the core components of the CHIP-8 architecture including a
-CPU for instruction execution, 4KB of memory, a 64x32 pixel monochrome display,
-and a 16-key hexadecimal keyboard, allowing users to run classic CHIP-8 games
-and programs such as Pong, Tetris, Space Invaders, and Breakout. Built using
-Maven as a build system, the project includes over 20 ROM files for various
-games and utilities, providing a complete implementation of the CHIP-8
-specification that serves as both an educational tool for understanding emulator
-development and a functional interpreter for running vintage CHIP-8 software.
+**Chip8 Emulator** project is a [CHIP-8](https://en.wikipedia.org/wiki/CHIP-8)
+emulator written in Java that interprets and executes programs designed for the
+CHIP-8 virtual machine, a simple interpreted programming language from the 1970s
+originally used on early microcomputers. The emulator implements the core
+components of the CHIP-8 architecture including a CPU for instruction execution,
+4KB of memory, a 64x32 pixel monochrome display, and a 16-key hexadecimal
+keyboard, allowing users to run classic CHIP-8 games and programs such as Pong,
+Tetris, Space Invaders, and Breakout. Built using Maven as a build system, the
+project includes over 20 ROM files for various games and utilities, providing a
+complete implementation of the CHIP-8 specification that serves as both an
+educational tool for understanding emulator development and a functional
+interpreter for running vintage CHIP-8 software.
 
 🔗 [https://github.com/vineelkovvuri/Projects/tree/master/Chip8Emulator](https://github.com/vineelkovvuri/Projects/tree/master/Chip8Emulator)
 
@@ -24,9 +24,9 @@ development and a functional interpreter for running vintage CHIP-8 software.
 
 ---
 
-## 🔍 Extendable Desktop Search
+## 🔍 Extensible Desktop Search
 
-**Extendable Desktop Search** is a Windows desktop search application built in
+**Extensible Desktop Search** is a Windows desktop search application built in
 C# that indexes and searches various types of files on a local system using the
 Lucene.Net search engine. The project features an extensible plugin architecture
 with specialized parsers for different file formats including documents (DOC,
@@ -38,7 +38,7 @@ includes core modules for file system crawling, real-time file system
 monitoring, indexing, and query execution, making it a comprehensive local
 search solution similar to Windows Search or Google Desktop.
 
-🔗 [https://github.com/vineelkovvuri/Projects/tree/master/ExtendableDesktopSearch](https://github.com/vineelkovvuri/Projects/tree/master/ExtendableDesktopSearch)
+🔗 [https://github.com/vineelkovvuri/Projects/tree/master/ExtensibleDesktopSearch](https://github.com/vineelkovvuri/Projects/tree/master/ExtensibleDesktopSearch)
 
 ![Desktop Search Screenshot](extendable-desktop-search.png)
 
