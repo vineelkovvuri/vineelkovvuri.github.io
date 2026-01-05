@@ -18,7 +18,7 @@ complete implementation of the CHIP-8 specification that serves as both an
 educational tool for understanding emulator development and a functional
 interpreter for running vintage CHIP-8 software.
 
-🔗 [https://github.com/vineelkovvuri/Projects/tree/master/Chip8Emulator](https://github.com/vineelkovvuri/Projects/tree/master/Chip8Emulator)
+🔗 [https://github.com/vineelkovvuri/Projects/tree/main/Chip8Emulator](https://github.com/vineelkovvuri/Projects/tree/main/Chip8Emulator)
 
 ![Chip8 Emulator Screenshot](chip8-emulator.png)
 
@@ -38,7 +38,7 @@ includes core modules for file system crawling, real-time file system
 monitoring, indexing, and query execution, making it a comprehensive local
 search solution similar to Windows Search or Google Desktop.
 
-🔗 [https://github.com/vineelkovvuri/Projects/tree/master/ExtensibleDesktopSearch](https://github.com/vineelkovvuri/Projects/tree/master/ExtensibleDesktopSearch)
+🔗 [https://github.com/vineelkovvuri/Projects/tree/main/ExtensibleDesktopSearch](https://github.com/vineelkovvuri/Projects/tree/main/ExtensibleDesktopSearch)
 
 ![Desktop Search Screenshot](extendable-desktop-search.png)
 
@@ -58,7 +58,7 @@ unauthorized access. All captured data including keystrokes, window activity,
 and screenshots are logged for later review through a dedicated interface that
 allows viewing of pictures and recorded activity.
 
-🔗 [https://github.com/vineelkovvuri/Projects/tree/master/Detective-007](https://github.com/vineelkovvuri/Projects/tree/master/Detective-007)
+🔗 [https://github.com/vineelkovvuri/Projects/tree/main/Detective-007](https://github.com/vineelkovvuri/Projects/tree/main/Detective-007)
 
 ![Detective 007 Screenshot](detective-007.png)
 
@@ -75,4 +75,4 @@ to read PE files, convert between relative virtual addresses (RVA) and file
 addresses (FA), and dump PE file information for inspection and analysis
 purposes.
 
-🔗 [https://github.com/vineelkovvuri/Projects/tree/master/PeLib](https://github.com/vineelkovvuri/Projects/tree/master/PeLib)
+🔗 [https://github.com/vineelkovvuri/Projects/tree/main/PeLib](https://github.com/vineelkovvuri/Projects/tree/main/PeLib)
