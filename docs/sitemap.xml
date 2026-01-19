@@ -3,16 +3,19 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>/blog/</loc>
-    <lastmod>2025-11-28T10:45:00+00:00</lastmod>
+    <lastmod>2026-01-18T10:45:00+00:00</lastmod>
   </url><url>
     <loc>/tags/general/</loc>
-    <lastmod>2025-11-28T10:45:00+00:00</lastmod>
+    <lastmod>2026-01-18T10:45:00+00:00</lastmod>
   </url><url>
     <loc>/</loc>
-    <lastmod>2025-11-28T10:45:00+00:00</lastmod>
+    <lastmod>2026-01-18T10:45:00+00:00</lastmod>
+  </url><url>
+    <loc>/blog/2026-01-18-qemu-cpu-feature-detection/</loc>
+    <lastmod>2026-01-18T10:45:00+00:00</lastmod>
   </url><url>
     <loc>/tags/</loc>
-    <lastmod>2025-11-28T10:45:00+00:00</lastmod>
+    <lastmod>2026-01-18T10:45:00+00:00</lastmod>
   </url><url>
     <loc>/blog/2025-11-28-thanks-giving-thank-you/</loc>
     <lastmod>2025-11-28T10:45:00+00:00</lastmod>
