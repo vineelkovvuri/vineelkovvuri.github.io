@@ -66,6 +66,7 @@ alias ls='ls --color -h'
 alias ks='ls --color -h'
 alias tree='tree -ahC'
 alias bc='bc -l'
+alias start='xdg-open'
 
 shopt -s nocaseglob # make ls *ttl* expand to TTL Cook. To unset use shopt -u nocaseglob
 
@@ -91,5 +92,6 @@ alias ls 'ls --color -h'
 alias ks 'ls --color -h'
 alias tree 'tree -ahC'
 alias bc 'bc -l'
+alias start 'xdg-open'
 
 ```
