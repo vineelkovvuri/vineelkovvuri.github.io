@@ -12,8 +12,8 @@ function loadGuids() {
       const lines = text.split("\n");
       lines.forEach((line) => {
         const trimmed = line.trim();
-        if (trimmed && trimmed.includes("=")) {
-          const [name, guid] = trimmed.split("=").map((part) => part.trim());
+        if (trimmed && trimmed.includes(",")) {
+          const [guid, name] = trimmed.split(",").map((part) => part.trim());
           if (name && guid) guidMap.set(name, guid);
         }
       });
