@@ -56,7 +56,7 @@ tags: ["Tools"]
         <label for="hexInput">Hex:</label>
       </td>
       <td>
-        <input type="text" id="hexInput" value="0x0" style="padding: 5px; width: 450px;" placeholder="e.g. 0x100004010 or 0xFFFE8000 + 0x18000" />
+        <input type="text" id="hexInput" value="0x0" style="padding: 5px; width: 450px;" placeholder="e.g. 0xFEC00000 + 64K + 2MB" />
       </td>
     </tr>
     <tr>
@@ -68,6 +68,17 @@ tags: ["Tools"]
       </td>
     </tr>
   </table>
+  <pre style="margin: 5px 0; color: gray;">Examples:
+  0x100000000                  Hex value
+  0xFFFF FFFF FFFF FFFF        Hex with spaces
+  0x1000_0000                  Hex with underscores
+  0xFFFE8000 + 0x00018000      Addition of hex values
+  0x100000000 - 0x1000         Subtraction of hex values
+  0xFEC00000 + 64K + 2MB       Mix of hex and size units
+  4GB - 16KB                   Subtraction with size units
+  4GB                          Size unit alone
+  64K, 2M, 1G, 3T, 512B        Short suffixes
+  64KB, 2MB, 1GB, 3TB          Long suffixes</pre>
 
   <hr>
 
@@ -109,15 +120,30 @@ tags: ["Tools"]
 
     // --- Section 1: Hex to TB/GB/MB/KB/Bytes ---
 
-    function parseSingleHex(hex) {
-      if (!hex) return BigInt(0);
-      hex = hex.trim().replaceAll("_", "").replaceAll(" ", "");
-      if (hex.startsWith("0x") || hex.startsWith("0X")) {
-        hex = hex.substring(2);
+    function parseTerm(term) {
+      if (!term) return BigInt(0);
+      term = term.trim().replaceAll("_", "").replaceAll(" ", "");
+      if (!term) return BigInt(0);
+
+      // Check for size suffix: e.g. 64K, 2MB, 1GB, 3TB, 512B
+      const suffixMatch = term.match(/^(\d+)(TB|GB|MB|KB|T|G|M|K|B)$/i);
+      if (suffixMatch) {
+        const num = BigInt(parseInt(suffixMatch[1]));
+        const suffix = suffixMatch[2].toUpperCase();
+        if (suffix === "TB" || suffix === "T") return num * TB;
+        if (suffix === "GB" || suffix === "G") return num * GB;
+        if (suffix === "MB" || suffix === "M") return num * MB;
+        if (suffix === "KB" || suffix === "K") return num * KB;
+        if (suffix === "B") return num;
       }
-      if (!hex) return BigInt(0);
+
+      // Otherwise treat as hex
+      if (term.startsWith("0x") || term.startsWith("0X")) {
+        term = term.substring(2);
+      }
+      if (!term) return BigInt(0);
       try {
-        return BigInt("0x" + hex);
+        return BigInt("0x" + term);
       } catch {
         return BigInt(0);
       }
@@ -125,10 +151,21 @@ tags: ["Tools"]
 
     function parseHexExpression(expr) {
       if (!expr) return BigInt(0);
-      const terms = expr.split("+");
+      // Tokenize into terms with + or - operators
+      // Split on + or - while keeping the operator
+      const tokens = expr.match(/[+-]?[^+-]+/g);
+      if (!tokens) return BigInt(0);
       let total = BigInt(0);
-      for (const term of terms) {
-        total += parseSingleHex(term);
+      for (let i = 0; i < tokens.length; i++) {
+        let token = tokens[i].trim();
+        if (!token) continue;
+        if (token.startsWith("-")) {
+          total -= parseTerm(token.substring(1));
+        } else if (token.startsWith("+")) {
+          total += parseTerm(token.substring(1));
+        } else {
+          total += parseTerm(token);
+        }
       }
       return total;
     }
@@ -176,11 +213,7 @@ tags: ["Tools"]
         return;
       }
 
-      let result = "";
-      const hasAddition = input.includes("+");
-      if (hasAddition) {
-        result += "= 0x" + originalValue.toString(16).toUpperCase() + "\n";
-      }
+      let result = "= 0x" + originalValue.toString(16).toUpperCase() + "\n";
 
       result += breakdownSize(originalValue);
 
