@@ -1,0 +1,223 @@
+---
+title: "Hex to Memory offsets and vice versa"
+tags: ["Tools"]
+---
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            font-family: monospace;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            width: 500px;
+            /* Set a fixed width for the container */
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-group label {
+            width: 50px;
+            /* Set a fixed width for the labels */
+            text-align: right;
+            /* Align the label text to the right */
+        }
+
+        .input-group select {
+            width: 80px;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+    </style>
+</head> -->
+
+<body>
+
+  <h3>Hexadecimal to Memory Offsets</h3>
+  <table style="margin: 0 !important;">
+    <tr>
+      <td style="text-align: right; padding-right: 10px;">
+        <label for="hexInput">Hex:</label>
+      </td>
+      <td>
+        <input type="text" id="hexInput" value="0x0" style="padding: 5px; width: 450px;" placeholder="e.g. 0x100004010 or 0xFFFE8000 + 0x18000" />
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: right; padding-right: 10px;">
+        <label>Result:</label>
+      </td>
+      <td>
+        <strong><pre id="hexToSizeResult" style="margin: 5px 0;">0 Bytes</pre></strong>
+      </td>
+    </tr>
+  </table>
+
+  <hr>
+
+  <h3>Memory Offsets to Hexadecimal</h3>
+  <table style="margin: 0 !important;">
+    <tr>
+      <td style="text-align: right; padding-right: 10px;"><label for="tbInput">TB:</label></td>
+      <td><input type="number" id="tbInput" value="0" min="0" style="padding: 5px; width: 100px;" /></td>
+    </tr>
+    <tr>
+      <td style="text-align: right; padding-right: 10px;"><label for="gbInput">GB:</label></td>
+      <td><input type="number" id="gbInput" value="0" min="0" style="padding: 5px; width: 100px;" /></td>
+    </tr>
+    <tr>
+      <td style="text-align: right; padding-right: 10px;"><label for="mbInput">MB:</label></td>
+      <td><input type="number" id="mbInput" value="0" min="0" style="padding: 5px; width: 100px;" /></td>
+    </tr>
+    <tr>
+      <td style="text-align: right; padding-right: 10px;"><label for="kbInput">KB:</label></td>
+      <td><input type="number" id="kbInput" value="0" min="0" style="padding: 5px; width: 100px;" /></td>
+    </tr>
+    <tr>
+      <td style="text-align: right; padding-right: 10px;"><label for="bytesInput">Bytes:</label></td>
+      <td><input type="number" id="bytesInput" value="0" min="0" style="padding: 5px; width: 100px;" /></td>
+    </tr>
+    <tr>
+      <td style="text-align: right; padding-right: 10px;"><label>Result:</label></td>
+      <td>
+        <strong><pre id="sizeToHexResult" style="margin: 5px 0;">0x0</pre></strong>
+      </td>
+    </tr>
+  </table>
+
+  <script>
+    const TB = BigInt(1) << BigInt(40);
+    const GB = BigInt(1) << BigInt(30);
+    const MB = BigInt(1) << BigInt(20);
+    const KB = BigInt(1) << BigInt(10);
+
+    // --- Section 1: Hex to TB/GB/MB/KB/Bytes ---
+
+    function parseSingleHex(hex) {
+      if (!hex) return BigInt(0);
+      hex = hex.trim().replaceAll("_", "").replaceAll(" ", "");
+      if (hex.startsWith("0x") || hex.startsWith("0X")) {
+        hex = hex.substring(2);
+      }
+      if (!hex) return BigInt(0);
+      try {
+        return BigInt("0x" + hex);
+      } catch {
+        return BigInt(0);
+      }
+    }
+
+    function parseHexExpression(expr) {
+      if (!expr) return BigInt(0);
+      const terms = expr.split("+");
+      let total = BigInt(0);
+      for (const term of terms) {
+        total += parseSingleHex(term);
+      }
+      return total;
+    }
+
+    function breakdownSize(val) {
+      const parts = [];
+      const t = val / TB; val = val % TB;
+      const g = val / GB; val = val % GB;
+      const m = val / MB; val = val % MB;
+      const k = val / KB; val = val % KB;
+      if (t > BigInt(0)) parts.push(t + " TB");
+      if (g > BigInt(0)) parts.push(g + " GB");
+      if (m > BigInt(0)) parts.push(m + " MB");
+      if (k > BigInt(0)) parts.push(k + " KB");
+      if (val > BigInt(0)) parts.push(val + " Bytes");
+      return parts.length > 0 ? parts.join(" + ") : "0 Bytes";
+    }
+
+    function formatCleanSize(val) {
+      const units = [
+        [TB, "TB"], [GB, "GB"], [MB, "MB"], [KB, "KB"]
+      ];
+      for (const [unit, label] of units) {
+        if (val >= unit && val % unit === BigInt(0)) {
+          return (val / unit) + " " + label;
+        }
+      }
+      return val + " Bytes";
+    }
+
+    function nextPowerOf2(n) {
+      if (n <= BigInt(0)) return BigInt(1);
+      let p = BigInt(1);
+      while (p < n) {
+        p <<= BigInt(1);
+      }
+      return p;
+    }
+
+    function hexToSize() {
+      const input = document.getElementById("hexInput").value;
+      const originalValue = parseHexExpression(input);
+      if (originalValue === BigInt(0)) {
+        document.getElementById("hexToSizeResult").innerText = "0 Bytes";
+        return;
+      }
+
+      let result = "";
+      const hasAddition = input.includes("+");
+      if (hasAddition) {
+        result += "= 0x" + originalValue.toString(16).toUpperCase() + "\n";
+      }
+
+      result += breakdownSize(originalValue);
+
+      // Show how much below the next power-of-2 boundary
+      const next = nextPowerOf2(originalValue);
+      const diff = next - originalValue;
+      if (diff > BigInt(0)) {
+        result += "\n" + breakdownSize(diff) + " below " + formatCleanSize(next);
+        result += " (0x" + diff.toString(16).toUpperCase() + " below 0x" + next.toString(16).toUpperCase() + ")";
+      }
+
+      document.getElementById("hexToSizeResult").innerText = result;
+    }
+
+    document.getElementById("hexInput").addEventListener("input", hexToSize);
+
+    // --- Section 2: TB/GB/MB/KB/Bytes to Hex ---
+
+    function sizeToHex() {
+      const tb = BigInt(parseInt(document.getElementById("tbInput").value) || 0);
+      const gb = BigInt(parseInt(document.getElementById("gbInput").value) || 0);
+      const mb = BigInt(parseInt(document.getElementById("mbInput").value) || 0);
+      const kb = BigInt(parseInt(document.getElementById("kbInput").value) || 0);
+      const bytes = BigInt(parseInt(document.getElementById("bytesInput").value) || 0);
+
+      const total = tb * TB + gb * GB + mb * MB + kb * KB + bytes;
+
+      document.getElementById("sizeToHexResult").innerText =
+        "0x" + total.toString(16).toUpperCase();
+    }
+
+    document.getElementById("tbInput").addEventListener("input", sizeToHex);
+    document.getElementById("gbInput").addEventListener("input", sizeToHex);
+    document.getElementById("mbInput").addEventListener("input", sizeToHex);
+    document.getElementById("kbInput").addEventListener("input", sizeToHex);
+    document.getElementById("bytesInput").addEventListener("input", sizeToHex);
+  </script>
+</body>
+<!--
+</html> -->
