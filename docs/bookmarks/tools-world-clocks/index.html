@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>World Clocks | Vineel Kovvuri</title>
+    
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/copy-button.css" />
+    <link rel="stylesheet" href="/css/forms.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/projects/">Projects</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">World Clocks</span></h1>
+
+
+</div>
+
+<main>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+
+    .add-clock-bar {
+        display: flex;
+        justify-content: center;
+        padding: 20px 24px 0;
+    }
+
+    .search-wrapper {
+        position: relative;
+        width: 360px;
+    }
+
+    .search-wrapper input {
+        width: 100%;
+        padding: 10px 14px;
+        border: 2px solid #b0c4de;
+        border-radius: 10px;
+        font-size: 14px;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+
+    .search-wrapper input:focus {
+        border-color: #5a9fd4;
+    }
+
+    .search-wrapper input::placeholder {
+        color: #a0a8b4;
+    }
+
+    .dropdown {
+        position: absolute;
+        top: calc(100% + 4px);
+        left: 0;
+        right: 0;
+        max-height: 260px;
+        overflow-y: auto;
+        background: #fff;
+        border: 1px solid #c8d6e5;
+        border-radius: 10px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        display: none;
+        z-index: 100;
+    }
+
+    .dropdown.open {
+        display: block;
+    }
+
+    .dropdown-item {
+        padding: 9px 14px;
+        cursor: pointer;
+        font-size: 13px;
+        color: #2c3e50;
+        border-bottom: 1px solid #f0f2f5;
+        transition: background 0.15s;
+    }
+
+    .dropdown-item:last-child {
+        border-bottom: none;
+    }
+
+    .dropdown-item:hover,
+    .dropdown-item.active {
+        background: #e8f0fe;
+    }
+
+    .dropdown-item .tz-region {
+        color: #7f8c8d;
+        font-size: 11px;
+    }
+
+    .clocks-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 32px;
+        padding: 24px;
+    }
+
+    .clock-card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        padding: 20px;
+        border-radius: 16px;
+        transition: background 0.5s, box-shadow 0.5s;
+    }
+
+    .clock-card.day {
+        background: linear-gradient(135deg, #e0f0ff, #f8fbff);
+        box-shadow: 0 4px 20px rgba(100, 160, 220, 0.2);
+    }
+
+    .clock-card.night {
+        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .clock-label {
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+    }
+
+    .clock-card.day .clock-label {
+        color: #2c3e50;
+    }
+
+    .clock-card.night .clock-label {
+        color: #dce6f0;
+    }
+
+    .clock-sublabel {
+        font-size: 11px;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+    }
+
+    .clock-card.day .clock-sublabel {
+        color: #7f8c8d;
+    }
+
+    .clock-card.night .clock-sublabel {
+        color: #8899aa;
+    }
+
+    .digital-time {
+        font-family: 'Consolas', 'Courier New', monospace;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 1px;
+    }
+
+    .clock-card.day .digital-time {
+        color: #34495e;
+    }
+
+    .clock-card.night .digital-time {
+        color: #a0c4e8;
+    }
+
+    .day-night-indicator {
+        font-size: 18px;
+        line-height: 1;
+    }
+
+    .remove-btn {
+        position: absolute;
+        top: 6px;
+        right: 8px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        line-height: 1;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+    }
+
+    .clock-card.day .remove-btn {
+        color: #95a5b6;
+    }
+
+    .clock-card.day .remove-btn:hover {
+        background: rgba(0, 0, 0, 0.08);
+        color: #e74c3c;
+    }
+
+    .clock-card.night .remove-btn {
+        color: #556678;
+    }
+
+    .clock-card.night .remove-btn:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: #ff6b6b;
+    }
+</style>
+
+<div class="add-clock-bar">
+    <div class="search-wrapper">
+        <input type="text" id="tzSearch" placeholder="Type a city or timezone to add a clock..." autocomplete="off" />
+        <div class="dropdown" id="tzDropdown"></div>
+    </div>
+</div>
+
+<div class="clocks-container" id="clocksContainer"></div>
+
+<script>
+    // All IANA timezones supported by the browser
+    const ALL_TIMEZONES = Intl.supportedValuesOf('timeZone');
+
+    // Build a friendly display list: "City — Region" from "Region/City"
+    const TZ_LIST = ALL_TIMEZONES.map(tz => {
+        const parts = tz.split('/');
+        const city = (parts[parts.length - 1] || '').replace(/_/g, ' ');
+        const region = parts.slice(0, -1).join('/').replace(/_/g, ' ');
+        return { tz, city, region, search: `${city} ${region} ${tz}`.toLowerCase() };
+    });
+
+    const DEFAULT_ZONES = [
+        { label: 'PST', tz: 'America/Los_Angeles', name: 'Los Angeles' },
+        { label: 'CST', tz: 'America/Chicago', name: 'Chicago' },
+        { label: 'EST', tz: 'America/New_York', name: 'New York' },
+        { label: 'IST', tz: 'Asia/Kolkata', name: 'India' },
+        { label: 'SGT', tz: 'Asia/Singapore', name: 'Singapore' },
+    ];
+
+    // Active clocks list: { label, tz, name, removable }
+    const clocks = DEFAULT_ZONES.map(z => ({ ...z, removable: false }));
+    let nextId = clocks.length;
+
+    const SIZE = 180;
+    const CENTER = SIZE / 2;
+    const CLOCK_RADIUS = 75;
+
+    const DAY = {
+        face: '#ffffff',
+        faceStroke: '#b0c4de',
+        hourMarks: '#4a6a8a',
+        minuteMarks: '#a0b8d0',
+        numbers: '#2c3e50',
+        hourHand: '#2c3e50',
+        minuteHand: '#34495e',
+        secondHand: '#e74c3c',
+        centerDot: '#2c3e50',
+        centerInner: '#e74c3c',
+    };
+
+    const NIGHT = {
+        face: '#0f1626',
+        faceStroke: '#2a3a5c',
+        hourMarks: '#4a6a9a',
+        minuteMarks: '#253550',
+        numbers: '#8aa8c8',
+        hourHand: '#c0d8f0',
+        minuteHand: '#90b0d0',
+        secondHand: '#ff6b6b',
+        centerDot: '#c0d8f0',
+        centerInner: '#ff6b6b',
+    };
+
+    function isDay(hours) {
+        return hours >= 6 && hours < 18;
+    }
+
+    function getTimeInZone(tz) {
+        const now = new Date();
+        const str = now.toLocaleString('en-US', {
+            timeZone: tz, hour12: false,
+            hour: '2-digit', minute: '2-digit', second: '2-digit',
+        });
+        const [h, m, s] = str.split(':').map(Number);
+        return { hours: h === 24 ? 0 : h, minutes: m, seconds: s };
+    }
+
+    function getDigitalTime(tz) {
+        return new Date().toLocaleString('en-US', {
+            timeZone: tz, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true,
+        });
+    }
+
+    function getDateStr(tz) {
+        return new Date().toLocaleString('en-US', {
+            timeZone: tz, weekday: 'short', month: 'short', day: 'numeric',
+        });
+    }
+
+    function buildClockSVG(id) {
+        return `
+        <svg id="svg-${id}" width="${SIZE}" height="${SIZE}" viewBox="0 0 ${SIZE} ${SIZE}">
+            <circle id="face-${id}" cx="${CENTER}" cy="${CENTER}" r="${CLOCK_RADIUS}" fill="${DAY.face}" stroke="${DAY.faceStroke}" stroke-width="2.5"/>
+            <g id="marks-${id}"></g>
+            <line id="hour-${id}" x1="${CENTER}" y1="${CENTER}" x2="${CENTER}" y2="${CENTER - 42}" stroke="${DAY.hourHand}" stroke-width="4.5" stroke-linecap="round"/>
+            <line id="min-${id}" x1="${CENTER}" y1="${CENTER}" x2="${CENTER}" y2="${CENTER - 58}" stroke="${DAY.minuteHand}" stroke-width="3" stroke-linecap="round"/>
+            <line id="sec-${id}" x1="${CENTER}" y1="${CENTER + 12}" x2="${CENTER}" y2="${CENTER - 62}" stroke="${DAY.secondHand}" stroke-width="1.2" stroke-linecap="round"/>
+            <circle id="cdot-${id}" cx="${CENTER}" cy="${CENTER}" r="4" fill="${DAY.centerDot}"/>
+            <circle id="cdoti-${id}" cx="${CENTER}" cy="${CENTER}" r="2" fill="${DAY.centerInner}"/>
+        </svg>`;
+    }
+
+    function buildMarks(id, palette) {
+        const g = document.getElementById(`marks-${id}`);
+        g.innerHTML = '';
+        for (let i = 0; i < 60; i++) {
+            const angle = (i * 6 - 90) * (Math.PI / 180);
+            if (i % 5 === 0) {
+                const x1 = CENTER + Math.cos(angle) * (CLOCK_RADIUS - 12);
+                const y1 = CENTER + Math.sin(angle) * (CLOCK_RADIUS - 12);
+                const x2 = CENTER + Math.cos(angle) * (CLOCK_RADIUS - 4);
+                const y2 = CENTER + Math.sin(angle) * (CLOCK_RADIUS - 4);
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+                line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+                line.setAttribute('stroke', palette.hourMarks);
+                line.setAttribute('stroke-width', '2.5');
+                line.setAttribute('stroke-linecap', 'round');
+                g.appendChild(line);
+                const num = i / 5 || 12;
+                const nx = CENTER + Math.cos(angle) * (CLOCK_RADIUS - 24);
+                const ny = CENTER + Math.sin(angle) * (CLOCK_RADIUS - 24);
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', nx); text.setAttribute('y', ny);
+                text.setAttribute('text-anchor', 'middle');
+                text.setAttribute('dominant-baseline', 'central');
+                text.setAttribute('fill', palette.numbers);
+                text.setAttribute('font-size', '12');
+                text.setAttribute('font-weight', '600');
+                text.setAttribute('font-family', "'Segoe UI', system-ui, sans-serif");
+                text.textContent = num;
+                g.appendChild(text);
+            } else {
+                const x1 = CENTER + Math.cos(angle) * (CLOCK_RADIUS - 6);
+                const y1 = CENTER + Math.sin(angle) * (CLOCK_RADIUS - 6);
+                const x2 = CENTER + Math.cos(angle) * (CLOCK_RADIUS - 4);
+                const y2 = CENTER + Math.sin(angle) * (CLOCK_RADIUS - 4);
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+                line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+                line.setAttribute('stroke', palette.minuteMarks);
+                line.setAttribute('stroke-width', '1');
+                line.setAttribute('stroke-linecap', 'round');
+                g.appendChild(line);
+            }
+        }
+    }
+
+    function rotateHand(el, degrees) {
+        el.setAttribute('transform', `rotate(${degrees}, ${CENTER}, ${CENTER})`);
+    }
+
+    function updateClock(clock, id) {
+        const { hours, minutes, seconds } = getTimeInZone(clock.tz);
+        const day = isDay(hours);
+        const palette = day ? DAY : NIGHT;
+
+        const card = document.getElementById(`card-${id}`);
+        if (!card) return;
+        card.className = `clock-card ${day ? 'day' : 'night'}`;
+
+        document.getElementById(`indicator-${id}`).textContent = day ? '\u2600\uFE0F' : '\uD83C\uDF19';
+
+        const face = document.getElementById(`face-${id}`);
+        face.setAttribute('fill', palette.face);
+        face.setAttribute('stroke', palette.faceStroke);
+
+        buildMarks(id, palette);
+
+        document.getElementById(`hour-${id}`).setAttribute('stroke', palette.hourHand);
+        document.getElementById(`min-${id}`).setAttribute('stroke', palette.minuteHand);
+        document.getElementById(`sec-${id}`).setAttribute('stroke', palette.secondHand);
+        document.getElementById(`cdot-${id}`).setAttribute('fill', palette.centerDot);
+        document.getElementById(`cdoti-${id}`).setAttribute('fill', palette.centerInner);
+
+        const secAngle = seconds * 6;
+        const minAngle = minutes * 6 + seconds * 0.1;
+        const hourAngle = (hours % 12) * 30 + minutes * 0.5;
+
+        rotateHand(document.getElementById(`sec-${id}`), secAngle);
+        rotateHand(document.getElementById(`min-${id}`), minAngle);
+        rotateHand(document.getElementById(`hour-${id}`), hourAngle);
+
+        document.getElementById(`digital-${id}`).textContent = getDigitalTime(clock.tz);
+        document.getElementById(`date-${id}`).textContent = getDateStr(clock.tz);
+    }
+
+    // Render a clock card into the container and return the assigned id
+    function renderClockCard(clock) {
+        const id = nextId++;
+        clock._id = id;
+        const container = document.getElementById('clocksContainer');
+        const card = document.createElement('div');
+        card.id = `card-${id}`;
+        card.className = 'clock-card day';
+        const removeHtml = clock.removable
+            ? `<button class="remove-btn" title="Remove" onclick="removeClock(${id})">&#x2715;</button>`
+            : '';
+        card.innerHTML = `
+            ${removeHtml}
+            <span class="day-night-indicator" id="indicator-${id}"></span>
+            <span class="clock-label">${clock.label}</span>
+            <span class="clock-sublabel">${clock.name}</span>
+            ${buildClockSVG(id)}
+            <span class="digital-time" id="digital-${id}"></span>
+            <span class="clock-sublabel" id="date-${id}"></span>
+        `;
+        container.appendChild(card);
+        updateClock(clock, id);
+        return id;
+    }
+
+    function removeClock(id) {
+        const idx = clocks.findIndex(c => c._id === id);
+        if (idx === -1) return;
+        clocks.splice(idx, 1);
+        const card = document.getElementById(`card-${id}`);
+        if (card) card.remove();
+    }
+
+    // Build default clocks
+    clocks.forEach(c => renderClockCard(c));
+
+    // Tick
+    function tick() {
+        clocks.forEach(c => updateClock(c, c._id));
+    }
+    setInterval(tick, 1000);
+
+    // --- Search / Autocomplete ---
+    const searchInput = document.getElementById('tzSearch');
+    const dropdown = document.getElementById('tzDropdown');
+    let activeIdx = -1;
+    let filtered = [];
+
+    function renderDropdown(items) {
+        filtered = items;
+        activeIdx = -1;
+        if (items.length === 0) {
+            dropdown.classList.remove('open');
+            dropdown.innerHTML = '';
+            return;
+        }
+        dropdown.innerHTML = items.map((item, i) =>
+            `<div class="dropdown-item" data-idx="${i}">
+                <span>${item.city}</span>
+                <span class="tz-region">${item.region ? ' \u2014 ' + item.region : ''}</span>
+            </div>`
+        ).join('');
+        dropdown.classList.add('open');
+    }
+
+    function highlightItem(idx) {
+        const items = dropdown.querySelectorAll('.dropdown-item');
+        items.forEach(el => el.classList.remove('active'));
+        if (idx >= 0 && idx < items.length) {
+            items[idx].classList.add('active');
+            items[idx].scrollIntoView({ block: 'nearest' });
+        }
+        activeIdx = idx;
+    }
+
+    function selectTimezone(tzEntry) {
+        // Don't add duplicates
+        if (clocks.some(c => c.tz === tzEntry.tz)) {
+            searchInput.value = '';
+            dropdown.classList.remove('open');
+            return;
+        }
+        const parts = tzEntry.tz.split('/');
+        const abbr = parts[parts.length - 1].replace(/_/g, ' ');
+        const clock = {
+            label: abbr,
+            tz: tzEntry.tz,
+            name: tzEntry.region ? tzEntry.region.replace(/_/g, ' ') : '',
+            removable: true,
+        };
+        clocks.push(clock);
+        renderClockCard(clock);
+        searchInput.value = '';
+        dropdown.classList.remove('open');
+    }
+
+    searchInput.addEventListener('input', () => {
+        const q = searchInput.value.trim().toLowerCase();
+        if (q.length === 0) {
+            dropdown.classList.remove('open');
+            dropdown.innerHTML = '';
+            return;
+        }
+        const matches = TZ_LIST.filter(t => t.search.includes(q)).slice(0, 30);
+        renderDropdown(matches);
+    });
+
+    searchInput.addEventListener('keydown', (e) => {
+        if (!dropdown.classList.contains('open')) return;
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            highlightItem(Math.min(activeIdx + 1, filtered.length - 1));
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            highlightItem(Math.max(activeIdx - 1, 0));
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            if (activeIdx >= 0 && activeIdx < filtered.length) {
+                selectTimezone(filtered[activeIdx]);
+            }
+        } else if (e.key === 'Escape') {
+            dropdown.classList.remove('open');
+        }
+    });
+
+    dropdown.addEventListener('click', (e) => {
+        const item = e.target.closest('.dropdown-item');
+        if (!item) return;
+        const idx = parseInt(item.dataset.idx, 10);
+        if (idx >= 0 && idx < filtered.length) {
+            selectTimezone(filtered[idx]);
+        }
+    });
+
+    // Close dropdown on outside click
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.search-wrapper')) {
+            dropdown.classList.remove('open');
+        }
+    });
+</script>
+
+</main>
+
+  <footer>
+  
+<script defer src="/js/center-img.js"></script>
+<script defer src="/js/pre-tag.js"></script>
+
+
+
+
+
+
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2026 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+
