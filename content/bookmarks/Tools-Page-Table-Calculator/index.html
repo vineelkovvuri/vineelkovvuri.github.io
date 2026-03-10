@@ -3,141 +3,269 @@ title: "Page Table Calculator"
 tags: ["Tools"]
 ---
 
-<!-- <!DOCTYPE html>
-<html lang="en">
+<style>
+.ptcalc {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  max-width: 1400px;
+  color: #24292e;
+}
+.ptcalc *, .ptcalc *::before, .ptcalc *::after { box-sizing: border-box; }
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PageTableCalculator - Calculate x64 Page table entries required for a given memory range</title>
-    <style>
-        * {
-            font-family: monospace;
-        }
+/* Controls */
+.ptcalc .controls { display: flex; flex-direction: column; gap: 8px; margin-bottom: 28px; }
+.ptcalc .ctrl-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ptcalc .ctrl-row label {
+  width: 36px; text-align: right; font-weight: 600; font-size: 13px; color: #586069;
+}
+.ptcalc .ctrl-row input[type="text"] {
+  font-family: inherit; font-size: 14px; padding: 7px 12px;
+  border: 1.5px solid #d1d5da; border-radius: 6px; width: 240px;
+  outline: none; transition: border-color 0.2s, box-shadow 0.2s; background: #fff;
+}
+.ptcalc .ctrl-row input[type="text"]:focus {
+  border-color: #3949ab; box-shadow: 0 0 0 3px rgba(57,73,171,0.12);
+}
+.ptcalc .ctrl-row input:disabled { background: #f6f8fa; color: #959da5; }
+.ptcalc .ctrl-row select {
+  font-family: inherit; font-size: 13px; padding: 6px 8px;
+  border: 1.5px solid #d1d5da; border-radius: 6px; background: #fff;
+  outline: none; cursor: pointer;
+}
 
-        .container {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            width: 500px;
-            /* Set a fixed width for the container */
-        }
+/* Address sections */
+.ptcalc .addr-section { margin-bottom: 28px; }
+.ptcalc .addr-header {
+  display: flex; align-items: baseline; gap: 6px; margin-bottom: 10px;
+}
+.ptcalc .addr-title {
+  font-weight: 700; font-size: 12px; text-transform: uppercase;
+  letter-spacing: 0.8px; color: #6a737d;
+}
+.ptcalc .addr-hex-full {
+  font-family: inherit; font-size: 12px; font-weight: 700;
+  letter-spacing: 0.8px; color: #6a737d;
+}
 
-        .input-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+/* Bit display container */
+.ptcalc .bit-display {
+  display: inline-flex; gap: 6px; padding: 12px 14px;
+  background: #f8f9fb; border: 1px solid #e1e4e8; border-radius: 12px;
+  overflow-x: auto;
+}
 
-        .input-group label {
-            width: 50px;
-            /* Set a fixed width for the labels */
-            text-align: right;
-            /* Align the label text to the right */
-        }
+/* Segment */
+.ptcalc .seg { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+.ptcalc .seg-label {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.3px; margin-bottom: 1px;
+}
+.ptcalc .seg-range { font-size: 9px; color: #959da5; margin-bottom: 4px; }
+.ptcalc .bit-pos-row { display: flex; gap: 0; }
+.ptcalc .bit-pos-digit {
+  width: 10px; height: 11px; display: flex; align-items: center; justify-content: center;
+  font-size: 8px; color: #c0c4c8;
+}
+.ptcalc .seg-bits { display: flex; gap: 0; }
 
-        .input-group select {
-            width: 80px;
-        }
+/* Bit cell */
+.ptcalc .bit-cell {
+  width: 10px; height: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+  transition: opacity 0.1s ease;
+  user-select: none; background: none;
+}
+.ptcalc .bit-cell.interactive { cursor: pointer; }
+.ptcalc .bit-cell.interactive:hover { opacity: 0.5; }
 
-        .input-group input {
-            flex: 1;
-            padding: 5px;
-            box-sizing: border-box;
-        }
-    </style>
-</head> -->
+/* Segment values */
+.ptcalc .seg-vals {
+  display: flex; flex-direction: column; align-items: center; margin-top: 4px; gap: 0;
+}
+.ptcalc .seg-hex { font-size: 10px; font-weight: 600; }
+.ptcalc .seg-dec { font-size: 9px; color: #959da5; }
 
-<body>
-  <table style="margin: 0 !important;">
-    <tr>
-      <td style="text-align: right; padding-right: 10px;">
-        <label for="tbFromHex">From:</label>
-      </td>
-      <td>
-        <input type="text" id="tbFromHex" value="0x0" style="padding: 5px;" />
-      </td>
-    </tr>
-    <tr>
-      <td style="text-align: right; padding-right: 10px;">
-        <label for="tbSizeHex">Size:</label>
-      </td>
-      <td style="align-items: center;">
-        <input type="text" id="tbSizeHex" value="0x1000" style="padding: 5px;" />
-        <select id="quantity" name="quantity">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
-          <option value="10">10</option>
-          <option value="16">16</option>
-          <option value="32">32</option>
-          <option value="48">48</option>
-          <option value="64">64</option>
-        </select>
-        <select id="unit" name="unit">
-          <option value="bytes">Bytes</option>
-          <option value="kb">KB</option>
-          <option value="mb">MB</option>
-          <option value="gb">GB</option>
-          <option value="tb">TB</option>
-        </select>
-      </td>
-    </tr>
-    <tr>
-      <td style="text-align: right; padding-right: 10px;">
-        <label for="tbToHex">To:</label>
-      </td>
-      <td>
-        <input type="text" id="tbToHex" value="0x0" disabled="disabled" style="padding: 5px;" />
-      </td>
-    </tr>
-  </table>
-  <strong><pre id="tbResults"></pre></strong>
+/* Segment colors */
+.ptcalc .seg[data-seg="sign"] { --c: #607d8b; --cll: #eceff1; }
+.ptcalc .seg[data-seg="pml5"] { --c: #3949ab; --cll: #e8eaf6; }
+.ptcalc .seg[data-seg="pml4"] { --c: #00838f; --cll: #e0f7fa; }
+.ptcalc .seg[data-seg="pdp"]  { --c: #2e7d32; --cll: #e8f5e9; }
+.ptcalc .seg[data-seg="pd"]   { --c: #d84315; --cll: #fbe9e7; }
+.ptcalc .seg[data-seg="pt"]   { --c: #c62828; --cll: #ffebee; }
+.ptcalc .seg[data-seg="phys"] { --c: #6a1b9a; --cll: #f3e5f5; }
 
-  <pre>
-X64 - 4K 5 Level Paging
+.ptcalc .seg .seg-label { color: var(--c); }
+.ptcalc .seg .bit-cell.bit-zero { color: var(--c); opacity: 0.4; }
+.ptcalc .seg .bit-cell.bit-one  { color: var(--c); }
+.ptcalc .seg .seg-hex { color: var(--c); }
 
+/* Results */
+.ptcalc .results {
+  background: #f8f9fb; border: 1px solid #e1e4e8; border-radius: 12px;
+  padding: 20px 24px; margin-bottom: 28px;
+}
+.ptcalc .results-title {
+  margin: 0 0 16px; font-size: 12px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.8px; color: #6a737d;
+}
+.ptcalc .results-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 16px;
+}
+.ptcalc .results-col-title {
+  margin: 0 0 8px; font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.3px; color: #959da5;
+  border-bottom: 1px solid #e1e4e8; padding-bottom: 4px;
+}
+.ptcalc .result-row {
+  display: flex; justify-content: space-between; padding: 3px 0; font-size: 13px;
+}
+.ptcalc .result-label { color: #586069; }
+.ptcalc .result-value { font-weight: 700; color: #24292e; }
+.ptcalc .results-summary { border-top: 1px solid #e1e4e8; padding-top: 14px; }
+.ptcalc .summary-row { padding: 3px 0; font-size: 13px; }
+.ptcalc .summary-label { color: #586069; }
+.ptcalc .summary-value { font-weight: 700; color: #24292e; }
+
+/* Reference sections */
+.ptcalc details.ref {
+  margin-bottom: 12px; border: 1px solid #e1e4e8; border-radius: 8px; overflow: hidden;
+}
+.ptcalc details.ref summary {
+  padding: 10px 16px; font-weight: 600; font-size: 13px; cursor: pointer;
+  background: #f6f8fa; user-select: none; color: #586069;
+}
+.ptcalc details.ref summary:hover { background: #eef1f4; }
+.ptcalc details.ref > pre {
+  margin: 0 !important; padding: 16px; font-size: 11px; line-height: 1.35;
+  overflow-x: auto; background: #fafbfc; border-top: 1px solid #e1e4e8;
+}
+.ptcalc .size-ref {
+  display: flex; flex-wrap: wrap; gap: 0; padding: 0;
+  border-top: 1px solid #e1e4e8; background: #fafbfc;
+}
+.ptcalc .size-ref pre {
+  margin: 0 !important; padding: 8px 16px; font-size: 11px;
+  line-height: 1.5; background: transparent; flex: 1; min-width: 220px;
+}
+</style>
+
+<div class="ptcalc">
+  <!-- Controls -->
+  <div class="controls">
+    <div class="ctrl-row">
+      <label for="tbFromHex">From</label>
+      <input type="text" id="tbFromHex" value="0x0" spellcheck="false" autocomplete="off">
+    </div>
+    <div class="ctrl-row">
+      <label for="tbSizeHex">Size</label>
+      <input type="text" id="tbSizeHex" value="0x1000" spellcheck="false" autocomplete="off">
+      <select id="quantity">
+        <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+        <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+        <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+        <option value="10">10</option><option value="16">16</option><option value="32">32</option>
+        <option value="48">48</option><option value="64">64</option>
+      </select>
+      <select id="unit">
+        <option value="bytes">Bytes</option><option value="kb">KB</option>
+        <option value="mb">MB</option><option value="gb">GB</option>
+        <option value="tb">TB</option>
+      </select>
+    </div>
+    <div class="ctrl-row">
+      <label for="tbToHex">To</label>
+      <input type="text" id="tbToHex" disabled>
+    </div>
+  </div>
+
+  <!-- Start Address Bit Display -->
+  <div class="addr-section">
+    <div class="addr-header">
+      <span class="addr-title">Start Address</span>
+      <code class="addr-hex-full" id="from-hex-full">0x0000000000000000</code>
+    </div>
+    <div class="bit-display" id="from-bits"></div>
+  </div>
+
+  <!-- End Address Bit Display -->
+  <div class="addr-section">
+    <div class="addr-header">
+      <span class="addr-title">End Address</span>
+      <code class="addr-hex-full" id="to-hex-full">0x0000000000000FFF</code>
+    </div>
+    <div class="bit-display" id="to-bits"></div>
+  </div>
+
+  <!-- Results -->
+  <div class="results">
+    <div class="results-title">Page Table Requirements</div>
+    <div class="results-grid">
+      <div>
+        <div class="results-col-title">Entries</div>
+        <div class="result-row"><span class="result-label">PML5</span><span class="result-value" id="r-pml5e">-</span></div>
+        <div class="result-row"><span class="result-label">PML4</span><span class="result-value" id="r-pml4e">-</span></div>
+        <div class="result-row"><span class="result-label">PDP</span><span class="result-value" id="r-pdpe">-</span></div>
+        <div class="result-row"><span class="result-label">PD</span><span class="result-value" id="r-pde">-</span></div>
+        <div class="result-row"><span class="result-label">PT</span><span class="result-value" id="r-pte">-</span></div>
+      </div>
+      <div>
+        <div class="results-col-title">Tables</div>
+        <div class="result-row"><span class="result-label">PML5</span><span class="result-value" id="r-pml5t">-</span></div>
+        <div class="result-row"><span class="result-label">PML4</span><span class="result-value" id="r-pml4t">-</span></div>
+        <div class="result-row"><span class="result-label">PDP</span><span class="result-value" id="r-pdpt">-</span></div>
+        <div class="result-row"><span class="result-label">PD</span><span class="result-value" id="r-pdt">-</span></div>
+        <div class="result-row"><span class="result-label">PT</span><span class="result-value" id="r-ptt">-</span></div>
+      </div>
+    </div>
+    <div class="results-summary">
+      <div class="summary-row"><span class="summary-label">Memory being mapped: </span><span class="summary-value" id="r-mem"></span></div>
+      <div class="summary-row"><span class="summary-label">Page tables required: </span><span class="summary-value" id="r-tables"></span></div>
+      <div class="summary-row"><span class="summary-label">Memory for page tables: </span><span class="summary-value" id="r-tablemem"></span></div>
+    </div>
+  </div>
+
+  <!-- Reference: Paging Diagram -->
+  <details class="ref">
+    <summary>x64 5-Level Paging Diagram</summary>
+    <pre>
      63           57 56           48 47           39 38           30 29            21 20            12 11               0
-     ┌──────────────┬───────────────┬───────────────┬───────────────┬────────────────┬────────────────┬──────────────────┐
-     │ Sign         │  PML5E        │ PML4E         │Page Directory │ Page           │ Page           │Physical          │
-     │ Extend       │  Offset       │ Offset        │Pointer        │ Directory      │ Table          │Page              │
-     │              │               │               │Offset         │ Offset         │ Offset         │Offset            │
-     └──────────────┴─┬─────────────┴─┬─────────────┴──┬────────────┴───┬────────────┴───┬────────────┴───┬──────────────┘
-                      │9              │9               │9               │9               │9               │12
-                      │               │                │                │                │                │
-                      │  ┌─────┐      │  ┌─────┐       │  ┌─────┐       │  ┌─────┐       │  ┌─────┐       │  ┌─────┐
-                      │  │     │      │  │     │       │  │     │       │  │     │       │  │     │       │  │     │
-                      │  │     │      │  │     │       │  │     │       │  │     │       │  │     │       │  │     │
-                      │  │     │      │  │     │       │  │     │       │  │     │       │  │     │       │  │     │
-                      │  │     │      │  │     │       │  │     │       │  │     │       │  │     │       │  │     │
-                      │  ├─────┤      │  ├─────┤       │  ├─────┤       │  ├─────┤       │  ├─────┤       │  ├─────┤
-                      └─►│PML5E├───┐  └─►│PML4E│───┐   └─►│PDPE │───┐   └─►│PDE  │───┐   └─►│PTE  │───┐   └─►│ PA  │
-                         ├─────┤   │52   ├─────┤   │52    ├─────┤   │52    ├─────┤   │52    ├─────┤   │52    ├─────┤
-                         │     │   │     │     │   │      │     │   │      │     │   │      │     │   │      │     │
-                  ┌─────►└─────┘   └────►└─────┘   └─────►└─────┘   └─────►└─────┘   └─────►└─────┘   └─────►└─────┘
-                  │        4K              4K               4K               4K                4K               4K
-                  │
-                  │
-                  │
-                  │
-63         52  51 │                               12 11            0
-┌─────────────┬───┴─────────────────────────────────┬───────────────┐
-│             │    Page-Map Level-4 or Level-5      │               │
-│    MBZ      │          Table Base Address         │               │  CR3
-│             │                                     │               │
-└─────────────┴─────────────────────────────────────┴───────────────┘
+     +──────────────+───────────────+───────────────+───────────────+────────────────+────────────────+──────────────────+
+     | Sign         |  PML5E        | PML4E         |Page Directory | Page           | Page           |Physical          |
+     | Extend       |  Offset       | Offset        |Pointer        | Directory      | Table          |Page              |
+     |              |               |               |Offset         | Offset         | Offset         |Offset            |
+     +──────────────+─+─────────────+─+─────────────+──+────────────+───+────────────+───+────────────+───+──────────────+
+                      |9              |9               |9               |9               |9               |12
+                      |               |                |                |                |                |
+                      |  +─────+      |  +─────+       |  +─────+       |  +─────+       |  +─────+       |  +─────+
+                      |  |     |      |  |     |       |  |     |       |  |     |       |  |     |       |  |     |
+                      |  |     |      |  |     |       |  |     |       |  |     |       |  |     |       |  |     |
+                      |  |     |      |  |     |       |  |     |       |  |     |       |  |     |       |  |     |
+                      |  |     |      |  |     |       |  |     |       |  |     |       |  |     |       |  |     |
+                      |  +─────+      |  +─────+       |  +─────+       |  +─────+       |  +─────+       |  +─────+
+                      +->|PML5E+---+  +->|PML4E|---+   +->|PDPE |---+   +->|PDE  |---+   +->|PTE  |---+   +->| PA  |
+                         +─────+   |52   +─────+   |52    +─────+   |52    +─────+   |52    +─────+   |52    +─────+
+                         |     |   |     |     |   |      |     |   |      |     |   |      |     |   |      |     |
+                  +----->+─────+   +---->+─────+   +----->+─────+   +----->+─────+   +----->+─────+   +----->+─────+
+                  |        4K              4K               4K               4K                4K               4K
+                  |
+                  |
+                  |
+                  |
+63         52  51 |                               12 11            0
++─────────────+───+─────────────────────────────────+───────────────+
+|             |    Page-Map Level-4 or Level-5      |               |
+|    MBZ      |          Table Base Address         |               |  CR3
+|             |                                     |               |
++─────────────+─────────────────────────────────────+───────────────+</pre>
+  </details>
 
-</pre>
-  <table>
-    <tr>
-      <td>
-        <pre>
+  <!-- Reference: Size Table -->
+  <details class="ref">
+    <summary>Size Reference Table</summary>
+    <div class="size-ref">
+      <pre>
 1B      2^0    0x1
 2B      2^1    0x2
 4B      2^2    0x4
@@ -147,11 +275,8 @@ X64 - 4K 5 Level Paging
 64B     2^6    0x40
 128B    2^7    0x80
 256B    2^8    0x100
-512B    2^9    0x200
-        </pre>
-      </td>
-      <td>
-        <pre>
+512B    2^9    0x200</pre>
+      <pre>
 1KB     2^10   0x400
 2KB     2^11   0x800
 4KB     2^12   0x1000
@@ -161,11 +286,8 @@ X64 - 4K 5 Level Paging
 64KB    2^16   0x10000
 128KB   2^17   0x20000
 256KB   2^18   0x40000
-512KB   2^19   0x80000
-        </pre>
-      </td>
-      <td>
-        <pre>
+512KB   2^19   0x80000</pre>
+      <pre>
 1MB     2^20   0x100000
 2MB     2^21   0x200000
 4MB     2^22   0x400000
@@ -175,13 +297,8 @@ X64 - 4K 5 Level Paging
 64MB    2^26   0x4000000
 128MB   2^27   0x8000000
 256MB   2^28   0x10000000
-512MB   2^29   0x20000000
-        </pre>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <pre>
+512MB   2^29   0x20000000</pre>
+      <pre>
 1GB     2^30   0x40000000
 2GB     2^31   0x80000000
 4GB     2^32   0x100000000
@@ -191,11 +308,8 @@ X64 - 4K 5 Level Paging
 64GB    2^36   0x1000000000
 128GB   2^37   0x2000000000
 256GB   2^38   0x4000000000
-512GB   2^39   0x8000000000
-        </pre>
-      </td>
-      <td>
-        <pre>
+512GB   2^39   0x8000000000</pre>
+      <pre>
 1TB     2^40   0x10000000000
 2TB     2^41   0x20000000000
 4TB     2^42   0x40000000000
@@ -205,11 +319,8 @@ X64 - 4K 5 Level Paging
 64TB    2^46   0x400000000000
 128TB   2^47   0x800000000000
 256TB   2^48   0x1000000000000
-512TB   2^49   0x2000000000000
-        </pre>
-      </td>
-      <td>
-        <pre>
+512TB   2^49   0x2000000000000</pre>
+      <pre>
 1PB     2^50   0x4000000000000
 2PB     2^51   0x8000000000000
 4PB     2^52   0x10000000000000
@@ -219,316 +330,277 @@ X64 - 4K 5 Level Paging
 64PB    2^56   0x100000000000000
 128PB   2^57   0x200000000000000
 256PB   2^58   0x400000000000000
-512PB   2^59   0x800000000000000
-        </pre>
-      </td>
-    </tr>
-  </table>
+512PB   2^59   0x800000000000000</pre>
+    </div>
+  </details>
+</div>
 
-  <script>
-    // Attach event listeners to text fields
-    document
-      .getElementById("tbFromHex")
-      .addEventListener("input", tbFromHex_TextChanged);
-    document
-      .getElementById("tbSizeHex")
-      .addEventListener("input", tbSizeHex_TextChanged);
-    window.onload = tbFromHex_TextChanged;
+<script>
+(function () {
+  var SEGMENTS = [
+    { id: 'sign', name: 'Sign Ext', range: '63:57', hi: 63, lo: 57 },
+    { id: 'pml5', name: 'PML5',     range: '56:48', hi: 56, lo: 48 },
+    { id: 'pml4', name: 'PML4',     range: '47:39', hi: 47, lo: 39 },
+    { id: 'pdp',  name: 'PDP/PML3', range: '38:30', hi: 38, lo: 30 },
+    { id: 'pd',   name: 'PD/PML2',  range: '29:21', hi: 29, lo: 21 },
+    { id: 'pt',   name: 'PT/PML1',  range: '20:12', hi: 20, lo: 12 },
+    { id: 'phys', name: 'Offset',   range: '11:0',  hi: 11, lo: 0  }
+  ];
 
-    function convertHexStringToUInt64(hex) {
-      if (!hex) {
-        return BigInt(0);
+  var PAGE_SIZE = BigInt(4096);
+  var MASK_64 = (BigInt(1) << BigInt(64)) - BigInt(1);
+  var PAGE_INDEX_MASK = BigInt(0x1FF);
+
+  var fromAddr = BigInt(0);
+  var sizeVal = BigInt(0x1000);
+
+  function $(id) { return document.getElementById(id); }
+
+  function parseHex(s) {
+    s = (s || '').replace(/_/g, '').trim();
+    if (s.startsWith('0x') || s.startsWith('0X')) s = s.slice(2);
+    if (!s) return BigInt(0);
+    try { return BigInt('0x' + s); } catch (e) { return BigInt(0); }
+  }
+
+  function toHex(n) { return n.toString(16).toUpperCase(); }
+  function toHex16(n) { return '0x' + n.toString(16).padStart(16, '0').toUpperCase(); }
+
+  function buildBitDisplay(container, which) {
+    SEGMENTS.forEach(function (seg) {
+      var segEl = document.createElement('div');
+      segEl.className = 'seg';
+      segEl.setAttribute('data-seg', seg.id);
+
+      var label = document.createElement('div');
+      label.className = 'seg-label';
+      label.textContent = seg.name;
+      segEl.appendChild(label);
+
+      var range = document.createElement('div');
+      range.className = 'seg-range';
+      range.textContent = seg.range;
+      segEl.appendChild(range);
+
+      // Bit position tens row
+      var tensRow = document.createElement('div');
+      tensRow.className = 'bit-pos-row';
+      for (var b = seg.hi; b >= seg.lo; b--) {
+        var d = document.createElement('div');
+        d.className = 'bit-pos-digit';
+        d.textContent = Math.floor(b / 10);
+        tensRow.appendChild(d);
+      }
+      segEl.appendChild(tensRow);
+
+      // Bit position units row
+      var unitsRow = document.createElement('div');
+      unitsRow.className = 'bit-pos-row';
+      for (var b = seg.hi; b >= seg.lo; b--) {
+        var d = document.createElement('div');
+        d.className = 'bit-pos-digit';
+        d.textContent = b % 10;
+        unitsRow.appendChild(d);
+      }
+      segEl.appendChild(unitsRow);
+
+      var bitsEl = document.createElement('div');
+      bitsEl.className = 'seg-bits';
+
+      for (var b = seg.hi; b >= seg.lo; b--) {
+        (function (bitIdx) {
+          var cell = document.createElement('div');
+          cell.className = 'bit-cell interactive bit-zero';
+          cell.setAttribute('data-bit', bitIdx);
+          cell.title = 'Bit ' + bitIdx + ' (' + seg.name + ')';
+          cell.textContent = '0';
+          cell.addEventListener('click', function () { onBitClick(which, bitIdx); });
+          bitsEl.appendChild(cell);
+        })(b);
       }
 
-      if (hex.startsWith("0x") || hex.startsWith("0X")) {
-        hex = hex.substring(2);
-      }
+      segEl.appendChild(bitsEl);
 
-      if (!hex) {
-        return BigInt(0);
-      }
+      var vals = document.createElement('div');
+      vals.className = 'seg-vals';
+      var hexSpan = document.createElement('span');
+      hexSpan.className = 'seg-hex';
+      hexSpan.textContent = '0x0';
+      var decSpan = document.createElement('span');
+      decSpan.className = 'seg-dec';
+      decSpan.textContent = '0';
+      vals.appendChild(hexSpan);
+      vals.appendChild(decSpan);
+      segEl.appendChild(vals);
 
-      try {
-        return BigInt(`0x${hex}`);
-      } catch {
-        return BigInt(`0x${hex.substring(0, 16)}`);
+      container.appendChild(segEl);
+    });
+  }
+
+  function onBitClick(which, bit) {
+    var bitBig = BigInt(bit);
+    if (which === 'from') {
+      fromAddr = (fromAddr ^ (BigInt(1) << bitBig)) & MASK_64;
+      $('tbFromHex').value = '0x' + toHex(fromAddr);
+    } else {
+      var endAddr = fromAddr + sizeVal - BigInt(1);
+      endAddr = (endAddr ^ (BigInt(1) << bitBig)) & MASK_64;
+      if (endAddr >= fromAddr) {
+        sizeVal = endAddr - fromAddr + BigInt(1);
+        $('tbSizeHex').value = '0x' + toHex(sizeVal);
       }
     }
+    updateAll();
+  }
 
-    function convertUInt64ToHexString(number) {
-      return number.toString(16).toUpperCase();
-    }
+  function updateBitDisplay(container, address) {
+    var segs = container.querySelectorAll('.seg');
+    for (var i = 0; i < segs.length; i++) {
+      var seg = SEGMENTS[i];
+      var segEl = segs[i];
+      var width = seg.hi - seg.lo + 1;
+      var mask = (BigInt(1) << BigInt(width)) - BigInt(1);
+      var segVal = (address >> BigInt(seg.lo)) & mask;
 
-    function updateResults(from, size) {
-      document.getElementById("tbResults").innerText = "";
-
-      ptPrintBinary(from);
-      ptPrintBinary(from + size - BigInt(1));
-
-      ptFindSpaceRequired(from, size);
-    }
-
-    const PAGE_INDEX_MASK = BigInt(0x1ff);
-
-    const PML5_START_BIT = 48;
-    const PML4_START_BIT = 39;
-    const PDP_START_BIT = 30;
-    const PD_START_BIT = 21;
-    const PT_START_BIT = 12;
-
-    const PML5_STOP_BIT = PML5_START_BIT + 9;
-    const PML4_STOP_BIT = PML4_START_BIT + 9;
-    const PDP_STOP_BIT = PDP_START_BIT + 9;
-    const PD_STOP_BIT = PD_START_BIT + 9;
-    const PT_STOP_BIT = PT_START_BIT + 9;
-
-    const PAGE_SIZE = 4096;
-    const NUM_ENTRIES = PAGE_SIZE / 8;
-
-    function ptPrintBinary(addr) {
-      const slots = [
-        64,
-        57,
-        PML5_START_BIT,
-        PML4_START_BIT,
-        PDP_START_BIT,
-        PD_START_BIT,
-        PT_START_BIT,
-        0,
-      ];
-      const tbResults = document.getElementById("tbResults");
-      tbResults.innerText += "\n";
-      tbResults.innerText += `0x${addr
-        .toString(16)
-        .padStart(16, "0")
-        .toUpperCase()} :\n`;
-
-      tbResults.innerText += `       |${"PML5".padStart(9)}|${"PML4".padStart(
-        9
-      )}|${"PDP/PML3".padStart(9)}|${"PD/PML2".padStart(
-        9
-      )}|${"PT/PML1".padStart(9)}|${"Physical".padStart(12)}\n`;
-
-      for (let i = 0; i < slots.length - 1; i++) {
-        for (let j = slots[i] - 1; j >= slots[i + 1]; j--) {
-          tbResults.innerText += `${Math.floor(j / 10)}`;
+      var cells = segEl.querySelectorAll('.bit-cell');
+      for (var j = 0; j < cells.length; j++) {
+        var cell = cells[j];
+        var b = parseInt(cell.getAttribute('data-bit'));
+        var v = (address >> BigInt(b)) & BigInt(1);
+        cell.textContent = v.toString();
+        if (v === BigInt(1)) {
+          cell.classList.add('bit-one');
+          cell.classList.remove('bit-zero');
+        } else {
+          cell.classList.add('bit-zero');
+          cell.classList.remove('bit-one');
         }
-        if (i !== slots.length - 2) tbResults.innerText += "|";
       }
-      tbResults.innerText += "\n";
 
-      for (let i = 0; i < slots.length - 1; i++) {
-        for (let j = slots[i] - 1; j >= slots[i + 1]; j--) {
-          tbResults.innerText += `${j % 10}`;
-        }
-        if (i !== slots.length - 2) tbResults.innerText += "|";
-      }
-      tbResults.innerText += "\n";
-
-      for (let i = 0; i < slots.length - 1; i++) {
-        for (let j = slots[i] - 1; j >= slots[i + 1]; j--) {
-          tbResults.innerText += `${(addr >> BigInt(j)) & BigInt(1)}`;
-        }
-        if (i !== slots.length - 2) tbResults.innerText += "|";
-      }
-      tbResults.innerText += "\n";
-
-      for (let i = 0; i < slots.length - 1; i++) {
-        const slotWidth = BigInt(slots[i] - slots[i + 1]);
-        const slotValue =
-          (addr >> BigInt(slots[i + 1])) &
-          ((BigInt(1) << slotWidth) - BigInt(1));
-        tbResults.innerText += slotValue
-          .toString(16)
-          .padStart(Number(slotWidth), " ")
-          .toUpperCase();
-
-        if (i !== slots.length - 2) tbResults.innerText += "|";
-      }
-      tbResults.innerText += " Hex\n";
-
-      for (let i = 0; i < slots.length - 1; i++) {
-        const slotWidth = BigInt(slots[i] - slots[i + 1]);
-        const slotValue =
-          (addr >> BigInt(slots[i + 1])) &
-          ((BigInt(1) << slotWidth) - BigInt(1));
-        tbResults.innerText += slotValue
-          .toString()
-          .padStart(Number(slotWidth), " ");
-
-        if (i !== slots.length - 2) tbResults.innerText += "|";
-      }
-      tbResults.innerText += " Decimal\n";
+      segEl.querySelector('.seg-hex').textContent = '0x' + toHex(segVal);
+      segEl.querySelector('.seg-dec').textContent = segVal.toString();
     }
+  }
 
-    function findNumEntries(startOffset, endOffset, numParentLevelEntries) {
-      let numEntries = BigInt(0);
+  function updateAll() {
+    var endAddr = (fromAddr + sizeVal - BigInt(1)) & MASK_64;
 
-      if (numParentLevelEntries > BigInt(1)) {
-        numEntries += BigInt(512) - startOffset; // Number of upper entries in first page
-        numEntries += (numParentLevelEntries - BigInt(2)) * BigInt(512); // Number of entries in between pages
-        numEntries += endOffset + BigInt(1); // Number of lower entries in the last page
-      } else {
-        numEntries = endOffset - startOffset + BigInt(1); // Number of entries in the page
-      }
+    $('from-hex-full').textContent = toHex16(fromAddr);
+    $('to-hex-full').textContent = toHex16(endAddr);
+    $('tbToHex').value = '0x' + toHex(endAddr);
 
-      return numEntries;
+    updateBitDisplay($('from-bits'), fromAddr);
+    updateBitDisplay($('to-bits'), endAddr);
+    updateResults(fromAddr, sizeVal);
+  }
+
+  function findNumEntries(startOff, endOff, parentEntries) {
+    if (parentEntries > BigInt(1)) {
+      return (BigInt(512) - startOff) + (parentEntries - BigInt(2)) * BigInt(512) + (endOff + BigInt(1));
     }
+    return endOff - startOff + BigInt(1);
+  }
 
-    function ptFindSpaceRequired(start, size) {
-      const end = start + size - BigInt(1);
+  function updateResults(start, size) {
+    var end = start + size - BigInt(1);
 
-      const pml5StartOffset =
-        (start >> BigInt(PML5_START_BIT)) & PAGE_INDEX_MASK;
-      const pml4StartOffset =
-        (start >> BigInt(PML4_START_BIT)) & PAGE_INDEX_MASK;
-      const pdpStartOffset = (start >> BigInt(PDP_START_BIT)) & PAGE_INDEX_MASK;
-      const pdStartOffset = (start >> BigInt(PD_START_BIT)) & PAGE_INDEX_MASK;
-      const ptStartOffset = (start >> BigInt(PT_START_BIT)) & PAGE_INDEX_MASK;
+    var pml5S = (start >> BigInt(48)) & PAGE_INDEX_MASK;
+    var pml4S = (start >> BigInt(39)) & PAGE_INDEX_MASK;
+    var pdpS  = (start >> BigInt(30)) & PAGE_INDEX_MASK;
+    var pdS   = (start >> BigInt(21)) & PAGE_INDEX_MASK;
 
-      const pml5EndOffset = (end >> BigInt(PML5_START_BIT)) & PAGE_INDEX_MASK;
-      const pml4EndOffset = (end >> BigInt(PML4_START_BIT)) & PAGE_INDEX_MASK;
-      const pdpEndOffset = (end >> BigInt(PDP_START_BIT)) & PAGE_INDEX_MASK;
-      const pdEndOffset = (end >> BigInt(PD_START_BIT)) & PAGE_INDEX_MASK;
-      const ptEndOffset = (end >> BigInt(PT_START_BIT)) & PAGE_INDEX_MASK;
+    var pml5E = (end >> BigInt(48)) & PAGE_INDEX_MASK;
+    var pml4E = (end >> BigInt(39)) & PAGE_INDEX_MASK;
+    var pdpE  = (end >> BigInt(30)) & PAGE_INDEX_MASK;
+    var pdE   = (end >> BigInt(21)) & PAGE_INDEX_MASK;
+    var ptE   = (end >> BigInt(12)) & PAGE_INDEX_MASK;
 
-      const numPml5Entries = pml5EndOffset - pml5StartOffset + BigInt(1);
-      const numPml4Entries = findNumEntries(
-        pml4StartOffset,
-        pml4EndOffset,
-        numPml5Entries
-      );
-      const numPdpEntries = findNumEntries(
-        pdpStartOffset,
-        pdpEndOffset,
-        numPml4Entries
-      );
-      const numPdEntries = findNumEntries(
-        pdStartOffset,
-        pdEndOffset,
-        numPdpEntries
-      );
-      const numPtEntries = findNumEntries(
-        ptStartOffset,
-        ptEndOffset,
-        numPdEntries
-      );
+    var ptS   = (start >> BigInt(12)) & PAGE_INDEX_MASK;
 
-      const numPml5Tables = BigInt(1);
-      const numPml4Tables = numPml5Entries;
-      const numPdpTables = numPml4Entries;
-      const numPdTables = numPdpEntries;
-      const numPtTables = numPdEntries;
+    var nPml5 = pml5E - pml5S + BigInt(1);
+    var nPml4 = findNumEntries(pml4S, pml4E, nPml5);
+    var nPdp  = findNumEntries(pdpS, pdpE, nPml4);
+    var nPd   = findNumEntries(pdS, pdE, nPdp);
+    var nPt   = findNumEntries(ptS, ptE, nPd);
 
-      const numberOfTables =
-        numPml5Tables +
-        numPml4Tables +
-        numPdpTables +
-        numPdTables +
-        numPtTables;
+    var tPml5 = BigInt(1);
+    var tPml4 = nPml5;
+    var tPdp  = nPml4;
+    var tPd   = nPdp;
+    var tPt   = nPd;
+    var totalTables = tPml5 + tPml4 + tPdp + tPd + tPt;
 
-      const tbResults = document.getElementById("tbResults");
+    $('r-pml5e').textContent = nPml5.toString();
+    $('r-pml4e').textContent = nPml4.toString();
+    $('r-pdpe').textContent  = nPdp.toString();
+    $('r-pde').textContent   = nPd.toString();
+    $('r-pte').textContent   = nPt.toString();
 
-      tbResults.innerText += "─────────────────────────────────────────────\n";
-      tbResults.innerText += `pml5 entries  : ${numPml5Entries}\n`;
-      tbResults.innerText += `pml4 entries  : ${numPml4Entries}\n`;
-      tbResults.innerText += `pdp entries   : ${numPdpEntries}\n`;
-      tbResults.innerText += `pd entries    : ${numPdEntries}\n`;
-      tbResults.innerText += `pt entries    : ${numPtEntries}\n`;
+    $('r-pml5t').textContent = tPml5.toString();
+    $('r-pml4t').textContent = tPml4.toString();
+    $('r-pdpt').textContent  = tPdp.toString();
+    $('r-pdt').textContent   = tPd.toString();
+    $('r-ptt').textContent   = tPt.toString();
 
-      tbResults.innerText += "─────────────────────────────────────────────\n";
-      tbResults.innerText += `pml5 tables   : ${numPml5Tables}\n`;
-      tbResults.innerText += `pml4 tables   : ${numPml4Tables}\n`;
-      tbResults.innerText += `pdp tables    : ${numPdpTables}\n`;
-      tbResults.innerText += `pd tables     : ${numPdTables}\n`;
-      tbResults.innerText += `pt tables     : ${numPtTables}\n`;
+    $('r-mem').textContent = '[0x' + toHex(start) + ' - 0x' + toHex(end) + '] = ' +
+      formatSize(size) + ' (' + size.toString() + ' bytes)';
+    $('r-tables').textContent = totalTables.toString();
+    $('r-tablemem').textContent = formatSize(totalTables * PAGE_SIZE);
+  }
 
-      tbResults.innerText += "─────────────────────────────────────────────\n";
-      tbResults.innerText += `Memory being mapped                  : [0x${start
-        .toString(16)
-        .toUpperCase()}-0x${end.toString(16).toUpperCase()}] = ${formatSize(
-        end - start + BigInt(1)
-      )}(${end - start + BigInt(1)} bytes)\n`;
-      tbResults.innerText += `Number of page tables required       : ${numberOfTables}\n`;
-      tbResults.innerText += `Memory required to build page tables : ${formatSize(
-        numberOfTables * BigInt(PAGE_SIZE)
-      )}\n`;
-      tbResults.innerText += `─────────────────────────────────────────────\n`;
-    }
+  function formatSize(bytes) {
+    var KB = BigInt(1024);
+    var MB = KB * BigInt(1024);
+    var GB = MB * BigInt(1024);
+    var TB = GB * BigInt(1024);
+    if (bytes >= TB) return (Number(bytes) / Number(TB)).toFixed(2) + ' TB';
+    if (bytes >= GB) return (Number(bytes) / Number(GB)).toFixed(2) + ' GB';
+    if (bytes >= MB) return (Number(bytes) / Number(MB)).toFixed(2) + ' MB';
+    if (bytes >= KB) return (Number(bytes) / Number(KB)).toFixed(2) + ' KB';
+    return bytes.toString() + ' bytes';
+  }
 
-    function formatSize(bytes) {
-      const KB = BigInt(1024);
-      const MB = KB * BigInt(1024);
-      const GB = MB * BigInt(1024);
-      const TB = GB * BigInt(1024);
+  var unitToBytes = {
+    bytes: BigInt(1),
+    kb: BigInt(1024),
+    mb: BigInt(1024) * BigInt(1024),
+    gb: BigInt(1024) * BigInt(1024) * BigInt(1024),
+    tb: BigInt(1024) * BigInt(1024) * BigInt(1024) * BigInt(1024)
+  };
 
-      if (bytes >= TB) {
-        return (Number(bytes) / Number(TB)).toFixed(2) + " TB";
-      }
-      if (bytes >= GB) {
-        return (Number(bytes) / Number(GB)).toFixed(2) + " GB";
-      }
-      if (bytes >= MB) {
-        return (Number(bytes) / Number(MB)).toFixed(2) + " MB";
-      }
-      if (bytes >= KB) {
-        return (Number(bytes) / Number(KB)).toFixed(2) + " KB";
-      }
-      return bytes + " bytes";
-    }
+  function onQuickSize() {
+    var q = BigInt($('quantity').value);
+    var u = $('unit').value;
+    sizeVal = q * unitToBytes[u];
+    $('tbSizeHex').value = '0x' + toHex(sizeVal);
+    updateAll();
+  }
 
-    function tbFromHex_TextChanged() {
-      const from = convertHexStringToUInt64(
-        document.getElementById("tbFromHex").value.replaceAll("_", "")
-      );
-      const size = convertHexStringToUInt64(
-        document.getElementById("tbSizeHex").value.replaceAll("_", "")
-      );
+  function init() {
+    buildBitDisplay($('from-bits'), 'from');
+    buildBitDisplay($('to-bits'), 'to');
 
-      document.getElementById("tbToHex").value =
-        "0x" + convertUInt64ToHexString(from + size - BigInt(1));
+    $('tbFromHex').addEventListener('input', function () {
+      fromAddr = parseHex($('tbFromHex').value) & MASK_64;
+      updateAll();
+    });
 
-      updateResults(from, size);
-    }
+    $('tbSizeHex').addEventListener('input', function () {
+      sizeVal = parseHex($('tbSizeHex').value);
+      if (sizeVal < BigInt(1)) sizeVal = BigInt(1);
+      updateAll();
+    });
 
-    function tbSizeHex_TextChanged() {
-      tbFromHex_TextChanged();
-    }
+    $('quantity').addEventListener('change', onQuickSize);
+    $('unit').addEventListener('change', onQuickSize);
 
-    // Define the conversion factors to bytes
-    const unitToBytes = {
-      bytes: BigInt(1),
-      kb: BigInt(1024),
-      mb: BigInt(1024 * 1024),
-      gb: BigInt(1024 * 1024 * 1024),
-      tb: BigInt(1024 * 1024 * 1024 * 1024),
-    };
+    updateAll();
+  }
 
-    // Function to calculate and display the result
-    function calculateResult() {
-      // Get the selected quantity and unit
-      const quantity = BigInt(
-        parseFloat(document.getElementById("quantity").value)
-      );
-      const unit = document.getElementById("unit").value;
-
-      // Convert the selected unit to bytes
-      const unitInBytes = unitToBytes[unit];
-
-      // Calculate the total in bytes
-      const totalBytes = quantity * unitInBytes;
-
-      document.getElementById("tbSizeHex").value =
-        "0x" + convertUInt64ToHexString(totalBytes);
-      tbSizeHex_TextChanged();
-    }
-
-    // Add event listeners to both dropdowns
-    document
-      .getElementById("quantity")
-      .addEventListener("change", calculateResult);
-    document.getElementById("unit").addEventListener("change", calculateResult);
-  </script>
-</body>
-<!-- 
-</html> -->
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>

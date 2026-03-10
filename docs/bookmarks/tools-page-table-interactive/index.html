@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Page Table Calculator 2 | Vineel Kovvuri</title>
+    
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/copy-button.css" />
+    <link rel="stylesheet" href="/css/forms.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/projects/">Projects</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Page Table Calculator 2</span></h1>
+
+
+</div>
+
+<main>
+
+<style>
+.ptcalc {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  max-width: 1400px;
+  color: #24292e;
+}
+.ptcalc *, .ptcalc *::before, .ptcalc *::after { box-sizing: border-box; }
+
+/* Controls */
+.ptcalc .controls { display: flex; flex-direction: column; gap: 8px; margin-bottom: 28px; }
+.ptcalc .ctrl-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ptcalc .ctrl-row label {
+  width: 36px; text-align: right; font-weight: 600; font-size: 13px; color: #586069;
+}
+.ptcalc .ctrl-row input[type="text"] {
+  font-family: inherit; font-size: 14px; padding: 7px 12px;
+  border: 1.5px solid #d1d5da; border-radius: 6px; width: 240px;
+  outline: none; transition: border-color 0.2s, box-shadow 0.2s; background: #fff;
+}
+.ptcalc .ctrl-row input[type="text"]:focus {
+  border-color: #3949ab; box-shadow: 0 0 0 3px rgba(57,73,171,0.12);
+}
+.ptcalc .ctrl-row input:disabled { background: #f6f8fa; color: #959da5; }
+.ptcalc .ctrl-row select {
+  font-family: inherit; font-size: 13px; padding: 6px 8px;
+  border: 1.5px solid #d1d5da; border-radius: 6px; background: #fff;
+  outline: none; cursor: pointer;
+}
+
+/* Address sections */
+.ptcalc .addr-section { margin-bottom: 28px; }
+.ptcalc .addr-header {
+  display: flex; align-items: baseline; gap: 6px; margin-bottom: 10px;
+}
+.ptcalc .addr-title {
+  font-weight: 700; font-size: 12px; text-transform: uppercase;
+  letter-spacing: 0.8px; color: #6a737d;
+}
+.ptcalc .addr-hex-full {
+  font-family: inherit; font-size: 12px; font-weight: 700;
+  letter-spacing: 0.8px; color: #6a737d;
+}
+
+/* Bit display container */
+.ptcalc .bit-display {
+  display: inline-flex; gap: 6px; padding: 12px 14px;
+  background: #f8f9fb; border: 1px solid #e1e4e8; border-radius: 12px;
+  overflow-x: auto;
+}
+
+/* Segment */
+.ptcalc .seg { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+.ptcalc .seg-label {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.3px; margin-bottom: 1px;
+}
+.ptcalc .seg-range { font-size: 9px; color: #959da5; margin-bottom: 4px; }
+.ptcalc .bit-pos-row { display: flex; gap: 0; }
+.ptcalc .bit-pos-digit {
+  width: 10px; height: 11px; display: flex; align-items: center; justify-content: center;
+  font-size: 8px; color: #c0c4c8;
+}
+.ptcalc .seg-bits { display: flex; gap: 0; }
+
+/* Bit cell */
+.ptcalc .bit-cell {
+  width: 10px; height: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+  transition: opacity 0.1s ease;
+  user-select: none; background: none;
+}
+.ptcalc .bit-cell.interactive { cursor: pointer; }
+.ptcalc .bit-cell.interactive:hover { opacity: 0.5; }
+
+/* Segment values */
+.ptcalc .seg-vals {
+  display: flex; flex-direction: column; align-items: center; margin-top: 4px; gap: 0;
+}
+.ptcalc .seg-hex { font-size: 10px; font-weight: 600; }
+.ptcalc .seg-dec { font-size: 9px; color: #959da5; }
+
+/* Segment colors */
+.ptcalc .seg[data-seg="sign"] { --c: #607d8b; --cll: #eceff1; }
+.ptcalc .seg[data-seg="pml5"] { --c: #3949ab; --cll: #e8eaf6; }
+.ptcalc .seg[data-seg="pml4"] { --c: #00838f; --cll: #e0f7fa; }
+.ptcalc .seg[data-seg="pdp"]  { --c: #2e7d32; --cll: #e8f5e9; }
+.ptcalc .seg[data-seg="pd"]   { --c: #d84315; --cll: #fbe9e7; }
+.ptcalc .seg[data-seg="pt"]   { --c: #c62828; --cll: #ffebee; }
+.ptcalc .seg[data-seg="phys"] { --c: #6a1b9a; --cll: #f3e5f5; }
+
+.ptcalc .seg .seg-label { color: var(--c); }
+.ptcalc .seg .bit-cell.bit-zero { color: var(--c); opacity: 0.4; }
+.ptcalc .seg .bit-cell.bit-one  { color: var(--c); }
+.ptcalc .seg .seg-hex { color: var(--c); }
+
+/* Results */
+.ptcalc .results {
+  background: #f8f9fb; border: 1px solid #e1e4e8; border-radius: 12px;
+  padding: 20px 24px; margin-bottom: 28px;
+}
+.ptcalc .results-title {
+  margin: 0 0 16px; font-size: 12px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.8px; color: #6a737d;
+}
+.ptcalc .results-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 16px;
+}
+.ptcalc .results-col-title {
+  margin: 0 0 8px; font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.3px; color: #959da5;
+  border-bottom: 1px solid #e1e4e8; padding-bottom: 4px;
+}
+.ptcalc .result-row {
+  display: flex; justify-content: space-between; padding: 3px 0; font-size: 13px;
+}
+.ptcalc .result-label { color: #586069; }
+.ptcalc .result-value { font-weight: 700; color: #24292e; }
+.ptcalc .results-summary { border-top: 1px solid #e1e4e8; padding-top: 14px; }
+.ptcalc .summary-row { padding: 3px 0; font-size: 13px; }
+.ptcalc .summary-label { color: #586069; }
+.ptcalc .summary-value { font-weight: 700; color: #24292e; }
+
+/* ──────────────────────────────────────────────────
+   Page Table Walk Visualization
+   ────────────────────────────────────────────────── */
+.ptcalc .pt-vis {
+  margin-bottom: 28px;
+  border: 1px solid #e1e4e8;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fafbfc;
+}
+.ptcalc .pt-vis-header {
+  padding: 14px 24px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #6a737d;
+  background: #f0f2f5;
+  border-bottom: 1px solid #e1e4e8;
+}
+.ptcalc .pt-vis-body {
+  position: relative;
+  padding: 24px 20px;
+  overflow-x: auto;
+  display: flex;
+  align-items: center;
+}
+
+/* CR3 */
+.ptcalc .pt-cr3 {
+  display: flex;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.ptcalc .pt-cr3-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: linear-gradient(135deg, #37474f, #455a64);
+  color: #fff;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(55,71,79,0.25);
+}
+.ptcalc .pt-cr3-box .cr3-label {
+  opacity: 0.7;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+/* Level row */
+.ptcalc .pt-level {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+.ptcalc .pt-level-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.ptcalc .pt-level-name {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--lc);
+}
+.ptcalc .pt-level-badge {
+  font-size: 9px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: var(--lc);
+  color: #fff;
+  opacity: 0.85;
+}
+.ptcalc .pt-tables-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Individual table box */
+.ptcalc .pt-tbl {
+  border: 1px solid #e1e4e8;
+  border-radius: 8px;
+  border-top: 3px solid var(--lc);
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  transition: box-shadow 0.2s, transform 0.15s;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.ptcalc .pt-tbl:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  transform: translateY(-1px);
+}
+.ptcalc .pt-tbl.highlight {
+  box-shadow: 0 0 0 2px var(--lc), 0 4px 16px rgba(0,0,0,0.12);
+}
+.ptcalc .pt-tbl-head {
+  padding: 5px 10px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--lc);
+  background: var(--lcl);
+  border-bottom: 1px solid #e8e8e8;
+  white-space: nowrap;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.ptcalc .pt-tbl-head .tbl-name { }
+.ptcalc .pt-tbl-head .tbl-info {
+  font-weight: 400;
+  font-size: 9px;
+  opacity: 0.7;
+}
+/* Entry grid: 32 columns x 16 rows = 512 cells */
+.ptcalc .pt-grid {
+  display: grid;
+  grid-template-columns: repeat(32, 5px);
+  gap: 1px;
+  padding: 6px 8px 8px;
+  background: #fff;
+}
+.ptcalc .pt-cell {
+  width: 5px;
+  height: 5px;
+  border-radius: 1px;
+  background: #eef0f2;
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.ptcalc .pt-cell.active {
+  background: var(--lc);
+  cursor: pointer;
+  position: relative;
+}
+.ptcalc .pt-cell.active:hover {
+  transform: scale(2.5);
+  z-index: 10;
+  box-shadow: 0 0 6px var(--lc);
+  border-radius: 2px;
+}
+.ptcalc .pt-cell.entry-highlight {
+  background: #ffd600 !important;
+  transform: scale(2.5);
+  z-index: 10;
+  box-shadow: 0 0 8px #ffd600;
+  border-radius: 2px;
+}
+
+/* Compact table (no grid, just summary) */
+.ptcalc .pt-tbl-compact {
+  padding: 8px 12px;
+  font-size: 10px;
+  color: #586069;
+  text-align: center;
+}
+.ptcalc .pt-tbl-compact .compact-range {
+  font-weight: 700;
+  color: var(--lc);
+}
+
+/* Connector arrow between levels */
+.ptcalc .pt-arrow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 4px;
+  color: #c0c4c8;
+  font-size: 18px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* Overflow indicator */
+.ptcalc .pt-overflow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  font-size: 11px;
+  color: #959da5;
+  font-style: italic;
+  border: 1px dashed #d1d5da;
+  border-radius: 8px;
+  background: #f8f9fb;
+  min-height: 60px;
+}
+
+/* Physical pages */
+.ptcalc .pt-phys {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #f3e5f5, #e8eaf6);
+  border: 1px solid #e1bee7;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #6a1b9a;
+  font-weight: 600;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* Tooltip */
+.ptcalc .pt-tip {
+  position: fixed;
+  z-index: 10000;
+  background: #1b1f23;
+  color: #e1e4e8;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 11px;
+  line-height: 1.6;
+  pointer-events: none;
+  white-space: pre;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+  max-width: 380px;
+  opacity: 0;
+  transition: opacity 0.12s;
+  border: 1px solid #30363d;
+}
+.ptcalc .pt-tip.show { opacity: 1; }
+.ptcalc .pt-tip .tip-title {
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+  font-size: 12px;
+}
+.ptcalc .pt-tip .tip-row {
+  display: flex;
+  gap: 8px;
+}
+.ptcalc .pt-tip .tip-label {
+  color: #8b949e;
+  min-width: 55px;
+}
+.ptcalc .pt-tip .tip-val {
+  color: #58a6ff;
+  font-weight: 600;
+}
+
+/* SVG connections overlay */
+.ptcalc .pt-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+.ptcalc .pt-svg path {
+  fill: none;
+  stroke-width: 1.5;
+  opacity: 0.2;
+  transition: opacity 0.2s;
+}
+.ptcalc .pt-svg path.conn-highlight {
+  opacity: 0.7;
+  stroke-width: 2.5;
+}
+
+/* Level colors as CSS custom properties */
+.ptcalc .pt-level[data-level="0"] { --lc: #3949ab; --lcl: #e8eaf6; }
+.ptcalc .pt-level[data-level="1"] { --lc: #00838f; --lcl: #e0f7fa; }
+.ptcalc .pt-level[data-level="2"] { --lc: #2e7d32; --lcl: #e8f5e9; }
+.ptcalc .pt-level[data-level="3"] { --lc: #d84315; --lcl: #fbe9e7; }
+.ptcalc .pt-level[data-level="4"] { --lc: #c62828; --lcl: #ffebee; }
+
+.ptcalc .pt-tbl[data-level="0"] { --lc: #3949ab; --lcl: #e8eaf6; }
+.ptcalc .pt-tbl[data-level="1"] { --lc: #00838f; --lcl: #e0f7fa; }
+.ptcalc .pt-tbl[data-level="2"] { --lc: #2e7d32; --lcl: #e8f5e9; }
+.ptcalc .pt-tbl[data-level="3"] { --lc: #d84315; --lcl: #fbe9e7; }
+.ptcalc .pt-tbl[data-level="4"] { --lc: #c62828; --lcl: #ffebee; }
+
+/* Reference sections */
+.ptcalc details.ref {
+  margin-bottom: 12px; border: 1px solid #e1e4e8; border-radius: 8px; overflow: hidden;
+}
+.ptcalc details.ref summary {
+  padding: 10px 16px; font-weight: 600; font-size: 13px; cursor: pointer;
+  background: #f6f8fa; user-select: none; color: #586069;
+}
+.ptcalc details.ref summary:hover { background: #eef1f4; }
+.ptcalc details.ref > pre {
+  margin: 0 !important; padding: 16px; font-size: 11px; line-height: 1.35;
+  overflow-x: auto; background: #fafbfc; border-top: 1px solid #e1e4e8;
+}
+.ptcalc .size-ref {
+  display: flex; flex-wrap: wrap; gap: 0; padding: 0;
+  border-top: 1px solid #e1e4e8; background: #fafbfc;
+}
+.ptcalc .size-ref pre {
+  margin: 0 !important; padding: 8px 16px; font-size: 11px;
+  line-height: 1.5; background: transparent; flex: 1; min-width: 220px;
+}
+</style>
+
+<div class="ptcalc">
+  <!-- Controls -->
+  <div class="controls">
+    <div class="ctrl-row">
+      <label for="tbFromHex">From</label>
+      <input type="text" id="tbFromHex" value="0x0" spellcheck="false" autocomplete="off">
+    </div>
+    <div class="ctrl-row">
+      <label for="tbSizeHex">Size</label>
+      <input type="text" id="tbSizeHex" value="0x1000" spellcheck="false" autocomplete="off">
+      <select id="quantity">
+        <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+        <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+        <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+        <option value="10">10</option><option value="16">16</option><option value="32">32</option>
+        <option value="48">48</option><option value="64">64</option>
+      </select>
+      <select id="unit">
+        <option value="bytes">Bytes</option><option value="kb">KB</option>
+        <option value="mb">MB</option><option value="gb">GB</option>
+        <option value="tb">TB</option>
+      </select>
+    </div>
+    <div class="ctrl-row">
+      <label for="tbToHex">To</label>
+      <input type="text" id="tbToHex" disabled>
+    </div>
+  </div>
+
+  <!-- Start Address Bit Display -->
+  <div class="addr-section">
+    <div class="addr-header">
+      <span class="addr-title">Start Address</span>
+      <code class="addr-hex-full" id="from-hex-full">0x0000000000000000</code>
+    </div>
+    <div class="bit-display" id="from-bits"></div>
+  </div>
+
+  <!-- End Address Bit Display -->
+  <div class="addr-section">
+    <div class="addr-header">
+      <span class="addr-title">End Address</span>
+      <code class="addr-hex-full" id="to-hex-full">0x0000000000000FFF</code>
+    </div>
+    <div class="bit-display" id="to-bits"></div>
+  </div>
+
+  <!-- Results -->
+  <div class="results">
+    <div class="results-title">Page Table Requirements</div>
+    <div class="results-grid">
+      <div>
+        <div class="results-col-title">Entries</div>
+        <div class="result-row"><span class="result-label">PML5</span><span class="result-value" id="r-pml5e">-</span></div>
+        <div class="result-row"><span class="result-label">PML4</span><span class="result-value" id="r-pml4e">-</span></div>
+        <div class="result-row"><span class="result-label">PDP</span><span class="result-value" id="r-pdpe">-</span></div>
+        <div class="result-row"><span class="result-label">PD</span><span class="result-value" id="r-pde">-</span></div>
+        <div class="result-row"><span class="result-label">PT</span><span class="result-value" id="r-pte">-</span></div>
+      </div>
+      <div>
+        <div class="results-col-title">Tables</div>
+        <div class="result-row"><span class="result-label">PML5</span><span class="result-value" id="r-pml5t">-</span></div>
+        <div class="result-row"><span class="result-label">PML4</span><span class="result-value" id="r-pml4t">-</span></div>
+        <div class="result-row"><span class="result-label">PDP</span><span class="result-value" id="r-pdpt">-</span></div>
+        <div class="result-row"><span class="result-label">PD</span><span class="result-value" id="r-pdt">-</span></div>
+        <div class="result-row"><span class="result-label">PT</span><span class="result-value" id="r-ptt">-</span></div>
+      </div>
+    </div>
+    <div class="results-summary">
+      <div class="summary-row"><span class="summary-label">Memory being mapped: </span><span class="summary-value" id="r-mem"></span></div>
+      <div class="summary-row"><span class="summary-label">Page tables required: </span><span class="summary-value" id="r-tables"></span></div>
+      <div class="summary-row"><span class="summary-label">Memory for page tables: </span><span class="summary-value" id="r-tablemem"></span></div>
+    </div>
+  </div>
+
+  <!-- Page Table Walk Visualization -->
+  <div class="pt-vis">
+    <div class="pt-vis-header">Page Table Walk Visualization</div>
+    <div class="pt-vis-body" id="pt-vis-body"></div>
+  </div>
+
+  <!-- Tooltip (shared) -->
+  <div class="pt-tip" id="pt-tip"></div>
+
+  <!-- Reference: Paging Diagram -->
+  <details class="ref">
+    <summary>x64 5-Level Paging Diagram</summary>
+    <pre>
+     63           57 56           48 47           39 38           30 29            21 20            12 11               0
+     +──────────────+───────────────+───────────────+───────────────+────────────────+────────────────+──────────────────+
+     | Sign         |  PML5E        | PML4E         |Page Directory | Page           | Page           |Physical          |
+     | Extend       |  Offset       | Offset        |Pointer        | Directory      | Table          |Page              |
+     |              |               |               |Offset         | Offset         | Offset         |Offset            |
+     +──────────────+─+─────────────+─+─────────────+──+────────────+───+────────────+───+────────────+───+──────────────+
+                      |9              |9               |9               |9               |9               |12
+                      |               |                |                |                |                |
+                      |  +─────+      |  +─────+       |  +─────+       |  +─────+       |  +─────+       |  +─────+
+                      |  |     |      |  |     |       |  |     |       |  |     |       |  |     |       |  |     |
+                      |  |     |      |  |     |       |  |     |       |  |     |       |  |     |       |  |     |
+                      |  |     |      |  |     |       |  |     |       |  |     |       |  |     |       |  |     |
+                      |  |     |      |  |     |       |  |     |       |  |     |       |  |     |       |  |     |
+                      |  +─────+      |  +─────+       |  +─────+       |  +─────+       |  +─────+       |  +─────+
+                      +->|PML5E+---+  +->|PML4E|---+   +->|PDPE |---+   +->|PDE  |---+   +->|PTE  |---+   +->| PA  |
+                         +─────+   |52   +─────+   |52    +─────+   |52    +─────+   |52    +─────+   |52    +─────+
+                         |     |   |     |     |   |      |     |   |      |     |   |      |     |   |      |     |
+                  +----->+─────+   +---->+─────+   +----->+─────+   +----->+─────+   +----->+─────+   +----->+─────+
+                  |        4K              4K               4K               4K                4K               4K
+                  |
+                  |
+                  |
+                  |
+63         52  51 |                               12 11            0
++─────────────+───+─────────────────────────────────+───────────────+
+|             |    Page-Map Level-4 or Level-5      |               |
+|    MBZ      |          Table Base Address         |               |  CR3
+|             |                                     |               |
++─────────────+─────────────────────────────────────+───────────────+</pre>
+  </details>
+
+  <!-- Reference: Size Table -->
+  <details class="ref">
+    <summary>Size Reference Table</summary>
+    <div class="size-ref">
+      <pre>
+1B      2^0    0x1
+2B      2^1    0x2
+4B      2^2    0x4
+8B      2^3    0x8
+16B     2^4    0x10
+32B     2^5    0x20
+64B     2^6    0x40
+128B    2^7    0x80
+256B    2^8    0x100
+512B    2^9    0x200</pre>
+      <pre>
+1KB     2^10   0x400
+2KB     2^11   0x800
+4KB     2^12   0x1000
+8KB     2^13   0x2000
+16KB    2^14   0x4000
+32KB    2^15   0x8000
+64KB    2^16   0x10000
+128KB   2^17   0x20000
+256KB   2^18   0x40000
+512KB   2^19   0x80000</pre>
+      <pre>
+1MB     2^20   0x100000
+2MB     2^21   0x200000
+4MB     2^22   0x400000
+8MB     2^23   0x800000
+16MB    2^24   0x1000000
+32MB    2^25   0x2000000
+64MB    2^26   0x4000000
+128MB   2^27   0x8000000
+256MB   2^28   0x10000000
+512MB   2^29   0x20000000</pre>
+      <pre>
+1GB     2^30   0x40000000
+2GB     2^31   0x80000000
+4GB     2^32   0x100000000
+8GB     2^33   0x200000000
+16GB    2^34   0x400000000
+32GB    2^35   0x800000000
+64GB    2^36   0x1000000000
+128GB   2^37   0x2000000000
+256GB   2^38   0x4000000000
+512GB   2^39   0x8000000000</pre>
+      <pre>
+1TB     2^40   0x10000000000
+2TB     2^41   0x20000000000
+4TB     2^42   0x40000000000
+8TB     2^43   0x80000000000
+16TB    2^44   0x100000000000
+32TB    2^45   0x200000000000
+64TB    2^46   0x400000000000
+128TB   2^47   0x800000000000
+256TB   2^48   0x1000000000000
+512TB   2^49   0x2000000000000</pre>
+      <pre>
+1PB     2^50   0x4000000000000
+2PB     2^51   0x8000000000000
+4PB     2^52   0x10000000000000
+8PB     2^53   0x20000000000000
+16PB    2^54   0x40000000000000
+32PB    2^55   0x80000000000000
+64PB    2^56   0x100000000000000
+128PB   2^57   0x200000000000000
+256PB   2^58   0x400000000000000
+512PB   2^59   0x800000000000000</pre>
+    </div>
+  </details>
+</div>
+
+<script>
+(function () {
+  /* ════════════════════════════════════════════════════════════
+     CONFIGURATION
+     ════════════════════════════════════════════════════════════ */
+  var SEGMENTS = [
+    { id: 'sign', name: 'Sign Ext', range: '63:57', hi: 63, lo: 57 },
+    { id: 'pml5', name: 'PML5',     range: '56:48', hi: 56, lo: 48 },
+    { id: 'pml4', name: 'PML4',     range: '47:39', hi: 47, lo: 39 },
+    { id: 'pdp',  name: 'PDP/PML3', range: '38:30', hi: 38, lo: 30 },
+    { id: 'pd',   name: 'PD/PML2',  range: '29:21', hi: 29, lo: 21 },
+    { id: 'pt',   name: 'PT/PML1',  range: '20:12', hi: 20, lo: 12 },
+    { id: 'phys', name: 'Offset',   range: '11:0',  hi: 11, lo: 0  }
+  ];
+
+  var LEVEL_NAMES  = ['PML5', 'PML4', 'PDP', 'PD', 'PT'];
+  var LEVEL_COLORS = ['#3949ab', '#00838f', '#2e7d32', '#d84315', '#c62828'];
+  var LEVEL_SHIFTS = [48n, 39n, 30n, 21n, 12n];
+  var INDEX_MASK   = 0x1FFn;
+  var MASK_64      = (BigInt(1) << BigInt(64)) - BigInt(1);
+  var PAGE_SIZE    = BigInt(4096);
+
+  var MAX_TABLES_DISPLAY  = 14;
+  var MAX_ENTRIES_EXPAND  = 512;
+
+  var fromAddr = BigInt(0);
+  var sizeVal  = BigInt(0x1000);
+
+  function $(id) { return document.getElementById(id); }
+
+  /* ════════════════════════════════════════════════════════════
+     PARSING / FORMATTING
+     ════════════════════════════════════════════════════════════ */
+  function parseHex(s) {
+    s = (s || '').replace(/_/g, '').trim();
+    if (s.startsWith('0x') || s.startsWith('0X')) s = s.slice(2);
+    if (!s) return BigInt(0);
+    try { return BigInt('0x' + s); } catch (e) { return BigInt(0); }
+  }
+
+  function toHex(n)   { return n.toString(16).toUpperCase(); }
+  function toHex16(n)  { return '0x' + n.toString(16).padStart(16, '0').toUpperCase(); }
+
+  function formatSize(bytes) {
+    var KB = BigInt(1024), MB = KB * BigInt(1024), GB = MB * BigInt(1024), TB = GB * BigInt(1024);
+    if (bytes >= TB) return (Number(bytes) / Number(TB)).toFixed(2) + ' TB';
+    if (bytes >= GB) return (Number(bytes) / Number(GB)).toFixed(2) + ' GB';
+    if (bytes >= MB) return (Number(bytes) / Number(MB)).toFixed(2) + ' MB';
+    if (bytes >= KB) return (Number(bytes) / Number(KB)).toFixed(2) + ' KB';
+    return bytes.toString() + ' bytes';
+  }
+
+  function formatSizeCompact(bytes) {
+    var KB = BigInt(1024), MB = KB * BigInt(1024), GB = MB * BigInt(1024), TB = GB * BigInt(1024);
+    if (bytes >= TB) return (Number(bytes) / Number(TB)).toFixed(0) + 'TB';
+    if (bytes >= GB) return (Number(bytes) / Number(GB)).toFixed(0) + 'GB';
+    if (bytes >= MB) return (Number(bytes) / Number(MB)).toFixed(0) + 'MB';
+    if (bytes >= KB) return (Number(bytes) / Number(KB)).toFixed(0) + 'KB';
+    return bytes.toString() + 'B';
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     BIT DISPLAY (existing)
+     ════════════════════════════════════════════════════════════ */
+  function buildBitDisplay(container, which) {
+    SEGMENTS.forEach(function (seg) {
+      var segEl = document.createElement('div');
+      segEl.className = 'seg';
+      segEl.setAttribute('data-seg', seg.id);
+
+      var label = document.createElement('div');
+      label.className = 'seg-label';
+      label.textContent = seg.name;
+      segEl.appendChild(label);
+
+      var range = document.createElement('div');
+      range.className = 'seg-range';
+      range.textContent = seg.range;
+      segEl.appendChild(range);
+
+      var tensRow = document.createElement('div');
+      tensRow.className = 'bit-pos-row';
+      for (var b = seg.hi; b >= seg.lo; b--) {
+        var d = document.createElement('div');
+        d.className = 'bit-pos-digit';
+        d.textContent = Math.floor(b / 10);
+        tensRow.appendChild(d);
+      }
+      segEl.appendChild(tensRow);
+
+      var unitsRow = document.createElement('div');
+      unitsRow.className = 'bit-pos-row';
+      for (var b = seg.hi; b >= seg.lo; b--) {
+        var d = document.createElement('div');
+        d.className = 'bit-pos-digit';
+        d.textContent = b % 10;
+        unitsRow.appendChild(d);
+      }
+      segEl.appendChild(unitsRow);
+
+      var bitsEl = document.createElement('div');
+      bitsEl.className = 'seg-bits';
+      for (var b = seg.hi; b >= seg.lo; b--) {
+        (function (bitIdx) {
+          var cell = document.createElement('div');
+          cell.className = 'bit-cell interactive bit-zero';
+          cell.setAttribute('data-bit', bitIdx);
+          cell.title = 'Bit ' + bitIdx + ' (' + seg.name + ')';
+          cell.textContent = '0';
+          cell.addEventListener('click', function () { onBitClick(which, bitIdx); });
+          bitsEl.appendChild(cell);
+        })(b);
+      }
+      segEl.appendChild(bitsEl);
+
+      var vals = document.createElement('div');
+      vals.className = 'seg-vals';
+      var hexSpan = document.createElement('span');
+      hexSpan.className = 'seg-hex';
+      hexSpan.textContent = '0x0';
+      var decSpan = document.createElement('span');
+      decSpan.className = 'seg-dec';
+      decSpan.textContent = '0';
+      vals.appendChild(hexSpan);
+      vals.appendChild(decSpan);
+      segEl.appendChild(vals);
+      container.appendChild(segEl);
+    });
+  }
+
+  function onBitClick(which, bit) {
+    var bitBig = BigInt(bit);
+    if (which === 'from') {
+      fromAddr = (fromAddr ^ (BigInt(1) << bitBig)) & MASK_64;
+      $('tbFromHex').value = '0x' + toHex(fromAddr);
+    } else {
+      var endAddr = fromAddr + sizeVal - BigInt(1);
+      endAddr = (endAddr ^ (BigInt(1) << bitBig)) & MASK_64;
+      if (endAddr >= fromAddr) {
+        sizeVal = endAddr - fromAddr + BigInt(1);
+        $('tbSizeHex').value = '0x' + toHex(sizeVal);
+      }
+    }
+    updateAll();
+  }
+
+  function updateBitDisplay(container, address) {
+    var segs = container.querySelectorAll('.seg');
+    for (var i = 0; i < segs.length; i++) {
+      var seg = SEGMENTS[i];
+      var segEl = segs[i];
+      var width = seg.hi - seg.lo + 1;
+      var mask = (BigInt(1) << BigInt(width)) - BigInt(1);
+      var segVal = (address >> BigInt(seg.lo)) & mask;
+      var cells = segEl.querySelectorAll('.bit-cell');
+      for (var j = 0; j < cells.length; j++) {
+        var cell = cells[j];
+        var b = parseInt(cell.getAttribute('data-bit'));
+        var v = (address >> BigInt(b)) & BigInt(1);
+        cell.textContent = v.toString();
+        if (v === BigInt(1)) {
+          cell.classList.add('bit-one');
+          cell.classList.remove('bit-zero');
+        } else {
+          cell.classList.add('bit-zero');
+          cell.classList.remove('bit-one');
+        }
+      }
+      segEl.querySelector('.seg-hex').textContent = '0x' + toHex(segVal);
+      segEl.querySelector('.seg-dec').textContent = segVal.toString();
+    }
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     RESULTS COMPUTATION (existing)
+     ════════════════════════════════════════════════════════════ */
+  function findNumEntries(startOff, endOff, parentEntries) {
+    if (parentEntries > BigInt(1)) {
+      return (BigInt(512) - startOff) + (parentEntries - BigInt(2)) * BigInt(512) + (endOff + BigInt(1));
+    }
+    return endOff - startOff + BigInt(1);
+  }
+
+  function updateResults(start, size) {
+    var end = start + size - BigInt(1);
+    var pml5S = (start >> BigInt(48)) & INDEX_MASK;
+    var pml4S = (start >> BigInt(39)) & INDEX_MASK;
+    var pdpS  = (start >> BigInt(30)) & INDEX_MASK;
+    var pdS   = (start >> BigInt(21)) & INDEX_MASK;
+    var ptS   = (start >> BigInt(12)) & INDEX_MASK;
+    var pml5E = (end >> BigInt(48)) & INDEX_MASK;
+    var pml4E = (end >> BigInt(39)) & INDEX_MASK;
+    var pdpE  = (end >> BigInt(30)) & INDEX_MASK;
+    var pdE   = (end >> BigInt(21)) & INDEX_MASK;
+    var ptE   = (end >> BigInt(12)) & INDEX_MASK;
+
+    var nPml5 = pml5E - pml5S + BigInt(1);
+    var nPml4 = findNumEntries(pml4S, pml4E, nPml5);
+    var nPdp  = findNumEntries(pdpS, pdpE, nPml4);
+    var nPd   = findNumEntries(pdS, pdE, nPdp);
+    var nPt   = findNumEntries(ptS, ptE, nPd);
+
+    var tPml5 = BigInt(1);
+    var tPml4 = nPml5;
+    var tPdp  = nPml4;
+    var tPd   = nPdp;
+    var tPt   = nPd;
+    var totalTables = tPml5 + tPml4 + tPdp + tPd + tPt;
+
+    $('r-pml5e').textContent = nPml5.toString();
+    $('r-pml4e').textContent = nPml4.toString();
+    $('r-pdpe').textContent  = nPdp.toString();
+    $('r-pde').textContent   = nPd.toString();
+    $('r-pte').textContent   = nPt.toString();
+    $('r-pml5t').textContent = tPml5.toString();
+    $('r-pml4t').textContent = tPml4.toString();
+    $('r-pdpt').textContent  = tPdp.toString();
+    $('r-pdt').textContent   = tPd.toString();
+    $('r-ptt').textContent   = tPt.toString();
+    $('r-mem').textContent = '[0x' + toHex(start) + ' - 0x' + toHex(end) + '] = ' +
+      formatSize(size) + ' (' + size.toString() + ' bytes)';
+    $('r-tables').textContent = totalTables.toString();
+    $('r-tablemem').textContent = formatSize(totalTables * PAGE_SIZE);
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     PAGE TABLE TREE COMPUTATION
+     ════════════════════════════════════════════════════════════ */
+  // Each tree node: { level, entries: [{index, addrStart, addrEnd, child}], firstIdx, lastIdx }
+  // A "table" at a given level with its used entries and their children.
+
+  var treeNodeCount = 0;
+
+  function buildTree(startAddr, endAddr) {
+    treeNodeCount = 0;
+
+    function build(levelIdx, rStart, rEnd) {
+      if (levelIdx >= 5) return null;
+      if (treeNodeCount > 8000) return null; // safety limit
+
+      var shift = LEVEL_SHIFTS[levelIdx];
+      var span  = BigInt(1) << shift;
+
+      var fi = Number((rStart >> shift) & INDEX_MASK);
+      var li = Number((rEnd   >> shift) & INDEX_MASK);
+      if (fi > li) return null; // shouldn't happen for valid canonical ranges
+
+      var numEntries = li - fi + 1;
+
+      // Compute higher-bits mask: keep bits above the index field
+      var fieldTop   = shift + 9n;
+      var higherMask = MASK_64 ^ ((BigInt(1) << fieldTop) - BigInt(1));
+      var higherBits = rStart & higherMask;
+      var lowerMask  = (BigInt(1) << shift) - BigInt(1);
+
+      var entries = [];
+      // If too many entries, only expand first few and last few children
+      var expandLimit = numEntries <= MAX_ENTRIES_EXPAND;
+
+      for (var i = fi; i <= li; i++) {
+        var eBase = (higherBits | (BigInt(i) << shift)) & MASK_64;
+        var eTop  = (eBase | lowerMask) & MASK_64;
+        var oStart = rStart > eBase ? rStart : eBase;
+        var oEnd   = rEnd < eTop ? rEnd : eTop;
+
+        var child = null;
+        var expandThis = expandLimit || (i - fi < 6) || (li - i < 3);
+        if (expandThis && levelIdx + 1 < 5) {
+          child = build(levelIdx + 1, oStart, oEnd);
+        }
+
+        entries.push({
+          index: i,
+          addrStart: oStart,
+          addrEnd: oEnd,
+          child: child,
+          skipped: !expandThis && levelIdx + 1 < 5
+        });
+      }
+
+      treeNodeCount++;
+      return { level: levelIdx, entries: entries, firstIdx: fi, lastIdx: li };
+    }
+
+    return build(0, startAddr, endAddr);
+  }
+
+  /* Flatten tree into per-level arrays of tables for rendering */
+  function flattenTree(tree) {
+    var levels = [[], [], [], [], []];
+    var tableId = 0;
+
+    function traverse(node, parentTableId, parentEntryIdx) {
+      if (!node) return;
+      var id = tableId++;
+      var tableInfo = {
+        id: id,
+        level: node.level,
+        entries: node.entries,
+        firstIdx: node.firstIdx,
+        lastIdx: node.lastIdx,
+        parentTableId: parentTableId,
+        parentEntryIdx: parentEntryIdx,
+        childTableIds: []
+      };
+      levels[node.level].push(tableInfo);
+
+      node.entries.forEach(function(entry) {
+        if (entry.child) {
+          var childId = tableId; // will be assigned in recursive call
+          tableInfo.childTableIds.push({ entryIdx: entry.index, childTableId: childId });
+          traverse(entry.child, id, entry.index);
+        }
+      });
+    }
+
+    traverse(tree, -1, -1);
+    return levels;
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     VISUALIZATION RENDERING
+     ════════════════════════════════════════════════════════════ */
+  var tooltip = null;
+  var svgEl   = null;
+  var allTableEls = {};  // id -> DOM element
+  var allEntryCells = {}; // "tableId-entryIdx" -> DOM element
+  var connectionData = []; // [{entryKey, childTableId}]
+
+  function renderVisualization() {
+    var body = $('pt-vis-body');
+    if (!body) return;
+    body.innerHTML = '';
+    allTableEls = {};
+    allEntryCells = {};
+    connectionData = [];
+
+    if (sizeVal <= BigInt(0)) return;
+
+    var endAddr = (fromAddr + sizeVal - BigInt(1)) & MASK_64;
+    var tree = buildTree(fromAddr, endAddr);
+    if (!tree) return;
+
+    var levels = flattenTree(tree);
+
+    // SVG for connections
+    svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svgEl.setAttribute('class', 'pt-svg');
+    svgEl.style.position = 'absolute';
+    svgEl.style.top = '0';
+    svgEl.style.left = '0';
+    svgEl.style.width = '100%';
+    svgEl.style.height = '100%';
+    svgEl.style.pointerEvents = 'none';
+    body.appendChild(svgEl);
+
+    // CR3
+    var cr3 = document.createElement('div');
+    cr3.className = 'pt-cr3';
+    cr3.innerHTML = '<div class="pt-cr3-box"><span class="cr3-label">CR3</span> Points to PML5 Table</div>';
+    body.appendChild(cr3);
+
+    // Arrow
+    body.appendChild(makeArrow());
+
+    // Render each level
+    levels.forEach(function(levelTables, levelIdx) {
+      if (levelTables.length === 0) return;
+      var levelEl = renderLevel(levelIdx, levelTables);
+      body.appendChild(levelEl);
+      if (levelIdx < 4) body.appendChild(makeArrow());
+    });
+
+    // Physical pages at bottom
+    var numPages = sizeVal / PAGE_SIZE;
+    if (sizeVal % PAGE_SIZE !== 0n) numPages += 1n;
+    var physEl = document.createElement('div');
+    physEl.className = 'pt-phys';
+    physEl.textContent = numPages.toString() + ' Physical Page' + (numPages > 1n ? 's' : '') + ' (' + formatSizeCompact(numPages * PAGE_SIZE) + ')';
+    body.appendChild(physEl);
+
+    // Draw connections after layout settles
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        drawConnections();
+      });
+    });
+  }
+
+  function makeArrow() {
+    var d = document.createElement('div');
+    d.className = 'pt-arrow';
+    d.innerHTML = '<svg width="20" height="16" viewBox="0 0 20 16"><path d="M0 8 L14 8 M10 3 L16 8 L10 13" stroke="#b0b8c0" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    return d;
+  }
+
+  function renderLevel(levelIdx, tables) {
+    var levelEl = document.createElement('div');
+    levelEl.className = 'pt-level';
+    levelEl.setAttribute('data-level', levelIdx);
+
+    // Header
+    var header = document.createElement('div');
+    header.className = 'pt-level-header';
+    var name = document.createElement('span');
+    name.className = 'pt-level-name';
+    name.textContent = LEVEL_NAMES[levelIdx];
+    header.appendChild(name);
+    var badge = document.createElement('span');
+    badge.className = 'pt-level-badge';
+    badge.textContent = tables.length + ' table' + (tables.length > 1 ? 's' : '');
+    header.appendChild(badge);
+    levelEl.appendChild(header);
+
+    // Tables row
+    var row = document.createElement('div');
+    row.className = 'pt-tables-row';
+
+    var showCount = Math.min(tables.length, MAX_TABLES_DISPLAY);
+    var showFirst = tables.length <= MAX_TABLES_DISPLAY ? tables.length : MAX_TABLES_DISPLAY - 2;
+    var showLast  = tables.length <= MAX_TABLES_DISPLAY ? 0 : 2;
+
+    for (var i = 0; i < showFirst; i++) {
+      row.appendChild(renderTable(tables[i], levelIdx));
+    }
+
+    if (tables.length > MAX_TABLES_DISPLAY) {
+      var overflow = document.createElement('div');
+      overflow.className = 'pt-overflow';
+      overflow.textContent = '... ' + (tables.length - MAX_TABLES_DISPLAY + 2) + ' more ...';
+      row.appendChild(overflow);
+      for (var j = tables.length - showLast; j < tables.length; j++) {
+        row.appendChild(renderTable(tables[j], levelIdx));
+      }
+    }
+
+    levelEl.appendChild(row);
+    return levelEl;
+  }
+
+  function renderTable(table, levelIdx) {
+    var tblEl = document.createElement('div');
+    tblEl.className = 'pt-tbl';
+    tblEl.setAttribute('data-level', levelIdx);
+    tblEl.setAttribute('data-table-id', table.id);
+    allTableEls[table.id] = tblEl;
+
+    // Header
+    var head = document.createElement('div');
+    head.className = 'pt-tbl-head';
+    var nameSpan = document.createElement('span');
+    nameSpan.className = 'tbl-name';
+    var tableName = LEVEL_NAMES[levelIdx];
+    if (table.parentEntryIdx >= 0) {
+      tableName += ' (from ' + LEVEL_NAMES[levelIdx - 1] + '[' + table.parentEntryIdx + '])';
+    }
+    nameSpan.textContent = tableName;
+    head.appendChild(nameSpan);
+
+    var info = document.createElement('span');
+    info.className = 'tbl-info';
+    var numActive = table.entries.length;
+    info.textContent = numActive + '/512';
+    head.appendChild(info);
+    tblEl.appendChild(head);
+
+    // Decide: show full grid or compact
+    // Show full 512-cell grid for small entry counts, compact for large
+    var useCompact = numActive > 256 && (table.lastIdx - table.firstIdx + 1) === numActive;
+
+    if (useCompact && numActive > 200) {
+      // Compact view: show entry range bar
+      var compact = document.createElement('div');
+      compact.className = 'pt-tbl-compact';
+      compact.innerHTML = 'Entries <span class="compact-range">[' + table.firstIdx + ' - ' + table.lastIdx + ']</span>';
+      tblEl.appendChild(compact);
+
+      // Still render a mini bar showing which entries are used
+      var bar = document.createElement('div');
+      bar.style.cssText = 'height:8px;margin:0 8px 8px;border-radius:4px;background:#eef0f2;position:relative;overflow:hidden;';
+      var fill = document.createElement('div');
+      var startPct = (table.firstIdx / 512 * 100).toFixed(1);
+      var widthPct = ((table.lastIdx - table.firstIdx + 1) / 512 * 100).toFixed(1);
+      fill.style.cssText = 'position:absolute;top:0;bottom:0;left:' + startPct + '%;width:' + widthPct + '%;background:' + LEVEL_COLORS[levelIdx] + ';border-radius:4px;opacity:0.7;';
+      bar.appendChild(fill);
+      tblEl.appendChild(bar);
+    } else {
+      // Full 512-cell grid
+      var grid = document.createElement('div');
+      grid.className = 'pt-grid';
+
+      // Build a Set of active indices for fast lookup
+      var activeSet = {};
+      var entryMap = {};
+      table.entries.forEach(function(e) {
+        activeSet[e.index] = true;
+        entryMap[e.index] = e;
+      });
+
+      for (var c = 0; c < 512; c++) {
+        var cell = document.createElement('div');
+        cell.className = 'pt-cell';
+        if (activeSet[c]) {
+          cell.classList.add('active');
+          cell.setAttribute('data-entry-idx', c);
+          cell.setAttribute('data-table-id', table.id);
+          var key = table.id + '-' + c;
+          allEntryCells[key] = cell;
+          // Store connection data
+          table.childTableIds.forEach(function(ct) {
+            if (ct.entryIdx === c) {
+              connectionData.push({ entryKey: key, childTableId: ct.childTableId, levelIdx: levelIdx });
+            }
+          });
+          // Tooltip events
+          (function(entry, lvl, tbl) {
+            cell.addEventListener('mouseenter', function(ev) { showEntryTooltip(ev, entry, lvl, tbl); });
+            cell.addEventListener('mousemove', function(ev) { moveTooltip(ev); });
+            cell.addEventListener('mouseleave', function() { hideTooltip(); unhighlightAll(); });
+            cell.addEventListener('mouseenter', function() { highlightConnection(tbl.id, entry.index); });
+          })(entryMap[c], levelIdx, table);
+        }
+        grid.appendChild(cell);
+      }
+      tblEl.appendChild(grid);
+    }
+
+    // Table hover: highlight parent entry
+    tblEl.addEventListener('mouseenter', function() {
+      if (table.parentTableId >= 0 && table.parentEntryIdx >= 0) {
+        var parentKey = table.parentTableId + '-' + table.parentEntryIdx;
+        if (allEntryCells[parentKey]) {
+          allEntryCells[parentKey].classList.add('entry-highlight');
+        }
+        highlightConnectionPaths(table.parentTableId, table.parentEntryIdx);
+      }
+    });
+    tblEl.addEventListener('mouseleave', function() {
+      unhighlightAll();
+    });
+
+    return tblEl;
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     SVG CONNECTIONS
+     ════════════════════════════════════════════════════════════ */
+  function drawConnections() {
+    if (!svgEl) return;
+    while (svgEl.firstChild) svgEl.removeChild(svgEl.firstChild);
+
+    var bodyRect = $('pt-vis-body').getBoundingClientRect();
+    // Update SVG size
+    svgEl.style.width  = $('pt-vis-body').scrollWidth + 'px';
+    svgEl.style.height = $('pt-vis-body').scrollHeight + 'px';
+
+    connectionData.forEach(function(conn) {
+      var entryCell = allEntryCells[conn.entryKey];
+      var childTbl  = allTableEls[conn.childTableId];
+      if (!entryCell || !childTbl) return;
+
+      var eRect = entryCell.getBoundingClientRect();
+      var tRect = childTbl.getBoundingClientRect();
+
+      var x1 = eRect.right - bodyRect.left + $('pt-vis-body').scrollLeft;
+      var y1 = eRect.top + eRect.height / 2 - bodyRect.top + $('pt-vis-body').scrollTop;
+      var x2 = tRect.left - bodyRect.left + $('pt-vis-body').scrollLeft;
+      var y2 = tRect.top + tRect.height / 2 - bodyRect.top + $('pt-vis-body').scrollTop;
+
+      var dx = (x2 - x1) * 0.4;
+      var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', 'M' + x1 + ',' + y1 + ' C' + (x1 + dx) + ',' + y1 + ' ' + (x2 - dx) + ',' + y2 + ' ' + x2 + ',' + y2);
+      path.setAttribute('stroke', LEVEL_COLORS[conn.levelIdx]);
+      path.setAttribute('data-entry', conn.entryKey);
+      path.setAttribute('data-child', conn.childTableId);
+      svgEl.appendChild(path);
+    });
+  }
+
+  function highlightConnection(tableId, entryIdx) {
+    if (!svgEl) return;
+    var key = tableId + '-' + entryIdx;
+    var paths = svgEl.querySelectorAll('path');
+    paths.forEach(function(p) {
+      if (p.getAttribute('data-entry') === key) {
+        p.classList.add('conn-highlight');
+      }
+    });
+    // Highlight the child table
+    connectionData.forEach(function(conn) {
+      if (conn.entryKey === key && allTableEls[conn.childTableId]) {
+        allTableEls[conn.childTableId].classList.add('highlight');
+      }
+    });
+  }
+
+  function highlightConnectionPaths(parentTableId, parentEntryIdx) {
+    if (!svgEl) return;
+    var key = parentTableId + '-' + parentEntryIdx;
+    var paths = svgEl.querySelectorAll('path');
+    paths.forEach(function(p) {
+      if (p.getAttribute('data-entry') === key) {
+        p.classList.add('conn-highlight');
+      }
+    });
+  }
+
+  function unhighlightAll() {
+    if (svgEl) {
+      svgEl.querySelectorAll('path.conn-highlight').forEach(function(p) {
+        p.classList.remove('conn-highlight');
+      });
+    }
+    document.querySelectorAll('.pt-tbl.highlight').forEach(function(el) {
+      el.classList.remove('highlight');
+    });
+    document.querySelectorAll('.pt-cell.entry-highlight').forEach(function(el) {
+      el.classList.remove('entry-highlight');
+    });
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     TOOLTIP
+     ════════════════════════════════════════════════════════════ */
+  function showEntryTooltip(ev, entry, levelIdx, table) {
+    var tip = $('pt-tip');
+    var shift = LEVEL_SHIFTS[levelIdx];
+    var span  = BigInt(1) << shift;
+
+    var lines = [];
+    lines.push('<div class="tip-title">' + LEVEL_NAMES[levelIdx] + ' Entry [' + entry.index + '] (0x' + entry.index.toString(16).toUpperCase() + ')</div>');
+    lines.push('<div class="tip-row"><span class="tip-label">Range:</span><span class="tip-val">0x' + toHex(entry.addrStart) + ' - 0x' + toHex(entry.addrEnd) + '</span></div>');
+    var rangeSize = entry.addrEnd - entry.addrStart + 1n;
+    lines.push('<div class="tip-row"><span class="tip-label">Maps:</span><span class="tip-val">' + formatSize(rangeSize) + '</span></div>');
+    if (levelIdx < 4) {
+      lines.push('<div class="tip-row"><span class="tip-label">Points to:</span><span class="tip-val">' + LEVEL_NAMES[levelIdx + 1] + ' Table</span></div>');
+    } else {
+      var numPages = rangeSize / PAGE_SIZE;
+      lines.push('<div class="tip-row"><span class="tip-label">Points to:</span><span class="tip-val">' + numPages.toString() + ' Physical Page(s)</span></div>');
+    }
+    if (table.parentEntryIdx >= 0) {
+      lines.push('<div class="tip-row"><span class="tip-label">Parent:</span><span class="tip-val">' + LEVEL_NAMES[levelIdx - 1] + '[' + table.parentEntryIdx + ']</span></div>');
+    }
+
+    tip.innerHTML = lines.join('');
+    tip.classList.add('show');
+    moveTooltip(ev);
+  }
+
+  function moveTooltip(ev) {
+    var tip = $('pt-tip');
+    var x = ev.clientX + 14;
+    var y = ev.clientY + 14;
+    // Keep on screen
+    var w = tip.offsetWidth;
+    var h = tip.offsetHeight;
+    if (x + w > window.innerWidth - 10) x = ev.clientX - w - 10;
+    if (y + h > window.innerHeight - 10) y = ev.clientY - h - 10;
+    tip.style.left = x + 'px';
+    tip.style.top  = y + 'px';
+  }
+
+  function hideTooltip() {
+    $('pt-tip').classList.remove('show');
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     MAIN UPDATE
+     ════════════════════════════════════════════════════════════ */
+  function updateAll() {
+    var endAddr = (fromAddr + sizeVal - BigInt(1)) & MASK_64;
+    $('from-hex-full').textContent = toHex16(fromAddr);
+    $('to-hex-full').textContent   = toHex16(endAddr);
+    $('tbToHex').value = '0x' + toHex(endAddr);
+    updateBitDisplay($('from-bits'), fromAddr);
+    updateBitDisplay($('to-bits'), endAddr);
+    updateResults(fromAddr, sizeVal);
+    renderVisualization();
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     QUICK SIZE
+     ════════════════════════════════════════════════════════════ */
+  var unitToBytes = {
+    bytes: BigInt(1),
+    kb: BigInt(1024),
+    mb: BigInt(1024) * BigInt(1024),
+    gb: BigInt(1024) * BigInt(1024) * BigInt(1024),
+    tb: BigInt(1024) * BigInt(1024) * BigInt(1024) * BigInt(1024)
+  };
+
+  function onQuickSize() {
+    var q = BigInt($('quantity').value);
+    var u = $('unit').value;
+    sizeVal = q * unitToBytes[u];
+    $('tbSizeHex').value = '0x' + toHex(sizeVal);
+    updateAll();
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     INIT
+     ════════════════════════════════════════════════════════════ */
+  function init() {
+    buildBitDisplay($('from-bits'), 'from');
+    buildBitDisplay($('to-bits'), 'to');
+
+    $('tbFromHex').addEventListener('input', function () {
+      fromAddr = parseHex($('tbFromHex').value) & MASK_64;
+      updateAll();
+    });
+
+    $('tbSizeHex').addEventListener('input', function () {
+      sizeVal = parseHex($('tbSizeHex').value);
+      if (sizeVal < BigInt(1)) sizeVal = BigInt(1);
+      updateAll();
+    });
+
+    $('quantity').addEventListener('change', onQuickSize);
+    $('unit').addEventListener('change', onQuickSize);
+
+    // Redraw connections on resize
+    var resizeTimer;
+    window.addEventListener('resize', function() {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function() { drawConnections(); }, 100);
+    });
+
+    updateAll();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+</main>
+
+  <footer>
+  
+<script defer src="/js/center-img.js"></script>
+<script defer src="/js/pre-tag.js"></script>
+
+
+
+
+
+
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2026 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+
