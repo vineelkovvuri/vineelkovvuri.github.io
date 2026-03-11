@@ -414,6 +414,10 @@
     let currentTaskName = '';
     const completedTasks = [];
 
+    // Wall-clock tracking to survive browser throttling
+    let startedAt = null;       // Date.now() when timer was started/resumed
+    let elapsedBeforePause = 0; // seconds already elapsed before the latest pause
+
     function updateRingColor() {
         ring.style.stroke = MODES[currentMode].color;
     }
@@ -541,11 +545,9 @@
     }
 
     function tick() {
-        if (remaining <= 0) {
-            onTimerComplete();
-            return;
-        }
-        remaining--;
+        // Use wall-clock time instead of decrementing to avoid drift from throttling
+        const elapsed = elapsedBeforePause + Math.floor((Date.now() - startedAt) / 1000);
+        remaining = Math.max(0, totalSeconds - elapsed);
         updateDisplay();
         if (remaining <= 0) {
             onTimerComplete();
@@ -554,8 +556,9 @@
 
     function startTimer() {
         if (running) {
-            // Pause
+            // Pause: save how much time has elapsed so far
             running = false;
+            elapsedBeforePause += Math.floor((Date.now() - startedAt) / 1000);
             clearInterval(timerInterval);
             timerInterval = null;
         } else {
@@ -563,9 +566,10 @@
             if (currentMode === 'pomodoro' && remaining === totalSeconds) {
                 currentTaskName = taskInput.value.trim();
             }
-            // Start
+            // Start / Resume: record wall-clock start time
+            startedAt = Date.now();
             running = true;
-            timerInterval = setInterval(tick, 1000);
+            timerInterval = setInterval(tick, 250); // check 4x/sec for responsiveness
         }
         setStartBtnState();
     }
@@ -574,6 +578,8 @@
         running = false;
         clearInterval(timerInterval);
         timerInterval = null;
+        startedAt = null;
+        elapsedBeforePause = 0;
         totalSeconds = MODES[currentMode].duration;
         remaining = totalSeconds;
         updateDisplay();
