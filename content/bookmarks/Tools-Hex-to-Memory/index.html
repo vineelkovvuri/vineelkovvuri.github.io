@@ -205,6 +205,21 @@ tags: ["Tools"]
       return p;
     }
 
+    function signedInterpretation(val) {
+      const widths = [8, 16, 32, 64];
+      for (const bits of widths) {
+        const max = BigInt(1) << BigInt(bits);        // 2^bits
+        const signBit = BigInt(1) << BigInt(bits - 1); // 2^(bits-1)
+        // Only show if value fits in this bit width and the sign bit is set
+        if (val > BigInt(0) && val < max && val >= signBit) {
+          const signed = val - max; // negative value
+          const abs = -signed;
+          return " | signed" + bits + ": -0x" + abs.toString(16).toUpperCase() + " (" + signed.toString(10) + ")";
+        }
+      }
+      return "";
+    }
+
     function hexToSize() {
       const input = document.getElementById("hexInput").value;
       const originalValue = parseHexExpression(input);
@@ -213,7 +228,7 @@ tags: ["Tools"]
         return;
       }
 
-      let result = "= 0x" + originalValue.toString(16).toUpperCase() + "\n";
+      let result = "= 0x" + originalValue.toString(16).toUpperCase() + " (" + originalValue.toString(10) + ")" + signedInterpretation(originalValue) + "\n";
 
       result += breakdownSize(originalValue);
 
