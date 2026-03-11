@@ -452,21 +452,40 @@
     function playBell() {
         try {
             const ctx = new (window.AudioContext || window.webkitAudioContext)();
-            const freqs = [830, 1050, 740];
-            freqs.forEach((freq, i) => {
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.value = freq;
-                gain.gain.setValueAtTime(0.3, ctx.currentTime + i * 0.35);
-                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.35 + 0.8);
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.start(ctx.currentTime + i * 0.35);
-                osc.stop(ctx.currentTime + i * 0.35 + 0.8);
-            });
-            // Close context after sounds finish
-            setTimeout(() => ctx.close(), 3000);
+
+            // A bell strike: fundamental + inharmonic partials with fast attack, long decay
+            function strike(time) {
+                const fundamental = 880;
+                // Bell-like partials (slightly inharmonic ratios typical of a real bell)
+                const partials = [
+                    { ratio: 1.0,   gain: 0.4  },
+                    { ratio: 2.0,   gain: 0.2  },
+                    { ratio: 3.0,   gain: 0.1  },
+                    { ratio: 4.16,  gain: 0.08 },
+                    { ratio: 5.43,  gain: 0.05 },
+                    { ratio: 6.8,   gain: 0.03 },
+                ];
+                partials.forEach(p => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.value = fundamental * p.ratio;
+                    // Sharp attack then long exponential decay
+                    gain.gain.setValueAtTime(p.gain, time);
+                    gain.gain.exponentialRampToValueAtTime(0.001, time + 2.0);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(time);
+                    osc.stop(time + 2.0);
+                });
+            }
+
+            // Ring 3 times
+            strike(ctx.currentTime);
+            strike(ctx.currentTime + 0.6);
+            strike(ctx.currentTime + 1.2);
+
+            setTimeout(() => ctx.close(), 4000);
         } catch (e) {
             // Fallback: do nothing if audio not supported
         }
