@@ -312,6 +312,22 @@
         text-align: center;
         padding: 16px 0;
     }
+
+    .pomo-btn-clear {
+        padding: 4px 12px;
+        border: none;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        background: #e74c3c;
+        color: #fff;
+        transition: background 0.2s, opacity 0.2s;
+    }
+
+    .pomo-btn-clear:hover {
+        background: #c0392b;
+    }
 </style>
 
 <div class="pomo-wrap">
@@ -375,6 +391,7 @@
         <div class="pomo-task-log-header">
             <span>Completed Tasks</span>
             <span class="pomo-task-log-total" id="pomoTaskTotal"></span>
+            <button class="pomo-btn-clear" id="pomoClearBtn" style="display:none;">Clear All</button>
         </div>
         <ul class="pomo-task-list" id="pomoTaskList">
             <li class="pomo-task-log-empty" id="pomoTaskEmpty">No tasks completed yet. Start a Pomodoro!</li>
@@ -401,6 +418,31 @@
     const taskList = document.getElementById('pomoTaskList');
     const taskEmpty = document.getElementById('pomoTaskEmpty');
     const taskTotal = document.getElementById('pomoTaskTotal');
+    const clearBtn = document.getElementById('pomoClearBtn');
+
+    const STORAGE_KEY_TASKS = 'pomoCompletedTasks';
+    const STORAGE_KEY_SESSIONS = 'pomoCompletedSessions';
+
+    function saveTasks() {
+        try { localStorage.setItem(STORAGE_KEY_TASKS, JSON.stringify(completedTasks)); } catch (e) {}
+    }
+    function saveSessions() {
+        try { localStorage.setItem(STORAGE_KEY_SESSIONS, JSON.stringify(completedSessions)); } catch (e) {}
+    }
+    function loadTasks() {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY_TASKS);
+            if (raw) { const arr = JSON.parse(raw); if (Array.isArray(arr)) return arr; }
+        } catch (e) {}
+        return [];
+    }
+    function loadSessions() {
+        try {
+            const v = JSON.parse(localStorage.getItem(STORAGE_KEY_SESSIONS));
+            if (typeof v === 'number' && v >= 0) return v;
+        } catch (e) {}
+        return 0;
+    }
 
     ring.style.strokeDasharray = CIRCUMFERENCE;
     ring.style.strokeDashoffset = '0';
@@ -410,9 +452,10 @@
     let remaining = totalSeconds;
     let timerInterval = null;
     let running = false;
-    let completedSessions = 0;
+    let completedSessions = loadSessions();
     let currentTaskName = '';
-    const completedTasks = [];
+    let currentTaskStartTime = null;
+    const completedTasks = loadTasks();
 
     // Wall-clock tracking to survive browser throttling
     let startedAt = null;       // Date.now() when timer was started/resumed
@@ -496,14 +539,16 @@
     }
 
     function renderTaskLog() {
+        // Remove old task items (keep the empty placeholder)
+        taskList.querySelectorAll('.pomo-task-item').forEach(el => el.remove());
         if (completedTasks.length === 0) {
             taskEmpty.style.display = '';
             taskTotal.textContent = '';
+            clearBtn.style.display = 'none';
             return;
         }
         taskEmpty.style.display = 'none';
-        // Remove old task items (keep the empty placeholder)
-        taskList.querySelectorAll('.pomo-task-item').forEach(el => el.remove());
+        clearBtn.style.display = '';
         // Render newest first
         for (let i = completedTasks.length - 1; i >= 0; i--) {
             const t = completedTasks[i];
@@ -531,21 +576,28 @@
         playBell();
 
         if (currentMode === 'pomodoro') {
-            // Log the task
+            // Log the task with start and end wall-clock times
             const name = currentTaskName || 'Untitled session';
-            const now = new Date();
-            const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+            const fmt = { hour: '2-digit', minute: '2-digit', hour12: true };
+            const startStr = currentTaskStartTime
+                ? currentTaskStartTime.toLocaleTimeString('en-US', fmt)
+                : '??:??';
+            const endStr = new Date().toLocaleTimeString('en-US', fmt);
+            const time = startStr + ' \u2013 ' + endStr;
             completedTasks.push({ name, time });
+            saveTasks();
             renderTaskLog();
 
             completedSessions++;
             if (completedSessions >= 20) completedSessions = 0;
+            saveSessions();
             updateSessionDots();
         }
 
         // Reset timer state so the next Start captures the new task name
         startedAt = null;
         elapsedBeforePause = 0;
+        currentTaskStartTime = null;
         remaining = totalSeconds;
         updateDisplay();
     }
@@ -568,9 +620,10 @@
             clearInterval(timerInterval);
             timerInterval = null;
         } else {
-            // Capture task name on first start of a pomodoro session
+            // Capture task name and start time on first start of a pomodoro session
             if (currentMode === 'pomodoro' && remaining === totalSeconds) {
                 currentTaskName = taskInput.value.trim();
+                currentTaskStartTime = new Date();
             }
             // Start / Resume: record wall-clock start time
             startedAt = Date.now();
@@ -601,10 +654,19 @@
     tabs.forEach(t => t.addEventListener('click', () => switchMode(t.dataset.mode)));
     startBtn.addEventListener('click', startTimer);
     resetBtn.addEventListener('click', resetTimer);
+    clearBtn.addEventListener('click', function () {
+        completedTasks.length = 0;
+        completedSessions = 0;
+        saveTasks();
+        saveSessions();
+        renderTaskLog();
+        updateSessionDots();
+    });
 
     // Initial render
     updateDisplay();
     updateSessionDots();
+    renderTaskLog();
 </script>
 
 </main>
