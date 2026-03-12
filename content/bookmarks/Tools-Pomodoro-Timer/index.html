@@ -504,6 +504,12 @@ tags: ["Tools"]
             if (completedSessions >= 20) completedSessions = 0;
             updateSessionDots();
         }
+
+        // Reset timer state so the next Start captures the new task name
+        startedAt = null;
+        elapsedBeforePause = 0;
+        remaining = totalSeconds;
+        updateDisplay();
     }
 
     function tick() {
