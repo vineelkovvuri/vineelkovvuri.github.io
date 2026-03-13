@@ -384,6 +384,7 @@ tags: ["Tools"]
 
     const STORAGE_KEY_TASKS = 'pomoCompletedTasks';
     const STORAGE_KEY_SESSIONS = 'pomoCompletedSessions';
+    const ORIGINAL_TITLE = document.title;
 
     function saveTasks() {
         try { localStorage.setItem(STORAGE_KEY_TASKS, JSON.stringify(completedTasks)); } catch (e) {}
@@ -430,13 +431,18 @@ tags: ["Tools"]
     function updateDisplay() {
         const m = Math.floor(remaining / 60);
         const s = remaining % 60;
-        digits.textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+        const timeStr = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+        digits.textContent = timeStr;
 
         const fraction = remaining / totalSeconds;
         ring.style.strokeDashoffset = CIRCUMFERENCE * (1 - fraction);
 
         label.textContent = MODES[currentMode].label;
         updateRingColor();
+
+        if (running) {
+            document.title = timeStr + ' - ' + ORIGINAL_TITLE;
+        }
     }
 
     function updateSessionDots() {
@@ -534,6 +540,7 @@ tags: ["Tools"]
         clearInterval(timerInterval);
         timerInterval = null;
         setStartBtnState();
+        document.title = ORIGINAL_TITLE;
 
         playBell();
 
@@ -605,6 +612,7 @@ tags: ["Tools"]
         remaining = totalSeconds;
         updateDisplay();
         setStartBtnState();
+        document.title = ORIGINAL_TITLE;
     }
 
     function switchMode(mode) {
