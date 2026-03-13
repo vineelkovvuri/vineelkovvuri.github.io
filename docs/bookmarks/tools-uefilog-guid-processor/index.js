@@ -33,7 +33,7 @@ require.config({
 require(["vs/editor/editor.main"], function () {
   editor = monaco.editor.create(document.getElementById("editor"), {
     value:
-      "Use 'Choose File' to load a UEFI log file and hit convert to replace all the GUIDs!\n",
+      "Use 'Choose File' to load a UEFI log file or copy paste the UEFI log content and hit convert to replace all the GUIDs!\n",
     language: "plaintext",
     theme: "vs-light",
     wordWrap: "off",

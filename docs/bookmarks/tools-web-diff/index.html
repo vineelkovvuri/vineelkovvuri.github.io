@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Diff Tool | Vineel Kovvuri</title>
+    
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/copy-button.css" />
+    <link rel="stylesheet" href="/css/forms.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/projects/">Projects</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Diff Tool</span></h1>
+
+
+</div>
+
+<main>
+
+<style>
+    #diff-container {
+        width: 100%;
+        height: 80vh;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    #toolbar {
+        display: flex;
+        gap: 8px;
+        padding: 8px 4px;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        font-size: 13px;
+        align-items: center;
+    }
+
+    #toolbar button {
+        padding: 5px 14px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        background: #f5f5f5;
+        cursor: pointer;
+        font-size: 13px;
+        font-family: inherit;
+        transition: background 0.15s;
+    }
+
+    #toolbar button:hover {
+        background: #e0e0e0;
+    }
+
+    #toolbar button.active {
+        background: #4363d8;
+        color: #fff;
+        border-color: #4363d8;
+    }
+
+    #toolbar label {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .eol-lf::after {
+        content: '↵';
+        color: #b0b0b0;
+    }
+
+    .eol-crlf::after {
+        content: '␍↵';
+        color: #b0b0b0;
+    }
+
+    .eol-cr::after {
+        content: '␍';
+        color: #b0b0b0;
+    }
+</style>
+
+<div id="toolbar">
+    <button id="btn-inline" title="Toggle inline diff view">📏 Inline</button>
+    <button id="btn-clear" title="Clear both editors">🗑️ Clear</button>
+    <label title="Toggle whitespace visibility in diff">
+        <input type="checkbox" id="chk-whitespace" />
+        Whitespace
+    </label>
+    <label title="Show invisible characters (spaces, tabs, etc.)">
+        <input type="checkbox" id="chk-invisible" />
+        Invisible Chars
+    </label>
+    <label title="Toggle word wrap">
+        <input type="checkbox" id="chk-wordwrap" checked />
+        Word Wrap
+    </label>
+</div>
+<div id="diff-container"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs/loader.js"></script>
+<script>
+    require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs' } });
+
+    require(['vs/editor/editor.main'], function () {
+        const originalModel = monaco.editor.createModel(
+            'Paste original text here.',
+            'plaintext'
+        );
+        const modifiedModel = monaco.editor.createModel(
+            'Paste modified text here.',
+            'plaintext'
+        );
+
+        const diffEditor = monaco.editor.createDiffEditor(
+            document.getElementById('diff-container'),
+            {
+                automaticLayout: true,
+                renderSideBySide: true,
+                originalEditable: true,
+                fontSize: 14,
+                wordWrap: 'on',
+                diffWordWrap: 'on',
+                minimap: { enabled: false },
+            }
+        );
+
+        diffEditor.setModel({
+            original: originalModel,
+            modified: modifiedModel,
+        });
+
+        // Inline toggle
+        const btnInline = document.getElementById('btn-inline');
+        let inline = false;
+        btnInline.addEventListener('click', function () {
+            inline = !inline;
+            diffEditor.updateOptions({ renderSideBySide: !inline });
+            btnInline.classList.toggle('active', inline);
+        });
+
+        // Clear both
+        document.getElementById('btn-clear').addEventListener('click', function () {
+            originalModel.setValue('');
+            modifiedModel.setValue('');
+        });
+
+        // Whitespace toggle
+        document.getElementById('chk-whitespace').addEventListener('change', function () {
+            diffEditor.updateOptions({
+                ignoreTrimWhitespace: !this.checked,
+            });
+        });
+
+        // Word wrap toggle
+        document.getElementById('chk-wordwrap').addEventListener('change', function () {
+            const value = this.checked ? 'on' : 'off';
+            diffEditor.updateOptions({
+                wordWrap: value,
+                diffWordWrap: value,
+            });
+        });
+
+        // Line ending decorations for both editors
+        let origEolDecorations = [];
+        let modEolDecorations = [];
+
+        function getEolClassName(model) {
+            const eol = model.getEOL();
+            if (eol === '\r\n') return 'eol-crlf';
+            if (eol === '\r') return 'eol-cr';
+            return 'eol-lf';
+        }
+
+        function buildEolDecorations(model) {
+            const cls = getEolClassName(model);
+            const lineCount = model.getLineCount();
+            const decorations = [];
+            for (let i = 1; i <= lineCount; i++) {
+                const lineLen = model.getLineLength(i);
+                decorations.push({
+                    range: new monaco.Range(i, lineLen + 1, i, lineLen + 1),
+                    options: {
+                        afterContentClassName: cls,
+                    },
+                });
+            }
+            return decorations;
+        }
+
+        function applyEolDecorations() {
+            const origEditor = diffEditor.getOriginalEditor();
+            const modEditor = diffEditor.getModifiedEditor();
+            origEolDecorations = origEditor.deltaDecorations(
+                origEolDecorations,
+                buildEolDecorations(originalModel)
+            );
+            modEolDecorations = modEditor.deltaDecorations(
+                modEolDecorations,
+                buildEolDecorations(modifiedModel)
+            );
+        }
+
+        function clearEolDecorations() {
+            const origEditor = diffEditor.getOriginalEditor();
+            const modEditor = diffEditor.getModifiedEditor();
+            origEolDecorations = origEditor.deltaDecorations(origEolDecorations, []);
+            modEolDecorations = modEditor.deltaDecorations(modEolDecorations, []);
+        }
+
+        // Invisible characters toggle
+        let invisibleOn = false;
+        const chkInvisible = document.getElementById('chk-invisible');
+
+        // Re-apply EOL decorations when content changes
+        originalModel.onDidChangeContent(function () {
+            if (invisibleOn) applyEolDecorations();
+        });
+        modifiedModel.onDidChangeContent(function () {
+            if (invisibleOn) applyEolDecorations();
+        });
+
+        chkInvisible.addEventListener('change', function () {
+            invisibleOn = this.checked;
+            const value = this.checked ? 'all' : 'none';
+            diffEditor.updateOptions({
+                renderWhitespace: value,
+                renderControlCharacters: this.checked,
+            });
+            if (this.checked) {
+                applyEolDecorations();
+            } else {
+                clearEolDecorations();
+            }
+        });
+    });
+</script>
+
+</main>
+
+  <footer>
+  
+<script defer src="/js/center-img.js"></script>
+<script defer src="/js/pre-tag.js"></script>
+
+
+
+
+
+
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2026 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+
