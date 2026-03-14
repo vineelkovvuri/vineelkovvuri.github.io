@@ -1,0 +1,469 @@
+---
+title: "Whiteboard"
+tags: ["Tools"]
+---
+
+<style>
+    .wb-wrap * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+
+    .wb-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 8px 8px;
+        user-select: none;
+    }
+
+    /* Toolbar */
+    .wb-toolbar {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .wb-tool-btn {
+        width: 40px;
+        height: 40px;
+        border: 2px solid #d0d5dd;
+        border-radius: 10px;
+        background: #fff;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    }
+
+    .wb-tool-btn:hover {
+        border-color: #98a2b3;
+    }
+
+    .wb-tool-btn.active {
+        border-color: #5a9fd4;
+        background: #e8f4fd;
+        box-shadow: 0 0 0 2px rgba(90, 159, 212, 0.25);
+    }
+
+    .wb-tool-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .wb-separator {
+        width: 1px;
+        height: 28px;
+        background: #d0d5dd;
+        margin: 0 4px;
+    }
+
+    /* Color swatches */
+    .wb-color-btn {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        border: 3px solid transparent;
+        cursor: pointer;
+        transition: border-color 0.2s, transform 0.15s;
+    }
+
+    .wb-color-btn:hover {
+        transform: scale(1.15);
+    }
+
+    .wb-color-btn.active {
+        border-color: #344054;
+    }
+
+    /* Clear button */
+    .wb-clear-btn {
+        padding: 8px 18px;
+        border: 2px solid #e74c3c;
+        border-radius: 10px;
+        background: #fff;
+        color: #e74c3c;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+    }
+
+    .wb-clear-btn:hover {
+        background: #e74c3c;
+        color: #fff;
+    }
+
+    /* Canvas */
+    .wb-canvas-wrap {
+        border: 2px solid #d0d5dd;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #fff;
+        touch-action: none;
+    }
+
+    .wb-canvas-wrap canvas {
+        display: block;
+    }
+</style>
+
+<div class="wb-wrap">
+    <!-- Toolbar -->
+    <div class="wb-toolbar">
+        <!-- Pen tool -->
+        <button class="wb-tool-btn active" id="wbPenBtn" title="Pen">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 19l7-7 3 3-7 7-3-3z"/>
+                <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
+                <path d="M2 2l7.586 7.586"/>
+                <circle cx="11" cy="11" r="2"/>
+            </svg>
+        </button>
+
+        <!-- Eraser tool -->
+        <button class="wb-tool-btn" id="wbEraserBtn" title="Eraser">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 20H7L3 16c-.8-.8-.8-2 0-2.8L14.6 1.6c.8-.8 2-.8 2.8 0l5 5c.8.8.8 2 0 2.8L12 20"/>
+                <path d="M6 11l7 7"/>
+            </svg>
+        </button>
+
+        <!-- Hand (pan) tool -->
+        <button class="wb-tool-btn" id="wbHandBtn" title="Hand (Pan)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 11V6a2 2 0 0 0-4 0v1"/>
+                <path d="M14 10V4a2 2 0 0 0-4 0v2"/>
+                <path d="M10 10.5V6a2 2 0 0 0-4 0v8"/>
+                <path d="M18 8a2 2 0 0 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.9-5.7-2.4L3.1 15a1.5 1.5 0 0 1 .5-2.3c.8-.4 1.8-.1 2.3.5L8 16"/>
+            </svg>
+        </button>
+
+        <div class="wb-separator"></div>
+
+        <!-- Color swatches -->
+        <button class="wb-color-btn active" data-color="#1e1e1e" style="background:#1e1e1e;" title="Black"></button>
+        <button class="wb-color-btn" data-color="#e74c3c" style="background:#e74c3c;" title="Red"></button>
+        <button class="wb-color-btn" data-color="#2980b9" style="background:#2980b9;" title="Blue"></button>
+        <button class="wb-color-btn" data-color="#27ae60" style="background:#27ae60;" title="Green"></button>
+        <button class="wb-color-btn" data-color="#f39c12" style="background:#f39c12;" title="Orange"></button>
+
+        <div class="wb-separator"></div>
+
+        <!-- Clear -->
+        <button class="wb-clear-btn" id="wbClearBtn">Clear</button>
+    </div>
+
+    <!-- Canvas -->
+    <div class="wb-canvas-wrap">
+        <canvas id="wbCanvas" width="900" height="560"></canvas>
+    </div>
+</div>
+
+<script>
+(function () {
+    const canvas = document.getElementById('wbCanvas');
+    const ctx = canvas.getContext('2d');
+    const penBtn = document.getElementById('wbPenBtn');
+    const eraserBtn = document.getElementById('wbEraserBtn');
+    const handBtn = document.getElementById('wbHandBtn');
+    const clearBtn = document.getElementById('wbClearBtn');
+    const colorBtns = document.querySelectorAll('.wb-color-btn');
+
+    let tool = 'pen';           // 'pen' | 'eraser' | 'hand'
+    let penColor = '#1e1e1e';
+    const PEN_WIDTH = 3;
+    const ERASER_WIDTH = 28;
+
+    // --- Infinite canvas state ---
+    // All strokes stored in world coordinates.
+    // Each stroke: { points: [{x,y},...], color, width, eraser:bool }
+    let strokes = [];
+    let currentStroke = null;
+
+    // Pan offset: world coordinate that maps to canvas top-left
+    let panX = 0;
+    let panY = 0;
+    let isPanning = false;
+    let panStartX = 0;
+    let panStartY = 0;
+    let panStartPanX = 0;
+    let panStartPanY = 0;
+
+    // --- Resize canvas to fill remaining viewport height ---
+    function resizeCanvas() {
+        const wbWrap = canvas.closest('.wb-wrap');
+        const toolbar = wbWrap.querySelector('.wb-toolbar');
+        const canvasWrap = canvas.parentElement;
+
+        const w = Math.max(wbWrap.clientWidth - 20, 320);
+
+        // Calculate remaining viewport height after toolbar, gaps, and padding
+        var toolbarRect = toolbar.getBoundingClientRect();
+        var usedHeight = toolbarRect.bottom + 12 + 4; // 12px gap + small buffer for border
+        var h = Math.max(window.innerHeight - usedHeight, 200);
+
+        if (canvas.width !== w || canvas.height !== h) {
+            canvas.width = w;
+            canvas.height = h;
+            redraw();
+        }
+    }
+
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // --- Cursors ---
+    function makePenCursor(color) {
+        var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">'
+            + '<path d="M3 21l1.5-4.5L17.3 3.7a1.4 1.4 0 0 1 2 0l1 1a1.4 1.4 0 0 1 0 2L7.5 19.5Z" '
+            + 'fill="' + color + '" stroke="%23333" stroke-width="1"/>'
+            + '<path d="M3 21l1-1" stroke="%23333" stroke-width="1.5" stroke-linecap="round"/>'
+            + '</svg>';
+        return 'url("data:image/svg+xml,' + encodeURIComponent(svg) + '") 1 23, crosshair';
+    }
+
+    var eraserCursor = (function () {
+        var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28">'
+            + '<rect x="2" y="2" width="24" height="24" rx="4" fill="%23fff" stroke="%23888" stroke-width="2"/>'
+            + '<line x1="8" y1="8" x2="20" y2="20" stroke="%23bbb" stroke-width="1.5"/>'
+            + '<line x1="20" y1="8" x2="8" y2="20" stroke="%23bbb" stroke-width="1.5"/>'
+            + '</svg>';
+        return 'url("data:image/svg+xml,' + encodeURIComponent(svg) + '") 14 14, crosshair';
+    })();
+
+    // --- Tool switching ---
+    function setTool(t) {
+        tool = t;
+        penBtn.classList.toggle('active', t === 'pen');
+        eraserBtn.classList.toggle('active', t === 'eraser');
+        handBtn.classList.toggle('active', t === 'hand');
+        if (t === 'eraser') {
+            canvas.style.cursor = eraserCursor;
+        } else if (t === 'hand') {
+            canvas.style.cursor = 'grab';
+        } else {
+            canvas.style.cursor = makePenCursor(penColor);
+        }
+    }
+
+    penBtn.addEventListener('click', function () { setTool('pen'); });
+    eraserBtn.addEventListener('click', function () { setTool('eraser'); });
+    handBtn.addEventListener('click', function () { setTool('hand'); });
+
+    // --- Color switching ---
+    colorBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            penColor = btn.dataset.color;
+            colorBtns.forEach(function (b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            setTool('pen');
+        });
+    });
+
+    // --- Clear ---
+    clearBtn.addEventListener('click', function () {
+        strokes = [];
+        panX = 0;
+        panY = 0;
+        redraw();
+    });
+
+    // --- Convert screen coords to world coords ---
+    function screenToWorld(sx, sy) {
+        return { x: sx + panX, y: sy + panY };
+    }
+
+    // --- Get screen position from event ---
+    function getScreenPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        var clientX, clientY;
+        if (e.touches && e.touches.length > 0) {
+            clientX = e.touches[0].clientX;
+            clientY = e.touches[0].clientY;
+        } else {
+            clientX = e.clientX;
+            clientY = e.clientY;
+        }
+        return {
+            x: (clientX - rect.left) * scaleX,
+            y: (clientY - rect.top) * scaleY
+        };
+    }
+
+    // --- Drawing a single stroke on the canvas ---
+    function drawStroke(s) {
+        if (s.points.length === 0) return;
+        ctx.save();
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        if (s.eraser) {
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.strokeStyle = 'rgba(0,0,0,1)';
+            ctx.fillStyle = 'rgba(0,0,0,1)';
+            ctx.lineWidth = s.width;
+        } else {
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.strokeStyle = s.color;
+            ctx.fillStyle = s.color;
+            ctx.lineWidth = s.width;
+        }
+
+        // Translate from world to screen
+        var offX = -panX;
+        var offY = -panY;
+
+        if (s.points.length === 1) {
+            // Single dot
+            ctx.beginPath();
+            ctx.arc(s.points[0].x + offX, s.points[0].y + offY, s.width / 2, 0, Math.PI * 2);
+            ctx.fill();
+        } else {
+            ctx.beginPath();
+            ctx.moveTo(s.points[0].x + offX, s.points[0].y + offY);
+            for (var i = 1; i < s.points.length; i++) {
+                ctx.lineTo(s.points[i].x + offX, s.points[i].y + offY);
+            }
+            ctx.stroke();
+        }
+        ctx.restore();
+    }
+
+    // --- Full redraw ---
+    function redraw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (var i = 0; i < strokes.length; i++) {
+            drawStroke(strokes[i]);
+        }
+        if (currentStroke) {
+            drawStroke(currentStroke);
+        }
+    }
+
+    // --- Incremental draw: just the last segment of the current stroke ---
+    function drawLastSegment() {
+        if (!currentStroke || currentStroke.points.length < 2) return;
+        var s = currentStroke;
+        var offX = -panX;
+        var offY = -panY;
+        var len = s.points.length;
+
+        ctx.save();
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        if (s.eraser) {
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.strokeStyle = 'rgba(0,0,0,1)';
+            ctx.lineWidth = s.width;
+        } else {
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.strokeStyle = s.color;
+            ctx.lineWidth = s.width;
+        }
+
+        ctx.beginPath();
+        ctx.moveTo(s.points[len - 2].x + offX, s.points[len - 2].y + offY);
+        ctx.lineTo(s.points[len - 1].x + offX, s.points[len - 1].y + offY);
+        ctx.stroke();
+        ctx.restore();
+    }
+
+    // --- Input handlers ---
+    function beginInput(e) {
+        var sp = getScreenPos(e);
+
+        if (tool === 'hand') {
+            isPanning = true;
+            panStartX = sp.x;
+            panStartY = sp.y;
+            panStartPanX = panX;
+            panStartPanY = panY;
+            canvas.style.cursor = 'grabbing';
+            return;
+        }
+
+        var wp = screenToWorld(sp.x, sp.y);
+        currentStroke = {
+            points: [wp],
+            color: penColor,
+            width: tool === 'eraser' ? ERASER_WIDTH : PEN_WIDTH,
+            eraser: tool === 'eraser'
+        };
+
+        // Draw initial dot
+        drawStroke(currentStroke);
+    }
+
+    function moveInput(e) {
+        e.preventDefault();
+        var sp = getScreenPos(e);
+
+        if (isPanning) {
+            var dx = sp.x - panStartX;
+            var dy = sp.y - panStartY;
+            panX = panStartPanX - dx;
+            panY = panStartPanY - dy;
+            redraw();
+            return;
+        }
+
+        if (!currentStroke) return;
+
+        var wp = screenToWorld(sp.x, sp.y);
+        currentStroke.points.push(wp);
+        drawLastSegment();
+    }
+
+    function endInput() {
+        if (isPanning) {
+            isPanning = false;
+            if (tool === 'hand') canvas.style.cursor = 'grab';
+            return;
+        }
+
+        if (currentStroke) {
+            strokes.push(currentStroke);
+            currentStroke = null;
+        }
+    }
+
+    // Mouse events
+    canvas.addEventListener('mousedown', beginInput);
+    canvas.addEventListener('mousemove', moveInput);
+    canvas.addEventListener('mouseup', endInput);
+    canvas.addEventListener('mouseleave', endInput);
+
+    // Touch events
+    canvas.addEventListener('touchstart', function (e) { e.preventDefault(); beginInput(e); }, { passive: false });
+    canvas.addEventListener('touchmove', function (e) { moveInput(e); }, { passive: false });
+    canvas.addEventListener('touchend', endInput);
+    canvas.addEventListener('touchcancel', endInput);
+
+    // Middle-mouse panning (hold middle button to pan regardless of tool)
+    canvas.addEventListener('mousedown', function (e) {
+        if (e.button === 1) {
+            e.preventDefault();
+            var sp = getScreenPos(e);
+            isPanning = true;
+            panStartX = sp.x;
+            panStartY = sp.y;
+            panStartPanX = panX;
+            panStartPanY = panY;
+            canvas.style.cursor = 'grabbing';
+        }
+    });
+
+    // Set initial cursor
+    setTool('pen');
+})();
+</script>
