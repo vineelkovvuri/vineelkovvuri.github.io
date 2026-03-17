@@ -49,38 +49,154 @@ tags: ["Tools"]
 
 <body>
   <style>
-    .calc-section {
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      padding: 12px;
-      margin-bottom: 12px;
+    .hm-section {
+      border: 1px solid #d0d5dd;
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 14px;
       position: relative;
+      background: #f8f9fb;
+      transition: box-shadow 0.2s ease;
     }
-    .calc-section .close-btn {
+    .hm-section:hover {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+    .hm-section .hm-close {
       position: absolute;
-      top: 6px;
-      right: 10px;
+      top: 8px;
+      right: 12px;
       background: none;
       border: none;
-      font-size: 20px;
+      font-size: 18px;
       cursor: pointer;
-      color: #888;
+      color: #7f8c8d;
       line-height: 1;
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: background 0.15s, color 0.15s;
     }
-    .calc-section .close-btn:hover { color: #c00; }
-    #add-section-btn {
-      font-size: 22px;
-      padding: 4px 14px;
+    .hm-section .hm-close:hover {
+      color: #e74c3c;
+      background: rgba(231, 76, 60, 0.1);
+    }
+    .hm-section label {
+      color: #2c3e50;
+      font-weight: 600;
+      font-size: 0.9em;
+    }
+    .hm-section input[type="text"] {
+      border: 1px solid #b0c4de;
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.95em;
+      color: #2c3e50;
+      background: #fff;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 450px;
+    }
+    .hm-section input[type="text"]:focus {
+      outline: none;
+      border-color: #5a9fd4;
+      box-shadow: 0 0 0 3px rgba(90, 159, 212, 0.15);
+    }
+    .hm-section .hm-result {
+      margin: 8px 0 0;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.92em;
+      color: #2c3e50;
+      background: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 12px;
+      line-height: 1.5;
+    }
+    #hm-add-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      font-size: 20px;
+      line-height: 1;
       cursor: pointer;
-      margin-bottom: 16px;
+      border: 1px solid #b0c4de;
+      border-radius: 8px;
+      background: #fff;
+      color: #5a9fd4;
+      vertical-align: middle;
+      margin-left: 8px;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    #hm-add-btn:hover {
+      background: #5a9fd4;
+      color: #fff;
+      border-color: #5a9fd4;
+    }
+    .hm-heading {
+      display: inline;
+      color: #2c3e50;
+      vertical-align: middle;
+    }
+    .hm-examples {
+      margin: 10px 0;
+      color: #7f8c8d;
+      font-size: 0.88em;
+      background: #f8f9fb;
+      border: 1px solid #e0e4e8;
+      border-radius: 8px;
+      padding: 12px 16px;
+      line-height: 1.6;
+    }
+    .hm-divider {
+      border: none;
+      border-top: 1px solid #d0d5dd;
+      margin: 20px 0;
+    }
+    .hm-offsets {
+      border: 1px solid #d0d5dd;
+      border-radius: 10px;
+      padding: 16px 20px;
+      background: #f8f9fb;
+    }
+    .hm-offsets label {
+      color: #2c3e50;
+      font-weight: 600;
+      font-size: 0.9em;
+    }
+    .hm-offsets input[type="number"] {
+      border: 1px solid #b0c4de;
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.95em;
+      color: #2c3e50;
+      background: #fff;
+      width: 100px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .hm-offsets input[type="number"]:focus {
+      outline: none;
+      border-color: #5a9fd4;
+      box-shadow: 0 0 0 3px rgba(90, 159, 212, 0.15);
+    }
+    .hm-offsets .hm-result {
+      margin: 8px 0 0;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.95em;
+      color: #2c3e50;
+      background: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 12px;
     }
   </style>
 
-  <h3 style="display: inline;">Hexadecimal to Memory Offsets</h3>
-  <button id="add-section-btn" title="Add another calculator section">+</button>
+  <h3 class="hm-heading">Hexadecimal to Memory Offsets</h3>
+  <button id="hm-add-btn" title="Add another calculator section">+</button>
   <div id="sections-container"></div>
 
-  <pre style="margin: 5px 0; color: gray;">Examples:
+  <pre class="hm-examples">Examples:
   0x100000000                  Hex value
   0xFFFF FFFF FFFF FFFF        Hex with spaces
   0x1000_0000                  Hex with underscores
@@ -92,37 +208,39 @@ tags: ["Tools"]
   64K, 2M, 1G, 3T, 512B        Short suffixes
   64KB, 2MB, 1GB, 3TB          Long suffixes</pre>
 
-  <hr>
+  <hr class="hm-divider">
 
-  <h3>Memory Offsets to Hexadecimal</h3>
-  <table style="margin: 0 !important;">
-    <tr>
-      <td style="text-align: right; padding-right: 10px;"><label for="tbInput">TB:</label></td>
-      <td><input type="number" id="tbInput" value="0" min="0" style="padding: 5px; width: 100px;" /></td>
-    </tr>
-    <tr>
-      <td style="text-align: right; padding-right: 10px;"><label for="gbInput">GB:</label></td>
-      <td><input type="number" id="gbInput" value="0" min="0" style="padding: 5px; width: 100px;" /></td>
-    </tr>
-    <tr>
-      <td style="text-align: right; padding-right: 10px;"><label for="mbInput">MB:</label></td>
-      <td><input type="number" id="mbInput" value="0" min="0" style="padding: 5px; width: 100px;" /></td>
-    </tr>
-    <tr>
-      <td style="text-align: right; padding-right: 10px;"><label for="kbInput">KB:</label></td>
-      <td><input type="number" id="kbInput" value="0" min="0" style="padding: 5px; width: 100px;" /></td>
-    </tr>
-    <tr>
-      <td style="text-align: right; padding-right: 10px;"><label for="bytesInput">Bytes:</label></td>
-      <td><input type="number" id="bytesInput" value="0" min="0" style="padding: 5px; width: 100px;" /></td>
-    </tr>
-    <tr>
-      <td style="text-align: right; padding-right: 10px;"><label>Result:</label></td>
-      <td>
-        <strong><pre id="sizeToHexResult" style="margin: 5px 0;">0x0</pre></strong>
-      </td>
-    </tr>
-  </table>
+  <div class="hm-offsets">
+    <h3 style="color: #2c3e50; margin-top: 0;">Memory Offsets to Hexadecimal</h3>
+    <table style="margin: 0 !important;">
+      <tr>
+        <td style="text-align: right; padding-right: 10px;"><label for="tbInput">TB:</label></td>
+        <td><input type="number" id="tbInput" value="0" min="0" /></td>
+      </tr>
+      <tr>
+        <td style="text-align: right; padding-right: 10px;"><label for="gbInput">GB:</label></td>
+        <td><input type="number" id="gbInput" value="0" min="0" /></td>
+      </tr>
+      <tr>
+        <td style="text-align: right; padding-right: 10px;"><label for="mbInput">MB:</label></td>
+        <td><input type="number" id="mbInput" value="0" min="0" /></td>
+      </tr>
+      <tr>
+        <td style="text-align: right; padding-right: 10px;"><label for="kbInput">KB:</label></td>
+        <td><input type="number" id="kbInput" value="0" min="0" /></td>
+      </tr>
+      <tr>
+        <td style="text-align: right; padding-right: 10px;"><label for="bytesInput">Bytes:</label></td>
+        <td><input type="number" id="bytesInput" value="0" min="0" /></td>
+      </tr>
+      <tr>
+        <td style="text-align: right; padding-right: 10px;"><label>Result:</label></td>
+        <td>
+          <pre class="hm-result" id="sizeToHexResult">0x0</pre>
+        </td>
+      </tr>
+    </table>
+  </div>
 
   <script>
     const TB = BigInt(1) << BigInt(40);
@@ -234,28 +352,28 @@ tags: ["Tools"]
     function createHexSection() {
       const id = sectionCounter++;
       const section = document.createElement("div");
-      section.className = "calc-section";
+      section.className = "hm-section";
       section.dataset.id = id;
 
-      const canClose = document.querySelectorAll(".calc-section").length > 0;
+      const canClose = document.querySelectorAll(".hm-section").length > 0;
 
       section.innerHTML = `
-        ${canClose ? '<button class="close-btn" title="Remove this section">&times;</button>' : ''}
+        ${canClose ? '<button class="hm-close" title="Remove this section">&times;</button>' : ''}
         <table style="margin: 0 !important;">
           <tr>
             <td style="text-align: right; padding-right: 10px;">
               <label>Hex:</label>
             </td>
             <td>
-              <input type="text" class="hexInput" value="0x0" style="padding: 5px; width: 450px;" placeholder="e.g. 0xFEC00000 + 64K + 2MB" />
+              <input type="text" class="hexInput" value="0x0" placeholder="e.g. 0xFEC00000 + 64K + 2MB" />
             </td>
           </tr>
           <tr>
-            <td style="text-align: right; padding-right: 10px;">
+            <td style="text-align: right; padding-right: 10px; vertical-align: top;">
               <label>Result:</label>
             </td>
             <td>
-              <strong><pre class="hexToSizeResult" style="margin: 5px 0;">0 Bytes</pre></strong>
+              <pre class="hexToSizeResult hm-result">0 Bytes</pre>
             </td>
           </tr>
         </table>
@@ -280,7 +398,7 @@ tags: ["Tools"]
         hexResult.innerText = result;
       });
 
-      const closeBtn = section.querySelector(".close-btn");
+      const closeBtn = section.querySelector(".hm-close");
       if (closeBtn) {
         closeBtn.addEventListener("click", function () {
           section.remove();
@@ -294,7 +412,7 @@ tags: ["Tools"]
     createHexSection();
 
     // Add hex section button
-    document.getElementById("add-section-btn").addEventListener("click", createHexSection);
+    document.getElementById("hm-add-btn").addEventListener("click", createHexSection);
 
     // --- Static Memory Offsets to Hex ---
 
