@@ -48,26 +48,38 @@ tags: ["Tools"]
 </head> -->
 
 <body>
+  <style>
+    .calc-section {
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 12px;
+      position: relative;
+    }
+    .calc-section .close-btn {
+      position: absolute;
+      top: 6px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: #888;
+      line-height: 1;
+    }
+    .calc-section .close-btn:hover { color: #c00; }
+    #add-section-btn {
+      font-size: 22px;
+      padding: 4px 14px;
+      cursor: pointer;
+      margin-bottom: 16px;
+    }
+  </style>
 
-  <h3>Hexadecimal to Memory Offsets</h3>
-  <table style="margin: 0 !important;">
-    <tr>
-      <td style="text-align: right; padding-right: 10px;">
-        <label for="hexInput">Hex:</label>
-      </td>
-      <td>
-        <input type="text" id="hexInput" value="0x0" style="padding: 5px; width: 450px;" placeholder="e.g. 0xFEC00000 + 64K + 2MB" />
-      </td>
-    </tr>
-    <tr>
-      <td style="text-align: right; padding-right: 10px;">
-        <label>Result:</label>
-      </td>
-      <td>
-        <strong><pre id="hexToSizeResult" style="margin: 5px 0;">0 Bytes</pre></strong>
-      </td>
-    </tr>
-  </table>
+  <h3 style="display: inline;">Hexadecimal to Memory Offsets</h3>
+  <button id="add-section-btn" title="Add another calculator section">+</button>
+  <div id="sections-container"></div>
+
   <pre style="margin: 5px 0; color: gray;">Examples:
   0x100000000                  Hex value
   0xFFFF FFFF FFFF FFFF        Hex with spaces
@@ -118,14 +130,15 @@ tags: ["Tools"]
     const MB = BigInt(1) << BigInt(20);
     const KB = BigInt(1) << BigInt(10);
 
-    // --- Section 1: Hex to TB/GB/MB/KB/Bytes ---
+    let sectionCounter = 0;
+
+    // --- Parsing helpers ---
 
     function parseTerm(term) {
       if (!term) return BigInt(0);
       term = term.trim().replaceAll("_", "").replaceAll(" ", "");
       if (!term) return BigInt(0);
 
-      // Check for size suffix: e.g. 64K, 2MB, 1GB, 3TB, 512B
       const suffixMatch = term.match(/^(\d+)(TB|GB|MB|KB|T|G|M|K|B)$/i);
       if (suffixMatch) {
         const num = BigInt(parseInt(suffixMatch[1]));
@@ -137,7 +150,6 @@ tags: ["Tools"]
         if (suffix === "B") return num;
       }
 
-      // Otherwise treat as hex
       if (term.startsWith("0x") || term.startsWith("0X")) {
         term = term.substring(2);
       }
@@ -151,8 +163,6 @@ tags: ["Tools"]
 
     function parseHexExpression(expr) {
       if (!expr) return BigInt(0);
-      // Tokenize into terms with + or - operators
-      // Split on + or - while keeping the operator
       const tokens = expr.match(/[+-]?[^+-]+/g);
       if (!tokens) return BigInt(0);
       let total = BigInt(0);
@@ -208,11 +218,10 @@ tags: ["Tools"]
     function signedInterpretation(val) {
       const widths = [8, 16, 32, 64];
       for (const bits of widths) {
-        const max = BigInt(1) << BigInt(bits);        // 2^bits
-        const signBit = BigInt(1) << BigInt(bits - 1); // 2^(bits-1)
-        // Only show if value fits in this bit width and the sign bit is set
+        const max = BigInt(1) << BigInt(bits);
+        const signBit = BigInt(1) << BigInt(bits - 1);
         if (val > BigInt(0) && val < max && val >= signBit) {
-          const signed = val - max; // negative value
+          const signed = val - max;
           const abs = -signed;
           return " | signed" + bits + ": -0x" + abs.toString(16).toUpperCase() + " (" + signed.toString(10) + ")";
         }
@@ -220,32 +229,74 @@ tags: ["Tools"]
       return "";
     }
 
-    function hexToSize() {
-      const input = document.getElementById("hexInput").value;
-      const originalValue = parseHexExpression(input);
-      if (originalValue === BigInt(0)) {
-        document.getElementById("hexToSizeResult").innerText = "0 Bytes";
-        return;
+    // --- Hex-to-Size section creation ---
+
+    function createHexSection() {
+      const id = sectionCounter++;
+      const section = document.createElement("div");
+      section.className = "calc-section";
+      section.dataset.id = id;
+
+      const canClose = document.querySelectorAll(".calc-section").length > 0;
+
+      section.innerHTML = `
+        ${canClose ? '<button class="close-btn" title="Remove this section">&times;</button>' : ''}
+        <table style="margin: 0 !important;">
+          <tr>
+            <td style="text-align: right; padding-right: 10px;">
+              <label>Hex:</label>
+            </td>
+            <td>
+              <input type="text" class="hexInput" value="0x0" style="padding: 5px; width: 450px;" placeholder="e.g. 0xFEC00000 + 64K + 2MB" />
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: right; padding-right: 10px;">
+              <label>Result:</label>
+            </td>
+            <td>
+              <strong><pre class="hexToSizeResult" style="margin: 5px 0;">0 Bytes</pre></strong>
+            </td>
+          </tr>
+        </table>
+      `;
+
+      const hexInput = section.querySelector(".hexInput");
+      const hexResult = section.querySelector(".hexToSizeResult");
+      hexInput.addEventListener("input", function () {
+        const originalValue = parseHexExpression(hexInput.value);
+        if (originalValue === BigInt(0)) {
+          hexResult.innerText = "0 Bytes";
+          return;
+        }
+        let result = "= 0x" + originalValue.toString(16).toUpperCase() + " (" + originalValue.toString(10) + ")" + signedInterpretation(originalValue) + "\n";
+        result += breakdownSize(originalValue);
+        const next = nextPowerOf2(originalValue);
+        const diff = next - originalValue;
+        if (diff > BigInt(0)) {
+          result += "\n" + breakdownSize(diff) + " below " + formatCleanSize(next);
+          result += " (0x" + diff.toString(16).toUpperCase() + " below 0x" + next.toString(16).toUpperCase() + ")";
+        }
+        hexResult.innerText = result;
+      });
+
+      const closeBtn = section.querySelector(".close-btn");
+      if (closeBtn) {
+        closeBtn.addEventListener("click", function () {
+          section.remove();
+        });
       }
 
-      let result = "= 0x" + originalValue.toString(16).toUpperCase() + " (" + originalValue.toString(10) + ")" + signedInterpretation(originalValue) + "\n";
-
-      result += breakdownSize(originalValue);
-
-      // Show how much below the next power-of-2 boundary
-      const next = nextPowerOf2(originalValue);
-      const diff = next - originalValue;
-      if (diff > BigInt(0)) {
-        result += "\n" + breakdownSize(diff) + " below " + formatCleanSize(next);
-        result += " (0x" + diff.toString(16).toUpperCase() + " below 0x" + next.toString(16).toUpperCase() + ")";
-      }
-
-      document.getElementById("hexToSizeResult").innerText = result;
+      document.getElementById("sections-container").appendChild(section);
     }
 
-    document.getElementById("hexInput").addEventListener("input", hexToSize);
+    // Create the first hex section on page load
+    createHexSection();
 
-    // --- Section 2: TB/GB/MB/KB/Bytes to Hex ---
+    // Add hex section button
+    document.getElementById("add-section-btn").addEventListener("click", createHexSection);
+
+    // --- Static Memory Offsets to Hex ---
 
     function sizeToHex() {
       const tb = BigInt(parseInt(document.getElementById("tbInput").value) || 0);
@@ -253,11 +304,8 @@ tags: ["Tools"]
       const mb = BigInt(parseInt(document.getElementById("mbInput").value) || 0);
       const kb = BigInt(parseInt(document.getElementById("kbInput").value) || 0);
       const bytes = BigInt(parseInt(document.getElementById("bytesInput").value) || 0);
-
       const total = tb * TB + gb * GB + mb * MB + kb * KB + bytes;
-
-      document.getElementById("sizeToHexResult").innerText =
-        "0x" + total.toString(16).toUpperCase();
+      document.getElementById("sizeToHexResult").innerText = "0x" + total.toString(16).toUpperCase();
     }
 
     document.getElementById("tbInput").addEventListener("input", sizeToHex);
