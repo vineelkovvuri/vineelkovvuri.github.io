@@ -153,43 +153,6 @@ tags: ["Tools"]
       border-top: 1px solid #d0d5dd;
       margin: 20px 0;
     }
-    .hm-offsets {
-      border: 1px solid #d0d5dd;
-      border-radius: 10px;
-      padding: 16px 20px;
-      background: #f8f9fb;
-    }
-    .hm-offsets label {
-      color: #2c3e50;
-      font-weight: 600;
-      font-size: 0.9em;
-    }
-    .hm-offsets input[type="number"] {
-      border: 1px solid #b0c4de;
-      border-radius: 6px;
-      padding: 8px 10px;
-      font-family: 'Consolas', 'Courier New', monospace;
-      font-size: 0.95em;
-      color: #2c3e50;
-      background: #fff;
-      width: 100px;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-    .hm-offsets input[type="number"]:focus {
-      outline: none;
-      border-color: #5a9fd4;
-      box-shadow: 0 0 0 3px rgba(90, 159, 212, 0.15);
-    }
-    .hm-offsets .hm-result {
-      margin: 8px 0 0;
-      font-family: 'Consolas', 'Courier New', monospace;
-      font-size: 0.95em;
-      color: #2c3e50;
-      background: #fff;
-      border: none;
-      border-radius: 6px;
-      padding: 8px 12px;
-    }
   </style>
 
   <h3 class="hm-heading">Hexadecimal to Memory Offsets</h3>
@@ -207,40 +170,6 @@ tags: ["Tools"]
   4GB                          Size unit alone
   64K, 2M, 1G, 3T, 512B        Short suffixes
   64KB, 2MB, 1GB, 3TB          Long suffixes</pre>
-
-  <hr class="hm-divider">
-
-  <div class="hm-offsets">
-    <h3 style="color: #2c3e50; margin-top: 0;">Memory Offsets to Hexadecimal</h3>
-    <table style="margin: 0 !important;">
-      <tr>
-        <td style="text-align: right; padding-right: 10px;"><label for="tbInput">TB:</label></td>
-        <td><input type="number" id="tbInput" value="0" min="0" /></td>
-      </tr>
-      <tr>
-        <td style="text-align: right; padding-right: 10px;"><label for="gbInput">GB:</label></td>
-        <td><input type="number" id="gbInput" value="0" min="0" /></td>
-      </tr>
-      <tr>
-        <td style="text-align: right; padding-right: 10px;"><label for="mbInput">MB:</label></td>
-        <td><input type="number" id="mbInput" value="0" min="0" /></td>
-      </tr>
-      <tr>
-        <td style="text-align: right; padding-right: 10px;"><label for="kbInput">KB:</label></td>
-        <td><input type="number" id="kbInput" value="0" min="0" /></td>
-      </tr>
-      <tr>
-        <td style="text-align: right; padding-right: 10px;"><label for="bytesInput">Bytes:</label></td>
-        <td><input type="number" id="bytesInput" value="0" min="0" /></td>
-      </tr>
-      <tr>
-        <td style="text-align: right; padding-right: 10px;"><label>Result:</label></td>
-        <td>
-          <pre class="hm-result" id="sizeToHexResult">0x0</pre>
-        </td>
-      </tr>
-    </table>
-  </div>
 
   <script>
     const TB = BigInt(1) << BigInt(40);
@@ -414,23 +343,6 @@ tags: ["Tools"]
     // Add hex section button
     document.getElementById("hm-add-btn").addEventListener("click", createHexSection);
 
-    // --- Static Memory Offsets to Hex ---
-
-    function sizeToHex() {
-      const tb = BigInt(parseInt(document.getElementById("tbInput").value) || 0);
-      const gb = BigInt(parseInt(document.getElementById("gbInput").value) || 0);
-      const mb = BigInt(parseInt(document.getElementById("mbInput").value) || 0);
-      const kb = BigInt(parseInt(document.getElementById("kbInput").value) || 0);
-      const bytes = BigInt(parseInt(document.getElementById("bytesInput").value) || 0);
-      const total = tb * TB + gb * GB + mb * MB + kb * KB + bytes;
-      document.getElementById("sizeToHexResult").innerText = "0x" + total.toString(16).toUpperCase();
-    }
-
-    document.getElementById("tbInput").addEventListener("input", sizeToHex);
-    document.getElementById("gbInput").addEventListener("input", sizeToHex);
-    document.getElementById("mbInput").addEventListener("input", sizeToHex);
-    document.getElementById("kbInput").addEventListener("input", sizeToHex);
-    document.getElementById("bytesInput").addEventListener("input", sizeToHex);
   </script>
 </body>
 <!--
