@@ -9,8 +9,7 @@
   {{ if .IsHome }}{{ $pages = .Site.RegularPages }}{{ end }}
   {{ range (where $pages "Section" "!=" "") }}
     <li>
-      {{ $toolName := (path.Base (path.Dir .RelPermalink)) | lower | title }}
-      <a href="{{ .RelPermalink }}">{{ $toolName }}</a>
+      <a href="{{ .RelPermalink }}">{{ .Title | markdownify }}</a>
     </li>
   {{ end }}
 </ul>

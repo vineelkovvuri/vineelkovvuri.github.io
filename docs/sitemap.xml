@@ -153,11 +153,11 @@
   </url><url>
     <loc>/categories/</loc>
   </url><url>
-    <loc>/bookmarks/tools-web-diff/</loc>
+    <loc>/tools/web-diff/</loc>
   </url><url>
     <loc>/bookmarks/presentations-git/</loc>
   </url><url>
-    <loc>/bookmarks/tools-hex-to-memory/</loc>
+    <loc>/tools/hex-to-memory/</loc>
   </url><url>
     <loc>/tags/linux/</loc>
   </url><url>
@@ -175,17 +175,17 @@
   </url><url>
     <loc>/tags/linuxsetup/</loc>
   </url><url>
-    <loc>/bookmarks/tools-multi-search-highlighter/</loc>
+    <loc>/tools/multi-search-highlighter/</loc>
   </url><url>
-    <loc>/bookmarks/tools-page-table-calculator/</loc>
+    <loc>/tools/page-table-calculator/</loc>
   </url><url>
-    <loc>/bookmarks/tools-page-table-interactive/</loc>
+    <loc>/tools/page-table-interactive/</loc>
   </url><url>
     <loc>/tags/patina/</loc>
   </url><url>
     <loc>/bookmarks/references-patina/</loc>
   </url><url>
-    <loc>/bookmarks/tools-pomodoro-timer/</loc>
+    <loc>/tools/pomodoro-timer/</loc>
   </url><url>
     <loc>/tags/presentations/</loc>
   </url><url>
@@ -203,7 +203,9 @@
   </url><url>
     <loc>/tags/tools/</loc>
   </url><url>
-    <loc>/bookmarks/tools-uefilog-guid-processor/</loc>
+    <loc>/tools/</loc>
+  </url><url>
+    <loc>/tools/uefilog-guid-processor/</loc>
   </url><url>
     <loc>/bookmarks/presentations-vscode/</loc>
   </url><url>
@@ -213,7 +215,7 @@
   </url><url>
     <loc>/bookmarks/windows-wezterm-settings/</loc>
   </url><url>
-    <loc>/bookmarks/tools-whiteboard/</loc>
+    <loc>/tools/whiteboard/</loc>
   </url><url>
     <loc>/bookmarks/windows-debloat-script/</loc>
   </url><url>
@@ -233,6 +235,6 @@
   </url><url>
     <loc>/tags/windowssetup/</loc>
   </url><url>
-    <loc>/bookmarks/tools-world-clocks/</loc>
+    <loc>/tools/world-clocks/</loc>
   </url>
 </urlset>
