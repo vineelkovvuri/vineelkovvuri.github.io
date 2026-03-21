@@ -158,6 +158,8 @@
 /* File input styling */
 input[type="file"].form-control {
   padding: 0.375rem 0.75rem;
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 0.85rem;
 }
 
 input[type="file"].form-control::file-selector-button {
@@ -170,6 +172,8 @@ input[type="file"].form-control::file-selector-button {
   border-right: 1px solid #0a58ca;
   border-radius: 0;
   cursor: pointer;
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 0.85rem;
 }
 
 input[type="file"].form-control:hover::file-selector-button {
