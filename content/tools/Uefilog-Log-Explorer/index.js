@@ -43,6 +43,10 @@ var UEFI_PHASES = [
 let phaseDecorationIds = [];
 let detectedPhases = []; // { label, lineNumber }
 
+// Summary stats
+let driverCounts = {}; // { "PEI Drivers": N, ... }
+let ppiCount = 0;
+
 // Inject phase marker CSS classes
 function injectPhaseCss() {
   var style = document.createElement("style");
@@ -213,6 +217,7 @@ function scanForDrivers() {
 
   DRIVER_PATTERNS.forEach(function (pat) {
     var drivers = groups[pat.group];
+    driverCounts[pat.group] = drivers.length;
     if (drivers.length === 0) return;
     totalCount += drivers.length;
     var optgroup = document.createElement("optgroup");
@@ -251,6 +256,33 @@ function scanForPpiInstalls() {
   });
 
   select.disabled = count === 0;
+  ppiCount = count;
+}
+
+// Update the summary section with stats
+function updateSummary() {
+  var section = document.getElementById("summarySection");
+  var pei = driverCounts["PEI Drivers"] || 0;
+  var mm = driverCounts["MM Drivers"] || 0;
+  var dxe = driverCounts["DXE Drivers"] || 0;
+  var total = pei + mm + dxe;
+
+  if (total === 0 && ppiCount === 0) {
+    section.style.display = "none";
+    return;
+  }
+
+  var html = '<span style="font-weight: bold; font-size: 0.85rem;">Summary</span> &nbsp; ';
+  html += '<span style="color: #3182ce;">PEI Drivers: ' + pei + '</span>';
+  html += ' &nbsp;&bull;&nbsp; ';
+  html += '<span style="color: #805ad5;">MM Drivers: ' + mm + '</span>';
+  html += ' &nbsp;&bull;&nbsp; ';
+  html += '<span style="color: #38a169;">DXE Drivers: ' + dxe + '</span>';
+  html += ' &nbsp;&bull;&nbsp; ';
+  html += '<span style="color: #3182ce;">PPIs Installed: ' + ppiCount + '</span>';
+
+  section.innerHTML = html;
+  section.style.display = "block";
 }
 
 // Load Monaco Editor and GUIDs
@@ -363,12 +395,25 @@ document
     if (file) {
       const reader = new FileReader();
       reader.onload = function (e) {
+        // Reset all state
+        highlightedWords.forEach(function (entry) {
+          editor.removeDecorations(entry.decorationIds);
+        });
+        highlightedWords.clear();
+        colorIndex = 0;
+
+        // Hide unresolved GUIDs section
+        document.getElementById("unresolvedSection").style.display = "none";
+        unresolvedEditor.setValue("");
+
+        // Load new content
         originalContent = e.target.result;
         editor.setValue(originalContent);
         isConverted = false;
         scanForPhases();
         scanForDrivers();
         scanForPpiInstalls();
+        updateSummary();
       };
       reader.readAsText(file);
     }
@@ -431,12 +476,14 @@ document.getElementById("convertBtn").addEventListener("click", function () {
     scanForPhases();
     scanForPpiInstalls();
     findUnresolvedGuids();
+    updateSummary();
     isConverted = true;
   } else {
     // Name → GUID (restore original)
     editor.setValue(originalContent);
     scanForPhases();
     scanForPpiInstalls();
+    updateSummary();
     // Hide unresolved section when showing raw GUIDs
     document.getElementById("unresolvedSection").style.display = "none";
     unresolvedEditor.setValue("");

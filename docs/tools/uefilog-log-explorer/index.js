@@ -362,9 +362,23 @@ document
     if (file) {
       const reader = new FileReader();
       reader.onload = function (e) {
+        // Reset all state for the new file
         originalContent = e.target.result;
-        editor.setValue(originalContent);
         isConverted = false;
+
+        // Clear Ctrl+Click highlights
+        highlightedWords.forEach(function (entry) {
+          editor.removeDecorations(entry.decorationIds);
+        });
+        highlightedWords.clear();
+        colorIndex = 0;
+
+        // Hide unresolved GUIDs section
+        document.getElementById("unresolvedSection").style.display = "none";
+        unresolvedEditor.setValue("");
+
+        // Set new content and scan
+        editor.setValue(originalContent);
         scanForPhases();
         scanForDrivers();
         scanForPpiInstalls();
