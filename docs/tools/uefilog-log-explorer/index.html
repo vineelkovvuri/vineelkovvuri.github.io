@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>🔬 UEFI Log Explorer | Vineel Kovvuri</title>
+    
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/copy-button.css" />
+    <link rel="stylesheet" href="/css/forms.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/projects/">Projects</a></li>
+      
+      <li><a href="/tools/">Tools</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">🔬 UEFI Log Explorer</span></h1>
+
+
+</div>
+
+
+
+<main>
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>🔬 UEFI Log Explorer | Vineel Kovvuri</title>
+
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/fonts.css" />
+    <link rel="stylesheet" href="./css/copy-button.css" />
+    <link rel="stylesheet" href="./css/forms.css" />
+
+    <script src="./monaco/min/vs/loader.js"></script>
+
+    <style>
+      #editor {
+        width: 100%;
+        height: 70vh;
+        border: 1px solid #ced4da;
+        border-radius: 0.375rem;
+        margin-top: 15px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <div>
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem; align-items: center;">
+          <label for="fileInput" style="white-space: nowrap; margin: 0; min-width: 75px; font-weight: bold;">UEFI Log:</label>
+          <input type="file" id="fileInput" class="form-control" style="flex: 1;" />
+          <button id="convertBtn" class="btn btn-primary" style="white-space: nowrap;">GUID &harr; Name</button>
+          <button id="themeToggle" class="btn" style="white-space: nowrap; padding: 0.375rem 0.5rem; font-size: 1.1rem; line-height: 1; border: 1px solid #ced4da; cursor: pointer;" title="Toggle dark/light mode">&#9790;</button>
+        </div>
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem; align-items: center;">
+          <label for="guidFileInput" style="white-space: nowrap; margin: 0; min-width: 75px; font-weight: bold;">GUID CSV:</label>
+          <input type="file" id="guidFileInput" class="form-control" accept=".csv,.txt" style="flex: 1;" />
+        </div>
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; align-items: center;">
+          <div style="min-width: 75px;"></div>
+          <select id="phaseJump" class="form-control" style="width: 150px; flex-shrink: 0;" disabled>
+            <option value="">Jump to phase...</option>
+          </select>
+          <select id="driverJump" class="form-control" style="width: 180px; flex-shrink: 0;" disabled>
+            <option value="">Jump to driver load...</option>
+          </select>
+          <select id="ppiJump" class="form-control" style="width: 180px; flex-shrink: 0;" disabled>
+            <option value="">Jump to PPI install...</option>
+          </select>
+        </div>
+
+        <div id="editor"></div>
+
+        <div id="unresolvedSection" style="display: none; margin-top: 1rem;">
+          <label style="font-weight: bold;">Unresolved GUIDs (CSV format - add names and load via GUID CSV):</label>
+          <div id="unresolvedEditor" style="width: 100%; height: 25vh; border: 1px solid #ced4da; border-radius: 0.375rem; margin-top: 0.5rem;"></div>
+        </div>
+      </div>
+    </main>
+
+    <hr/>
+
+    <script src="./guids-data.js"></script>
+    <script src="./index.js"></script>
+  </body>
+</html>
+
+</main>
+
+<hr/>
+
+<section id="comments" class="giscus">
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
+
+  <footer>
+  
+<script defer src="/js/center-img.js"></script>
+<script defer src="/js/pre-tag.js"></script>
+
+
+
+
+
+
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2026 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+

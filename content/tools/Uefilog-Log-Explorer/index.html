@@ -1,0 +1,71 @@
+---
+title: "🔬 UEFI Log Explorer"
+tags: ["Tools"]
+---
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>🔬 UEFI Log Explorer | Vineel Kovvuri</title>
+
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/fonts.css" />
+    <link rel="stylesheet" href="./css/copy-button.css" />
+    <link rel="stylesheet" href="./css/forms.css" />
+
+    <script src="./monaco/min/vs/loader.js"></script>
+
+    <style>
+      #editor {
+        width: 100%;
+        height: 70vh;
+        border: 1px solid #ced4da;
+        border-radius: 0.375rem;
+        margin-top: 15px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <div>
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem; align-items: center;">
+          <label for="fileInput" style="white-space: nowrap; margin: 0; min-width: 75px; font-weight: bold;">UEFI Log:</label>
+          <input type="file" id="fileInput" class="form-control" style="flex: 1;" />
+          <button id="convertBtn" class="btn btn-primary" style="white-space: nowrap;">GUID &harr; Name</button>
+          <button id="themeToggle" class="btn" style="white-space: nowrap; padding: 0.375rem 0.5rem; font-size: 1.1rem; line-height: 1; border: 1px solid #ced4da; cursor: pointer;" title="Toggle dark/light mode">&#9790;</button>
+        </div>
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem; align-items: center;">
+          <label for="guidFileInput" style="white-space: nowrap; margin: 0; min-width: 75px; font-weight: bold;">GUID CSV:</label>
+          <input type="file" id="guidFileInput" class="form-control" accept=".csv,.txt" style="flex: 1;" />
+        </div>
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; align-items: center;">
+          <div style="min-width: 75px;"></div>
+          <select id="phaseJump" class="form-control" style="width: 150px; flex-shrink: 0;" disabled>
+            <option value="">Jump to phase...</option>
+          </select>
+          <select id="driverJump" class="form-control" style="width: 180px; flex-shrink: 0;" disabled>
+            <option value="">Jump to driver load...</option>
+          </select>
+          <select id="ppiJump" class="form-control" style="width: 180px; flex-shrink: 0;" disabled>
+            <option value="">Jump to PPI install...</option>
+          </select>
+        </div>
+
+        <div id="editor"></div>
+
+        <div id="unresolvedSection" style="display: none; margin-top: 1rem;">
+          <label style="font-weight: bold;">Unresolved GUIDs (CSV format - add names and load via GUID CSV):</label>
+          <div id="unresolvedEditor" style="width: 100%; height: 25vh; border: 1px solid #ced4da; border-radius: 0.375rem; margin-top: 0.5rem;"></div>
+        </div>
+      </div>
+    </main>
+
+    <hr/>
+
+    <script src="./guids-data.js"></script>
+    <script src="./index.js"></script>
+  </body>
+</html>
