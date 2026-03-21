@@ -178,11 +178,11 @@ function scanForPhases() {
   select.disabled = detectedPhases.length === 0;
 }
 
-// Driver load patterns: { regex, group label }
+// Driver load patterns: { regex, group label, color }
 var DRIVER_PATTERNS = [
-  { regex: /Loading PEIM at (0x[0-9A-Fa-f]+)\s+EntryPoint=\S+\s+(\S+?\.efi)/i,     group: "PEI Drivers" },
-  { regex: /Loading MM driver at (0x[0-9A-Fa-f]+)\s+EntryPoint=\S+\s+(\S+?\.efi)/i, group: "MM Drivers" },
-  { regex: /Loaded image at (0x[0-9A-Fa-f]+)\s+Size=\S+\s+EntryPoint=\S+\s+(\S+?\.efi)/i, group: "DXE Drivers" },
+  { regex: /Loading PEIM at (0x[0-9A-Fa-f]+)\s+EntryPoint=\S+\s+(\S+?\.efi)/i,     group: "PEI Drivers",  color: "#3182ce30" },
+  { regex: /Loading MM driver at (0x[0-9A-Fa-f]+)\s+EntryPoint=\S+\s+(\S+?\.efi)/i, group: "MM Drivers",   color: "#805ad530" },
+  { regex: /Loaded image at (0x[0-9A-Fa-f]+)\s+Size=\S+\s+EntryPoint=\S+\s+(\S+?\.efi)/i, group: "DXE Drivers", color: "#38a16930" },
 ];
 
 // Scan original content for driver loads and populate the driver jump dropdown
@@ -221,6 +221,7 @@ function scanForDrivers() {
       var opt = document.createElement("option");
       opt.value = drv.lineNumber;
       opt.textContent = drv.name + " [" + drv.address + "] (line " + drv.lineNumber + ")";
+      opt.style.backgroundColor = pat.color;
       optgroup.appendChild(opt);
     });
     select.appendChild(optgroup);
