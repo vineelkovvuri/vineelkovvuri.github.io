@@ -46,6 +46,7 @@ let detectedPhases = []; // { label, lineNumber }
 // Summary stats
 let driverCounts = {}; // { "PEI Drivers": N, ... }
 let ppiCount = 0;
+let fvCount = 0;
 
 // Inject phase marker CSS classes
 function injectPhaseCss() {
@@ -259,6 +260,72 @@ function scanForPpiInstalls() {
   ppiCount = count;
 }
 
+// Scan original content for FV (Firmware Volume) loads and populate the FV jump dropdown.
+// Correlates "Installing ... FV @" lines with "The Nth FV start address" lines via handle.
+function scanForFvLoads() {
+  if (!originalContent) return;
+
+  var lines = originalContent.split("\n");
+  var select = document.getElementById("fvJump");
+  select.innerHTML = '<option value="">Jump to FV load...</option>';
+
+  // First pass: collect "Installing ... FV @" entries keyed by handle
+  var installRegex = /Installing\s+(.+?)\s+FV\s+@\s+(0x[0-9A-Fa-f]+),\s*size:\s*(0x[0-9A-Fa-f]+)/i;
+  var fvByHandle = {}; // handle -> { name, handle, size, lineNumber }
+
+  lines.forEach(function (line, idx) {
+    var match = line.match(installRegex);
+    if (match) {
+      var handle = match[2].toUpperCase();
+      fvByHandle[handle] = {
+        name: match[1],
+        handle: match[2],
+        size: match[3],
+        loadAddress: null,
+        lineNumber: idx + 1,
+      };
+    }
+  });
+
+  // Second pass: correlate with "The Nth FV start address" lines.
+  // If no matching "Installing" line exists (e.g. 0th FV), create a new entry.
+  var fvAddrRegex = /The\s+(\d+)(?:st|nd|rd|th)\s+FV\s+start\s+address\s+is\s+(0x[0-9A-Fa-f]+),\s*size\s+is\s+(0x[0-9A-Fa-f]+),\s*handle\s+is\s+(0x[0-9A-Fa-f]+)/i;
+
+  lines.forEach(function (line, idx) {
+    var match = line.match(fvAddrRegex);
+    if (match) {
+      var handle = match[4].toUpperCase();
+      if (fvByHandle[handle]) {
+        fvByHandle[handle].loadAddress = match[2];
+      } else {
+        // No "Installing" line for this FV (e.g. 0th FV)
+        fvByHandle[handle] = {
+          name: "FV #" + match[1],
+          handle: match[4],
+          size: match[3],
+          loadAddress: match[2],
+          lineNumber: idx + 1,
+        };
+      }
+    }
+  });
+
+  // Build dropdown entries sorted by line number
+  var fvList = Object.values(fvByHandle);
+  fvList.sort(function (a, b) { return a.lineNumber - b.lineNumber; });
+
+  fvList.forEach(function (fv) {
+    var opt = document.createElement("option");
+    opt.value = fv.lineNumber;
+    var addr = fv.loadAddress || fv.handle;
+    opt.textContent = fv.name + " [addr:" + addr + " size:" + fv.size + " handle:" + fv.handle + "] (line " + fv.lineNumber + ")";
+    select.appendChild(opt);
+  });
+
+  fvCount = fvList.length;
+  select.disabled = fvCount === 0;
+}
+
 // Update the summary section with stats
 function updateSummary() {
   var section = document.getElementById("summarySection");
@@ -267,19 +334,22 @@ function updateSummary() {
   var dxe = driverCounts["DXE Drivers"] || 0;
   var total = pei + mm + dxe;
 
-  if (total === 0 && ppiCount === 0) {
+  if (total === 0 && ppiCount === 0 && fvCount === 0) {
     section.style.display = "none";
     return;
   }
 
+  var sep = ' &nbsp;<span style="color: #aaa;">&bull;</span>&nbsp; ';
   var html = '<span style="font-weight: bold; font-size: 0.85rem;">Summary</span> &nbsp; ';
   html += '<span style="color: #3182ce;">PEI Drivers: ' + pei + '</span>';
-  html += ' &nbsp;&bull;&nbsp; ';
+  html += sep;
   html += '<span style="color: #805ad5;">MM Drivers: ' + mm + '</span>';
-  html += ' &nbsp;&bull;&nbsp; ';
+  html += sep;
   html += '<span style="color: #38a169;">DXE Drivers: ' + dxe + '</span>';
-  html += ' &nbsp;&bull;&nbsp; ';
-  html += '<span style="color: #3182ce;">PPIs Installed: ' + ppiCount + '</span>';
+  html += sep;
+  html += '<span style="color: #3182ce;">PPIs: ' + ppiCount + '</span>';
+  html += sep;
+  html += '<span style="color: #d69e2e;">FVs: ' + fvCount + '</span>';
 
   section.innerHTML = html;
   section.style.display = "block";
@@ -307,6 +377,7 @@ require(["vs/editor/editor.main"], function () {
       "  - Use 'Jump to phase' dropdown to navigate between boot phases",
       "  - Use 'Jump to driver load' dropdown to navigate to PEI, MM, and DXE driver loads",
       "  - Use 'Jump to PPI install' dropdown to navigate to PPI installations (updates on GUID <-> Name toggle)",
+      "  - Use 'Jump to FV load' dropdown to navigate to Firmware Volume load locations",
       "",
       "Editor:",
       "  - Use the moon/sun button to toggle dark/light mode",
@@ -413,6 +484,7 @@ document
         scanForPhases();
         scanForDrivers();
         scanForPpiInstalls();
+        scanForFvLoads();
         updateSummary();
       };
       reader.readAsText(file);
@@ -513,6 +585,16 @@ document.getElementById("driverJump").addEventListener("change", function () {
 
 // Handle Jump-to-PPI dropdown
 document.getElementById("ppiJump").addEventListener("change", function () {
+  var lineNumber = parseInt(this.value);
+  if (!lineNumber || !editor) return;
+  editor.revealLineInCenter(lineNumber);
+  editor.setPosition({ lineNumber: lineNumber, column: 1 });
+  editor.focus();
+  this.value = "";
+});
+
+// Handle Jump-to-FV dropdown
+document.getElementById("fvJump").addEventListener("change", function () {
   var lineNumber = parseInt(this.value);
   if (!lineNumber || !editor) return;
   editor.revealLineInCenter(lineNumber);
