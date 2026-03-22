@@ -149,8 +149,6 @@
     <loc>/tags/reversing/</loc>
     <lastmod>2018-08-10T18:33:07-07:00</lastmod>
   </url><url>
-    <loc>/tools/pe-editor/</loc>
-  </url><url>
     <loc>/tools/uefilog-log-explorer/</loc>
   </url><url>
     <loc>/bookmarks/</loc>
@@ -238,5 +236,7 @@
     <loc>/tags/windowssetup/</loc>
   </url><url>
     <loc>/tools/world-clocks/</loc>
+  </url><url>
+    <loc>/tools/pe-editor/</loc>
   </url>
 </urlset>

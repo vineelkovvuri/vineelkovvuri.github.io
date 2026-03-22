@@ -2338,7 +2338,7 @@ function showDataDirectories(dirs) {
 
   dirs.forEach(function (dir, idx) {
     var present = (dir.rva !== 0 || dir.size !== 0) ? "Yes" : "No";
-    html += '<tr>';
+    html += '<tr data-hex-offset="' + dir.offset + '" data-hex-size="8">';
     html += '<td>' + idx + '</td>';
     html += '<td>' + escapeHtml(dir.name) + '</td>';
     html += '<td>' + hex(dir.offset, 8) + '</td>';
@@ -2363,8 +2363,8 @@ function showSingleDataDirectory(dir, idx) {
   html += '<th class="col-meaning">Meaning</th>';
   html += '</tr></thead><tbody>';
 
-  html += '<tr><td>VirtualAddress (RVA)</td><td>' + hex(dir.offset, 8) + '</td><td>4</td><td>' + hex(dir.rva, 8) + '</td><td>' + (dir.rva === 0 ? "Not present" : "RVA of " + dir.name) + '</td></tr>';
-  html += '<tr><td>Size</td><td>' + hex(dir.offset + 4, 8) + '</td><td>4</td><td>' + hex(dir.size, 8) + '</td><td>' + dir.size + ' bytes' + '</td></tr>';
+  html += '<tr data-hex-offset="' + dir.offset + '" data-hex-size="4"><td>VirtualAddress (RVA)</td><td>' + hex(dir.offset, 8) + '</td><td>4</td><td>' + hex(dir.rva, 8) + '</td><td>' + (dir.rva === 0 ? "Not present" : "RVA of " + dir.name) + '</td></tr>';
+  html += '<tr data-hex-offset="' + (dir.offset + 4) + '" data-hex-size="4"><td>Size</td><td>' + hex(dir.offset + 4, 8) + '</td><td>4</td><td>' + hex(dir.size, 8) + '</td><td>' + dir.size + ' bytes' + '</td></tr>';
 
   html += '</tbody></table>';
   panel.innerHTML = html;
@@ -2400,7 +2400,7 @@ function showExportTable(exportTable) {
     else if (f.name === "AddressOfNames") meaning = "RVA of Export Name Pointer Table";
     else if (f.name === "AddressOfNameOrdinals") meaning = "RVA of Export Ordinal Table";
 
-    html += '<tr>';
+    html += '<tr data-hex-offset="' + f.offset + '" data-hex-size="' + f.size + '">';
     html += '<td>' + escapeHtml(f.name) + '</td>';
     html += '<td>' + hex(f.offset, 8) + '</td>';
     html += '<td>' + f.size + '</td>';
@@ -2455,7 +2455,7 @@ function showImportTableOverview(importTable) {
   html += '</tr></thead><tbody>';
 
   importTable.forEach(function (dll, idx) {
-    html += '<tr>';
+    html += '<tr data-hex-offset="' + dll.fields[0].offset + '" data-hex-size="20">';
     html += '<td>' + idx + '</td>';
     html += '<td>' + escapeHtml(dll.dllName) + '</td>';
     html += '<td>' + hex(dll.fields[0].value, 8) + '</td>';
@@ -2492,7 +2492,7 @@ function showImportDll(dll) {
     else if (f.name === "OriginalFirstThunk (ILT RVA)") meaning = f.value === 0 ? "Not set" : "RVA of Import Lookup Table";
     else if (f.name === "FirstThunk (IAT RVA)") meaning = "RVA of Import Address Table";
 
-    html += '<tr>';
+    html += '<tr data-hex-offset="' + f.offset + '" data-hex-size="' + f.size + '">';
     html += '<td>' + escapeHtml(f.name) + '</td>';
     html += '<td>' + hex(f.offset, 8) + '</td>';
     html += '<td>' + f.size + '</td>';
@@ -2546,7 +2546,7 @@ function showBaseRelocationOverview(blocks) {
   html += '</tr></thead><tbody>';
 
   blocks.forEach(function (block, idx) {
-    html += '<tr>';
+    html += '<tr data-hex-offset="' + block.fileOffset + '" data-hex-size="' + block.blockSize + '">';
     html += '<td>' + idx + '</td>';
     html += '<td>' + hex(block.pageRva, 8) + '</td>';
     html += '<td>' + hex(block.blockSize, 8) + ' (' + block.blockSize + ')' + '</td>';
@@ -2572,8 +2572,8 @@ function showBaseRelocationBlock(block, idx) {
   html += '<th class="col-meaning">Meaning</th>';
   html += '</tr></thead><tbody>';
 
-  html += '<tr><td>VirtualAddress</td><td>' + hex(block.fileOffset, 8) + '</td><td>4</td><td>' + hex(block.pageRva, 8) + '</td><td>Page RVA for this block</td></tr>';
-  html += '<tr><td>SizeOfBlock</td><td>' + hex(block.fileOffset + 4, 8) + '</td><td>4</td><td>' + hex(block.blockSize, 8) + '</td><td>' + block.blockSize + ' bytes total (' + block.entries.length + ' entries)</td></tr>';
+  html += '<tr data-hex-offset="' + block.fileOffset + '" data-hex-size="4"><td>VirtualAddress</td><td>' + hex(block.fileOffset, 8) + '</td><td>4</td><td>' + hex(block.pageRva, 8) + '</td><td>Page RVA for this block</td></tr>';
+  html += '<tr data-hex-offset="' + (block.fileOffset + 4) + '" data-hex-size="4"><td>SizeOfBlock</td><td>' + hex(block.fileOffset + 4, 8) + '</td><td>4</td><td>' + hex(block.blockSize, 8) + '</td><td>' + block.blockSize + ' bytes total (' + block.entries.length + ' entries)</td></tr>';
 
   html += '</tbody></table>';
 
@@ -2623,7 +2623,7 @@ function showCertificateTableOverview(certs) {
   html += '</tr></thead><tbody>';
 
   certs.forEach(function (cert) {
-    html += '<tr>';
+    html += '<tr data-hex-offset="' + cert.fileOffset + '" data-hex-size="' + cert.length + '">';
     html += '<td>' + cert.index + '</td>';
     html += '<td>' + escapeHtml(cert.revision) + '</td>';
     html += '<td>' + escapeHtml(cert.certType) + '</td>';
@@ -2656,7 +2656,7 @@ function showCertificateEntry(cert) {
     else if (f.name === "wRevision") meaning = "Revision " + cert.revision;
     else if (f.name === "wCertificateType") meaning = cert.certType;
 
-    html += '<tr>';
+    html += '<tr data-hex-offset="' + f.offset + '" data-hex-size="' + f.size + '">';
     html += '<td>' + escapeHtml(f.name) + '</td>';
     html += '<td>' + hex(f.offset, 8) + '</td>';
     html += '<td>' + f.size + '</td>';
@@ -2666,7 +2666,7 @@ function showCertificateEntry(cert) {
   });
 
   // Show certificate data info
-  html += '<tr><td>bCertificate</td><td>' + hex(cert.dataOffset, 8) + '</td><td>' + cert.dataSize + '</td><td>(binary data)</td><td>' + cert.dataSize + ' bytes of certificate data</td></tr>';
+  html += '<tr data-hex-offset="' + cert.dataOffset + '" data-hex-size="' + cert.dataSize + '"><td>bCertificate</td><td>' + hex(cert.dataOffset, 8) + '</td><td>' + cert.dataSize + '</td><td>(binary data)</td><td>' + cert.dataSize + ' bytes of certificate data</td></tr>';
 
   html += '</tbody></table>';
   panel.innerHTML = html;
@@ -2714,7 +2714,7 @@ function showTlsDirectory(tlsDir) {
       meaning = align === 0 ? "Default alignment" : "Alignment: " + Math.pow(2, align - 1) + " bytes";
     }
 
-    html += '<tr>';
+    html += '<tr data-hex-offset="' + f.offset + '" data-hex-size="' + f.size + '">';
     html += '<td>' + escapeHtml(f.name) + '</td>';
     html += '<td>' + hex(f.offset, 8) + '</td>';
     html += '<td>' + f.size + '</td>';
@@ -2745,7 +2745,7 @@ function showLoadConfig(loadConfig) {
   html += '</tr></thead><tbody>';
 
   loadConfig.fields.forEach(function (f) {
-    html += '<tr>';
+    html += '<tr data-hex-offset="' + parseInt(f.offset, 16) + '" data-hex-size="' + (f.rawHex.length / 2) + '">';
     html += '<td>' + escapeHtml(f.name) + '</td>';
     html += '<td>' + f.offset + '</td>';
     html += '<td>' + f.rawHex + '</td>';
@@ -2903,7 +2903,7 @@ function showSectionHeadersSummary(sections) {
     var chars = f[9].value;
     var flagStr = decodeFlags(chars, SECTION_CHARACTERISTICS);
 
-    html += '<tr>';
+    html += '<tr data-hex-offset="' + sec.fields[0].offset + '" data-hex-size="40">';
     html += '<td>' + escapeHtml(sec.name) + '</td>';
     html += '<td>' + hex(f[1].value, 8) + '</td>';
     html += '<td>' + hex(f[2].value, 8) + '</td>';
@@ -2939,7 +2939,7 @@ function showBoundImportOverview(entries) {
 
   entries.forEach(function (entry) {
     var fwdNames = entry.forwarders.map(function (f) { return f.moduleName; }).join(", ");
-    html += '<tr>';
+    html += '<tr data-hex-offset="' + entry.fileOffset + '" data-hex-size="8">';
     html += '<td>' + entry.index + '</td>';
     html += '<td>' + hex(entry.fileOffset, 8) + '</td>';
     html += '<td>' + escapeHtml(entry.moduleName) + '</td>';
@@ -2973,7 +2973,7 @@ function showIATOverview(iat) {
   var maxShow = Math.min(iat.entries.length, 500);
   for (var i = 0; i < maxShow; i++) {
     var entry = iat.entries[i];
-    html += '<tr>';
+    html += '<tr data-hex-offset="' + entry.fileOffset + '" data-hex-size="' + iat.entrySize + '">';
     html += '<td>' + entry.index + '</td>';
     html += '<td>' + hex(entry.fileOffset, 8) + '</td>';
     html += '<td>' + hex(entry.rva, 8) + '</td>';
@@ -3010,7 +3010,7 @@ function showDelayImportOverview(entries) {
   html += '</tr></thead><tbody>';
 
   entries.forEach(function (entry) {
-    html += '<tr>';
+    html += '<tr data-hex-offset="' + entry.fileOffset + '" data-hex-size="32">';
     html += '<td>' + entry.index + '</td>';
     html += '<td>' + hex(entry.fileOffset, 8) + '</td>';
     html += '<td>' + escapeHtml(entry.dllName) + '</td>';
@@ -3037,14 +3037,14 @@ function showDelayImportDll(dll) {
   html += '<th class="col-meaning">Meaning</th>';
   html += '</tr></thead><tbody>';
 
-  html += '<tr><td>Attributes</td><td>' + hex(dll.attributes, 8) + '</td><td>' + (dll.attributes & 1 ? "RVAs (new style)" : "VAs (old style)") + '</td></tr>';
-  html += '<tr><td>Name RVA</td><td>' + hex(dll.nameRva, 8) + '</td><td>' + escapeHtml(dll.dllName) + '</td></tr>';
-  html += '<tr><td>Module Handle</td><td>' + hex(dll.moduleHandle, 8) + '</td><td>RVA of module handle</td></tr>';
-  html += '<tr><td>Delay IAT</td><td>' + hex(dll.delayIAT, 8) + '</td><td>RVA of delay-load IAT</td></tr>';
-  html += '<tr><td>Delay INT</td><td>' + hex(dll.delayINT, 8) + '</td><td>RVA of delay-load name table</td></tr>';
-  html += '<tr><td>Bound IAT</td><td>' + hex(dll.boundIAT, 8) + '</td><td>RVA of bound delay-load IAT</td></tr>';
-  html += '<tr><td>Unload IAT</td><td>' + hex(dll.unloadIAT, 8) + '</td><td>RVA of unload delay-load IAT</td></tr>';
-  html += '<tr><td>TimeDateStamp</td><td>' + hex(dll.timeDateStamp, 8) + '</td><td>' + formatTimestamp(dll.timeDateStamp) + '</td></tr>';
+  html += '<tr data-hex-offset="' + dll.fileOffset + '" data-hex-size="4"><td>Attributes</td><td>' + hex(dll.attributes, 8) + '</td><td>' + (dll.attributes & 1 ? "RVAs (new style)" : "VAs (old style)") + '</td></tr>';
+  html += '<tr data-hex-offset="' + (dll.fileOffset + 4) + '" data-hex-size="4"><td>Name RVA</td><td>' + hex(dll.nameRva, 8) + '</td><td>' + escapeHtml(dll.dllName) + '</td></tr>';
+  html += '<tr data-hex-offset="' + (dll.fileOffset + 8) + '" data-hex-size="4"><td>Module Handle</td><td>' + hex(dll.moduleHandle, 8) + '</td><td>RVA of module handle</td></tr>';
+  html += '<tr data-hex-offset="' + (dll.fileOffset + 12) + '" data-hex-size="4"><td>Delay IAT</td><td>' + hex(dll.delayIAT, 8) + '</td><td>RVA of delay-load IAT</td></tr>';
+  html += '<tr data-hex-offset="' + (dll.fileOffset + 16) + '" data-hex-size="4"><td>Delay INT</td><td>' + hex(dll.delayINT, 8) + '</td><td>RVA of delay-load name table</td></tr>';
+  html += '<tr data-hex-offset="' + (dll.fileOffset + 20) + '" data-hex-size="4"><td>Bound IAT</td><td>' + hex(dll.boundIAT, 8) + '</td><td>RVA of bound delay-load IAT</td></tr>';
+  html += '<tr data-hex-offset="' + (dll.fileOffset + 24) + '" data-hex-size="4"><td>Unload IAT</td><td>' + hex(dll.unloadIAT, 8) + '</td><td>RVA of unload delay-load IAT</td></tr>';
+  html += '<tr data-hex-offset="' + (dll.fileOffset + 28) + '" data-hex-size="4"><td>TimeDateStamp</td><td>' + hex(dll.timeDateStamp, 8) + '</td><td>' + formatTimestamp(dll.timeDateStamp) + '</td></tr>';
   html += '</tbody></table>';
 
   // Functions
@@ -3089,13 +3089,13 @@ function showCLRHeader(clr) {
   html += '<th class="col-meaning">Meaning</th>';
   html += '</tr></thead><tbody>';
 
-  html += '<tr><td>cb (Size)</td><td>' + hex(clr.fileOffset, 8) + '</td><td>' + clr.size + '</td><td>' + clr.size + ' bytes</td></tr>';
-  html += '<tr><td>MajorRuntimeVersion</td><td>' + hex(clr.fileOffset + 4, 8) + '</td><td>' + clr.majorRuntimeVersion + '</td><td></td></tr>';
-  html += '<tr><td>MinorRuntimeVersion</td><td>' + hex(clr.fileOffset + 6, 8) + '</td><td>' + clr.minorRuntimeVersion + '</td><td>v' + clr.majorRuntimeVersion + '.' + clr.minorRuntimeVersion + '</td></tr>';
-  html += '<tr><td>MetaData RVA</td><td>' + hex(clr.fileOffset + 8, 8) + '</td><td>' + hex(clr.metaData.rva, 8) + '</td><td>RVA of CLI metadata</td></tr>';
-  html += '<tr><td>MetaData Size</td><td>' + hex(clr.fileOffset + 12, 8) + '</td><td>' + clr.metaData.size + '</td><td>' + clr.metaData.size + ' bytes</td></tr>';
-  html += '<tr><td>Flags</td><td>' + hex(clr.fileOffset + 16, 8) + '</td><td>' + hex(clr.flags, 8) + '</td><td>' + escapeHtml(clr.flagStr) + '</td></tr>';
-  html += '<tr><td>EntryPointToken</td><td>' + hex(clr.fileOffset + 20, 8) + '</td><td>' + hex(clr.entryPointToken, 8) + '</td><td>Method token or native RVA</td></tr>';
+  html += '<tr data-hex-offset="' + clr.fileOffset + '" data-hex-size="4"><td>cb (Size)</td><td>' + hex(clr.fileOffset, 8) + '</td><td>' + clr.size + '</td><td>' + clr.size + ' bytes</td></tr>';
+  html += '<tr data-hex-offset="' + (clr.fileOffset + 4) + '" data-hex-size="2"><td>MajorRuntimeVersion</td><td>' + hex(clr.fileOffset + 4, 8) + '</td><td>' + clr.majorRuntimeVersion + '</td><td></td></tr>';
+  html += '<tr data-hex-offset="' + (clr.fileOffset + 6) + '" data-hex-size="2"><td>MinorRuntimeVersion</td><td>' + hex(clr.fileOffset + 6, 8) + '</td><td>' + clr.minorRuntimeVersion + '</td><td>v' + clr.majorRuntimeVersion + '.' + clr.minorRuntimeVersion + '</td></tr>';
+  html += '<tr data-hex-offset="' + (clr.fileOffset + 8) + '" data-hex-size="4"><td>MetaData RVA</td><td>' + hex(clr.fileOffset + 8, 8) + '</td><td>' + hex(clr.metaData.rva, 8) + '</td><td>RVA of CLI metadata</td></tr>';
+  html += '<tr data-hex-offset="' + (clr.fileOffset + 12) + '" data-hex-size="4"><td>MetaData Size</td><td>' + hex(clr.fileOffset + 12, 8) + '</td><td>' + clr.metaData.size + '</td><td>' + clr.metaData.size + ' bytes</td></tr>';
+  html += '<tr data-hex-offset="' + (clr.fileOffset + 16) + '" data-hex-size="4"><td>Flags</td><td>' + hex(clr.fileOffset + 16, 8) + '</td><td>' + hex(clr.flags, 8) + '</td><td>' + escapeHtml(clr.flagStr) + '</td></tr>';
+  html += '<tr data-hex-offset="' + (clr.fileOffset + 20) + '" data-hex-size="4"><td>EntryPointToken</td><td>' + hex(clr.fileOffset + 20, 8) + '</td><td>' + hex(clr.entryPointToken, 8) + '</td><td>Method token or native RVA</td></tr>';
 
   // Directory entries
   var dirs = [
@@ -3108,8 +3108,8 @@ function showCLRHeader(clr) {
   ];
   dirs.forEach(function (dir) {
     var present = (dir.d.rva !== 0 || dir.d.size !== 0) ? "Present" : "Empty";
-    html += '<tr><td>' + dir.name + ' RVA</td><td>' + hex(clr.fileOffset + dir.off, 8) + '</td><td>' + hex(dir.d.rva, 8) + '</td><td>' + present + '</td></tr>';
-    html += '<tr><td>' + dir.name + ' Size</td><td>' + hex(clr.fileOffset + dir.off + 4, 8) + '</td><td>' + dir.d.size + '</td><td>' + dir.d.size + ' bytes</td></tr>';
+    html += '<tr data-hex-offset="' + (clr.fileOffset + dir.off) + '" data-hex-size="4"><td>' + dir.name + ' RVA</td><td>' + hex(clr.fileOffset + dir.off, 8) + '</td><td>' + hex(dir.d.rva, 8) + '</td><td>' + present + '</td></tr>';
+    html += '<tr data-hex-offset="' + (clr.fileOffset + dir.off + 4) + '" data-hex-size="4"><td>' + dir.name + ' Size</td><td>' + hex(clr.fileOffset + dir.off + 4, 8) + '</td><td>' + dir.d.size + '</td><td>' + dir.d.size + ' bytes</td></tr>';
   });
 
   html += '</tbody></table>';
@@ -3157,7 +3157,7 @@ function showExceptionTableOverview(excTable) {
       }
     }
 
-    html += '<tr>';
+    html += '<tr data-hex-offset="' + entry.fileOffset + '" data-hex-size="' + (entry.architecture === "x64" ? 12 : 8) + '">';
     html += '<td>' + entry.index + '</td>';
     html += '<td>' + hex(entry.fileOffset, 8) + '</td>';
     html += '<td>' + hex(entry.beginAddress, 8) + '</td>';
@@ -3184,16 +3184,16 @@ function showExceptionEntry(entry) {
   html += '<th class="col-meaning">Meaning</th>';
   html += '</tr></thead><tbody>';
 
-  html += '<tr><td>BeginAddress</td><td>' + hex(entry.fileOffset, 8) + '</td><td>' + hex(entry.beginAddress, 8) + '</td><td>RVA of function start</td></tr>';
+  html += '<tr data-hex-offset="' + entry.fileOffset + '" data-hex-size="4"><td>BeginAddress</td><td>' + hex(entry.fileOffset, 8) + '</td><td>' + hex(entry.beginAddress, 8) + '</td><td>RVA of function start</td></tr>';
   if (entry.endAddress !== undefined) {
-    html += '<tr><td>EndAddress</td><td>' + hex(entry.fileOffset + 4, 8) + '</td><td>' + hex(entry.endAddress, 8) + '</td><td>RVA of function end</td></tr>';
+    html += '<tr data-hex-offset="' + (entry.fileOffset + 4) + '" data-hex-size="4"><td>EndAddress</td><td>' + hex(entry.fileOffset + 4, 8) + '</td><td>' + hex(entry.endAddress, 8) + '</td><td>RVA of function end</td></tr>';
   }
   if (entry.functionSize !== undefined) {
     html += '<tr><td>Function Size</td><td></td><td>' + entry.functionSize + '</td><td>' + entry.functionSize + ' bytes</td></tr>';
   }
 
   if (entry.architecture === "x64") {
-    html += '<tr><td>UnwindInfoAddress</td><td>' + hex(entry.fileOffset + 8, 8) + '</td><td>' + hex(entry.unwindDataRva, 8) + '</td><td>RVA of UNWIND_INFO</td></tr>';
+    html += '<tr data-hex-offset="' + (entry.fileOffset + 8) + '" data-hex-size="4"><td>UnwindInfoAddress</td><td>' + hex(entry.fileOffset + 8, 8) + '</td><td>' + hex(entry.unwindDataRva, 8) + '</td><td>RVA of UNWIND_INFO</td></tr>';
   } else if (entry.isPacked && entry.packedInfo) {
     var p = entry.packedInfo;
     html += '<tr><td>Flag</td><td></td><td>' + p.flag + '</td><td>Packed unwind data</td></tr>';
@@ -3321,7 +3321,7 @@ function showDebugDirectoryOverview(entries) {
       var pdbField = entry.codeView.fields.find(function (f) { return f.name === "PdbFileName"; });
       if (pdbField) pdbPath = pdbField.value;
     }
-    html += '<tr>';
+    html += '<tr data-hex-offset="' + entry.offset + '" data-hex-size="28">';
     html += '<td>' + entry.index + '</td>';
     html += '<td>' + escapeHtml(entry.typeName) + '</td>';
     html += '<td>' + hex(entry.offset, 8) + '</td>';
@@ -3360,7 +3360,7 @@ function showDebugEntry(entry) {
     else if (f.name === "PointerToRawData") meaning = f.value === 0 ? "Not set" : "File offset of debug data";
     else if (f.name === "Characteristics") meaning = "Reserved, should be 0";
 
-    html += '<tr>';
+    html += '<tr data-hex-offset="' + f.offset + '" data-hex-size="' + f.size + '">';
     html += '<td>' + escapeHtml(f.name) + '</td>';
     html += '<td>' + hex(f.offset, 8) + '</td>';
     html += '<td>' + f.size + '</td>';
@@ -3389,7 +3389,7 @@ function showDebugEntry(entry) {
       } else {
         valStr = hex(f.value, f.size * 2);
       }
-      html += '<tr>';
+      html += '<tr data-hex-offset="' + f.offset + '" data-hex-size="' + f.size + '">';
       html += '<td>' + escapeHtml(f.name) + '</td>';
       html += '<td>' + hex(f.offset, 8) + '</td>';
       html += '<td>' + f.size + '</td>';
