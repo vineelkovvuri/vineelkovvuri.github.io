@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PE Editor | Vineel Kovvuri</title>
+    
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/copy-button.css" />
+    <link rel="stylesheet" href="/css/forms.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/projects/">Projects</a></li>
+      
+      <li><a href="/tools/">Tools</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">PE Editor</span></h1>
+
+
+</div>
+
+
+
+<main>
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PE Editor | Vineel Kovvuri</title>
+
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/fonts.css" />
+    <link rel="stylesheet" href="./css/copy-button.css" />
+    <link rel="stylesheet" href="./css/forms.css" />
+
+    <style>
+      body { max-width: 100%; padding: 0.5em 1em; }
+
+      /* Toolbar */
+      .pe-toolbar {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        padding: 0.4rem 0;
+      }
+
+      /* Main container: tree + detail */
+      .pe-container {
+        display: flex;
+        height: calc(100vh - 80px);
+        border: 1px solid #ced4da;
+        border-radius: 0.375rem;
+        overflow: hidden;
+        background: #fff;
+      }
+
+      /* Left tree panel */
+      .pe-tree-panel {
+        width: 280px;
+        min-width: 200px;
+        border-right: 1px solid #ced4da;
+        overflow-y: auto;
+        overflow-x: auto;
+        background: #f8f9fa;
+        padding: 0.25rem 0;
+        flex-shrink: 0;
+      }
+
+      /* Resizer handle */
+      .pe-resizer {
+        width: 4px;
+        cursor: col-resize;
+        background: #ced4da;
+        flex-shrink: 0;
+      }
+      .pe-resizer:hover { background: #86b7fe; }
+
+      /* Right detail panel */
+      .pe-detail-panel {
+        flex: 1;
+        overflow: auto;
+        padding: 0;
+        background: #fff;
+      }
+
+      /* Tree view styles */
+      .pe-tree { list-style: none; margin: 0; padding: 0 0 0 0.25rem; font-family: Consolas, 'Courier New', monospace; font-size: 0.82rem; }
+      .pe-tree ul { list-style: none; margin: 0; padding: 0 0 0 1rem; }
+      .pe-tree li { user-select: none; }
+      .pe-tree-label {
+        display: flex;
+        align-items: center;
+        padding: 2px 6px;
+        cursor: pointer;
+        white-space: nowrap;
+        border-radius: 3px;
+      }
+      .pe-tree-label:hover { background: #e2e6ea; }
+      .pe-tree-label.selected { background: #0d6efd; color: #fff; }
+      .pe-tree-arrow {
+        display: inline-block;
+        width: 14px;
+        text-align: center;
+        font-size: 0.7em;
+        flex-shrink: 0;
+        margin-right: 2px;
+        transition: transform 0.15s;
+      }
+      .pe-tree-arrow.expanded { transform: rotate(90deg); }
+      .pe-tree-arrow.leaf { visibility: hidden; }
+      .pe-tree-children { display: none; }
+      .pe-tree-children.open { display: block; }
+
+      /* Detail table */
+      .pe-detail-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.82rem;
+        table-layout: fixed;
+      }
+      .pe-detail-table thead th {
+        position: sticky;
+        top: 0;
+        background: #e9ecef;
+        border-bottom: 2px solid #ced4da;
+        padding: 6px 8px;
+        text-align: left;
+        font-weight: bold;
+        z-index: 1;
+      }
+      .pe-detail-table tbody td {
+        padding: 4px 8px;
+        border-bottom: 1px solid #eee;
+        vertical-align: top;
+        word-break: break-all;
+      }
+      .pe-detail-table tbody tr:nth-child(even) { background: #f8f9fa; }
+      .pe-detail-table tbody tr:hover { background: #e8f0fe; }
+
+      /* Column widths */
+      .pe-detail-table .col-member { width: 28%; }
+      .pe-detail-table .col-offset { width: 10%; }
+      .pe-detail-table .col-size { width: 8%; }
+      .pe-detail-table .col-value { width: 20%; }
+      .pe-detail-table .col-meaning { width: 34%; }
+
+      /* Section header in detail */
+      .pe-detail-header {
+        padding: 8px 12px;
+        background: linear-gradient(135deg, #f0f4ff 0%, #e8f5e9 100%);
+        border-bottom: 2px solid #3182ce;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.9rem;
+        font-weight: bold;
+        position: sticky;
+        top: 0;
+        z-index: 2;
+      }
+
+      /* Welcome / empty state */
+      .pe-welcome {
+        padding: 2rem;
+        color: #666;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.85rem;
+        line-height: 1.8;
+      }
+      .pe-welcome h2 { color: #333; margin-top: 0; }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <!-- Toolbar -->
+      <div class="pe-toolbar">
+        <label for="fileInput" style="white-space: nowrap; margin: 0; font-weight: bold;">PE File:</label>
+        <input type="file" id="fileInput" class="form-control" accept=".exe,.dll,.sys,.efi,.ocx,.scr,.drv,.cpl,.mui" style="flex: 1; max-width: 500px;" />
+        <span id="fileInfo" style="font-family: Consolas, 'Courier New', monospace; font-size: 0.82rem; color: #666;"></span>
+      </div>
+
+      <!-- Main split view -->
+      <div class="pe-container">
+        <div class="pe-tree-panel" id="treePanel">
+          <ul class="pe-tree" id="peTree"></ul>
+        </div>
+        <div class="pe-resizer" id="resizer"></div>
+        <div class="pe-detail-panel" id="detailPanel">
+          <div class="pe-welcome" id="welcomeMsg">
+            <h2>PE Editor</h2>
+            <p>Load a PE file (.exe, .dll, .sys, .efi) to explore its structure.</p>
+            <p>
+              <strong>Features:</strong><br>
+              - Parses DOS Header, NT Headers (File Header + Optional Header)<br>
+              - Shows Data Directories (Import, Export, Resource, Debug, etc.)<br>
+              - Shows Section Headers with flags decoded<br>
+              - Tree navigation on the left, detail table on the right<br>
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <hr/>
+    <script src="./index.js"></script>
+  </body>
+</html>
+
+</main>
+
+<hr/>
+
+<section id="comments" class="giscus">
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
+
+  <footer>
+  
+<script defer src="/js/center-img.js"></script>
+<script defer src="/js/pre-tag.js"></script>
+
+
+
+
+
+
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2026 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+
