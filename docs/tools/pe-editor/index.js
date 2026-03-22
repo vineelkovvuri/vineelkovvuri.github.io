@@ -89,6 +89,19 @@ var WIN_CERT_TYPE = {
   0x0004: "PKCS1_MODULE_SIGN (Terminal Server)",
 };
 
+// x64 Unwind operation codes (UWOP)
+var UWOP_NAMES = {
+  0: "PUSH_NONVOL", 1: "ALLOC_LARGE", 2: "ALLOC_SMALL", 3: "SET_FPREG",
+  4: "SAVE_NONVOL", 5: "SAVE_NONVOL_FAR", 8: "SAVE_XMM128",
+  9: "SAVE_XMM128_FAR", 10: "PUSH_MACHFRAME",
+};
+
+// x64 register names (indexed by register number 0-15)
+var X64_REGISTERS = [
+  "RAX", "RCX", "RDX", "RBX", "RSP", "RBP", "RSI", "RDI",
+  "R8", "R9", "R10", "R11", "R12", "R13", "R14", "R15",
+];
+
 var SECTION_CHARACTERISTICS = {
   0x00000008: "TYPE_NO_PAD", 0x00000020: "CNT_CODE", 0x00000040: "CNT_INITIALIZED_DATA",
   0x00000080: "CNT_UNINITIALIZED_DATA", 0x00000100: "LNK_OTHER", 0x00000200: "LNK_INFO",
@@ -372,6 +385,9 @@ function parsePE(buffer) {
 
   // --- TLS Directory ---
   result.tlsDirectory = parseTlsDirectory(view, buffer, result.dataDirectories, result.sections, result.is64);
+
+  // --- Exception Table (.pdata / .xdata) ---
+  result.exceptionTable = parseExceptionTable(view, buffer, result.dataDirectories, result.sections, machine);
 
   return result;
 }
@@ -865,6 +881,262 @@ function parseTlsDirectory(view, buffer, dataDirectories, sections, is64) {
   }
 }
 
+// Parse the Exception Table (.pdata) - Data Directory index 3
+// x64: RUNTIME_FUNCTION entries (12 bytes each): BeginAddress, EndAddress, UnwindInfoAddress
+// ARM64: RUNTIME_FUNCTION entries (8 bytes each): BeginAddress, UnwindData
+function parseExceptionTable(view, buffer, dataDirectories, sections, machine) {
+  if (dataDirectories.length <= 3) return null;
+  var excDir = dataDirectories[3];
+  if (excDir.rva === 0 || excDir.size === 0) return null;
+
+  var baseOff = rvaToFileOffset(excDir.rva, sections);
+  if (baseOff >= buffer.byteLength) return null;
+
+  var isX64 = (machine === 0x8664);
+  var isARM64 = (machine === 0xAA64);
+  if (!isX64 && !isARM64) return null;
+
+  var entries = [];
+  var entrySize = isX64 ? 12 : 8;
+  var numEntries = Math.min(Math.floor(excDir.size / entrySize), 50000);
+
+  for (var i = 0; i < numEntries; i++) {
+    var off = baseOff + i * entrySize;
+    if (off + entrySize > buffer.byteLength) break;
+
+    var beginAddr = view.getUint32(off, true);
+
+    if (isX64) {
+      var endAddr = view.getUint32(off + 4, true);
+      var unwindDataRva = view.getUint32(off + 8, true);
+
+      var entry = {
+        index: i, fileOffset: off, beginAddress: beginAddr,
+        endAddress: endAddr, unwindDataRva: unwindDataRva,
+        functionSize: endAddr - beginAddr, architecture: "x64",
+        unwindInfo: null,
+      };
+
+      if (unwindDataRva !== 0) {
+        entry.unwindInfo = parseUnwindInfoX64(view, buffer, unwindDataRva, sections);
+      }
+      entries.push(entry);
+    } else {
+      // ARM64
+      var unwindWord = view.getUint32(off + 4, true);
+      var flag = unwindWord & 0x3; // 2-bit flag
+
+      var entry = {
+        index: i, fileOffset: off, beginAddress: beginAddr,
+        architecture: "ARM64", isPacked: (flag !== 0),
+        unwindInfo: null, packedInfo: null,
+      };
+
+      if (flag !== 0) {
+        // Packed unwind data
+        var funcLen = ((unwindWord >> 2) & 0x7FF) * 4;
+        var frameSize = ((unwindWord >> 13) & 0x1FF) * 16;
+        var cr = (unwindWord >> 22) & 0x3;
+        var h = (unwindWord >> 24) & 0x1;
+        var regI = (unwindWord >> 25) & 0xF;
+        var regF = (unwindWord >> 29) & 0x7;
+
+        entry.functionSize = funcLen;
+        entry.endAddress = beginAddr + funcLen;
+        entry.packedInfo = {
+          flag: flag, functionLength: funcLen, frameSize: frameSize,
+          cr: cr, h: h, regI: regI, regF: regF,
+        };
+      } else {
+        // Exception Information RVA (low 2 bits are flag=0, rest is RVA with low 2 bits implicitly 0)
+        entry.unwindDataRva = unwindWord;
+        entry.unwindInfo = parseUnwindInfoARM64(view, buffer, unwindWord, sections);
+      }
+      entries.push(entry);
+    }
+  }
+
+  return { architecture: isX64 ? "x64" : "ARM64", entries: entries };
+}
+
+// Parse x64 UNWIND_INFO structure from .xdata
+function parseUnwindInfoX64(view, buffer, unwindRva, sections) {
+  var off = rvaToFileOffset(unwindRva, sections);
+  if (off + 4 > buffer.byteLength) return null;
+
+  var byte0 = view.getUint8(off);
+  var version = byte0 & 0x7;
+  var flags = (byte0 >> 3) & 0x1F;
+  var sizeOfProlog = view.getUint8(off + 1);
+  var countOfCodes = view.getUint8(off + 2);
+  var byte3 = view.getUint8(off + 3);
+  var frameRegister = byte3 & 0xF;
+  var frameOffset = ((byte3 >> 4) & 0xF) * 16;
+
+  // Decode flag names
+  var flagNames = [];
+  if (flags & 0x1) flagNames.push("EHANDLER");
+  if (flags & 0x2) flagNames.push("UHANDLER");
+  if (flags & 0x4) flagNames.push("CHAININFO");
+  var flagStr = flagNames.length > 0 ? flagNames.join(" | ") : "NHANDLER";
+
+  // Parse unwind codes
+  var codes = [];
+  var codesOff = off + 4;
+  var ci = 0;
+  while (ci < countOfCodes) {
+    if (codesOff + ci * 2 + 2 > buffer.byteLength) break;
+    var codeOffset = view.getUint8(codesOff + ci * 2);
+    var opByte = view.getUint8(codesOff + ci * 2 + 1);
+    var unwindOp = opByte & 0xF;
+    var opInfo = (opByte >> 4) & 0xF;
+
+    var code = {
+      codeOffset: codeOffset, unwindOp: unwindOp,
+      opName: UWOP_NAMES[unwindOp] || ("Unknown(" + unwindOp + ")"),
+      opInfo: opInfo, description: "", slots: 1,
+    };
+
+    switch (unwindOp) {
+      case 0: // PUSH_NONVOL
+        code.description = "push " + (X64_REGISTERS[opInfo] || "reg" + opInfo);
+        code.slots = 1;
+        break;
+      case 1: // ALLOC_LARGE
+        if (opInfo === 0) {
+          if (codesOff + (ci + 1) * 2 + 2 <= buffer.byteLength) {
+            var sz = view.getUint16(codesOff + (ci + 1) * 2, true) * 8;
+            code.description = "alloc " + sz + " bytes";
+          }
+          code.slots = 2;
+        } else {
+          if (codesOff + (ci + 1) * 2 + 4 <= buffer.byteLength) {
+            var sz = view.getUint32(codesOff + (ci + 1) * 2, true);
+            code.description = "alloc " + sz + " bytes";
+          }
+          code.slots = 3;
+        }
+        break;
+      case 2: // ALLOC_SMALL
+        code.description = "alloc " + (opInfo * 8 + 8) + " bytes";
+        code.slots = 1;
+        break;
+      case 3: // SET_FPREG
+        code.description = "set frame reg " + (X64_REGISTERS[frameRegister] || "reg" + frameRegister) + " = RSP+" + hex(frameOffset);
+        code.slots = 1;
+        break;
+      case 4: // SAVE_NONVOL
+        if (codesOff + (ci + 1) * 2 + 2 <= buffer.byteLength) {
+          var saveOff = view.getUint16(codesOff + (ci + 1) * 2, true) * 8;
+          code.description = "save " + (X64_REGISTERS[opInfo] || "reg" + opInfo) + " at [RSP+" + hex(saveOff) + "]";
+        }
+        code.slots = 2;
+        break;
+      case 5: // SAVE_NONVOL_FAR
+        if (codesOff + (ci + 1) * 2 + 4 <= buffer.byteLength) {
+          var saveOff = view.getUint32(codesOff + (ci + 1) * 2, true);
+          code.description = "save " + (X64_REGISTERS[opInfo] || "reg" + opInfo) + " at [RSP+" + hex(saveOff) + "]";
+        }
+        code.slots = 3;
+        break;
+      case 8: // SAVE_XMM128
+        if (codesOff + (ci + 1) * 2 + 2 <= buffer.byteLength) {
+          var saveOff = view.getUint16(codesOff + (ci + 1) * 2, true) * 16;
+          code.description = "save XMM" + opInfo + " at [RSP+" + hex(saveOff) + "]";
+        }
+        code.slots = 2;
+        break;
+      case 9: // SAVE_XMM128_FAR
+        if (codesOff + (ci + 1) * 2 + 4 <= buffer.byteLength) {
+          var saveOff = view.getUint32(codesOff + (ci + 1) * 2, true);
+          code.description = "save XMM" + opInfo + " at [RSP+" + hex(saveOff) + "]";
+        }
+        code.slots = 3;
+        break;
+      case 10: // PUSH_MACHFRAME
+        code.description = "machine frame" + (opInfo ? " with error code" : "");
+        code.slots = 1;
+        break;
+      default:
+        code.slots = 1;
+        break;
+    }
+    codes.push(code);
+    ci += code.slots;
+  }
+
+  // After codes: exception handler or chained function
+  var afterCodesOff = codesOff + countOfCodes * 2;
+  // Align to DWORD boundary (even number of USHORT entries)
+  if (countOfCodes % 2 !== 0) afterCodesOff += 2;
+
+  var handlerRva = 0;
+  var chainedFunction = null;
+
+  if (flags & 0x4) { // CHAININFO
+    if (afterCodesOff + 12 <= buffer.byteLength) {
+      chainedFunction = {
+        beginAddress: view.getUint32(afterCodesOff, true),
+        endAddress: view.getUint32(afterCodesOff + 4, true),
+        unwindData: view.getUint32(afterCodesOff + 8, true),
+      };
+    }
+  } else if (flags & 0x3) { // EHANDLER or UHANDLER
+    if (afterCodesOff + 4 <= buffer.byteLength) {
+      handlerRva = view.getUint32(afterCodesOff, true);
+    }
+  }
+
+  return {
+    fileOffset: off, version: version, flags: flags, flagStr: flagStr,
+    sizeOfProlog: sizeOfProlog, countOfCodes: countOfCodes,
+    frameRegister: frameRegister,
+    frameRegisterName: frameRegister !== 0 ? (X64_REGISTERS[frameRegister] || "reg" + frameRegister) : "(none)",
+    frameOffset: frameOffset, unwindCodes: codes,
+    handlerRva: handlerRva, chainedFunction: chainedFunction,
+  };
+}
+
+// Parse ARM64 .xdata unwind info (basic header)
+function parseUnwindInfoARM64(view, buffer, unwindRva, sections) {
+  var off = rvaToFileOffset(unwindRva, sections);
+  if (off + 4 > buffer.byteLength) return null;
+
+  var word0 = view.getUint32(off, true);
+  var funcLength = (word0 & 0x3FFFF) * 4;
+  var vers = (word0 >> 18) & 0x3;
+  var x = (word0 >> 20) & 0x1;
+  var e = (word0 >> 21) & 0x1;
+  var epilogCount = (word0 >> 22) & 0x1F;
+  var codeWords = (word0 >> 27) & 0x1F;
+
+  // If both epilogCount and codeWords are 0, extended header is present
+  var extendedHeader = (epilogCount === 0 && codeWords === 0);
+  if (extendedHeader && off + 8 <= buffer.byteLength) {
+    var word1 = view.getUint32(off + 4, true);
+    epilogCount = word1 & 0xFFFF;
+    codeWords = (word1 >> 16) & 0xFF;
+  }
+
+  var handlerRva = 0;
+  if (x) {
+    // Exception handler RVA is after epilog scopes + code words
+    var headerSize = extendedHeader ? 8 : 4;
+    var epilogScopeSize = e ? 0 : epilogCount * 4;
+    var handlerOff = off + headerSize + epilogScopeSize + codeWords * 4;
+    if (handlerOff + 4 <= buffer.byteLength) {
+      handlerRva = view.getUint32(handlerOff, true);
+    }
+  }
+
+  return {
+    fileOffset: off, functionLength: funcLength, version: vers,
+    hasExceptionData: x, singleEpilog: e,
+    epilogCount: epilogCount, codeWords: codeWords,
+    extendedHeader: extendedHeader, handlerRva: handlerRva,
+  };
+}
+
 function parseOptionalHeader32(view, off) {
   return [
     { name: "Magic",                       offset: off,      size: 2, value: view.getUint16(off, true) },
@@ -1055,6 +1327,21 @@ function buildTree(pe) {
     });
   }
 
+  // Build exception table child nodes (limit to first 200 to avoid huge tree)
+  var excChildren = [];
+  if (pe.exceptionTable && pe.exceptionTable.entries.length > 0) {
+    var maxShow = Math.min(pe.exceptionTable.entries.length, 200);
+    for (var i = 0; i < maxShow; i++) {
+      (function (entry) {
+        var label = "#" + entry.index + " " + hex(entry.beginAddress, 8);
+        excChildren.push(createTreeNode(label, function () { showExceptionEntry(entry); }));
+      })(pe.exceptionTable.entries[i]);
+    }
+    if (pe.exceptionTable.entries.length > 200) {
+      excChildren.push(createTreeNode("... (" + (pe.exceptionTable.entries.length - 200) + " more)", null));
+    }
+  }
+
   // Root node
   var root = createTreeNode("PE File", null, [
     createTreeNode("DOS Header", function () { showFields("DOS Header", "dosHeader", pe.dosHeader.fields); }),
@@ -1067,12 +1354,13 @@ function buildTree(pe) {
         return createTreeNode(dir.name, function () { showSingleDataDirectory(dir, idx); });
       })
     ),
-    createTreeNode("Export Table", function () { showExportTable(pe.exportTable); }),
-    createTreeNode("Import Table", function () { showImportTableOverview(pe.importTable); }, importChildren),
-    createTreeNode("Base Relocation Table", function () { showBaseRelocationOverview(pe.baseRelocations); }, relocChildren),
-    createTreeNode("Certificate Table", function () { showCertificateTableOverview(pe.certificates); }, certChildren),
-    createTreeNode("TLS Directory", function () { showTlsDirectory(pe.tlsDirectory); }),
-    createTreeNode("Debug Directory", function () { showDebugDirectoryOverview(pe.debugEntries); }, debugChildren),
+    createTreeNode("Export Table (Decoded)", function () { showExportTable(pe.exportTable); }),
+    createTreeNode("Import Table (Decoded)", function () { showImportTableOverview(pe.importTable); }, importChildren),
+    createTreeNode("Exception Table (Decoded)", function () { showExceptionTableOverview(pe.exceptionTable); }, excChildren),
+    createTreeNode("Base Relocation Table (Decoded)", function () { showBaseRelocationOverview(pe.baseRelocations); }, relocChildren),
+    createTreeNode("Certificate Table (Decoded)", function () { showCertificateTableOverview(pe.certificates); }, certChildren),
+    createTreeNode("TLS Directory (Decoded)", function () { showTlsDirectory(pe.tlsDirectory); }),
+    createTreeNode("Debug Directory (Decoded)", function () { showDebugDirectoryOverview(pe.debugEntries); }, debugChildren),
     createTreeNode("Section Headers", null,
       pe.sections.map(function (sec) {
         return createTreeNode(sec.name, function () { showFields("Section: " + sec.name, "section", sec.fields); });
@@ -1081,9 +1369,6 @@ function buildTree(pe) {
   ]);
 
   tree.appendChild(root);
-
-  // Expand all nodes
-  expandAllNodes(root);
 }
 
 function createTreeNode(label, onClick, children) {
@@ -1600,6 +1885,185 @@ function showTlsDirectory(tlsDir) {
   });
 
   html += '</tbody></table>';
+  panel.innerHTML = html;
+}
+
+function showExceptionTableOverview(excTable) {
+  var panel = document.getElementById("detailPanel");
+  if (!excTable || excTable.entries.length === 0) {
+    panel.innerHTML = '<div class="pe-detail-header">Exception Table</div>' +
+      '<div class="pe-welcome"><p>No exception table found in this PE file.</p></div>';
+    return;
+  }
+
+  var html = '<div class="pe-detail-header">Exception Table (' + excTable.architecture + ', ' + excTable.entries.length + ' entries)</div>';
+
+  html += '<table class="pe-detail-table"><thead><tr>';
+  html += '<th style="width:6%">#</th>';
+  html += '<th style="width:10%">File Offset</th>';
+  html += '<th style="width:12%">Begin Addr</th>';
+  html += '<th style="width:12%">End Addr</th>';
+  html += '<th style="width:10%">Func Size</th>';
+  html += '<th style="width:12%">Unwind RVA</th>';
+  html += '<th style="width:38%">Summary</th>';
+  html += '</tr></thead><tbody>';
+
+  excTable.entries.forEach(function (entry) {
+    var endStr = entry.endAddress !== undefined ? hex(entry.endAddress, 8) : "N/A";
+    var sizeStr = entry.functionSize !== undefined ? entry.functionSize + " bytes" : "N/A";
+    var unwindRvaStr = entry.unwindDataRva !== undefined ? hex(entry.unwindDataRva, 8) : (entry.isPacked ? "Packed" : "N/A");
+
+    var summary = "";
+    if (entry.architecture === "x64" && entry.unwindInfo) {
+      var ui = entry.unwindInfo;
+      summary = "v" + ui.version + " " + ui.flagStr + " prolog=" + ui.sizeOfProlog + " codes=" + ui.countOfCodes;
+      if (ui.frameRegister !== 0) summary += " frame=" + ui.frameRegisterName;
+    } else if (entry.architecture === "ARM64") {
+      if (entry.isPacked && entry.packedInfo) {
+        var p = entry.packedInfo;
+        summary = "Packed: frame=" + p.frameSize + " CR=" + p.cr + " H=" + p.h + " RegI=" + p.regI + " RegF=" + p.regF;
+      } else if (entry.unwindInfo) {
+        var ui = entry.unwindInfo;
+        summary = "v" + ui.version + " epilogs=" + ui.epilogCount + " codeWords=" + ui.codeWords;
+        if (ui.hasExceptionData) summary += " +handler";
+      }
+    }
+
+    html += '<tr>';
+    html += '<td>' + entry.index + '</td>';
+    html += '<td>' + hex(entry.fileOffset, 8) + '</td>';
+    html += '<td>' + hex(entry.beginAddress, 8) + '</td>';
+    html += '<td>' + endStr + '</td>';
+    html += '<td>' + sizeStr + '</td>';
+    html += '<td>' + unwindRvaStr + '</td>';
+    html += '<td>' + escapeHtml(summary) + '</td>';
+    html += '</tr>';
+  });
+
+  html += '</tbody></table>';
+  panel.innerHTML = html;
+}
+
+function showExceptionEntry(entry) {
+  var panel = document.getElementById("detailPanel");
+  var html = '<div class="pe-detail-header">Exception Entry #' + entry.index + ' (' + entry.architecture + ')</div>';
+
+  // RUNTIME_FUNCTION fields
+  html += '<table class="pe-detail-table"><thead><tr>';
+  html += '<th class="col-member">Member</th>';
+  html += '<th class="col-offset">Offset</th>';
+  html += '<th class="col-value">Value</th>';
+  html += '<th class="col-meaning">Meaning</th>';
+  html += '</tr></thead><tbody>';
+
+  html += '<tr><td>BeginAddress</td><td>' + hex(entry.fileOffset, 8) + '</td><td>' + hex(entry.beginAddress, 8) + '</td><td>RVA of function start</td></tr>';
+  if (entry.endAddress !== undefined) {
+    html += '<tr><td>EndAddress</td><td>' + hex(entry.fileOffset + 4, 8) + '</td><td>' + hex(entry.endAddress, 8) + '</td><td>RVA of function end</td></tr>';
+  }
+  if (entry.functionSize !== undefined) {
+    html += '<tr><td>Function Size</td><td></td><td>' + entry.functionSize + '</td><td>' + entry.functionSize + ' bytes</td></tr>';
+  }
+
+  if (entry.architecture === "x64") {
+    html += '<tr><td>UnwindInfoAddress</td><td>' + hex(entry.fileOffset + 8, 8) + '</td><td>' + hex(entry.unwindDataRva, 8) + '</td><td>RVA of UNWIND_INFO</td></tr>';
+  } else if (entry.isPacked && entry.packedInfo) {
+    var p = entry.packedInfo;
+    html += '<tr><td>Flag</td><td></td><td>' + p.flag + '</td><td>Packed unwind data</td></tr>';
+    html += '<tr><td>FunctionLength</td><td></td><td>' + p.functionLength + '</td><td>' + p.functionLength + ' bytes</td></tr>';
+    html += '<tr><td>FrameSize</td><td></td><td>' + p.frameSize + '</td><td>' + p.frameSize + ' bytes</td></tr>';
+    html += '<tr><td>CR</td><td></td><td>' + p.cr + '</td><td>' + ["No chaining", "Chained (PackedCR=1)", "Chained stp x29,lr (PackedCR=2)", "Chaining with context (PackedCR=3)"][p.cr] + '</td></tr>';
+    html += '<tr><td>H</td><td></td><td>' + p.h + '</td><td>' + (p.h ? "Homes integer parameter registers" : "No homing") + '</td></tr>';
+    html += '<tr><td>RegI</td><td></td><td>' + p.regI + '</td><td>' + p.regI + ' non-volatile INT register(s) saved</td></tr>';
+    html += '<tr><td>RegF</td><td></td><td>' + p.regF + '</td><td>' + (p.regF === 7 ? "No FP registers saved" : (p.regF + 1) + " non-volatile FP register(s) saved") + '</td></tr>';
+  } else if (entry.unwindDataRva !== undefined) {
+    html += '<tr><td>UnwindData</td><td>' + hex(entry.fileOffset + 4, 8) + '</td><td>' + hex(entry.unwindDataRva, 8) + '</td><td>RVA of .xdata record</td></tr>';
+  }
+  html += '</tbody></table>';
+
+  // UNWIND_INFO detail for x64
+  if (entry.architecture === "x64" && entry.unwindInfo) {
+    var ui = entry.unwindInfo;
+    html += '<div class="pe-detail-header" style="margin-top:1px">UNWIND_INFO at file offset ' + hex(ui.fileOffset, 8) + '</div>';
+
+    html += '<table class="pe-detail-table"><thead><tr>';
+    html += '<th class="col-member">Member</th>';
+    html += '<th class="col-value">Value</th>';
+    html += '<th class="col-meaning">Meaning</th>';
+    html += '</tr></thead><tbody>';
+
+    html += '<tr><td>Version</td><td>' + ui.version + '</td><td></td></tr>';
+    html += '<tr><td>Flags</td><td>' + hex(ui.flags, 2) + '</td><td>' + escapeHtml(ui.flagStr) + '</td></tr>';
+    html += '<tr><td>SizeOfProlog</td><td>' + ui.sizeOfProlog + '</td><td>' + ui.sizeOfProlog + ' bytes</td></tr>';
+    html += '<tr><td>CountOfCodes</td><td>' + ui.countOfCodes + '</td><td>' + ui.countOfCodes + ' UNWIND_CODE slot(s)</td></tr>';
+    html += '<tr><td>FrameRegister</td><td>' + ui.frameRegister + '</td><td>' + escapeHtml(ui.frameRegisterName) + '</td></tr>';
+    html += '<tr><td>FrameOffset</td><td>' + hex(ui.frameOffset, 4) + '</td><td>' + (ui.frameRegister !== 0 ? ui.frameOffset + " bytes from RSP" : "N/A") + '</td></tr>';
+
+    if (ui.handlerRva !== 0) {
+      html += '<tr><td>ExceptionHandler</td><td>' + hex(ui.handlerRva, 8) + '</td><td>RVA of exception/termination handler</td></tr>';
+    }
+    if (ui.chainedFunction) {
+      var cf = ui.chainedFunction;
+      html += '<tr><td>Chained Begin</td><td>' + hex(cf.beginAddress, 8) + '</td><td>Chained RUNTIME_FUNCTION</td></tr>';
+      html += '<tr><td>Chained End</td><td>' + hex(cf.endAddress, 8) + '</td><td></td></tr>';
+      html += '<tr><td>Chained Unwind</td><td>' + hex(cf.unwindData, 8) + '</td><td></td></tr>';
+    }
+
+    html += '</tbody></table>';
+
+    // Unwind codes
+    if (ui.unwindCodes.length > 0) {
+      html += '<div class="pe-detail-header" style="margin-top:1px">Unwind Codes (' + ui.unwindCodes.length + ')</div>';
+
+      html += '<table class="pe-detail-table"><thead><tr>';
+      html += '<th style="width:10%">Prolog Offset</th>';
+      html += '<th style="width:8%">Op Code</th>';
+      html += '<th style="width:20%">Operation</th>';
+      html += '<th style="width:8%">OpInfo</th>';
+      html += '<th style="width:8%">Slots</th>';
+      html += '<th style="width:46%">Description</th>';
+      html += '</tr></thead><tbody>';
+
+      ui.unwindCodes.forEach(function (c) {
+        html += '<tr>';
+        html += '<td>' + hex(c.codeOffset, 2) + '</td>';
+        html += '<td>' + c.unwindOp + '</td>';
+        html += '<td>' + escapeHtml(c.opName) + '</td>';
+        html += '<td>' + c.opInfo + '</td>';
+        html += '<td>' + c.slots + '</td>';
+        html += '<td>' + escapeHtml(c.description) + '</td>';
+        html += '</tr>';
+      });
+
+      html += '</tbody></table>';
+    }
+  }
+
+  // UNWIND_INFO detail for ARM64 (non-packed)
+  if (entry.architecture === "ARM64" && !entry.isPacked && entry.unwindInfo) {
+    var ui = entry.unwindInfo;
+    html += '<div class="pe-detail-header" style="margin-top:1px">.xdata Record at file offset ' + hex(ui.fileOffset, 8) + '</div>';
+
+    html += '<table class="pe-detail-table"><thead><tr>';
+    html += '<th class="col-member">Member</th>';
+    html += '<th class="col-value">Value</th>';
+    html += '<th class="col-meaning">Meaning</th>';
+    html += '</tr></thead><tbody>';
+
+    html += '<tr><td>FunctionLength</td><td>' + ui.functionLength + '</td><td>' + ui.functionLength + ' bytes</td></tr>';
+    html += '<tr><td>Version</td><td>' + ui.version + '</td><td></td></tr>';
+    html += '<tr><td>X (Exception Data)</td><td>' + ui.hasExceptionData + '</td><td>' + (ui.hasExceptionData ? "Exception handler present" : "No handler") + '</td></tr>';
+    html += '<tr><td>E (Single Epilog)</td><td>' + ui.singleEpilog + '</td><td>' + (ui.singleEpilog ? "Single epilog packed in header" : "Epilog scopes at offset") + '</td></tr>';
+    html += '<tr><td>Epilog Count</td><td>' + ui.epilogCount + '</td><td></td></tr>';
+    html += '<tr><td>Code Words</td><td>' + ui.codeWords + '</td><td>' + (ui.codeWords * 4) + ' bytes of unwind codes</td></tr>';
+    html += '<tr><td>Extended Header</td><td>' + (ui.extendedHeader ? "Yes" : "No") + '</td><td>' + (ui.extendedHeader ? "Extended epilog count and code words" : "Standard header") + '</td></tr>';
+
+    if (ui.handlerRva !== 0) {
+      html += '<tr><td>ExceptionHandler</td><td>' + hex(ui.handlerRva, 8) + '</td><td>RVA of exception handler</td></tr>';
+    }
+
+    html += '</tbody></table>';
+  }
+
   panel.innerHTML = html;
 }
 
