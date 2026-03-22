@@ -31,15 +31,27 @@ tags: ["Tools"]
   <body>
     <main>
       <div>
-        <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem; align-items: center;">
-          <label for="fileInput" style="white-space: nowrap; margin: 0; min-width: 75px; font-weight: bold;">UEFI Log:</label>
-          <input type="file" id="fileInput" class="form-control" style="flex: 1;" />
-          <button id="convertBtn" class="btn btn-primary" style="white-space: nowrap;">GUID &harr; Name</button>
-          <button id="themeToggle" class="btn" style="white-space: nowrap; padding: 0.375rem 0.5rem; font-size: 1.1rem; line-height: 1; border: 1px solid #ced4da; cursor: pointer;" title="Toggle dark/light mode">&#9790;</button>
-        </div>
-        <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem; align-items: center;">
-          <label for="guidFileInput" style="white-space: nowrap; margin: 0; min-width: 75px; font-weight: bold;">GUID CSV:</label>
-          <input type="file" id="guidFileInput" class="form-control" accept=".csv,.txt" style="flex: 1;" />
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem; align-items: stretch;">
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 0.5rem;">
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <label style="white-space: nowrap; margin: 0; min-width: 75px; font-weight: bold;">UEFI Log:</label>
+              <div id="fileDropZone" style="flex: 1; padding: 0.375rem 0.75rem; border: 1px dashed #0d6efd; border-radius: 0.25rem; cursor: pointer; font-family: Consolas, 'Courier New', monospace; font-size: 0.85rem; color: #0d6efd; background: rgba(13,110,253,0.04); text-align: center; user-select: none;">
+                Drop file here or click to browse...
+              </div>
+              <input type="file" id="fileInput" style="display: none;" />
+            </div>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <label style="white-space: nowrap; margin: 0; min-width: 75px; font-weight: bold;">GUID CSV:</label>
+              <div id="guidDropZone" style="flex: 1; padding: 0.375rem 0.75rem; border: 1px dashed #0d6efd; border-radius: 0.25rem; cursor: pointer; font-family: Consolas, 'Courier New', monospace; font-size: 0.85rem; color: #0d6efd; background: rgba(13,110,253,0.04); text-align: center; user-select: none;">
+                Drop CSV file here or click to browse...
+              </div>
+              <input type="file" id="guidFileInput" accept=".csv,.txt" style="display: none;" />
+            </div>
+          </div>
+          <div style="display: flex; gap: 0.5rem; align-items: center; flex-shrink: 0;">
+            <button id="convertBtn" class="btn btn-primary" style="white-space: nowrap;">GUID &harr; Name</button>
+            <button id="themeToggle" class="btn" style="white-space: nowrap; padding: 0.375rem 0.5rem; font-size: 1.1rem; line-height: 1; border: 1px solid #ced4da; cursor: pointer;" title="Toggle dark/light mode">&#9790;</button>
+          </div>
         </div>
         <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; align-items: center;">
           <div style="min-width: 75px;"></div>

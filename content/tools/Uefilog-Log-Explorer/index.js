@@ -458,38 +458,146 @@ require(["vs/editor/editor.main"], function () {
   });
 });
 
-// Handle File Input Change with substring-based filtering
+// Load a file into the editor (shared by file input and drag & drop)
+function loadFile(file) {
+  var reader = new FileReader();
+  reader.onload = function (e) {
+    // Reset all state
+    highlightedWords.forEach(function (entry) {
+      editor.removeDecorations(entry.decorationIds);
+    });
+    highlightedWords.clear();
+    colorIndex = 0;
+
+    // Hide unresolved GUIDs section
+    document.getElementById("unresolvedSection").style.display = "none";
+    unresolvedEditor.setValue("");
+
+    // Load new content
+    originalContent = e.target.result;
+    editor.setValue(originalContent);
+    isConverted = false;
+
+    // Hide editor drop overlay
+    var overlay = document.getElementById("editorDropOverlay");
+    if (overlay) overlay.style.display = "none";
+
+    scanForPhases();
+    scanForDrivers();
+    scanForPpiInstalls();
+    scanForFvLoads();
+    updateSummary();
+  };
+  reader.readAsText(file);
+}
+
+// Handle File Input Change
 document
   .getElementById("fileInput")
   .addEventListener("change", function (event) {
     const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        // Reset all state
-        highlightedWords.forEach(function (entry) {
-          editor.removeDecorations(entry.decorationIds);
-        });
-        highlightedWords.clear();
-        colorIndex = 0;
+    if (file) loadFile(file);
+  });
 
-        // Hide unresolved GUIDs section
-        document.getElementById("unresolvedSection").style.display = "none";
-        unresolvedEditor.setValue("");
+// Drop zone for UEFI log file (click + drag & drop)
+(function setupFileDropZone() {
+  var dropZone = document.getElementById("fileDropZone");
+  var fileInput = document.getElementById("fileInput");
 
-        // Load new content
-        originalContent = e.target.result;
-        editor.setValue(originalContent);
-        isConverted = false;
-        scanForPhases();
-        scanForDrivers();
-        scanForPpiInstalls();
-        scanForFvLoads();
-        updateSummary();
-      };
-      reader.readAsText(file);
+  // Click to open file browser
+  dropZone.addEventListener("click", function () {
+    fileInput.click();
+  });
+
+  // Drag hover styling
+  dropZone.addEventListener("dragenter", function (e) {
+    e.preventDefault();
+    dropZone.style.borderColor = "#0b5ed7";
+    dropZone.style.background = "rgba(13,110,253,0.12)";
+  });
+
+  dropZone.addEventListener("dragleave", function (e) {
+    e.preventDefault();
+    dropZone.style.borderColor = "#0d6efd";
+    dropZone.style.background = "rgba(13,110,253,0.04)";
+  });
+
+  dropZone.addEventListener("dragover", function (e) {
+    e.preventDefault();
+  });
+
+  dropZone.addEventListener("drop", function (e) {
+    e.preventDefault();
+    dropZone.style.borderColor = "#0d6efd";
+    dropZone.style.background = "rgba(13,110,253,0.04)";
+    var files = e.dataTransfer.files;
+    if (files.length > 0) {
+      loadFile(files[0]);
+      dropZone.textContent = files[0].name;
+      dropZone.style.color = "#333";
     }
   });
+
+  // Update drop zone text when file is chosen via dialog
+  fileInput.addEventListener("change", function () {
+    if (fileInput.files.length > 0) {
+      dropZone.textContent = fileInput.files[0].name;
+      dropZone.style.color = "#333";
+    }
+  });
+})();
+
+// Drag & drop support on the editor area
+(function setupEditorDragDrop() {
+  var editorEl = document.getElementById("editor");
+  var overlay = document.createElement("div");
+  overlay.id = "editorDropOverlay";
+  overlay.style.cssText = "display:flex; position:absolute; top:0; left:0; right:0; bottom:0; background:rgba(13,110,253,0.08); border:2px dashed #0d6efd; border-radius:0.375rem; z-index:100; pointer-events:none; align-items:center; justify-content:center;";
+  overlay.innerHTML = '<span style="font-size:1.1rem; font-weight:bold; color:#0d6efd; font-family:Consolas,monospace; background:rgba(255,255,255,0.9); padding:0.4rem 1rem; border-radius:0.25rem;">Drop UEFI log file here</span>';
+  editorEl.style.position = "relative";
+  editorEl.appendChild(overlay);
+
+  var dragCounter = 0;
+
+  editorEl.addEventListener("dragenter", function (e) {
+    e.preventDefault();
+    dragCounter++;
+    overlay.style.display = "flex";
+    overlay.style.background = "rgba(13,110,253,0.15)";
+  });
+
+  editorEl.addEventListener("dragleave", function (e) {
+    e.preventDefault();
+    dragCounter--;
+    if (dragCounter <= 0) {
+      dragCounter = 0;
+      // Restore initial state if no file loaded yet
+      if (!originalContent) {
+        overlay.style.background = "rgba(13,110,253,0.08)";
+      } else {
+        overlay.style.display = "none";
+      }
+    }
+  });
+
+  editorEl.addEventListener("dragover", function (e) {
+    e.preventDefault();
+  });
+
+  editorEl.addEventListener("drop", function (e) {
+    e.preventDefault();
+    dragCounter = 0;
+    overlay.style.display = "none";
+    var files = e.dataTransfer.files;
+    if (files.length > 0) {
+      loadFile(files[0]);
+      // Update the drop zone text too
+      var dropZone = document.getElementById("fileDropZone");
+      dropZone.textContent = files[0].name;
+      dropZone.style.color = "#333";
+    }
+  });
+})();
 
 // GUID regex pattern
 var GUID_REGEX = /[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/g;
@@ -603,10 +711,8 @@ document.getElementById("fvJump").addEventListener("change", function () {
   this.value = "";
 });
 
-// Handle GUID CSV file input
-document.getElementById("guidFileInput").addEventListener("change", function (event) {
-  var file = event.target.files[0];
-  if (!file) return;
+// Load a GUID CSV file (shared by file input and drag & drop)
+function loadGuidCsv(file) {
   var reader = new FileReader();
   reader.onload = function (e) {
     // Reset to built-in GUIDs, then merge CSV on top
@@ -626,11 +732,54 @@ document.getElementById("guidFileInput").addEventListener("change", function (ev
         }
       }
     });
-    document.getElementById("guidFileInput").parentElement.querySelector("label").textContent =
-      "GUID CSV: (" + count + " loaded)";
+    var dropZone = document.getElementById("guidDropZone");
+    dropZone.textContent = file.name + " (" + count + " loaded)";
+    dropZone.style.color = "#333";
   };
   reader.readAsText(file);
+}
+
+// Handle GUID CSV file input
+document.getElementById("guidFileInput").addEventListener("change", function (event) {
+  var file = event.target.files[0];
+  if (file) loadGuidCsv(file);
 });
+
+// Drop zone for GUID CSV file (click + drag & drop)
+(function setupGuidDropZone() {
+  var dropZone = document.getElementById("guidDropZone");
+  var fileInput = document.getElementById("guidFileInput");
+
+  dropZone.addEventListener("click", function () {
+    fileInput.click();
+  });
+
+  dropZone.addEventListener("dragenter", function (e) {
+    e.preventDefault();
+    dropZone.style.borderColor = "#0b5ed7";
+    dropZone.style.background = "rgba(13,110,253,0.12)";
+  });
+
+  dropZone.addEventListener("dragleave", function (e) {
+    e.preventDefault();
+    dropZone.style.borderColor = "#0d6efd";
+    dropZone.style.background = "rgba(13,110,253,0.04)";
+  });
+
+  dropZone.addEventListener("dragover", function (e) {
+    e.preventDefault();
+  });
+
+  dropZone.addEventListener("drop", function (e) {
+    e.preventDefault();
+    dropZone.style.borderColor = "#0d6efd";
+    dropZone.style.background = "rgba(13,110,253,0.04)";
+    var files = e.dataTransfer.files;
+    if (files.length > 0) {
+      loadGuidCsv(files[0]);
+    }
+  });
+})();
 
 // Handle theme toggle (light/dark)
 var isDark = false;

@@ -389,6 +389,12 @@ function parsePE(buffer) {
   // --- Exception Table (.pdata / .xdata) ---
   result.exceptionTable = parseExceptionTable(view, buffer, result.dataDirectories, result.sections, machine);
 
+  // --- Load Config Directory ---
+  result.loadConfig = parseLoadConfigDirectory(view, buffer, result.dataDirectories, result.sections, result.is64);
+
+  // --- Resource Directory ---
+  result.resourceDirectory = parseResourceDirectory(view, buffer, result.dataDirectories, result.sections);
+
   return result;
 }
 
@@ -1137,6 +1143,267 @@ function parseUnwindInfoARM64(view, buffer, unwindRva, sections) {
   };
 }
 
+// Guard flags for Load Config
+var IMAGE_GUARD_FLAGS = {
+  0x00000100: "CF_INSTRUMENTED",
+  0x00000200: "CFW_INSTRUMENTED",
+  0x00000400: "CF_FUNCTION_TABLE_PRESENT",
+  0x00000800: "SECURITY_COOKIE_UNUSED",
+  0x00001000: "PROTECT_DELAYLOAD_IAT",
+  0x00002000: "DELAYLOAD_IAT_IN_ITS_OWN_SECTION",
+  0x00004000: "CF_EXPORT_SUPPRESSION_INFO_PRESENT",
+  0x00008000: "CF_ENABLE_EXPORT_SUPPRESSION",
+  0x00010000: "CF_LONGJUMP_TABLE_PRESENT",
+  0x00100000: "EH_CONTINUATION_TABLE_PRESENT",
+};
+
+// Resource type names
+var RT_NAMES = {
+  1: "RT_CURSOR", 2: "RT_BITMAP", 3: "RT_ICON", 4: "RT_MENU",
+  5: "RT_DIALOG", 6: "RT_STRING", 7: "RT_FONTDIR", 8: "RT_FONT",
+  9: "RT_ACCELERATOR", 10: "RT_RCDATA", 11: "RT_MESSAGETABLE",
+  12: "RT_GROUP_CURSOR", 14: "RT_GROUP_ICON", 16: "RT_VERSION",
+  17: "RT_DLGINCLUDE", 19: "RT_PLUGPLAY", 20: "RT_VXD",
+  21: "RT_ANICURSOR", 22: "RT_ANIICON", 23: "RT_HTML",
+  24: "RT_MANIFEST",
+};
+
+function parseLoadConfigDirectory(view, buffer, dataDirectories, sections, is64) {
+  // Load Config is data directory index 10
+  if (dataDirectories.length <= 10) return null;
+  var lcDir = dataDirectories[10];
+  if (lcDir.rva === 0 || lcDir.size === 0) return null;
+
+  var off = rvaToFileOffset(lcDir.rva, sections);
+  if (off + 4 > buffer.byteLength) return null;
+
+  var structSize = view.getUint32(off, true);
+  var fields = [];
+  var pos = off;
+
+  function addField4(name, desc) {
+    if (pos + 4 - off > structSize || pos + 4 > buffer.byteLength) return;
+    var v = view.getUint32(pos, true);
+    fields.push({ name: name, offset: hex(pos, 8), rawHex: hex(v, 8), value: v, description: desc || "" });
+    pos += 4;
+  }
+  function addField2(name, desc) {
+    if (pos + 2 - off > structSize || pos + 2 > buffer.byteLength) return;
+    var v = view.getUint16(pos, true);
+    fields.push({ name: name, offset: hex(pos, 8), rawHex: hex(v, 4), value: v, description: desc || "" });
+    pos += 2;
+  }
+  function addFieldPtr(name, desc) {
+    if (is64) {
+      if (pos + 8 - off > structSize || pos + 8 > buffer.byteLength) return;
+      var lo = view.getUint32(pos, true);
+      var hi = view.getUint32(pos + 4, true);
+      var hx = hex64(lo, hi);
+      fields.push({ name: name, offset: hex(pos, 8), rawHex: hx, value: hx, description: desc || "" });
+      pos += 8;
+    } else {
+      if (pos + 4 - off > structSize || pos + 4 > buffer.byteLength) return;
+      var v = view.getUint32(pos, true);
+      fields.push({ name: name, offset: hex(pos, 8), rawHex: hex(v, 8), value: v, description: desc || "" });
+      pos += 4;
+    }
+  }
+
+  // Common fields (same order on 32 and 64 up to CSDVersion)
+  addField4("Size", structSize + " bytes");
+  addField4("TimeDateStamp", formatTimestamp(view.getUint32(pos, true)));
+  addField2("MajorVersion", "");
+  addField2("MinorVersion", "");
+  addField4("GlobalFlagsClear", "");
+  addField4("GlobalFlagsSet", "");
+  addField4("CriticalSectionDefaultTimeout", "");
+
+  if (is64) {
+    addFieldPtr("DeCommitFreeBlockThreshold", "");
+    addFieldPtr("DeCommitTotalFreeThreshold", "");
+    addFieldPtr("LockPrefixTable", "VA");
+    addFieldPtr("MaximumAllocationSize", "");
+    addFieldPtr("VirtualMemoryThreshold", "");
+    addFieldPtr("ProcessAffinityMask", "");
+    addField4("ProcessHeapFlags", "");
+  } else {
+    addField4("DeCommitFreeBlockThreshold", "");
+    addField4("DeCommitTotalFreeThreshold", "");
+    addField4("LockPrefixTable", "VA");
+    addField4("MaximumAllocationSize", "");
+    addField4("VirtualMemoryThreshold", "");
+    addField4("ProcessHeapFlags", "");
+    addField4("ProcessAffinityMask", "");
+  }
+  addField2("CSDVersion", "Service pack version");
+  addField2("DependentLoadFlags", "");
+  addFieldPtr("EditList", "VA, reserved");
+  addFieldPtr("SecurityCookie", "VA, /GS security cookie");
+  addFieldPtr("SEHandlerTable", "VA, SE handler table (x86)");
+  addFieldPtr("SEHandlerCount", "");
+  addFieldPtr("GuardCFCheckFunctionPointer", "VA, CFG check function");
+  addFieldPtr("GuardCFDispatchFunctionPointer", "VA, CFG dispatch function");
+  addFieldPtr("GuardCFFunctionTable", "VA, CFG function table");
+  addFieldPtr("GuardCFFunctionCount", "");
+
+  // GuardFlags
+  if (pos + 4 - off <= structSize && pos + 4 <= buffer.byteLength) {
+    var gf = view.getUint32(pos, true);
+    var gfDesc = decodeFlags(gf, IMAGE_GUARD_FLAGS);
+    fields.push({ name: "GuardFlags", offset: hex(pos, 8), rawHex: hex(gf, 8), value: gf, description: gfDesc || "" });
+    pos += 4;
+  }
+
+  // CodeIntegrity (12 bytes)
+  if (pos + 12 - off <= structSize && pos + 12 <= buffer.byteLength) {
+    var ciFlags = view.getUint16(pos, true);
+    var ciCatalog = view.getUint16(pos + 2, true);
+    var ciOffset = view.getUint32(pos + 4, true);
+    var ciReserved = view.getUint32(pos + 8, true);
+    fields.push({ name: "CodeIntegrity.Flags", offset: hex(pos, 8), rawHex: hex(ciFlags, 4), value: ciFlags, description: "" });
+    fields.push({ name: "CodeIntegrity.Catalog", offset: hex(pos + 2, 8), rawHex: hex(ciCatalog, 4), value: ciCatalog, description: "" });
+    fields.push({ name: "CodeIntegrity.CatalogOffset", offset: hex(pos + 4, 8), rawHex: hex(ciOffset, 8), value: ciOffset, description: "" });
+    fields.push({ name: "CodeIntegrity.Reserved", offset: hex(pos + 8, 8), rawHex: hex(ciReserved, 8), value: ciReserved, description: "" });
+    pos += 12;
+  }
+
+  // Remaining pointer fields
+  var remainingFields = [
+    "GuardAddressTakenIatEntryTable", "GuardAddressTakenIatEntryCount",
+    "GuardLongJumpTargetTable", "GuardLongJumpTargetCount",
+    "DynamicValueRelocTable", "CHPEMetadataPointer",
+    "GuardRFFailureRoutine", "GuardRFFailureRoutineFunctionPointer",
+  ];
+  for (var i = 0; i < remainingFields.length; i++) {
+    addFieldPtr(remainingFields[i], "");
+  }
+
+  // DynamicValueRelocTableOffset (DWORD) + Section (WORD) + Reserved2 (WORD)
+  addField4("DynamicValueRelocTableOffset", "");
+  addField2("DynamicValueRelocTableSection", "");
+  addField2("Reserved2", "");
+
+  // More pointer fields
+  var moreFields = [
+    "GuardRFVerifyStackPointerFunctionPointer",
+  ];
+  for (var i = 0; i < moreFields.length; i++) {
+    addFieldPtr(moreFields[i], "");
+  }
+  addField4("HotPatchTableOffset", "");
+  addField4("Reserved3", "");
+
+  var finalFields = [
+    "EnclaveConfigurationPointer", "VolatileMetadataPointer",
+    "GuardEHContinuationTable", "GuardEHContinuationCount",
+    "GuardXFGCheckFunctionPointer", "GuardXFGDispatchFunctionPointer",
+    "GuardXFGTableDispatchFunctionPointer",
+    "CastGuardOsDeterminedFailureMode", "GuardMemcpyFunctionPointer",
+  ];
+  for (var i = 0; i < finalFields.length; i++) {
+    addFieldPtr(finalFields[i], "");
+  }
+
+  return { fileOffset: off, structSize: structSize, fields: fields };
+}
+
+function parseResourceDirectory(view, buffer, dataDirectories, sections) {
+  // Resource Directory is data directory index 2
+  if (dataDirectories.length <= 2) return null;
+  var rsrcDir = dataDirectories[2];
+  if (rsrcDir.rva === 0 || rsrcDir.size === 0) return null;
+
+  var rsrcBaseOff = rvaToFileOffset(rsrcDir.rva, sections);
+  if (rsrcBaseOff + 16 > buffer.byteLength) return null;
+
+  var rsrcRva = rsrcDir.rva;
+
+  function parseDir(dirOff, level, maxDepth) {
+    if (level > maxDepth || dirOff + 16 > buffer.byteLength) return null;
+
+    var characteristics = view.getUint32(dirOff, true);
+    var timeDateStamp = view.getUint32(dirOff + 4, true);
+    var majorVersion = view.getUint16(dirOff + 8, true);
+    var minorVersion = view.getUint16(dirOff + 10, true);
+    var numberOfNamedEntries = view.getUint16(dirOff + 12, true);
+    var numberOfIdEntries = view.getUint16(dirOff + 14, true);
+    var totalEntries = numberOfNamedEntries + numberOfIdEntries;
+
+    // Cap entries to prevent runaway parsing
+    if (totalEntries > 1000) totalEntries = 1000;
+
+    var entries = [];
+    var entryOff = dirOff + 16;
+
+    for (var i = 0; i < totalEntries; i++) {
+      if (entryOff + 8 > buffer.byteLength) break;
+
+      var nameOrId = view.getUint32(entryOff, true);
+      var offsetToData = view.getUint32(entryOff + 4, true);
+
+      var entry = { nameOrId: nameOrId, isNamed: false, name: "", id: 0, isDirectory: false, children: null, dataEntry: null };
+
+      // Decode name or ID
+      if (nameOrId & 0x80000000) {
+        // Named entry - read Unicode string
+        entry.isNamed = true;
+        var nameOff = rsrcBaseOff + (nameOrId & 0x7FFFFFFF);
+        if (nameOff + 2 <= buffer.byteLength) {
+          var nameLen = view.getUint16(nameOff, true);
+          var nameBuf = [];
+          for (var c = 0; c < Math.min(nameLen, 256); c++) {
+            if (nameOff + 2 + c * 2 + 2 > buffer.byteLength) break;
+            nameBuf.push(String.fromCharCode(view.getUint16(nameOff + 2 + c * 2, true)));
+          }
+          entry.name = nameBuf.join("");
+        }
+      } else {
+        entry.id = nameOrId & 0xFFFF;
+        if (level === 0) {
+          entry.name = RT_NAMES[entry.id] || ("Type " + entry.id);
+        } else if (level === 2) {
+          entry.name = "Lang " + hex(entry.id, 4);
+        } else {
+          entry.name = "#" + entry.id;
+        }
+      }
+
+      // Subdirectory or data entry
+      if (offsetToData & 0x80000000) {
+        entry.isDirectory = true;
+        var subDirOff = rsrcBaseOff + (offsetToData & 0x7FFFFFFF);
+        entry.children = parseDir(subDirOff, level + 1, maxDepth);
+      } else {
+        // Data entry (leaf)
+        var dataOff = rsrcBaseOff + offsetToData;
+        if (dataOff + 16 <= buffer.byteLength) {
+          entry.dataEntry = {
+            rva: view.getUint32(dataOff, true),
+            size: view.getUint32(dataOff + 4, true),
+            codePage: view.getUint32(dataOff + 8, true),
+            reserved: view.getUint32(dataOff + 12, true),
+            fileOffset: dataOff,
+          };
+        }
+      }
+
+      entries.push(entry);
+      entryOff += 8;
+    }
+
+    return {
+      fileOffset: dirOff, characteristics: characteristics,
+      timeDateStamp: timeDateStamp, majorVersion: majorVersion,
+      minorVersion: minorVersion,
+      numberOfNamedEntries: numberOfNamedEntries,
+      numberOfIdEntries: numberOfIdEntries,
+      entries: entries,
+    };
+  }
+
+  return parseDir(rsrcBaseOff, 0, 3);
+}
+
 function parseOptionalHeader32(view, off) {
   return [
     { name: "Magic",                       offset: off,      size: 2, value: view.getUint16(off, true) },
@@ -1342,6 +1609,23 @@ function buildTree(pe) {
     }
   }
 
+  // Build resource directory tree nodes (recursive)
+  function buildResourceTreeNodes(dir) {
+    if (!dir || !dir.entries) return [];
+    return dir.entries.map(function (entry) {
+      var label = entry.isNamed ? entry.name : entry.name;
+      if (entry.isDirectory && entry.children) {
+        var childNodes = buildResourceTreeNodes(entry.children);
+        return createTreeNode(label, function () { showResourceDirEntry(entry); }, childNodes);
+      } else if (entry.dataEntry) {
+        return createTreeNode(label + " (" + entry.dataEntry.size + " bytes)", function () { showResourceDataEntry(entry); });
+      } else {
+        return createTreeNode(label, null);
+      }
+    });
+  }
+  var resourceChildren = buildResourceTreeNodes(pe.resourceDirectory);
+
   // Root node
   var root = createTreeNode("PE File", null, [
     createTreeNode("DOS Header", function () { showFields("DOS Header", "dosHeader", pe.dosHeader.fields); }),
@@ -1354,21 +1638,26 @@ function buildTree(pe) {
         return createTreeNode(dir.name, function () { showSingleDataDirectory(dir, idx); });
       })
     ),
-    createTreeNode("Export Table (Decoded)", function () { showExportTable(pe.exportTable); }),
-    createTreeNode("Import Table (Decoded)", function () { showImportTableOverview(pe.importTable); }, importChildren),
-    createTreeNode("Exception Table (Decoded)", function () { showExceptionTableOverview(pe.exceptionTable); }, excChildren),
-    createTreeNode("Base Relocation Table (Decoded)", function () { showBaseRelocationOverview(pe.baseRelocations); }, relocChildren),
-    createTreeNode("Certificate Table (Decoded)", function () { showCertificateTableOverview(pe.certificates); }, certChildren),
-    createTreeNode("TLS Directory (Decoded)", function () { showTlsDirectory(pe.tlsDirectory); }),
-    createTreeNode("Debug Directory (Decoded)", function () { showDebugDirectoryOverview(pe.debugEntries); }, debugChildren),
     createTreeNode("Section Headers", null,
       pe.sections.map(function (sec) {
         return createTreeNode(sec.name, function () { showFields("Section: " + sec.name, "section", sec.fields); });
       })
     ),
+    createTreeNode("Export Table (Decoded)", function () { showExportTable(pe.exportTable); }),
+    createTreeNode("Import Table (Decoded)", function () { showImportTableOverview(pe.importTable); }, importChildren),
+    createTreeNode("Resource Directory (Decoded)", function () { showResourceDirectoryOverview(pe.resourceDirectory); }, resourceChildren),
+    createTreeNode("Exception Table (Decoded)", function () { showExceptionTableOverview(pe.exceptionTable); }, excChildren),
+    createTreeNode("Base Relocation Table (Decoded)", function () { showBaseRelocationOverview(pe.baseRelocations); }, relocChildren),
+    createTreeNode("Certificate Table (Decoded)", function () { showCertificateTableOverview(pe.certificates); }, certChildren),
+    createTreeNode("TLS Directory (Decoded)", function () { showTlsDirectory(pe.tlsDirectory); }),
+    createTreeNode("Load Config (Decoded)", function () { showLoadConfig(pe.loadConfig); }),
+    createTreeNode("Debug Directory (Decoded)", function () { showDebugDirectoryOverview(pe.debugEntries); }, debugChildren),
   ]);
 
   tree.appendChild(root);
+
+  // Expand only the first level (root node)
+  expandNode(root);
 }
 
 function createTreeNode(label, onClick, children) {
@@ -1885,6 +2174,161 @@ function showTlsDirectory(tlsDir) {
   });
 
   html += '</tbody></table>';
+  panel.innerHTML = html;
+}
+
+function showLoadConfig(loadConfig) {
+  var panel = document.getElementById("detailPanel");
+  if (!loadConfig) {
+    panel.innerHTML = '<div class="pe-detail-header">Load Config Directory</div>' +
+      '<div class="pe-welcome"><p>No Load Config Directory found in this PE file.</p></div>';
+    return;
+  }
+
+  var html = '<div class="pe-detail-header">Load Config Directory (Size: ' + loadConfig.structSize + ' bytes)</div>';
+
+  html += '<table class="pe-detail-table"><thead><tr>';
+  html += '<th class="col-member">Member</th>';
+  html += '<th class="col-offset">Offset</th>';
+  html += '<th class="col-rawvalue">Raw Value</th>';
+  html += '<th class="col-meaning">Description</th>';
+  html += '</tr></thead><tbody>';
+
+  loadConfig.fields.forEach(function (f) {
+    html += '<tr>';
+    html += '<td>' + escapeHtml(f.name) + '</td>';
+    html += '<td>' + f.offset + '</td>';
+    html += '<td>' + f.rawHex + '</td>';
+    html += '<td>' + escapeHtml(f.description) + '</td>';
+    html += '</tr>';
+  });
+
+  html += '</tbody></table>';
+  panel.innerHTML = html;
+}
+
+function showResourceDirectoryOverview(dir) {
+  var panel = document.getElementById("detailPanel");
+  if (!dir) {
+    panel.innerHTML = '<div class="pe-detail-header">Resource Directory</div>' +
+      '<div class="pe-welcome"><p>No Resource Directory found in this PE file.</p></div>';
+    return;
+  }
+
+  var html = '<div class="pe-detail-header">Resource Directory (Root)</div>';
+
+  html += '<table class="pe-detail-table"><thead><tr>';
+  html += '<th class="col-member">Member</th>';
+  html += '<th class="col-value">Value</th>';
+  html += '</tr></thead><tbody>';
+
+  html += '<tr><td>File Offset</td><td>' + hex(dir.fileOffset, 8) + '</td></tr>';
+  html += '<tr><td>Characteristics</td><td>' + hex(dir.characteristics, 8) + '</td></tr>';
+  html += '<tr><td>TimeDateStamp</td><td>' + formatTimestamp(dir.timeDateStamp) + '</td></tr>';
+  html += '<tr><td>Version</td><td>' + dir.majorVersion + '.' + dir.minorVersion + '</td></tr>';
+  html += '<tr><td>Number of Named Entries</td><td>' + dir.numberOfNamedEntries + '</td></tr>';
+  html += '<tr><td>Number of ID Entries</td><td>' + dir.numberOfIdEntries + '</td></tr>';
+  html += '<tr><td>Total Resource Types</td><td>' + dir.entries.length + '</td></tr>';
+
+  html += '</tbody></table>';
+
+  // Summary table of types
+  if (dir.entries.length > 0) {
+    html += '<div class="pe-detail-header" style="margin-top:1px">Resource Types</div>';
+    html += '<table class="pe-detail-table"><thead><tr>';
+    html += '<th style="width:10%">#</th>';
+    html += '<th style="width:30%">Type</th>';
+    html += '<th style="width:20%">ID / Named</th>';
+    html += '<th style="width:20%">Sub-entries</th>';
+    html += '</tr></thead><tbody>';
+
+    dir.entries.forEach(function (entry, idx) {
+      var subCount = entry.isDirectory && entry.children ? entry.children.entries.length : 0;
+      html += '<tr>';
+      html += '<td>' + idx + '</td>';
+      html += '<td>' + escapeHtml(entry.name) + '</td>';
+      html += '<td>' + (entry.isNamed ? "Named" : "ID " + entry.id) + '</td>';
+      html += '<td>' + subCount + '</td>';
+      html += '</tr>';
+    });
+
+    html += '</tbody></table>';
+  }
+
+  panel.innerHTML = html;
+}
+
+function showResourceDirEntry(entry) {
+  var panel = document.getElementById("detailPanel");
+  var html = '<div class="pe-detail-header">Resource: ' + escapeHtml(entry.name) + '</div>';
+
+  if (entry.isDirectory && entry.children) {
+    var dir = entry.children;
+    html += '<table class="pe-detail-table"><thead><tr>';
+    html += '<th class="col-member">Member</th>';
+    html += '<th class="col-value">Value</th>';
+    html += '</tr></thead><tbody>';
+
+    html += '<tr><td>File Offset</td><td>' + hex(dir.fileOffset, 8) + '</td></tr>';
+    html += '<tr><td>Characteristics</td><td>' + hex(dir.characteristics, 8) + '</td></tr>';
+    html += '<tr><td>TimeDateStamp</td><td>' + formatTimestamp(dir.timeDateStamp) + '</td></tr>';
+    html += '<tr><td>Version</td><td>' + dir.majorVersion + '.' + dir.minorVersion + '</td></tr>';
+    html += '<tr><td>Named Entries</td><td>' + dir.numberOfNamedEntries + '</td></tr>';
+    html += '<tr><td>ID Entries</td><td>' + dir.numberOfIdEntries + '</td></tr>';
+    html += '</tbody></table>';
+
+    if (dir.entries.length > 0) {
+      html += '<div class="pe-detail-header" style="margin-top:1px">Entries (' + dir.entries.length + ')</div>';
+      html += '<table class="pe-detail-table"><thead><tr>';
+      html += '<th style="width:10%">#</th>';
+      html += '<th style="width:30%">Name / ID</th>';
+      html += '<th style="width:20%">Type</th>';
+      html += '<th style="width:20%">Details</th>';
+      html += '</tr></thead><tbody>';
+
+      dir.entries.forEach(function (child, idx) {
+        var details = "";
+        if (child.isDirectory && child.children) {
+          details = child.children.entries.length + " sub-entries";
+        } else if (child.dataEntry) {
+          details = child.dataEntry.size + " bytes at RVA " + hex(child.dataEntry.rva, 8);
+        }
+        html += '<tr>';
+        html += '<td>' + idx + '</td>';
+        html += '<td>' + escapeHtml(child.name) + '</td>';
+        html += '<td>' + (child.isDirectory ? "Directory" : "Data") + '</td>';
+        html += '<td>' + details + '</td>';
+        html += '</tr>';
+      });
+
+      html += '</tbody></table>';
+    }
+  }
+
+  panel.innerHTML = html;
+}
+
+function showResourceDataEntry(entry) {
+  var panel = document.getElementById("detailPanel");
+  var html = '<div class="pe-detail-header">Resource Data: ' + escapeHtml(entry.name) + '</div>';
+
+  if (entry.dataEntry) {
+    var de = entry.dataEntry;
+    html += '<table class="pe-detail-table"><thead><tr>';
+    html += '<th class="col-member">Member</th>';
+    html += '<th class="col-value">Value</th>';
+    html += '<th class="col-meaning">Description</th>';
+    html += '</tr></thead><tbody>';
+
+    html += '<tr><td>OffsetToData (RVA)</td><td>' + hex(de.rva, 8) + '</td><td>RVA of resource data</td></tr>';
+    html += '<tr><td>Size</td><td>' + de.size + '</td><td>' + de.size + ' bytes</td></tr>';
+    html += '<tr><td>CodePage</td><td>' + de.codePage + '</td><td>' + (de.codePage === 0 ? "Unicode" : "Code page " + de.codePage) + '</td></tr>';
+    html += '<tr><td>Reserved</td><td>' + hex(de.reserved, 8) + '</td><td>Must be zero</td></tr>';
+    html += '<tr><td>Entry File Offset</td><td>' + hex(de.fileOffset, 8) + '</td><td>File offset of IMAGE_RESOURCE_DATA_ENTRY</td></tr>';
+
+    html += '</tbody></table>';
+  }
+
   panel.innerHTML = html;
 }
 
