@@ -24,19 +24,49 @@ const HIGHLIGHT_COLORS = [
 // Each phase has a marker string to search for, a label, a color, and a level (0=main, 1=sub)
 // Markers are always matched against the original (unconverted) content so only raw GUIDs are needed
 var UEFI_PHASES = [
+  // --- FSP-T / Early Init ---
+  { marker: "FSP-T: CAR Init",                                              label: "FSP-T Start",          level: 0, color: "rgba(255, 140, 60, 0.25)",  borderColor: "#dd6b20" },
+
+  // --- SEC ---
   { marker: "SecStartup() TempRAM Base",                                    label: "SEC Start",            level: 0, color: "rgba(255, 100, 100, 0.25)", borderColor: "#e53e3e" },
+
+  // --- PEI ---
   { marker: "SecStartupPhase2() PeiCoreEntryPoint",                         label: "PEI Start",            level: 0, color: "rgba(100, 180, 255, 0.25)", borderColor: "#3182ce" },
+  { marker: "CPU Pre-Mem Entry",                                            label: "CPU Pre-Mem",          level: 1, color: "rgba(100, 180, 255, 0.15)", borderColor: "#63a4e8" },
   { marker: "Install PPI: F894643D-C449-42D1-8EA8-85BDD8C65BDE",            label: "Permanent RAM Ready",  level: 1, color: "rgba(100, 180, 255, 0.15)", borderColor: "#63a4e8" },
+  { marker: "MemoryInit Complete.",                                          label: "Memory Init Done",     level: 1, color: "rgba(100, 180, 255, 0.15)", borderColor: "#63a4e8" },
+  { marker: "CPU Post-Mem Entry",                                           label: "CPU Post-Mem",         level: 1, color: "rgba(100, 180, 255, 0.15)", borderColor: "#63a4e8" },
   { marker: "Install PPI: BAE23646-BD60-4F8B-B3F9-F391EE7EE6C8",            label: "Temp RAM Exit",        level: 1, color: "rgba(100, 180, 255, 0.15)", borderColor: "#63a4e8" },
   { marker: "Install PPI: 605EA650-C65C-42E1-BA80-91A52AB618C6",            label: "End of PEI",           level: 1, color: "rgba(100, 180, 255, 0.15)", borderColor: "#63a4e8" },
   { marker: "DXE IPL Entry",                                                label: "DXE IPL Entry",        level: 1, color: "rgba(100, 180, 255, 0.15)", borderColor: "#63a4e8" },
-  { marker: "Loading DXE CORE at",                                           label: "DXE Load",            level: 1, color: "rgba(100, 220, 100, 0.25)", borderColor: "#63a4e8" },
+  { marker: "Loading DXE CORE at",                                          label: "DXE Load",             level: 1, color: "rgba(100, 220, 100, 0.25)", borderColor: "#63a4e8" },
+
+  // --- MM / SMM ---
+  { marker: "SMM IPL loading SMM Core",                                     label: "SMM Core Load",        level: 1, color: "rgba(200, 130, 255, 0.15)", borderColor: "#805ad5" },
   { marker: "MmMain - ",                                                    label: "MM Start",             level: 1, color: "rgba(200, 130, 255, 0.15)", borderColor: "#805ad5" },
   { marker: "MmMain Done!",                                                 label: "MM End",               level: 1, color: "rgba(200, 130, 255, 0.15)", borderColor: "#805ad5" },
-  { marker: "MmDriverDispatchHandler Entry",                                 label: "MM Dispatcher Start",  level: 1, color: "rgba(200, 130, 255, 0.15)", borderColor: "#805ad5" },
+  { marker: "MmDriverDispatchHandler Entry",                                label: "MM Dispatcher Start",  level: 1, color: "rgba(200, 130, 255, 0.15)", borderColor: "#805ad5" },
+  { marker: "SMM IPL locked SMRAM window",                                  label: "SMRAM Locked",         level: 1, color: "rgba(200, 130, 255, 0.15)", borderColor: "#805ad5" },
+  { marker: "MmDriverDispatchHandler Exit",                                 label: "MM Dispatcher End",    level: 1, color: "rgba(200, 130, 255, 0.15)", borderColor: "#805ad5" },
+
+  // --- DXE ---
   { marker: "DXE Core Platform Binary",                                     label: "DXE Start",            level: 0, color: "rgba(100, 220, 100, 0.25)", borderColor: "#38a169" },
+  { marker: "PCI Bus First Scanning",                                       label: "PCI Enumeration",      level: 1, color: "rgba(100, 220, 100, 0.15)", borderColor: "#68d391" },
+  { marker: "PciHostBridge: NotifyPhase (AllocateResources)",                label: "PCI Resource Alloc",   level: 1, color: "rgba(100, 220, 100, 0.15)", borderColor: "#68d391" },
+  { marker: "Graphics Console Started",                                     label: "Console Ready",        level: 1, color: "rgba(100, 220, 100, 0.15)", borderColor: "#68d391" },
+  { marker: "All EndOfDxe callbacks have returned successfully",             label: "End of DXE",           level: 0, color: "rgba(100, 220, 100, 0.25)", borderColor: "#38a169" },
+  { marker: "MmReadyToLockHandler",                                         label: "SMM Ready to Lock",    level: 1, color: "rgba(200, 130, 255, 0.15)", borderColor: "#805ad5" },
+
+  // --- BDS ---
   { marker: "[Bds] Entry",                                                  label: "BDS Start",            level: 0, color: "rgba(220, 180, 50, 0.25)",  borderColor: "#d69e2e" },
+  { marker: "OnPreReadyToBoot:",                                            label: "Pre-ReadyToBoot",      level: 1, color: "rgba(220, 180, 50, 0.15)",  borderColor: "#ecc94b" },
+  { marker: "TPM2 Tcg2Dxe Measure Data when ReadyToBoot",                   label: "Ready to Boot",        level: 0, color: "rgba(220, 150, 50, 0.25)",  borderColor: "#c05621" },
+  { marker: "FSOpen: Open '\\EFI\\Microsoft\\Boot\\bootmgfw.efi' Success",  label: "OS Loader Found",      level: 1, color: "rgba(220, 180, 50, 0.15)",  borderColor: "#ecc94b" },
   { marker: "[Bds]=============End Load Options Dumping",                    label: "BDS End",              level: 0, color: "rgba(220, 180, 50, 0.25)",  borderColor: "#d69e2e" },
+
+  // --- ExitBootServices ---
+  { marker: "INFO - EBS initiated.",                                        label: "ExitBootServices",     level: 0, color: "rgba(255, 80, 80, 0.25)",   borderColor: "#c53030" },
+  { marker: "======== TestPointExitBootServices - Enter",                    label: "EBS Validation",       level: 1, color: "rgba(255, 80, 80, 0.15)",   borderColor: "#fc8181" },
 ];
 
 // Phase decoration tracking
