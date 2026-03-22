@@ -171,29 +171,59 @@ tags: ["Tools"]
         border-color: #dc3545;
         background: #fff5f5;
       }
-      .pe-bitmask-value {
+      /* Bitmask dropdown combobox */
+      .pe-bitmask-combo {
+        position: relative;
+        width: 100%;
+      }
+      .pe-bitmask-trigger {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
         font-family: Consolas, 'Courier New', monospace;
         font-size: 0.82rem;
-        font-weight: bold;
-        display: block;
-        margin-bottom: 4px;
-      }
-      .pe-bitmask-checkboxes {
-        max-height: 150px;
-        overflow-y: auto;
-        border: 1px solid #eee;
-        padding: 4px;
+        padding: 2px 4px;
+        border: 1px solid #ced4da;
         border-radius: 3px;
-        background: #fafafa;
+        box-sizing: border-box;
+        background: #fffff0;
+        cursor: pointer;
+        user-select: none;
       }
-      .pe-bitmask-label {
-        display: block;
+      .pe-bitmask-trigger:hover { border-color: #86b7fe; }
+      .pe-bitmask-trigger .pe-bitmask-arrow {
+        font-size: 0.6rem;
+        margin-left: 6px;
+        color: #666;
+      }
+      .pe-bitmask-dropdown {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        max-height: 200px;
+        overflow-y: auto;
+        background: #fff;
+        border: 1px solid #ced4da;
+        border-top: none;
+        border-radius: 0 0 3px 3px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+      }
+      .pe-bitmask-dropdown.open { display: block; }
+      .pe-bitmask-dropdown label {
+        display: flex;
+        align-items: center;
         font-size: 0.78rem;
         font-family: Consolas, 'Courier New', monospace;
         cursor: pointer;
-        padding: 1px 0;
+        padding: 3px 6px;
         white-space: nowrap;
+        gap: 5px;
       }
+      .pe-bitmask-dropdown label:hover { background: #f0f4ff; }
     </style>
   </head>
 

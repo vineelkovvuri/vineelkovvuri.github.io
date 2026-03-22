@@ -1880,49 +1880,78 @@ function renderDropdown(container, field, sectionKey, options) {
 }
 
 function renderBitmask(container, field, sectionKey, flags) {
-  var wrapper = document.createElement("div");
+  var combo = document.createElement("div");
+  combo.className = "pe-bitmask-combo";
 
-  var hexDisplay = document.createElement("span");
-  hexDisplay.className = "pe-bitmask-value";
-  hexDisplay.textContent = hex(field.value, field.size * 2);
-  wrapper.appendChild(hexDisplay);
+  // Trigger button (looks like a combobox)
+  var trigger = document.createElement("div");
+  trigger.className = "pe-bitmask-trigger";
 
-  var checkboxDiv = document.createElement("div");
-  checkboxDiv.className = "pe-bitmask-checkboxes";
+  var triggerText = document.createElement("span");
+  triggerText.textContent = hex(field.value, field.size * 2);
+  trigger.appendChild(triggerText);
+
+  var arrow = document.createElement("span");
+  arrow.className = "pe-bitmask-arrow";
+  arrow.textContent = "\u25BC"; // down triangle
+  trigger.appendChild(arrow);
+
+  combo.appendChild(trigger);
+
+  // Dropdown panel with checkboxes
+  var dropdown = document.createElement("div");
+  dropdown.className = "pe-bitmask-dropdown";
 
   var currentVal = field.value;
 
   for (var bit in flags) {
     var bitNum = parseInt(bit);
     var label = document.createElement("label");
-    label.className = "pe-bitmask-label";
 
     var cb = document.createElement("input");
     cb.type = "checkbox";
     cb.value = bitNum;
     cb.checked = !!(currentVal & bitNum);
-    cb.style.marginRight = "4px";
 
-    cb.addEventListener("change", (function (hexDisp) {
+    cb.addEventListener("change", (function (txtSpan) {
       return function () {
         var newVal = 0;
-        var allCbs = checkboxDiv.querySelectorAll('input[type="checkbox"]');
+        var allCbs = dropdown.querySelectorAll('input[type="checkbox"]');
         for (var i = 0; i < allCbs.length; i++) {
           if (allCbs[i].checked) newVal |= parseInt(allCbs[i].value);
         }
-        hexDisp.textContent = hex(newVal, field.size * 2);
+        txtSpan.textContent = hex(newVal, field.size * 2);
         writeFieldValue(field, newVal);
         onFieldModified(sectionKey);
       };
-    })(hexDisplay));
+    })(triggerText));
+
+    // Stop label click from closing dropdown
+    label.addEventListener("click", function (e) { e.stopPropagation(); });
 
     label.appendChild(cb);
     label.appendChild(document.createTextNode(hex(bitNum, 4) + " " + flags[bit]));
-    checkboxDiv.appendChild(label);
+    dropdown.appendChild(label);
   }
 
-  wrapper.appendChild(checkboxDiv);
-  container.parentNode.replaceChild(wrapper, container);
+  combo.appendChild(dropdown);
+
+  // Toggle dropdown on trigger click
+  trigger.addEventListener("click", function (e) {
+    e.stopPropagation();
+    var isOpen = dropdown.classList.contains("open");
+    // Close any other open bitmask dropdowns
+    var allOpen = document.querySelectorAll(".pe-bitmask-dropdown.open");
+    for (var i = 0; i < allOpen.length; i++) allOpen[i].classList.remove("open");
+    if (!isOpen) dropdown.classList.add("open");
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener("click", function () {
+    dropdown.classList.remove("open");
+  });
+
+  container.parentNode.replaceChild(combo, container);
 }
 
 function downloadModifiedPE() {
