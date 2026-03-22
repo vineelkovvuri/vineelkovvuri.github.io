@@ -1,0 +1,73 @@
+body {
+  max-width: 960px;
+  margin: auto;
+  padding: 1em;
+  line-height: 1.5;
+}
+
+/* header and footer areas */
+.menu { padding: 0; }
+.menu li { display: inline-block; }
+.article-meta, .menu a {
+  text-decoration: none;
+  background: #eee;
+  padding: 5px;
+  border-radius: 5px;
+}
+.menu, .article-meta, footer { text-align: center; }
+.title { font-size: 1.1em; }
+footer a { text-decoration: none; }
+hr {
+  border-style: dashed;
+  color: #ddd;
+}
+
+/* code */
+pre {
+  border: 1px solid #ddd;
+  margin: 0px;
+  /* box-shadow: 5px 5px 5px #eee; */
+  padding: 1em;
+  overflow-x: auto;
+}
+code { background: #f9f9f9; }
+pre code { background: none;}
+
+/* misc elements */
+img, iframe, video { max-width: 100%; }
+main { hyphens: auto; }
+blockquote {
+  background: #f9f9f9;
+  border-left: 5px solid #ccc;
+  padding: 3px 1em 3px;
+}
+
+table {
+  margin: auto;  /* center the table */
+  border-top: 1px solid #666;
+  border-bottom: 1px solid #666;
+}
+table thead th { border-bottom: 1px solid #ddd; }
+th, td { padding: 5px; }
+thead, tfoot, tr:nth-child(even) { background: #eee; }
+
+/* below will fix the highlightjs theme. As we make it #eee above */
+pre tr:nth-child(even) { background: #fff; }
+
+.social {
+  text-align: center;
+}
+
+a {
+  text-decoration: none;
+  color: #0645ad;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+mark {
+  background: linear-gradient(-100deg, hsla(48,92%,75%,.3), hsla(48,92%,75%,.7) 95%, hsla(48,92%,75%,.1));
+  border-radius: 1em 0;
+  padding: .5rem;
+}
