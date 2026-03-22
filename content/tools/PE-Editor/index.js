@@ -266,11 +266,13 @@ function parsePE(buffer) {
 
   // --- Rich Header (between DOS stub and PE signature) ---
   result.richHeader = null;
-  // Search for "Rich" signature (0x52696368) in the region between DOS header and e_lfanew
+  // Search for "Rich" signature in the region between DOS header and e_lfanew
+  // "Rich" = 0x52,0x69,0x63,0x68 -> little-endian uint32 = 0x68636952
+  // "DanS" = 0x44,0x61,0x6E,0x53 -> little-endian uint32 = 0x536E6144
   if (e_lfanew > 0x80) {
     var richOffset = -1;
     for (var ri = e_lfanew - 4; ri >= 0x80; ri -= 4) {
-      if (view.getUint32(ri, true) === 0x52696368) { // "Rich"
+      if (view.getUint32(ri, true) === 0x68636952) { // "Rich"
         richOffset = ri;
         break;
       }
@@ -278,10 +280,10 @@ function parsePE(buffer) {
     if (richOffset > 0) {
       var xorKey = view.getUint32(richOffset + 4, true);
 
-      // Search backwards for "DanS" (0x44616E53) when XOR'd with key
+      // Search backwards for "DanS" when XOR'd with key
       var dansOffset = -1;
       for (var di = richOffset - 4; di >= 0x40; di -= 4) {
-        if ((view.getUint32(di, true) ^ xorKey) === 0x44616E53) {
+        if ((view.getUint32(di, true) ^ xorKey) === 0x536E6144) { // "DanS"
           dansOffset = di;
           break;
         }
