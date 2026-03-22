@@ -3606,6 +3606,8 @@ var hexRowsEl = null;          // Cached rows container
 var hexSpacerEl = null;        // Cached spacer element
 var hexHeaderEl = null;        // Cached header element
 var hexRafPending = false;     // requestAnimationFrame guard
+var hexSelecting = false;      // True while mouse-dragging bytes
+var hexSelAnchor = -1;         // Byte offset where drag started
 
 function initHexPanel() {
   var panel = document.getElementById("hexPanel");
@@ -3768,6 +3770,37 @@ function initHexPanel() {
     }
   });
 
+  // Manual byte selection via click-and-drag
+  scroll.addEventListener("mousedown", function (e) {
+    var span = e.target.closest(".pe-hb");
+    if (!span) return;
+    var byteOff = parseInt(span.getAttribute("data-byte"), 10);
+    if (isNaN(byteOff)) return;
+    hexSelecting = true;
+    hexSelAnchor = byteOff;
+    hexHighlightOffset = byteOff;
+    hexHighlightSize = 1;
+    renderHexRows();
+    e.preventDefault(); // prevent text selection
+  });
+
+  scroll.addEventListener("mousemove", function (e) {
+    if (!hexSelecting) return;
+    var span = e.target.closest(".pe-hb");
+    if (!span) return;
+    var byteOff = parseInt(span.getAttribute("data-byte"), 10);
+    if (isNaN(byteOff)) return;
+    var lo = Math.min(hexSelAnchor, byteOff);
+    var hi = Math.max(hexSelAnchor, byteOff);
+    hexHighlightOffset = lo;
+    hexHighlightSize = hi - lo + 1;
+    renderHexRows();
+  });
+
+  document.addEventListener("mouseup", function () {
+    if (hexSelecting) hexSelecting = false;
+  });
+
   renderHexRows();
 }
 
@@ -3821,13 +3854,9 @@ function formatHexRow(view, rowIndex) {
         byteOffset >= hexHighlightOffset &&
         byteOffset < hexHighlightOffset + hexHighlightSize;
 
-      if (inHighlight) {
-        hexParts.push('<span class="pe-hex-highlight">' + hexByte + '</span>');
-        asciiParts.push('<span class="pe-hex-highlight">' + asciiChar + '</span>');
-      } else {
-        hexParts.push(hexByte);
-        asciiParts.push(asciiChar);
-      }
+      var hlClass = inHighlight ? " pe-hex-highlight" : "";
+      hexParts.push('<span class="pe-hb' + hlClass + '" data-byte="' + byteOffset + '">' + hexByte + '</span>');
+      asciiParts.push('<span class="pe-ab' + hlClass + '" data-byte="' + byteOffset + '">' + asciiChar + '</span>');
     } else {
       hexParts.push("  ");
       asciiParts.push(" ");
