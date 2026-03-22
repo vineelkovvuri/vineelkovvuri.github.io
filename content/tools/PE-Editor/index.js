@@ -397,6 +397,18 @@ function parsePE(buffer) {
   // --- Resource Directory ---
   result.resourceDirectory = parseResourceDirectory(view, buffer, result.dataDirectories, result.sections);
 
+  // --- Bound Import ---
+  result.boundImport = parseBoundImport(view, buffer, result.dataDirectories);
+
+  // --- IAT ---
+  result.iat = parseIAT(view, buffer, result.dataDirectories, result.sections, result.is64);
+
+  // --- Delay Import Descriptor ---
+  result.delayImport = parseDelayImportDescriptor(view, buffer, result.dataDirectories, result.sections, result.is64);
+
+  // --- CLR Runtime Header ---
+  result.clrHeader = parseCLRHeader(view, buffer, result.dataDirectories, result.sections);
+
   return result;
 }
 
@@ -1417,6 +1429,258 @@ function parseResourceDirectory(view, buffer, dataDirectories, sections) {
   return parseDir(rsrcBaseOff, 0, 3);
 }
 
+// Parse Bound Import Table (Data Directory index 11)
+// Uses file offset directly (the RVA field here IS a file offset in practice for bound imports,
+// but per spec it's an RVA relative to the image base, typically within headers)
+function parseBoundImport(view, buffer, dataDirectories) {
+  if (dataDirectories.length <= 11) return null;
+  var biDir = dataDirectories[11];
+  if (biDir.rva === 0 || biDir.size === 0) return null;
+
+  // Bound import uses RVA that is actually a file offset (within headers)
+  var baseOff = biDir.rva;
+  if (baseOff + 8 > buffer.byteLength) return null;
+
+  var entries = [];
+  var off = baseOff;
+  var safeEnd = baseOff + biDir.size;
+  var maxEntries = 500;
+
+  for (var i = 0; i < maxEntries; i++) {
+    if (off + 8 > buffer.byteLength || off + 8 > safeEnd) break;
+
+    var timeDateStamp = view.getUint32(off, true);
+    var offsetModuleName = view.getUint16(off + 4, true);
+    var numberOfModuleForwarderRefs = view.getUint16(off + 6, true);
+
+    // All-zero entry terminates
+    if (timeDateStamp === 0 && offsetModuleName === 0 && numberOfModuleForwarderRefs === 0) break;
+
+    var moduleName = "";
+    var nameOff = baseOff + offsetModuleName;
+    if (nameOff < buffer.byteLength) {
+      moduleName = readNullTerminatedString(view, nameOff, 256);
+    }
+
+    // Parse forwarder refs
+    var forwarders = [];
+    var fwdOff = off + 8;
+    for (var f = 0; f < numberOfModuleForwarderRefs; f++) {
+      if (fwdOff + 8 > buffer.byteLength) break;
+      var fwdTimestamp = view.getUint32(fwdOff, true);
+      var fwdNameOffset = view.getUint16(fwdOff + 4, true);
+      var fwdReserved = view.getUint16(fwdOff + 6, true);
+      var fwdName = "";
+      var fwdNameOff = baseOff + fwdNameOffset;
+      if (fwdNameOff < buffer.byteLength) {
+        fwdName = readNullTerminatedString(view, fwdNameOff, 256);
+      }
+      forwarders.push({
+        timeDateStamp: fwdTimestamp, moduleName: fwdName,
+        offsetModuleName: fwdNameOffset, reserved: fwdReserved,
+      });
+      fwdOff += 8;
+    }
+
+    entries.push({
+      index: i, fileOffset: off, timeDateStamp: timeDateStamp,
+      offsetModuleName: offsetModuleName, moduleName: moduleName,
+      numberOfModuleForwarderRefs: numberOfModuleForwarderRefs,
+      forwarders: forwarders,
+    });
+    off = fwdOff; // skip past forwarder refs
+  }
+
+  return entries;
+}
+
+// Parse IAT - Import Address Table (Data Directory index 12)
+// The IAT is an array of function pointers (4 or 8 bytes each)
+function parseIAT(view, buffer, dataDirectories, sections, is64) {
+  if (dataDirectories.length <= 12) return null;
+  var iatDir = dataDirectories[12];
+  if (iatDir.rva === 0 || iatDir.size === 0) return null;
+
+  var baseOff = rvaToFileOffset(iatDir.rva, sections);
+  if (baseOff + 4 > buffer.byteLength) return null;
+
+  var entrySize = is64 ? 8 : 4;
+  var numEntries = Math.floor(iatDir.size / entrySize);
+  var entries = [];
+
+  for (var i = 0; i < numEntries; i++) {
+    var off = baseOff + i * entrySize;
+    if (off + entrySize > buffer.byteLength) break;
+
+    var value;
+    if (is64) {
+      var lo = view.getUint32(off, true);
+      var hi = view.getUint32(off + 4, true);
+      value = { lo: lo, hi: hi, hex: hex64(lo, hi) };
+    } else {
+      var val = view.getUint32(off, true);
+      value = { lo: val, hi: 0, hex: hex(val, 8) };
+    }
+
+    entries.push({ index: i, fileOffset: off, rva: iatDir.rva + i * entrySize, value: value });
+  }
+
+  return { rva: iatDir.rva, size: iatDir.size, entrySize: entrySize, entries: entries };
+}
+
+// Parse Delay Import Descriptor (Data Directory index 13)
+// Array of ImgDelayDescr (32 bytes each), terminated by all-zero entry
+function parseDelayImportDescriptor(view, buffer, dataDirectories, sections, is64) {
+  if (dataDirectories.length <= 13) return null;
+  var diDir = dataDirectories[13];
+  if (diDir.rva === 0 || diDir.size === 0) return null;
+
+  var baseOff = rvaToFileOffset(diDir.rva, sections);
+  if (baseOff + 32 > buffer.byteLength) return null;
+
+  var entries = [];
+  var off = baseOff;
+  var maxDescriptors = 500;
+
+  for (var d = 0; d < maxDescriptors; d++) {
+    if (off + 32 > buffer.byteLength) break;
+
+    var attrs = view.getUint32(off, true);
+    var nameRva = view.getUint32(off + 4, true);
+    var moduleHandle = view.getUint32(off + 8, true);
+    var delayIAT = view.getUint32(off + 12, true);
+    var delayINT = view.getUint32(off + 16, true);
+    var boundIAT = view.getUint32(off + 20, true);
+    var unloadIAT = view.getUint32(off + 24, true);
+    var timeDateStamp = view.getUint32(off + 28, true);
+
+    // All-zero terminates
+    if (attrs === 0 && nameRva === 0 && delayIAT === 0) break;
+
+    var dllName = "";
+    if (nameRva !== 0) {
+      var nameOff = rvaToFileOffset(nameRva, sections);
+      if (nameOff < buffer.byteLength) {
+        dllName = readNullTerminatedString(view, nameOff, 256);
+      }
+    }
+
+    // Parse delay INT (name table) for imported functions
+    var functions = [];
+    if (delayINT !== 0) {
+      var intOff = rvaToFileOffset(delayINT, sections);
+      var entrySize = is64 ? 8 : 4;
+      for (var fi = 0; fi < 10000; fi++) {
+        if (intOff + entrySize > buffer.byteLength) break;
+        var thunk;
+        if (is64) {
+          var lo = view.getUint32(intOff, true);
+          var hi = view.getUint32(intOff + 4, true);
+          if (lo === 0 && hi === 0) break;
+          var isOrdinal = !!(hi & 0x80000000);
+          thunk = { lo: lo, hi: hi, isOrdinal: isOrdinal };
+        } else {
+          thunk = { lo: view.getUint32(intOff, true), hi: 0 };
+          if (thunk.lo === 0) break;
+          thunk.isOrdinal = !!(thunk.lo & 0x80000000);
+        }
+
+        var func = { index: fi, ordinal: 0, name: "", hint: 0 };
+        if (thunk.isOrdinal) {
+          func.ordinal = thunk.lo & 0xFFFF;
+          func.name = "Ordinal " + func.ordinal;
+        } else {
+          var hintRva = is64 ? thunk.lo : thunk.lo;
+          var hintOff = rvaToFileOffset(hintRva, sections);
+          if (hintOff + 2 < buffer.byteLength) {
+            func.hint = view.getUint16(hintOff, true);
+            func.name = readNullTerminatedString(view, hintOff + 2, 256);
+          }
+        }
+        functions.push(func);
+        intOff += entrySize;
+      }
+    }
+
+    entries.push({
+      index: d, fileOffset: off, attributes: attrs, nameRva: nameRva,
+      dllName: dllName, moduleHandle: moduleHandle,
+      delayIAT: delayIAT, delayINT: delayINT, boundIAT: boundIAT,
+      unloadIAT: unloadIAT, timeDateStamp: timeDateStamp,
+      functions: functions,
+    });
+    off += 32;
+  }
+
+  return entries;
+}
+
+// Parse CLR Runtime Header (Data Directory index 14)
+// IMAGE_COR20_HEADER structure
+function parseCLRHeader(view, buffer, dataDirectories, sections) {
+  if (dataDirectories.length <= 14) return null;
+  var clrDir = dataDirectories[14];
+  if (clrDir.rva === 0 || clrDir.size === 0) return null;
+
+  var off = rvaToFileOffset(clrDir.rva, sections);
+  if (off + 72 > buffer.byteLength) return null;
+
+  var size = view.getUint32(off, true);
+  var majorVer = view.getUint16(off + 4, true);
+  var minorVer = view.getUint16(off + 6, true);
+
+  // MetaData directory (RVA + Size)
+  var metaDataRva = view.getUint32(off + 8, true);
+  var metaDataSize = view.getUint32(off + 12, true);
+  var flags = view.getUint32(off + 16, true);
+  var entryPointToken = view.getUint32(off + 20, true);
+
+  // Resources
+  var resourcesRva = view.getUint32(off + 24, true);
+  var resourcesSize = view.getUint32(off + 28, true);
+  // StrongNameSignature
+  var snSigRva = view.getUint32(off + 32, true);
+  var snSigSize = view.getUint32(off + 36, true);
+  // CodeManagerTable
+  var cmTableRva = view.getUint32(off + 40, true);
+  var cmTableSize = view.getUint32(off + 44, true);
+  // VTableFixups
+  var vtFixupsRva = view.getUint32(off + 48, true);
+  var vtFixupsSize = view.getUint32(off + 52, true);
+  // ExportAddressTableJumps
+  var eatJumpsRva = view.getUint32(off + 56, true);
+  var eatJumpsSize = view.getUint32(off + 60, true);
+  // ManagedNativeHeader
+  var mnHeaderRva = view.getUint32(off + 64, true);
+  var mnHeaderSize = view.getUint32(off + 68, true);
+
+  // Decode flags
+  var CLR_FLAGS = {
+    0x00000001: "ILONLY",
+    0x00000002: "32BITREQUIRED",
+    0x00000004: "IL_LIBRARY",
+    0x00000008: "STRONGNAMESIGNED",
+    0x00000010: "NATIVE_ENTRYPOINT",
+    0x00010000: "TRACKDEBUGDATA",
+    0x00020000: "32BITPREFERRED",
+  };
+  var flagStr = decodeFlags(flags, CLR_FLAGS);
+
+  return {
+    fileOffset: off, size: size,
+    majorRuntimeVersion: majorVer, minorRuntimeVersion: minorVer,
+    metaData: { rva: metaDataRva, size: metaDataSize },
+    flags: flags, flagStr: flagStr,
+    entryPointToken: entryPointToken,
+    resources: { rva: resourcesRva, size: resourcesSize },
+    strongNameSignature: { rva: snSigRva, size: snSigSize },
+    codeManagerTable: { rva: cmTableRva, size: cmTableSize },
+    vTableFixups: { rva: vtFixupsRva, size: vtFixupsSize },
+    exportAddressTableJumps: { rva: eatJumpsRva, size: eatJumpsSize },
+    managedNativeHeader: { rva: mnHeaderRva, size: mnHeaderSize },
+  };
+}
+
 function parseOptionalHeader32(view, off) {
   return [
     { name: "Magic",                       offset: off,      size: 2, value: view.getUint16(off, true) },
@@ -1639,6 +1903,14 @@ function buildTree(pe) {
   }
   var resourceChildren = buildResourceTreeNodes(pe.resourceDirectory);
 
+  // Build delay import child nodes (one per DLL)
+  var delayImportChildren = [];
+  if (pe.delayImport && pe.delayImport.length > 0) {
+    delayImportChildren = pe.delayImport.map(function (dll) {
+      return createTreeNode(dll.dllName || "(unknown)", function () { showDelayImportDll(dll); });
+    });
+  }
+
   // Root node
   var root = createTreeNode("PE File", null, [
     createTreeNode("DOS Header", function () { showFields("DOS Header", "dosHeader", pe.dosHeader.fields); }),
@@ -1651,7 +1923,7 @@ function buildTree(pe) {
         return createTreeNode(dir.name, function () { showSingleDataDirectory(dir, idx); });
       })
     ),
-    createTreeNode("Section Headers", null,
+    createTreeNode("Section Headers", function () { showSectionHeadersSummary(pe.sections); },
       pe.sections.map(function (sec) {
         return createTreeNode(sec.name, function () { showFields("Section: " + sec.name, "section", sec.fields); });
       })
@@ -1664,6 +1936,10 @@ function buildTree(pe) {
     createTreeNode("Certificate Table (Decoded)", function () { showCertificateTableOverview(pe.certificates); }, certChildren),
     createTreeNode("TLS Directory (Decoded)", function () { showTlsDirectory(pe.tlsDirectory); }),
     createTreeNode("Load Config (Decoded)", function () { showLoadConfig(pe.loadConfig); }),
+    createTreeNode("Bound Import (Decoded)", function () { showBoundImportOverview(pe.boundImport); }),
+    createTreeNode("IAT (Decoded)", function () { showIATOverview(pe.iat); }),
+    createTreeNode("Delay Import (Decoded)", function () { showDelayImportOverview(pe.delayImport); }, delayImportChildren),
+    createTreeNode("CLR Runtime Header (Decoded)", function () { showCLRHeader(pe.clrHeader); }),
     createTreeNode("Debug Directory (Decoded)", function () { showDebugDirectoryOverview(pe.debugEntries); }, debugChildren),
   ]);
 
@@ -2594,6 +2870,240 @@ function showResourceDataEntry(entry) {
     html += '</tbody></table>';
   }
 
+  panel.innerHTML = html;
+}
+
+function showSectionHeadersSummary(sections) {
+  var panel = document.getElementById("detailPanel");
+  var html = '<div class="pe-detail-header">Section Headers (' + sections.length + ' sections)</div>';
+
+  html += '<table class="pe-detail-table"><thead><tr>';
+  html += '<th style="width:12%">Name</th>';
+  html += '<th style="width:12%">Virtual Size</th>';
+  html += '<th style="width:13%">Virtual Address</th>';
+  html += '<th style="width:13%">Raw Data Size</th>';
+  html += '<th style="width:13%">Raw Data Ptr</th>';
+  html += '<th style="width:12%">Characteristics</th>';
+  html += '<th style="width:25%">Flags</th>';
+  html += '</tr></thead><tbody>';
+
+  sections.forEach(function (sec) {
+    var f = sec.fields;
+    // f[0]=Name, f[1]=VirtualSize, f[2]=VirtualAddress, f[3]=SizeOfRawData,
+    // f[4]=PointerToRawData, f[9]=Characteristics
+    var chars = f[9].value;
+    var flagStr = decodeFlags(chars, SECTION_CHARACTERISTICS);
+
+    html += '<tr>';
+    html += '<td>' + escapeHtml(sec.name) + '</td>';
+    html += '<td>' + hex(f[1].value, 8) + '</td>';
+    html += '<td>' + hex(f[2].value, 8) + '</td>';
+    html += '<td>' + hex(f[3].value, 8) + '</td>';
+    html += '<td>' + hex(f[4].value, 8) + '</td>';
+    html += '<td>' + hex(chars, 8) + '</td>';
+    html += '<td style="font-size:0.75rem">' + escapeHtml(flagStr) + '</td>';
+    html += '</tr>';
+  });
+
+  html += '</tbody></table>';
+  panel.innerHTML = html;
+}
+
+function showBoundImportOverview(entries) {
+  var panel = document.getElementById("detailPanel");
+  if (!entries || entries.length === 0) {
+    panel.innerHTML = '<div class="pe-detail-header">Bound Import</div>' +
+      '<div class="pe-welcome"><p>No Bound Import table found in this PE file.</p></div>';
+    return;
+  }
+
+  var html = '<div class="pe-detail-header">Bound Import (' + entries.length + ' entries)</div>';
+
+  html += '<table class="pe-detail-table"><thead><tr>';
+  html += '<th style="width:6%">#</th>';
+  html += '<th style="width:10%">Offset</th>';
+  html += '<th style="width:28%">Module Name</th>';
+  html += '<th style="width:18%">TimeDateStamp</th>';
+  html += '<th style="width:12%">Forwarders</th>';
+  html += '<th style="width:26%">Forwarder Modules</th>';
+  html += '</tr></thead><tbody>';
+
+  entries.forEach(function (entry) {
+    var fwdNames = entry.forwarders.map(function (f) { return f.moduleName; }).join(", ");
+    html += '<tr>';
+    html += '<td>' + entry.index + '</td>';
+    html += '<td>' + hex(entry.fileOffset, 8) + '</td>';
+    html += '<td>' + escapeHtml(entry.moduleName) + '</td>';
+    html += '<td>' + formatTimestamp(entry.timeDateStamp) + '</td>';
+    html += '<td>' + entry.numberOfModuleForwarderRefs + '</td>';
+    html += '<td>' + escapeHtml(fwdNames) + '</td>';
+    html += '</tr>';
+  });
+
+  html += '</tbody></table>';
+  panel.innerHTML = html;
+}
+
+function showIATOverview(iat) {
+  var panel = document.getElementById("detailPanel");
+  if (!iat || iat.entries.length === 0) {
+    panel.innerHTML = '<div class="pe-detail-header">Import Address Table (IAT)</div>' +
+      '<div class="pe-welcome"><p>No IAT found in this PE file.</p></div>';
+    return;
+  }
+
+  var html = '<div class="pe-detail-header">Import Address Table (' + iat.entries.length + ' entries, ' + iat.entrySize + ' bytes each)</div>';
+
+  html += '<table class="pe-detail-table"><thead><tr>';
+  html += '<th style="width:8%">#</th>';
+  html += '<th style="width:15%">File Offset</th>';
+  html += '<th style="width:15%">RVA</th>';
+  html += '<th style="width:20%">Value</th>';
+  html += '</tr></thead><tbody>';
+
+  var maxShow = Math.min(iat.entries.length, 500);
+  for (var i = 0; i < maxShow; i++) {
+    var entry = iat.entries[i];
+    html += '<tr>';
+    html += '<td>' + entry.index + '</td>';
+    html += '<td>' + hex(entry.fileOffset, 8) + '</td>';
+    html += '<td>' + hex(entry.rva, 8) + '</td>';
+    html += '<td>' + entry.value.hex + '</td>';
+    html += '</tr>';
+  }
+  if (iat.entries.length > 500) {
+    html += '<tr><td colspan="4" style="text-align:center;color:#666;">... ' + (iat.entries.length - 500) + ' more entries</td></tr>';
+  }
+
+  html += '</tbody></table>';
+  panel.innerHTML = html;
+}
+
+function showDelayImportOverview(entries) {
+  var panel = document.getElementById("detailPanel");
+  if (!entries || entries.length === 0) {
+    panel.innerHTML = '<div class="pe-detail-header">Delay Import Descriptor</div>' +
+      '<div class="pe-welcome"><p>No Delay Import Descriptor found in this PE file.</p></div>';
+    return;
+  }
+
+  var html = '<div class="pe-detail-header">Delay Import Descriptor (' + entries.length + ' DLLs)</div>';
+
+  html += '<table class="pe-detail-table"><thead><tr>';
+  html += '<th style="width:6%">#</th>';
+  html += '<th style="width:10%">Offset</th>';
+  html += '<th style="width:22%">DLL Name</th>';
+  html += '<th style="width:10%">Attributes</th>';
+  html += '<th style="width:12%">Delay IAT</th>';
+  html += '<th style="width:12%">Delay INT</th>';
+  html += '<th style="width:12%">Bound IAT</th>';
+  html += '<th style="width:10%">Functions</th>';
+  html += '</tr></thead><tbody>';
+
+  entries.forEach(function (entry) {
+    html += '<tr>';
+    html += '<td>' + entry.index + '</td>';
+    html += '<td>' + hex(entry.fileOffset, 8) + '</td>';
+    html += '<td>' + escapeHtml(entry.dllName) + '</td>';
+    html += '<td>' + hex(entry.attributes, 8) + '</td>';
+    html += '<td>' + hex(entry.delayIAT, 8) + '</td>';
+    html += '<td>' + hex(entry.delayINT, 8) + '</td>';
+    html += '<td>' + hex(entry.boundIAT, 8) + '</td>';
+    html += '<td>' + entry.functions.length + '</td>';
+    html += '</tr>';
+  });
+
+  html += '</tbody></table>';
+  panel.innerHTML = html;
+}
+
+function showDelayImportDll(dll) {
+  var panel = document.getElementById("detailPanel");
+  var html = '<div class="pe-detail-header">Delay Import: ' + escapeHtml(dll.dllName) + '</div>';
+
+  // Descriptor fields
+  html += '<table class="pe-detail-table"><thead><tr>';
+  html += '<th class="col-member">Member</th>';
+  html += '<th class="col-value">Value</th>';
+  html += '<th class="col-meaning">Meaning</th>';
+  html += '</tr></thead><tbody>';
+
+  html += '<tr><td>Attributes</td><td>' + hex(dll.attributes, 8) + '</td><td>' + (dll.attributes & 1 ? "RVAs (new style)" : "VAs (old style)") + '</td></tr>';
+  html += '<tr><td>Name RVA</td><td>' + hex(dll.nameRva, 8) + '</td><td>' + escapeHtml(dll.dllName) + '</td></tr>';
+  html += '<tr><td>Module Handle</td><td>' + hex(dll.moduleHandle, 8) + '</td><td>RVA of module handle</td></tr>';
+  html += '<tr><td>Delay IAT</td><td>' + hex(dll.delayIAT, 8) + '</td><td>RVA of delay-load IAT</td></tr>';
+  html += '<tr><td>Delay INT</td><td>' + hex(dll.delayINT, 8) + '</td><td>RVA of delay-load name table</td></tr>';
+  html += '<tr><td>Bound IAT</td><td>' + hex(dll.boundIAT, 8) + '</td><td>RVA of bound delay-load IAT</td></tr>';
+  html += '<tr><td>Unload IAT</td><td>' + hex(dll.unloadIAT, 8) + '</td><td>RVA of unload delay-load IAT</td></tr>';
+  html += '<tr><td>TimeDateStamp</td><td>' + hex(dll.timeDateStamp, 8) + '</td><td>' + formatTimestamp(dll.timeDateStamp) + '</td></tr>';
+  html += '</tbody></table>';
+
+  // Functions
+  if (dll.functions.length > 0) {
+    html += '<div class="pe-detail-header" style="margin-top:1px">Imported Functions (' + dll.functions.length + ')</div>';
+    html += '<table class="pe-detail-table"><thead><tr>';
+    html += '<th style="width:8%">#</th>';
+    html += '<th style="width:10%">Hint</th>';
+    html += '<th style="width:10%">Ordinal</th>';
+    html += '<th style="width:72%">Name</th>';
+    html += '</tr></thead><tbody>';
+
+    dll.functions.forEach(function (func) {
+      html += '<tr>';
+      html += '<td>' + func.index + '</td>';
+      html += '<td>' + (func.ordinal ? "" : hex(func.hint, 4)) + '</td>';
+      html += '<td>' + (func.ordinal ? func.ordinal : "") + '</td>';
+      html += '<td>' + escapeHtml(func.name) + '</td>';
+      html += '</tr>';
+    });
+
+    html += '</tbody></table>';
+  }
+
+  panel.innerHTML = html;
+}
+
+function showCLRHeader(clr) {
+  var panel = document.getElementById("detailPanel");
+  if (!clr) {
+    panel.innerHTML = '<div class="pe-detail-header">CLR Runtime Header</div>' +
+      '<div class="pe-welcome"><p>No CLR Runtime Header found in this PE file. (Not a .NET assembly)</p></div>';
+    return;
+  }
+
+  var html = '<div class="pe-detail-header">CLR Runtime Header (IMAGE_COR20_HEADER)</div>';
+
+  html += '<table class="pe-detail-table"><thead><tr>';
+  html += '<th class="col-member">Member</th>';
+  html += '<th class="col-offset">Offset</th>';
+  html += '<th class="col-value">Value</th>';
+  html += '<th class="col-meaning">Meaning</th>';
+  html += '</tr></thead><tbody>';
+
+  html += '<tr><td>cb (Size)</td><td>' + hex(clr.fileOffset, 8) + '</td><td>' + clr.size + '</td><td>' + clr.size + ' bytes</td></tr>';
+  html += '<tr><td>MajorRuntimeVersion</td><td>' + hex(clr.fileOffset + 4, 8) + '</td><td>' + clr.majorRuntimeVersion + '</td><td></td></tr>';
+  html += '<tr><td>MinorRuntimeVersion</td><td>' + hex(clr.fileOffset + 6, 8) + '</td><td>' + clr.minorRuntimeVersion + '</td><td>v' + clr.majorRuntimeVersion + '.' + clr.minorRuntimeVersion + '</td></tr>';
+  html += '<tr><td>MetaData RVA</td><td>' + hex(clr.fileOffset + 8, 8) + '</td><td>' + hex(clr.metaData.rva, 8) + '</td><td>RVA of CLI metadata</td></tr>';
+  html += '<tr><td>MetaData Size</td><td>' + hex(clr.fileOffset + 12, 8) + '</td><td>' + clr.metaData.size + '</td><td>' + clr.metaData.size + ' bytes</td></tr>';
+  html += '<tr><td>Flags</td><td>' + hex(clr.fileOffset + 16, 8) + '</td><td>' + hex(clr.flags, 8) + '</td><td>' + escapeHtml(clr.flagStr) + '</td></tr>';
+  html += '<tr><td>EntryPointToken</td><td>' + hex(clr.fileOffset + 20, 8) + '</td><td>' + hex(clr.entryPointToken, 8) + '</td><td>Method token or native RVA</td></tr>';
+
+  // Directory entries
+  var dirs = [
+    { name: "Resources", d: clr.resources, off: 24 },
+    { name: "StrongNameSignature", d: clr.strongNameSignature, off: 32 },
+    { name: "CodeManagerTable", d: clr.codeManagerTable, off: 40 },
+    { name: "VTableFixups", d: clr.vTableFixups, off: 48 },
+    { name: "ExportAddressTableJumps", d: clr.exportAddressTableJumps, off: 56 },
+    { name: "ManagedNativeHeader", d: clr.managedNativeHeader, off: 64 },
+  ];
+  dirs.forEach(function (dir) {
+    var present = (dir.d.rva !== 0 || dir.d.size !== 0) ? "Present" : "Empty";
+    html += '<tr><td>' + dir.name + ' RVA</td><td>' + hex(clr.fileOffset + dir.off, 8) + '</td><td>' + hex(dir.d.rva, 8) + '</td><td>' + present + '</td></tr>';
+    html += '<tr><td>' + dir.name + ' Size</td><td>' + hex(clr.fileOffset + dir.off + 4, 8) + '</td><td>' + dir.d.size + '</td><td>' + dir.d.size + ' bytes</td></tr>';
+  });
+
+  html += '</tbody></table>';
   panel.innerHTML = html;
 }
 
