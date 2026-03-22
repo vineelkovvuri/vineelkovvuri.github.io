@@ -264,6 +264,59 @@ function parsePE(buffer) {
 
   var e_lfanew = view.getUint32(60, true);
 
+  // --- Rich Header (between DOS stub and PE signature) ---
+  result.richHeader = null;
+  // Search for "Rich" signature (0x52696368) in the region between DOS header and e_lfanew
+  if (e_lfanew > 0x80) {
+    var richOffset = -1;
+    for (var ri = e_lfanew - 4; ri >= 0x80; ri -= 4) {
+      if (view.getUint32(ri, true) === 0x52696368) { // "Rich"
+        richOffset = ri;
+        break;
+      }
+    }
+    if (richOffset > 0) {
+      var xorKey = view.getUint32(richOffset + 4, true);
+
+      // Search backwards for "DanS" (0x44616E53) when XOR'd with key
+      var dansOffset = -1;
+      for (var di = richOffset - 4; di >= 0x40; di -= 4) {
+        if ((view.getUint32(di, true) ^ xorKey) === 0x44616E53) {
+          dansOffset = di;
+          break;
+        }
+      }
+
+      if (dansOffset >= 0) {
+        // Decrypt the entire Rich header region
+        var richEntries = [];
+        // After DanS + 3 padding DWORDs (12 bytes), entries begin
+        var entriesStart = dansOffset + 16;
+        for (var ei = entriesStart; ei < richOffset; ei += 8) {
+          var compId = view.getUint32(ei, true) ^ xorKey;
+          var useCount = view.getUint32(ei + 4, true) ^ xorKey;
+          var prodId = (compId >>> 16) & 0xFFFF;
+          var buildNum = compId & 0xFFFF;
+          richEntries.push({
+            offset: ei,
+            compId: compId,
+            prodId: prodId,
+            buildNum: buildNum,
+            useCount: useCount
+          });
+        }
+
+        result.richHeader = {
+          offset: dansOffset,
+          size: richOffset + 8 - dansOffset,
+          xorKey: xorKey,
+          richSignatureOffset: richOffset,
+          entries: richEntries
+        };
+      }
+    }
+  }
+
   // --- NT Headers (PE Signature) ---
   if (e_lfanew + 4 > buffer.byteLength) {
     throw new Error("e_lfanew points beyond file end");
@@ -1916,6 +1969,7 @@ function buildTree(pe) {
   // Root node
   var root = createTreeNode("PE File", null, [
     createTreeNode("DOS Header", function () { showFields("DOS Header", "dosHeader", pe.dosHeader.fields); }),
+    createTreeNode("Rich Header", function () { showRichHeader(pe.richHeader); }),
     createTreeNode("NT Headers", function () { showFields("NT Signature", "ntSignature", pe.ntSignature.fields); }, [
       createTreeNode("File Header", function () { showFields("File Header", "fileHeader", pe.fileHeader.fields); }),
       createTreeNode("Optional Header", function () { showFields("Optional Header", "optionalHeader", pe.optionalHeader.fields); }),
@@ -2371,6 +2425,318 @@ function showFields(title, sectionKey, fields) {
       }
     });
   }
+}
+
+function getRichProductName(prodId) {
+  var names = {
+    0: "Unknown",
+    1: "Import0",
+    2: "Linker510",
+    3: "Cvtomf510",
+    4: "Linker600",
+    5: "Cvtomf600",
+    6: "Cvtres500",
+    7: "Utc11_Basic",
+    8: "Utc11_C",
+    9: "Utc12_Basic",
+    10: "Utc12_C",
+    11: "Utc12_CPP",
+    12: "AliasObj60",
+    13: "VisualBasic60",
+    14: "Masm613",
+    15: "Masm710",
+    16: "Linker511",
+    17: "Cvtomf511",
+    18: "Masm614",
+    19: "Linker512",
+    20: "Cvtomf512",
+    21: "Utc12_C_Std",
+    22: "Utc12_CPP_Std",
+    23: "Utc12_C_Book",
+    24: "Utc12_CPP_Book",
+    25: "Implib700",
+    26: "Cvtomf700",
+    27: "Utc13_Basic",
+    28: "Utc13_C",
+    29: "Utc13_CPP",
+    30: "Linker610",
+    31: "Cvtomf610",
+    32: "Linker601",
+    33: "Cvtomf601",
+    34: "Utc12_1_Basic",
+    35: "Utc12_1_C",
+    36: "Utc12_1_CPP",
+    37: "Linker620",
+    38: "Cvtomf620",
+    39: "AliasObj70",
+    40: "Linker621",
+    41: "Cvtomf621",
+    42: "Masm615",
+    43: "Utc13_LTCG_C",
+    44: "Utc13_LTCG_CPP",
+    45: "Masm620",
+    46: "ILAsm100",
+    47: "Utc12_2_Basic",
+    48: "Utc12_2_C",
+    49: "Utc12_2_CPP",
+    50: "Utc12_2_C_Std",
+    51: "Utc12_2_CPP_Std",
+    52: "Utc12_2_C_Book",
+    53: "Utc12_2_CPP_Book",
+    54: "Implib622",
+    55: "Cvtomf622",
+    56: "Cvtres501",
+    57: "Utc13_C_Std",
+    58: "Utc13_CPP_Std",
+    59: "Cvtpgd1300",
+    60: "Linker622",
+    61: "Linker700",
+    62: "Export622",
+    63: "Export700",
+    64: "Masm700",
+    65: "Utc13_POGO_I_C",
+    66: "Utc13_POGO_I_CPP",
+    67: "Utc13_POGO_O_C",
+    68: "Utc13_POGO_O_CPP",
+    69: "Cvtres700",
+    70: "Cvtres710p",
+    71: "Linker710p",
+    72: "Cvtomf710p",
+    73: "Export710p",
+    74: "Implib710p",
+    75: "Masm710p",
+    76: "Utc1310p_C",
+    77: "Utc1310p_CPP",
+    78: "Utc1310p_C_Std",
+    79: "Utc1310p_CPP_Std",
+    80: "Utc1310p_LTCG_C",
+    81: "Utc1310p_LTCG_CPP",
+    82: "Utc1310p_POGO_I_C",
+    83: "Utc1310p_POGO_I_CPP",
+    84: "Utc1310p_POGO_O_C",
+    85: "Utc1310p_POGO_O_CPP",
+    86: "Linker624",
+    87: "Cvtomf624",
+    88: "Export624",
+    89: "Implib624",
+    90: "Linker710",
+    91: "Cvtomf710",
+    92: "Export710",
+    93: "Implib710",
+    94: "Cvtres710",
+    95: "Utc1310_C",
+    96: "Utc1310_CPP",
+    97: "Utc1310_C_Std",
+    98: "Utc1310_CPP_Std",
+    99: "Utc1310_LTCG_C",
+    100: "Utc1310_LTCG_CPP",
+    101: "Utc1310_POGO_I_C",
+    102: "Utc1310_POGO_I_CPP",
+    103: "Utc1310_POGO_O_C",
+    104: "Utc1310_POGO_O_CPP",
+    105: "AliasObj710",
+    106: "AliasObj710p",
+    107: "Cvtpgd1310",
+    108: "Cvtpgd1310p",
+    109: "Utc1400_C",
+    110: "Utc1400_CPP",
+    111: "Utc1400_C_Std",
+    112: "Utc1400_CPP_Std",
+    113: "Utc1400_LTCG_C",
+    114: "Utc1400_LTCG_CPP",
+    115: "Utc1400_POGO_I_C",
+    116: "Utc1400_POGO_I_CPP",
+    117: "Utc1400_POGO_O_C",
+    118: "Utc1400_POGO_O_CPP",
+    119: "Cvtpgd1400",
+    120: "Linker800",
+    121: "Cvtomf800",
+    122: "Export800",
+    123: "Implib800",
+    124: "Cvtres800",
+    125: "Masm800",
+    126: "AliasObj800",
+    127: "PhoenixPrerelease",
+    128: "Utc1400_CVTCIL_C",
+    129: "Utc1400_CVTCIL_CPP",
+    130: "Utc1400_LTCG_MSIL",
+    131: "Masm900",
+    132: "Utc1500_C",
+    133: "Utc1500_CPP",
+    134: "Utc1500_C_Std",
+    135: "Utc1500_CPP_Std",
+    136: "Utc1500_CVTCIL_C",
+    137: "Utc1500_CVTCIL_CPP",
+    138: "Utc1500_LTCG_C",
+    139: "Utc1500_LTCG_CPP",
+    140: "Utc1500_LTCG_MSIL",
+    141: "Utc1500_POGO_I_C",
+    142: "Utc1500_POGO_I_CPP",
+    143: "Utc1500_POGO_O_C",
+    144: "Utc1500_POGO_O_CPP",
+    145: "Cvtpgd1500",
+    146: "Linker900",
+    147: "Export900",
+    148: "Implib900",
+    149: "Cvtres900",
+    150: "Masm1000",
+    151: "Utc1600_C",
+    152: "Utc1600_CPP",
+    153: "Utc1600_CVTCIL_C",
+    154: "Utc1600_CVTCIL_CPP",
+    155: "Utc1600_LTCG_C",
+    156: "Utc1600_LTCG_CPP",
+    157: "Utc1600_LTCG_MSIL",
+    158: "Utc1600_POGO_I_C",
+    159: "Utc1600_POGO_I_CPP",
+    160: "Utc1600_POGO_O_C",
+    161: "Utc1600_POGO_O_CPP",
+    162: "Linker1000",
+    163: "Export1000",
+    164: "Implib1000",
+    165: "Cvtres1000",
+    166: "Masm1010",
+    167: "Utc1610_C",
+    168: "Utc1610_CPP",
+    169: "Utc1610_CVTCIL_C",
+    170: "Utc1610_CVTCIL_CPP",
+    171: "Utc1610_LTCG_C",
+    172: "Utc1610_LTCG_CPP",
+    173: "Utc1610_LTCG_MSIL",
+    174: "Utc1610_POGO_I_C",
+    175: "Utc1610_POGO_I_CPP",
+    176: "Utc1610_POGO_O_C",
+    177: "Utc1610_POGO_O_CPP",
+    178: "Linker1010",
+    179: "Export1010",
+    180: "Implib1010",
+    181: "Cvtres1010",
+    182: "Masm1100",
+    183: "Utc1700_C",
+    184: "Utc1700_CPP",
+    185: "Utc1700_CVTCIL_C",
+    186: "Utc1700_CVTCIL_CPP",
+    187: "Utc1700_LTCG_C",
+    188: "Utc1700_LTCG_CPP",
+    189: "Utc1700_LTCG_MSIL",
+    190: "Utc1700_POGO_I_C",
+    191: "Utc1700_POGO_I_CPP",
+    192: "Utc1700_POGO_O_C",
+    193: "Utc1700_POGO_O_CPP",
+    194: "Linker1100",
+    195: "Export1100",
+    196: "Implib1100",
+    197: "Cvtres1100",
+    198: "Masm1200",
+    199: "Utc1800_C",
+    200: "Utc1800_CPP",
+    201: "Utc1800_CVTCIL_C",
+    202: "Utc1800_CVTCIL_CPP",
+    203: "Utc1800_LTCG_C",
+    204: "Utc1800_LTCG_CPP",
+    205: "Utc1800_LTCG_MSIL",
+    206: "Utc1800_POGO_I_C",
+    207: "Utc1800_POGO_I_CPP",
+    208: "Utc1800_POGO_O_C",
+    209: "Utc1800_POGO_O_CPP",
+    210: "Linker1200",
+    211: "Export1200",
+    212: "Implib1200",
+    213: "Cvtres1200",
+    214: "Masm1300",
+    215: "Utc1900_C",
+    216: "Utc1900_CPP",
+    217: "Utc1900_CVTCIL_C",
+    218: "Utc1900_CVTCIL_CPP",
+    219: "Utc1900_LTCG_C",
+    220: "Utc1900_LTCG_CPP",
+    221: "Utc1900_LTCG_MSIL",
+    222: "Utc1900_POGO_I_C",
+    223: "Utc1900_POGO_I_CPP",
+    224: "Utc1900_POGO_O_C",
+    225: "Utc1900_POGO_O_CPP",
+    226: "Linker1300",
+    227: "Export1300",
+    228: "Implib1300",
+    229: "Cvtres1300",
+    230: "Masm1400",
+    231: "Utc1900_POGO_I_C_CPP",
+    232: "Utc1900_POGO_O_C_CPP",
+    255: "Linker1400",
+    256: "Export1400",
+    257: "Implib1400",
+    258: "Cvtres1400",
+    259: "Masm1410",
+    260: "Linker1410",
+    261: "Export1410",
+    262: "Implib1410",
+    263: "Cvtres1410"
+  };
+  return names[prodId] || ("ProdId_" + prodId);
+}
+
+function showRichHeader(richHeader) {
+  var panel = document.getElementById("detailPanel");
+  if (!richHeader) {
+    panel.innerHTML = '<div class="pe-detail-header">Rich Header</div>' +
+      '<p style="padding: 1rem; color: #888;">No Rich header found in this PE file.</p>';
+    return;
+  }
+
+  var html = '<div class="pe-detail-header">Rich Header (Decoded)</div>';
+
+  // Summary info
+  html += '<table class="pe-detail-table"><thead><tr>';
+  html += '<th class="col-member">Property</th>';
+  html += '<th class="col-offset">Offset</th>';
+  html += '<th class="col-size">Size</th>';
+  html += '<th class="col-value">Value</th>';
+  html += '<th class="col-meaning">Meaning</th>';
+  html += '</tr></thead><tbody>';
+
+  html += '<tr data-hex-offset="' + richHeader.offset + '" data-hex-size="4">';
+  html += '<td>DanS Signature</td><td>' + hex(richHeader.offset, 8) + '</td><td>4</td>';
+  html += '<td>' + hex(0x44616E53, 8) + '</td><td>Start of Rich header (XOR-encrypted)</td></tr>';
+
+  html += '<tr data-hex-offset="' + richHeader.richSignatureOffset + '" data-hex-size="4">';
+  html += '<td>Rich Signature</td><td>' + hex(richHeader.richSignatureOffset, 8) + '</td><td>4</td>';
+  html += '<td>' + hex(0x52696368, 8) + '</td><td>"Rich" end marker</td></tr>';
+
+  html += '<tr data-hex-offset="' + (richHeader.richSignatureOffset + 4) + '" data-hex-size="4">';
+  html += '<td>XOR Key</td><td>' + hex(richHeader.richSignatureOffset + 4, 8) + '</td><td>4</td>';
+  html += '<td>' + hex(richHeader.xorKey, 8) + '</td><td>Checksum / decryption key</td></tr>';
+
+  html += '<tr><td>Total Size</td><td>' + hex(richHeader.offset, 8) + '</td><td>' + richHeader.size + '</td>';
+  html += '<td>' + hex(richHeader.size, 4) + '</td><td>' + richHeader.size + ' bytes (' + richHeader.entries.length + ' entries)</td></tr>';
+
+  html += '</tbody></table>';
+
+  // Entries table
+  html += '<div class="pe-detail-header" style="margin-top: 8px;">Build Tool Entries (' + richHeader.entries.length + ')</div>';
+  html += '<table class="pe-detail-table"><thead><tr>';
+  html += '<th style="width:5%">#</th>';
+  html += '<th style="width:10%">Offset</th>';
+  html += '<th style="width:12%">Comp.ID</th>';
+  html += '<th style="width:10%">Prod.ID</th>';
+  html += '<th style="width:10%">Build</th>';
+  html += '<th style="width:10%">Count</th>';
+  html += '<th style="width:43%">Tool</th>';
+  html += '</tr></thead><tbody>';
+
+  richHeader.entries.forEach(function (entry, idx) {
+    html += '<tr data-hex-offset="' + entry.offset + '" data-hex-size="8">';
+    html += '<td>' + idx + '</td>';
+    html += '<td>' + hex(entry.offset, 8) + '</td>';
+    html += '<td>' + hex(entry.compId, 8) + '</td>';
+    html += '<td>' + entry.prodId + '</td>';
+    html += '<td>' + entry.buildNum + '</td>';
+    html += '<td>' + entry.useCount + '</td>';
+    html += '<td>' + escapeHtml(getRichProductName(entry.prodId)) + '</td>';
+    html += '</tr>';
+  });
+
+  html += '</tbody></table>';
+  panel.innerHTML = html;
 }
 
 function showDataDirectories(dirs) {
