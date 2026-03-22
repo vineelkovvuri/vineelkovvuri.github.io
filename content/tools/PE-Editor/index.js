@@ -2080,6 +2080,9 @@ function onFieldModified(sectionKey) {
     return;
   }
 
+  // Update hex view to reflect edited bytes
+  renderHexRows();
+
   // Only re-render if the user is still viewing this section
   if (currentSection !== sectionKey) return;
 
@@ -2283,7 +2286,7 @@ function showFields(title, sectionKey, fields) {
     var rawVal = (f.valueLo !== undefined) ? (f.valueHi * 0x100000000 + f.valueLo) : f.value;
     var meaning = getMeaning(sectionKey, f.name, rawVal, f);
 
-    html += '<tr>';
+    html += '<tr data-hex-offset="' + f.offset + '" data-hex-size="' + f.size + '">';
     html += '<td>' + escapeHtml(f.name) + '</td>';
     html += '<td>' + hex(f.offset, 8) + '</td>';
     html += '<td>' + f.size + '</td>';
@@ -3461,6 +3464,9 @@ function loadPEFile(file) {
         '<div class="pe-welcome"><h2>Error</h2><p style="color: #c53030;">' + escapeHtml(err.message) + '</p></div>';
       document.getElementById("peTree").innerHTML = "";
       document.getElementById("fileInfo").textContent = "";
+      document.getElementById("hexPanel").innerHTML = '<div class="pe-hex-placeholder">Load a PE file to see its hex dump.</div>';
+      hexScrollEl = null;
+      hexRowsEl = null;
       return;
     }
 
@@ -3475,6 +3481,7 @@ function loadPEFile(file) {
     // Build tree and show DOS header by default
     buildTree(parsedPE);
     showFields("DOS Header", "dosHeader", parsedPE.dosHeader.fields);
+    initHexPanel();
 
     // Select the DOS Header node in the tree
     var labels = document.querySelectorAll(".pe-tree-label");
@@ -3536,3 +3543,221 @@ function loadPEFile(file) {
 
 // Download button
 document.getElementById("downloadBtn").addEventListener("click", downloadModifiedPE);
+
+// ============================================================
+// Hex View: virtual scrolling hex dump with click-to-highlight
+// ============================================================
+
+var hexRowHeight = 18;         // Must match CSS .pe-hex-row height
+var hexBytesPerRow = 16;
+var hexHighlightOffset = -1;   // File offset of highlighted range
+var hexHighlightSize = 0;      // Size of highlighted range
+var hexScrollEl = null;        // Cached scroll container
+var hexRowsEl = null;          // Cached rows container
+var hexSpacerEl = null;        // Cached spacer element
+var hexHeaderEl = null;        // Cached header element
+var hexRafPending = false;     // requestAnimationFrame guard
+
+function initHexPanel() {
+  var panel = document.getElementById("hexPanel");
+  panel.innerHTML = "";
+
+  // Header bar
+  var header = document.createElement("div");
+  header.className = "pe-hex-header";
+  header.textContent = "Hex View \u2014 " + peData.byteLength + " bytes (" + hex(peData.byteLength, 8) + ")";
+  panel.appendChild(header);
+  hexHeaderEl = header;
+
+  // Scroll container
+  var scroll = document.createElement("div");
+  scroll.className = "pe-hex-scroll";
+  panel.appendChild(scroll);
+  hexScrollEl = scroll;
+
+  // Spacer for virtual scroll height
+  var totalRows = Math.ceil(peData.byteLength / hexBytesPerRow);
+  var spacer = document.createElement("div");
+  spacer.className = "pe-hex-spacer";
+  spacer.style.height = (totalRows * hexRowHeight) + "px";
+  scroll.appendChild(spacer);
+  hexSpacerEl = spacer;
+
+  // Rows container (absolutely positioned within spacer)
+  var rows = document.createElement("div");
+  rows.className = "pe-hex-rows";
+  scroll.appendChild(rows);
+  hexRowsEl = rows;
+
+  // Reset highlight
+  hexHighlightOffset = -1;
+  hexHighlightSize = 0;
+
+  // Scroll listener with rAF throttle
+  scroll.addEventListener("scroll", function () {
+    if (!hexRafPending) {
+      hexRafPending = true;
+      requestAnimationFrame(function () {
+        hexRafPending = false;
+        renderHexRows();
+      });
+    }
+  });
+
+  renderHexRows();
+}
+
+function renderHexRows() {
+  if (!hexScrollEl || !hexRowsEl || !peData) return;
+
+  var scrollTop = hexScrollEl.scrollTop;
+  var viewHeight = hexScrollEl.clientHeight;
+  var totalRows = Math.ceil(peData.byteLength / hexBytesPerRow);
+
+  var firstVisible = Math.floor(scrollTop / hexRowHeight);
+  var visibleCount = Math.ceil(viewHeight / hexRowHeight) + 1;
+
+  // Buffer a few rows above and below
+  var buffer = 5;
+  var startRow = Math.max(0, firstVisible - buffer);
+  var endRow = Math.min(totalRows, firstVisible + visibleCount + buffer);
+
+  // Position the rows container
+  hexRowsEl.style.top = (startRow * hexRowHeight) + "px";
+
+  // Build HTML for visible rows
+  var view = new Uint8Array(peData);
+  var html = "";
+  for (var r = startRow; r < endRow; r++) {
+    html += formatHexRow(view, r);
+  }
+  hexRowsEl.innerHTML = html;
+}
+
+function formatHexRow(view, rowIndex) {
+  var fileOffset = rowIndex * hexBytesPerRow;
+  var end = Math.min(fileOffset + hexBytesPerRow, view.length);
+
+  // Offset column
+  var offsetStr = '<span class="pe-hex-offset">' + hex(fileOffset, 8) + '</span>  ';
+
+  // Hex bytes + ASCII
+  var hexParts = [];
+  var asciiParts = [];
+
+  for (var i = 0; i < hexBytesPerRow; i++) {
+    var byteOffset = fileOffset + i;
+    if (byteOffset < end) {
+      var b = view[byteOffset];
+      var hexByte = (b < 16 ? "0" : "") + b.toString(16).toUpperCase();
+      var asciiChar = (b >= 32 && b <= 126) ? escapeHtmlChar(b) : ".";
+
+      // Check if this byte is in the highlight range
+      var inHighlight = hexHighlightOffset >= 0 &&
+        byteOffset >= hexHighlightOffset &&
+        byteOffset < hexHighlightOffset + hexHighlightSize;
+
+      if (inHighlight) {
+        hexParts.push('<span class="pe-hex-highlight">' + hexByte + '</span>');
+        asciiParts.push('<span class="pe-hex-highlight">' + asciiChar + '</span>');
+      } else {
+        hexParts.push(hexByte);
+        asciiParts.push(asciiChar);
+      }
+    } else {
+      hexParts.push("  ");
+      asciiParts.push(" ");
+    }
+    // Extra gap after byte 8
+    if (i === 7) {
+      hexParts.push(" ");
+    }
+  }
+
+  return '<div class="pe-hex-row">' + offsetStr +
+    hexParts.join(" ") + "  " +
+    '<span class="pe-hex-ascii">' + asciiParts.join("") + '</span></div>';
+}
+
+function escapeHtmlChar(charCode) {
+  if (charCode === 38) return "&amp;";   // &
+  if (charCode === 60) return "&lt;";    // <
+  if (charCode === 62) return "&gt;";    // >
+  if (charCode === 34) return "&quot;";  // "
+  return String.fromCharCode(charCode);
+}
+
+function highlightHexBytes(offset, size) {
+  hexHighlightOffset = offset;
+  hexHighlightSize = size;
+
+  if (!hexScrollEl || !peData) return;
+
+  // Scroll to center the highlighted row
+  var targetRow = Math.floor(offset / hexBytesPerRow);
+  var viewHeight = hexScrollEl.clientHeight;
+  var targetScrollTop = (targetRow * hexRowHeight) - (viewHeight / 2) + hexRowHeight;
+  targetScrollTop = Math.max(0, targetScrollTop);
+  hexScrollEl.scrollTop = targetScrollTop;
+
+  // renderHexRows will be called by scroll event, but call it if scroll didn't change
+  renderHexRows();
+}
+
+// ============================================================
+// Hex view: vertical resizer
+// ============================================================
+
+(function setupHexResizer() {
+  var resizer = document.getElementById("hexResizer");
+  var hexPanel = document.getElementById("hexPanel");
+  var startY, startHeight;
+
+  resizer.addEventListener("mousedown", function (e) {
+    startY = e.clientY;
+    startHeight = hexPanel.offsetHeight;
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
+    e.preventDefault();
+  });
+
+  function onMouseMove(e) {
+    var delta = startY - e.clientY; // dragging up = bigger hex panel
+    var newHeight = startHeight + delta;
+    if (newHeight < 80) newHeight = 80;
+    if (newHeight > 600) newHeight = 600;
+    hexPanel.style.height = newHeight + "px";
+    renderHexRows();
+  }
+
+  function onMouseUp() {
+    document.removeEventListener("mousemove", onMouseMove);
+    document.removeEventListener("mouseup", onMouseUp);
+  }
+})();
+
+// ============================================================
+// Hex view: click-to-highlight on detail table rows
+// ============================================================
+
+(function setupHexClickHandler() {
+  var detailPanel = document.getElementById("detailPanel");
+  detailPanel.addEventListener("click", function (e) {
+    var row = e.target.closest("tr[data-hex-offset]");
+    if (!row) return;
+
+    var offset = parseInt(row.getAttribute("data-hex-offset"), 10);
+    var size = parseInt(row.getAttribute("data-hex-size"), 10);
+    if (isNaN(offset) || isNaN(size)) return;
+
+    // Remove previous selection highlight
+    var prev = detailPanel.querySelector(".pe-field-selected");
+    if (prev) prev.classList.remove("pe-field-selected");
+
+    // Highlight clicked row
+    row.classList.add("pe-field-selected");
+
+    // Highlight in hex view
+    highlightHexBytes(offset, size);
+  });
+})();

@@ -58,13 +58,88 @@ tags: ["Tools"]
       }
       .pe-resizer:hover { background: #86b7fe; }
 
+      /* Right panel (vertical flex: detail + hex resizer + hex view) */
+      .pe-right-panel {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        overflow: hidden;
+      }
+
       /* Right detail panel */
       .pe-detail-panel {
         flex: 1;
+        min-height: 0;
         overflow: auto;
         padding: 0;
         background: #fff;
       }
+
+      /* Hex view resizer */
+      .pe-hex-resizer {
+        height: 4px;
+        cursor: row-resize;
+        background: #ced4da;
+        flex-shrink: 0;
+      }
+      .pe-hex-resizer:hover { background: #86b7fe; }
+
+      /* Hex view panel */
+      .pe-hex-panel {
+        height: 250px;
+        min-height: 80px;
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        background: #fff;
+        border-top: 1px solid #ced4da;
+      }
+      .pe-hex-header {
+        padding: 4px 8px;
+        background: #e9ecef;
+        border-bottom: 1px solid #ced4da;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.78rem;
+        font-weight: bold;
+        flex-shrink: 0;
+        color: #555;
+      }
+      .pe-hex-scroll {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+        position: relative;
+      }
+      .pe-hex-spacer {
+        width: 100%;
+      }
+      .pe-hex-rows {
+        position: absolute;
+        left: 0;
+        right: 0;
+      }
+      .pe-hex-row {
+        height: 18px;
+        line-height: 18px;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.78rem;
+        white-space: pre;
+        padding: 0 8px;
+      }
+      .pe-hex-row:nth-child(even) { background: #f8f9fa; }
+      .pe-hex-offset { color: #888; }
+      .pe-hex-ascii { color: #2e7d32; }
+      .pe-hex-highlight { background: #fff3cd; color: #000; }
+      .pe-hex-placeholder {
+        padding: 2rem;
+        color: #999;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.82rem;
+        text-align: center;
+      }
+      .pe-field-selected { background: #fff3cd !important; }
 
       /* Tree view styles */
       .pe-tree { list-style: none; margin: 0; padding: 0 0 0 0.25rem; font-family: Consolas, 'Courier New', monospace; font-size: 0.82rem; }
@@ -246,24 +321,31 @@ tags: ["Tools"]
           <ul class="pe-tree" id="peTree"></ul>
         </div>
         <div class="pe-resizer" id="resizer"></div>
-        <div class="pe-detail-panel" id="detailPanel">
-          <div class="pe-welcome" id="welcomeMsg">
-            <h2>PE Editor</h2>
-            <p>Load a PE file (.exe, .dll, .sys, .efi) to explore its structure.</p>
-            <p>
-              <strong>Features:</strong><br>
-              - Parses DOS Header, NT Headers (File Header + Optional Header)<br>
-              - Shows Data Directories (Import, Export, Resource, Debug, etc.)<br>
-              - Parses Export Table, Import Table, Base Relocation Table<br>
-              - Parses Certificate Table, TLS Directory, Debug Directory (CodeView)<br>
-              - Parses Exception Table (.pdata/.xdata) for x64 and ARM64<br>
-              - Decodes Load Config Directory (CFG, XFG, security cookie, etc.)<br>
-              - Decodes Resource Directory tree (types, names, languages)<br>
-              - Decodes IAT, Delay Import Descriptor, Bound Import, CLR Runtime Header<br>
-              - Editable headers (DOS, File, Optional) with Save PE download<br>
-              - Shows Section Headers with flags decoded<br>
-              - Tree navigation on the left, detail table on the right<br>
-            </p>
+        <div class="pe-right-panel" id="rightPanel">
+          <div class="pe-detail-panel" id="detailPanel">
+            <div class="pe-welcome" id="welcomeMsg">
+              <h2>PE Editor</h2>
+              <p>Load a PE file (.exe, .dll, .sys, .efi) to explore its structure.</p>
+              <p>
+                <strong>Features:</strong><br>
+                - Parses DOS Header, NT Headers (File Header + Optional Header)<br>
+                - Shows Data Directories (Import, Export, Resource, Debug, etc.)<br>
+                - Parses Export Table, Import Table, Base Relocation Table<br>
+                - Parses Certificate Table, TLS Directory, Debug Directory (CodeView)<br>
+                - Parses Exception Table (.pdata/.xdata) for x64 and ARM64<br>
+                - Decodes Load Config Directory (CFG, XFG, security cookie, etc.)<br>
+                - Decodes Resource Directory tree (types, names, languages)<br>
+                - Decodes IAT, Delay Import Descriptor, Bound Import, CLR Runtime Header<br>
+                - Editable headers (DOS, File, Optional) with Save PE download<br>
+                - Shows Section Headers with flags decoded<br>
+                - Hex view with click-to-highlight field bytes<br>
+                - Tree navigation on the left, detail table on the right<br>
+              </p>
+            </div>
+          </div>
+          <div class="pe-hex-resizer" id="hexResizer"></div>
+          <div class="pe-hex-panel" id="hexPanel">
+            <div class="pe-hex-placeholder">Load a PE file to see its hex dump.</div>
           </div>
         </div>
       </div>
