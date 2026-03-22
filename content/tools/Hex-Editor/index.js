@@ -712,6 +712,14 @@ function initHexView() {
     } else if (e.ctrlKey && e.key === "y") {
       e.preventDefault();
       doRedo();
+    } else if (e.ctrlKey && e.key === "[") {
+      e.preventDefault();
+      if (tabs.length < 2) return;
+      activateTab(activeTabIndex <= 0 ? tabs.length - 1 : activeTabIndex - 1);
+    } else if (e.ctrlKey && e.key === "]") {
+      e.preventDefault();
+      if (tabs.length < 2) return;
+      activateTab(activeTabIndex >= tabs.length - 1 ? 0 : activeTabIndex + 1);
     }
   });
 
