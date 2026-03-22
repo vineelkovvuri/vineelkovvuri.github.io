@@ -30,6 +30,7 @@ var hexSelAnchor = -1;
 var editingByteOffset = -1;  // Offset of byte currently being edited (-1 = none)
 var editNibbleHigh = true;   // True = waiting for high nibble, false = waiting for low nibble
 var editPendingNibble = 0;   // High nibble value while waiting for low nibble
+var editByteOriginal = -1;   // Original byte value when editing started on current byte
 
 // ============================================================
 // Section B: Utilities
@@ -62,20 +63,24 @@ function createTab(fileName, arrayBuffer) {
     fileName: fileName,
     fileSize: arrayBuffer.byteLength,
     data: arrayBuffer,
+    originalData: new Uint8Array(new Uint8Array(arrayBuffer)).buffer, // snapshot of original bytes
     scrollTop: 0,
     highlightOffset: -1,
     highlightSize: 0,
     findLastPos: 0,
     findQuery: "",
-    modifiedBytes: {},  // offset -> true for bytes that have been edited
-    isModified: false
+    modifiedBytes: {},  // offset -> true for bytes that differ from original
+    isModified: false,
+    undoStack: [],      // each entry: [{offset, oldByte, newByte}, ...]
+    redoStack: []
   };
   tabs.push(tab);
   activateTab(tabs.length - 1);
 }
 
 function activateTab(index) {
-  // Cancel any in-progress byte editing
+  // Flush any pending byte edit and cancel editing
+  flushByteEdit();
   editingByteOffset = -1;
 
   // Save current tab state
@@ -223,12 +228,74 @@ function updateSaveButton(tab) {
 }
 
 function markModified(tab, offset) {
-  tab.modifiedBytes[offset] = true;
-  if (!tab.isModified) {
-    tab.isModified = true;
+  // Compare current byte against original to decide modified status
+  var cur = new Uint8Array(tab.data)[offset];
+  var orig = new Uint8Array(tab.originalData)[offset];
+  if (cur !== orig) {
+    tab.modifiedBytes[offset] = true;
+  } else {
+    delete tab.modifiedBytes[offset];
+  }
+  refreshModifiedState(tab);
+}
+
+function refreshModifiedState(tab) {
+  var wasModified = tab.isModified;
+  // File is modified if any byte differs from original
+  var hasKeys = false;
+  for (var k in tab.modifiedBytes) {
+    if (tab.modifiedBytes.hasOwnProperty(k)) { hasKeys = true; break; }
+  }
+  tab.isModified = hasKeys;
+  if (wasModified !== tab.isModified) {
     renderTabs();
     updateSaveButton(tab);
   }
+}
+
+function pushUndo(tab, changes) {
+  tab.undoStack.push(changes);
+  tab.redoStack = [];
+}
+
+function doUndo() {
+  var tab = getActiveTab();
+  if (!tab || tab.undoStack.length === 0) return;
+  var changes = tab.undoStack.pop();
+  tab.redoStack.push(changes);
+  var view = new Uint8Array(tab.data);
+  for (var i = 0; i < changes.length; i++) {
+    view[changes[i].offset] = changes[i].oldByte;
+    markModified(tab, changes[i].offset);
+  }
+  editingByteOffset = -1;
+  renderHexRows();
+}
+
+function doRedo() {
+  var tab = getActiveTab();
+  if (!tab || tab.redoStack.length === 0) return;
+  var changes = tab.redoStack.pop();
+  tab.undoStack.push(changes);
+  var view = new Uint8Array(tab.data);
+  for (var i = 0; i < changes.length; i++) {
+    view[changes[i].offset] = changes[i].newByte;
+    markModified(tab, changes[i].offset);
+  }
+  editingByteOffset = -1;
+  renderHexRows();
+}
+
+// Flush a pending byte edit as an undo entry (call when leaving a byte or cancelling)
+function flushByteEdit() {
+  if (editByteOriginal < 0 || editingByteOffset < 0) return;
+  var tab = getActiveTab();
+  if (!tab) return;
+  var curByte = new Uint8Array(tab.data)[editingByteOffset];
+  if (curByte !== editByteOriginal) {
+    pushUndo(tab, [{ offset: editingByteOffset, oldByte: editByteOriginal, newByte: curByte }]);
+  }
+  editByteOriginal = -1;
 }
 
 function saveFile() {
@@ -558,10 +625,13 @@ function initHexView() {
 
     // Overwrite the matched bytes with replacement (truncate or pad if different length)
     var len = Math.min(replaceBytes.length, searchBytes.length);
+    var changes = [];
     for (var j = 0; j < len; j++) {
+      changes.push({ offset: off + j, oldByte: view[off + j], newByte: replaceBytes[j] });
       view[off + j] = replaceBytes[j];
       markModified(tab, off + j);
     }
+    if (changes.length > 0) pushUndo(tab, changes);
     // If replace is shorter, leave remaining bytes unchanged
     // If replace is longer, ignore extra bytes (same-length replacement for hex editing)
 
@@ -581,6 +651,7 @@ function initHexView() {
     var view = new Uint8Array(tab.data);
     var len = Math.min(replaceBytes.length, searchBytes.length);
     var count = 0;
+    var changes = [];
 
     for (var pos = 0; pos <= view.length - searchBytes.length; pos++) {
       var match = true;
@@ -589,6 +660,7 @@ function initHexView() {
       }
       if (match) {
         for (var j = 0; j < len; j++) {
+          changes.push({ offset: pos + j, oldByte: view[pos + j], newByte: replaceBytes[j] });
           view[pos + j] = replaceBytes[j];
           markModified(tab, pos + j);
         }
@@ -598,6 +670,7 @@ function initHexView() {
     }
 
     if (count > 0) {
+      pushUndo(tab, changes);
       renderHexRows();
     }
   }
@@ -632,6 +705,13 @@ function initHexView() {
     } else if (e.ctrlKey && e.key === "s") {
       e.preventDefault();
       saveFile();
+    } else if (e.ctrlKey && e.key === "z") {
+      e.preventDefault();
+      flushByteEdit();
+      doUndo();
+    } else if (e.ctrlKey && e.key === "y") {
+      e.preventDefault();
+      doRedo();
     }
   });
 
@@ -654,6 +734,8 @@ function initHexView() {
     if (isNaN(byteOff)) return;
     var tab = getActiveTab();
     if (!tab) return;
+    // Flush any pending edit on previous byte before switching
+    flushByteEdit();
     hexSelecting = true;
     hexSelAnchor = byteOff;
     // Enter edit mode on the clicked byte
@@ -697,6 +779,7 @@ function initHexView() {
 
     // Escape cancels editing
     if (e.key === "Escape") {
+      flushByteEdit();
       editingByteOffset = -1;
       renderHexRows();
       e.preventDefault();
@@ -705,6 +788,7 @@ function initHexView() {
 
     // Arrow keys navigate between bytes
     if (e.key === "ArrowRight") {
+      flushByteEdit();
       if (editingByteOffset < tab.fileSize - 1) {
         editingByteOffset++;
         editNibbleHigh = true;
@@ -717,6 +801,7 @@ function initHexView() {
       return;
     }
     if (e.key === "ArrowLeft") {
+      flushByteEdit();
       if (editingByteOffset > 0) {
         editingByteOffset--;
         editNibbleHigh = true;
@@ -729,6 +814,7 @@ function initHexView() {
       return;
     }
     if (e.key === "ArrowDown") {
+      flushByteEdit();
       var newOff = editingByteOffset + hexBytesPerRow;
       if (newOff < tab.fileSize) {
         editingByteOffset = newOff;
@@ -742,6 +828,7 @@ function initHexView() {
       return;
     }
     if (e.key === "ArrowUp") {
+      flushByteEdit();
       var newOff = editingByteOffset - hexBytesPerRow;
       if (newOff >= 0) {
         editingByteOffset = newOff;
@@ -757,6 +844,7 @@ function initHexView() {
 
     // Tab moves to next byte
     if (e.key === "Tab") {
+      flushByteEdit();
       if (e.shiftKey && editingByteOffset > 0) {
         editingByteOffset--;
       } else if (!e.shiftKey && editingByteOffset < tab.fileSize - 1) {
@@ -779,6 +867,8 @@ function initHexView() {
       var curByte = view[editingByteOffset];
 
       if (editNibbleHigh) {
+        // Starting to edit this byte — capture original value
+        editByteOriginal = curByte;
         // Replace high nibble immediately, keep low nibble
         view[editingByteOffset] = (nibbleVal << 4) | (curByte & 0x0F);
         markModified(tab, editingByteOffset);
@@ -787,6 +877,9 @@ function initHexView() {
         // Replace low nibble, then auto-advance to next byte
         view[editingByteOffset] = (curByte & 0xF0) | nibbleVal;
         markModified(tab, editingByteOffset);
+
+        // Flush undo entry for completed byte edit
+        flushByteEdit();
 
         if (editingByteOffset < tab.fileSize - 1) {
           editingByteOffset++;
