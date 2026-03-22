@@ -2660,10 +2660,7 @@ function escapeHtml(str) {
 // File loading
 // ============================================================
 
-document.getElementById("fileInput").addEventListener("change", function (event) {
-  var file = event.target.files[0];
-  if (!file) return;
-
+function loadPEFile(file) {
   var reader = new FileReader();
   reader.onload = function (e) {
     peData = e.target.result;
@@ -2687,6 +2684,11 @@ document.getElementById("fileInput").addEventListener("change", function (event)
     document.getElementById("fileInfo").textContent =
       file.name + " | " + (file.size / 1024).toFixed(1) + " KB | " + bitness + " | " + machineStr;
 
+    // Update drop zone text
+    var dropZone = document.getElementById("fileDropZone");
+    dropZone.textContent = file.name;
+    dropZone.style.color = "#333";
+
     // Build tree and show DOS header by default
     buildTree(parsedPE);
     showFields("DOS Header", "dosHeader", parsedPE.dosHeader.fields);
@@ -2702,4 +2704,49 @@ document.getElementById("fileInput").addEventListener("change", function (event)
     }
   };
   reader.readAsArrayBuffer(file);
-});
+}
+
+// Drop zone for PE file (click + drag & drop)
+(function setupFileDropZone() {
+  var dropZone = document.getElementById("fileDropZone");
+  var fileInput = document.getElementById("fileInput");
+
+  // Click to open file browser
+  dropZone.addEventListener("click", function () {
+    fileInput.click();
+  });
+
+  // File chosen via dialog
+  fileInput.addEventListener("change", function () {
+    if (fileInput.files.length > 0) {
+      loadPEFile(fileInput.files[0]);
+    }
+  });
+
+  // Drag hover styling
+  dropZone.addEventListener("dragenter", function (e) {
+    e.preventDefault();
+    dropZone.style.borderColor = "#0b5ed7";
+    dropZone.style.background = "rgba(13,110,253,0.12)";
+  });
+
+  dropZone.addEventListener("dragleave", function (e) {
+    e.preventDefault();
+    dropZone.style.borderColor = "#0d6efd";
+    dropZone.style.background = "rgba(13,110,253,0.04)";
+  });
+
+  dropZone.addEventListener("dragover", function (e) {
+    e.preventDefault();
+  });
+
+  dropZone.addEventListener("drop", function (e) {
+    e.preventDefault();
+    dropZone.style.borderColor = "#0d6efd";
+    dropZone.style.background = "rgba(13,110,253,0.04)";
+    var files = e.dataTransfer.files;
+    if (files.length > 0) {
+      loadPEFile(files[0]);
+    }
+  });
+})();
