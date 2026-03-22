@@ -26,6 +26,11 @@ var hexRafPending = false;
 var hexSelecting = false;
 var hexSelAnchor = -1;
 
+// Byte editing state
+var editingByteOffset = -1;  // Offset of byte currently being edited (-1 = none)
+var editNibbleHigh = true;   // True = waiting for high nibble, false = waiting for low nibble
+var editPendingNibble = 0;   // High nibble value while waiting for low nibble
+
 // ============================================================
 // Section B: Utilities
 // ============================================================
@@ -61,13 +66,18 @@ function createTab(fileName, arrayBuffer) {
     highlightOffset: -1,
     highlightSize: 0,
     findLastPos: 0,
-    findQuery: ""
+    findQuery: "",
+    modifiedBytes: {},  // offset -> true for bytes that have been edited
+    isModified: false
   };
   tabs.push(tab);
   activateTab(tabs.length - 1);
 }
 
 function activateTab(index) {
+  // Cancel any in-progress byte editing
+  editingByteOffset = -1;
+
   // Save current tab state
   if (activeTabIndex >= 0 && activeTabIndex < tabs.length) {
     var cur = tabs[activeTabIndex];
@@ -109,6 +119,9 @@ function activateTab(index) {
 
   // Update file info
   updateFileInfo(tab);
+
+  // Update save button
+  updateSaveButton(tab);
 }
 
 function closeTab(index) {
@@ -136,7 +149,19 @@ function renderTabs() {
       var tab = tabs[idx];
       var div = document.createElement("div");
       div.className = "hex-tab" + (idx === activeTabIndex ? " active" : "");
-      div.textContent = tab.fileName;
+
+      var nameSpan = document.createElement("span");
+      nameSpan.textContent = tab.fileName;
+      div.appendChild(nameSpan);
+
+      if (tab.isModified) {
+        var modDot = document.createElement("span");
+        modDot.className = "hex-tab-modified";
+        modDot.textContent = "\u25CF"; // filled circle
+        modDot.title = "Modified";
+        div.appendChild(modDot);
+      }
+
       div.addEventListener("click", function () { activateTab(idx); });
 
       var closeBtn = document.createElement("span");
@@ -188,6 +213,38 @@ function updateFileInfo(tab) {
   }
 }
 
+function updateSaveButton(tab) {
+  var btn = document.getElementById("saveBtn");
+  if (!tab || !tab.isModified) {
+    btn.style.display = "none";
+  } else {
+    btn.style.display = "inline-block";
+  }
+}
+
+function markModified(tab, offset) {
+  tab.modifiedBytes[offset] = true;
+  if (!tab.isModified) {
+    tab.isModified = true;
+    renderTabs();
+    updateSaveButton(tab);
+  }
+}
+
+function saveFile() {
+  var tab = getActiveTab();
+  if (!tab) return;
+  var blob = new Blob([tab.data], { type: "application/octet-stream" });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.href = url;
+  a.download = tab.fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
 // ============================================================
 // Section D: Hex Rendering
 // ============================================================
@@ -226,12 +283,12 @@ function renderHexRows() {
   var view = new Uint8Array(data);
   var html = "";
   for (var r = startRow; r < endRow; r++) {
-    html += formatHexRow(view, r, tab.highlightOffset, tab.highlightSize);
+    html += formatHexRow(view, r, tab.highlightOffset, tab.highlightSize, tab.modifiedBytes);
   }
   hexRowsEl.innerHTML = html;
 }
 
-function formatHexRow(view, rowIndex, highlightOffset, highlightSize) {
+function formatHexRow(view, rowIndex, highlightOffset, highlightSize, modifiedBytes) {
   var fileOffset = rowIndex * hexBytesPerRow;
   var end = Math.min(fileOffset + hexBytesPerRow, view.length);
 
@@ -254,9 +311,20 @@ function formatHexRow(view, rowIndex, highlightOffset, highlightSize) {
         byteOffset >= highlightOffset &&
         byteOffset < highlightOffset + highlightSize;
 
-      var hlClass = inHighlight ? " hex-highlight" : "";
-      hexParts.push('<span class="hb' + hlClass + '" data-byte="' + byteOffset + '">' + hexByte + '</span>');
-      asciiParts.push('<span class="ab' + hlClass + '" data-byte="' + byteOffset + '">' + asciiChar + '</span>');
+      var isMod = modifiedBytes[byteOffset] === true;
+      var isEditing = byteOffset === editingByteOffset;
+
+      var cls = "hb";
+      if (isMod) cls += " hex-modified";
+      if (inHighlight) cls += " hex-highlight";
+      if (isEditing) cls += " hex-editing";
+
+      var acls = "ab";
+      if (isMod) acls += " hex-modified";
+      if (inHighlight) acls += " hex-highlight";
+
+      hexParts.push('<span class="' + cls + '" data-byte="' + byteOffset + '">' + hexByte + '</span>');
+      asciiParts.push('<span class="' + acls + '" data-byte="' + byteOffset + '">' + asciiChar + '</span>');
     } else {
       hexParts.push("  ");
       asciiParts.push(" ");
@@ -290,6 +358,21 @@ function highlightHexBytes(offset, size) {
 
   // renderHexRows will be called by scroll event, but call it if scroll didn't change
   renderHexRows();
+}
+
+function ensureByteVisible(offset) {
+  if (!hexScrollEl) return;
+  var targetRow = Math.floor(offset / hexBytesPerRow);
+  var scrollTop = hexScrollEl.scrollTop;
+  var viewHeight = hexScrollEl.clientHeight;
+  var rowTop = targetRow * hexRowHeight;
+  var rowBottom = rowTop + hexRowHeight;
+
+  if (rowTop < scrollTop) {
+    hexScrollEl.scrollTop = rowTop;
+  } else if (rowBottom > scrollTop + viewHeight) {
+    hexScrollEl.scrollTop = rowBottom - viewHeight;
+  }
 }
 
 // ============================================================
@@ -350,6 +433,34 @@ function initHexView() {
   findBtn.title = "Find next occurrence";
   toolbar.appendChild(findBtn);
 
+  // Separator
+  var sep2 = document.createElement("span");
+  sep2.className = "hex-sep";
+  toolbar.appendChild(sep2);
+
+  // Replace
+  var replaceLabel = document.createElement("label");
+  replaceLabel.textContent = "Replace:";
+  toolbar.appendChild(replaceLabel);
+
+  var replaceInput = document.createElement("input");
+  replaceInput.type = "text";
+  replaceInput.id = "hexReplaceInput";
+  replaceInput.placeholder = "hex bytes";
+  replaceInput.title = "Replacement hex bytes (e.g. 90 90) — Ctrl+H";
+  replaceInput.style.width = "120px";
+  toolbar.appendChild(replaceInput);
+
+  var replaceBtn = document.createElement("button");
+  replaceBtn.textContent = "Replace";
+  replaceBtn.title = "Replace current match";
+  toolbar.appendChild(replaceBtn);
+
+  var replaceAllBtn = document.createElement("button");
+  replaceAllBtn.textContent = "All";
+  replaceAllBtn.title = "Replace all occurrences";
+  toolbar.appendChild(replaceAllBtn);
+
   headerEl.appendChild(toolbar);
 
   // Goto handler
@@ -364,33 +475,31 @@ function initHexView() {
     }
   });
 
-  // Find handler
-  function doFind() {
-    var tab = getActiveTab();
-    if (!tab) return;
-    var query = findInput.value.trim();
-    if (!query) return;
-
-    var searchBytes = null;
-
-    // Try to parse as hex bytes first (all hex chars, even length)
+  // Parse input string into byte array (hex bytes or ASCII text)
+  function parseInputBytes(query) {
+    if (!query) return null;
     var hexOnly = query.replace(/\s+/g, "").replace(/^0x/i, "");
     if (/^[0-9a-fA-F]+$/.test(hexOnly) && hexOnly.length % 2 === 0 && hexOnly.length >= 2) {
-      searchBytes = [];
+      var bytes = [];
       for (var i = 0; i < hexOnly.length; i += 2) {
-        searchBytes.push(parseInt(hexOnly.substring(i, i + 2), 16));
+        bytes.push(parseInt(hexOnly.substring(i, i + 2), 16));
       }
+      return bytes;
     }
-
-    // Fall back to ASCII text search
-    if (!searchBytes) {
-      searchBytes = [];
-      for (var i = 0; i < query.length; i++) {
-        searchBytes.push(query.charCodeAt(i) & 0xFF);
-      }
+    // Fall back to ASCII text
+    var bytes = [];
+    for (var i = 0; i < query.length; i++) {
+      bytes.push(query.charCodeAt(i) & 0xFF);
     }
+    return bytes.length > 0 ? bytes : null;
+  }
 
-    if (searchBytes.length === 0) return;
+  // Find handler — returns found offset or -1
+  function doFind() {
+    var tab = getActiveTab();
+    if (!tab) return -1;
+    var searchBytes = parseInputBytes(findInput.value.trim());
+    if (!searchBytes) return -1;
 
     // Search from last position + 1 (wrap around)
     var view = new Uint8Array(tab.data);
@@ -420,15 +529,94 @@ function initHexView() {
       tab.findLastPos = found + 1;
       highlightHexBytes(found, searchBytes.length);
     }
+    return found;
+  }
+
+  // Replace current match
+  function doReplace() {
+    var tab = getActiveTab();
+    if (!tab) return;
+    var searchBytes = parseInputBytes(findInput.value.trim());
+    var replaceBytes = parseInputBytes(replaceInput.value.trim());
+    if (!searchBytes || !replaceBytes) return;
+
+    // Check if current highlight is a match
+    var view = new Uint8Array(tab.data);
+    var off = tab.highlightOffset;
+    if (off < 0 || tab.highlightSize !== searchBytes.length) {
+      doFind();
+      return;
+    }
+    var isMatch = true;
+    for (var j = 0; j < searchBytes.length; j++) {
+      if (view[off + j] !== searchBytes[j]) { isMatch = false; break; }
+    }
+    if (!isMatch) {
+      doFind();
+      return;
+    }
+
+    // Overwrite the matched bytes with replacement (truncate or pad if different length)
+    var len = Math.min(replaceBytes.length, searchBytes.length);
+    for (var j = 0; j < len; j++) {
+      view[off + j] = replaceBytes[j];
+      markModified(tab, off + j);
+    }
+    // If replace is shorter, leave remaining bytes unchanged
+    // If replace is longer, ignore extra bytes (same-length replacement for hex editing)
+
+    renderHexRows();
+    // Find next
+    doFind();
+  }
+
+  // Replace all
+  function doReplaceAll() {
+    var tab = getActiveTab();
+    if (!tab) return;
+    var searchBytes = parseInputBytes(findInput.value.trim());
+    var replaceBytes = parseInputBytes(replaceInput.value.trim());
+    if (!searchBytes || !replaceBytes) return;
+
+    var view = new Uint8Array(tab.data);
+    var len = Math.min(replaceBytes.length, searchBytes.length);
+    var count = 0;
+
+    for (var pos = 0; pos <= view.length - searchBytes.length; pos++) {
+      var match = true;
+      for (var j = 0; j < searchBytes.length; j++) {
+        if (view[pos + j] !== searchBytes[j]) { match = false; break; }
+      }
+      if (match) {
+        for (var j = 0; j < len; j++) {
+          view[pos + j] = replaceBytes[j];
+          markModified(tab, pos + j);
+        }
+        count++;
+        pos += searchBytes.length - 1; // skip past this match
+      }
+    }
+
+    if (count > 0) {
+      renderHexRows();
+    }
   }
 
   findBtn.addEventListener("click", doFind);
   findInput.addEventListener("keydown", function (e) {
     if (e.key === "Enter") doFind();
   });
+  replaceBtn.addEventListener("click", doReplace);
+  replaceAllBtn.addEventListener("click", doReplaceAll);
+  replaceInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") doReplace();
+  });
 
-  // Global keyboard shortcuts: Ctrl+G = Goto, Ctrl+F = Find
+  // Global keyboard shortcuts: Ctrl+G = Goto, Ctrl+F = Find, Ctrl+H = Replace
   document.addEventListener("keydown", function (e) {
+    // Skip shortcuts when editing bytes
+    if (editingByteOffset >= 0 && !e.ctrlKey) return;
+
     if (e.ctrlKey && e.key === "g") {
       e.preventDefault();
       gotoInput.focus();
@@ -437,6 +625,13 @@ function initHexView() {
       e.preventDefault();
       findInput.focus();
       findInput.select();
+    } else if (e.ctrlKey && e.key === "h") {
+      e.preventDefault();
+      replaceInput.focus();
+      replaceInput.select();
+    } else if (e.ctrlKey && e.key === "s") {
+      e.preventDefault();
+      saveFile();
     }
   });
 
@@ -461,6 +656,9 @@ function initHexView() {
     if (!tab) return;
     hexSelecting = true;
     hexSelAnchor = byteOff;
+    // Enter edit mode on the clicked byte
+    editingByteOffset = byteOff;
+    editNibbleHigh = true;
     tab.highlightOffset = byteOff;
     tab.highlightSize = 1;
     renderHexRows();
@@ -479,12 +677,133 @@ function initHexView() {
     var hi = Math.max(hexSelAnchor, byteOff);
     tab.highlightOffset = lo;
     tab.highlightSize = hi - lo + 1;
+    // If dragging across multiple bytes, exit edit mode (it's a selection)
+    if (hi > lo) editingByteOffset = -1;
     renderHexRows();
   });
 
   document.addEventListener("mouseup", function () {
     if (hexSelecting) hexSelecting = false;
   });
+
+  // Keyboard handler for hex byte editing
+  document.addEventListener("keydown", function (e) {
+    if (editingByteOffset < 0) return;
+    // Don't intercept when user is typing in an input field
+    var ae = document.activeElement;
+    if (ae && (ae.tagName === "INPUT" || ae.tagName === "TEXTAREA")) return;
+    var tab = getActiveTab();
+    if (!tab) return;
+
+    // Escape cancels editing
+    if (e.key === "Escape") {
+      editingByteOffset = -1;
+      renderHexRows();
+      e.preventDefault();
+      return;
+    }
+
+    // Arrow keys navigate between bytes
+    if (e.key === "ArrowRight") {
+      if (editingByteOffset < tab.fileSize - 1) {
+        editingByteOffset++;
+        editNibbleHigh = true;
+        tab.highlightOffset = editingByteOffset;
+        tab.highlightSize = 1;
+        ensureByteVisible(editingByteOffset);
+        renderHexRows();
+      }
+      e.preventDefault();
+      return;
+    }
+    if (e.key === "ArrowLeft") {
+      if (editingByteOffset > 0) {
+        editingByteOffset--;
+        editNibbleHigh = true;
+        tab.highlightOffset = editingByteOffset;
+        tab.highlightSize = 1;
+        ensureByteVisible(editingByteOffset);
+        renderHexRows();
+      }
+      e.preventDefault();
+      return;
+    }
+    if (e.key === "ArrowDown") {
+      var newOff = editingByteOffset + hexBytesPerRow;
+      if (newOff < tab.fileSize) {
+        editingByteOffset = newOff;
+        editNibbleHigh = true;
+        tab.highlightOffset = editingByteOffset;
+        tab.highlightSize = 1;
+        ensureByteVisible(editingByteOffset);
+        renderHexRows();
+      }
+      e.preventDefault();
+      return;
+    }
+    if (e.key === "ArrowUp") {
+      var newOff = editingByteOffset - hexBytesPerRow;
+      if (newOff >= 0) {
+        editingByteOffset = newOff;
+        editNibbleHigh = true;
+        tab.highlightOffset = editingByteOffset;
+        tab.highlightSize = 1;
+        ensureByteVisible(editingByteOffset);
+        renderHexRows();
+      }
+      e.preventDefault();
+      return;
+    }
+
+    // Tab moves to next byte
+    if (e.key === "Tab") {
+      if (e.shiftKey && editingByteOffset > 0) {
+        editingByteOffset--;
+      } else if (!e.shiftKey && editingByteOffset < tab.fileSize - 1) {
+        editingByteOffset++;
+      }
+      editNibbleHigh = true;
+      tab.highlightOffset = editingByteOffset;
+      tab.highlightSize = 1;
+      ensureByteVisible(editingByteOffset);
+      renderHexRows();
+      e.preventDefault();
+      return;
+    }
+
+    // Hex digit input (0-9, a-f, A-F)
+    var hexChar = e.key.toLowerCase();
+    if (/^[0-9a-f]$/.test(hexChar) && !e.ctrlKey && !e.altKey && !e.metaKey) {
+      var nibbleVal = parseInt(hexChar, 16);
+      var view = new Uint8Array(tab.data);
+      var curByte = view[editingByteOffset];
+
+      if (editNibbleHigh) {
+        // Replace high nibble immediately, keep low nibble
+        view[editingByteOffset] = (nibbleVal << 4) | (curByte & 0x0F);
+        markModified(tab, editingByteOffset);
+        editNibbleHigh = false;
+      } else {
+        // Replace low nibble, then auto-advance to next byte
+        view[editingByteOffset] = (curByte & 0xF0) | nibbleVal;
+        markModified(tab, editingByteOffset);
+
+        if (editingByteOffset < tab.fileSize - 1) {
+          editingByteOffset++;
+          ensureByteVisible(editingByteOffset);
+        }
+        editNibbleHigh = true;
+        tab.highlightOffset = editingByteOffset;
+        tab.highlightSize = 1;
+      }
+      renderHexRows();
+      e.preventDefault();
+      return;
+    }
+  });
+
+  // Save button handler
+  document.getElementById("saveBtn").addEventListener("click", saveFile);
 }
 
 // ============================================================

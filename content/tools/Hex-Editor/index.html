@@ -164,7 +164,11 @@ tags: ["Tools"]
       .hex-offset { color: #888; }
       .hex-ascii { color: #2e7d32; }
       .hex-highlight { background: #cce5ff; color: #000; }
+      .hex-modified { color: #dc3545; font-weight: bold; }
+      .hex-modified.hex-highlight { background: #cce5ff; color: #dc3545; }
+      .hex-editing { outline: 2px solid #0d6efd; background: #e8f0fe; }
       .hb, .ab { cursor: default; }
+      .hex-tab-modified { color: #dc3545; margin-left: 4px; font-size: 0.7rem; }
 
       /* Placeholder */
       .hex-placeholder {
@@ -192,6 +196,7 @@ tags: ["Tools"]
         </div>
         <input type="file" id="fileInput" multiple style="display: none;" />
         <span id="fileInfo" style="font-family: Consolas, 'Courier New', monospace; font-size: 0.82rem; color: #666;"></span>
+        <button id="saveBtn" class="btn btn-primary" style="display: none; font-family: Consolas, 'Courier New', monospace; font-size: 0.82rem; padding: 4px 12px; white-space: nowrap;">Save</button>
       </div>
 
       <!-- Main container -->

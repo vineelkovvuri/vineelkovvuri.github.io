@@ -149,6 +149,8 @@
     <loc>/tags/reversing/</loc>
     <lastmod>2018-08-10T18:33:07-07:00</lastmod>
   </url><url>
+    <loc>/tools/hex-editor/</loc>
+  </url><url>
     <loc>/tools/uefilog-log-explorer/</loc>
   </url><url>
     <loc>/bookmarks/</loc>
@@ -158,8 +160,6 @@
     <loc>/tools/web-diff/</loc>
   </url><url>
     <loc>/bookmarks/presentations-git/</loc>
-  </url><url>
-    <loc>/tools/hex-editor/</loc>
   </url><url>
     <loc>/tools/hex-to-memory/</loc>
   </url><url>
