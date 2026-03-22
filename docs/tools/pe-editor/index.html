@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>🔧 PE Editor | Vineel Kovvuri</title>
@@ -192,6 +192,50 @@
         line-height: 1.8;
       }
       .pe-welcome h2 { color: #333; margin-top: 0; }
+
+      /* Editable field controls */
+      .pe-edit-input, .pe-edit-select {
+        width: 100%;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.82rem;
+        padding: 2px 4px;
+        border: 1px solid #ced4da;
+        border-radius: 3px;
+        box-sizing: border-box;
+        background: #fffff0;
+      }
+      .pe-edit-input:focus, .pe-edit-select:focus {
+        border-color: #86b7fe;
+        outline: 0;
+        box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.15);
+      }
+      .pe-edit-input.invalid {
+        border-color: #dc3545;
+        background: #fff5f5;
+      }
+      .pe-bitmask-value {
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.82rem;
+        font-weight: bold;
+        display: block;
+        margin-bottom: 4px;
+      }
+      .pe-bitmask-checkboxes {
+        max-height: 150px;
+        overflow-y: auto;
+        border: 1px solid #eee;
+        padding: 4px;
+        border-radius: 3px;
+        background: #fafafa;
+      }
+      .pe-bitmask-label {
+        display: block;
+        font-size: 0.78rem;
+        font-family: Consolas, 'Courier New', monospace;
+        cursor: pointer;
+        padding: 1px 0;
+        white-space: nowrap;
+      }
     </style>
   </head>
 
@@ -205,6 +249,7 @@
         </div>
         <input type="file" id="fileInput" accept=".exe,.dll,.sys,.efi,.ocx,.scr,.drv,.cpl,.mui" style="display: none;" />
         <span id="fileInfo" style="font-family: Consolas, 'Courier New', monospace; font-size: 0.82rem; color: #666;"></span>
+        <button id="downloadBtn" class="btn btn-primary" style="display: none; font-family: Consolas, 'Courier New', monospace; font-size: 0.82rem; padding: 4px 12px; white-space: nowrap;">Save PE</button>
       </div>
 
       <!-- Main split view -->

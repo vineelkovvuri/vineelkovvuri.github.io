@@ -5,6 +5,8 @@ var peData = null;    // ArrayBuffer of loaded file
 var peView = null;    // DataView for reading
 var parsedPE = null;  // Parsed structure
 var selectedLabel = null; // Currently selected tree label element
+var isModified = false;   // Tracks whether any field has been changed
+var loadedFileName = null; // Stores the original file name for download
 
 // ============================================================
 // PE Constants
@@ -1168,6 +1170,17 @@ var RT_NAMES = {
   24: "RT_MANIFEST",
 };
 
+// Editable section configuration
+var EDITABLE_SECTIONS = ["dosHeader", "fileHeader", "optionalHeader"];
+
+var FIELD_EDIT_TYPE = {
+  "fileHeader:Machine":                { type: "dropdown", options: IMAGE_FILE_MACHINE },
+  "optionalHeader:Magic":              { type: "dropdown", options: { 0x10B: "PE32", 0x20B: "PE32+ (64-bit)", 0x107: "ROM image" } },
+  "optionalHeader:Subsystem":          { type: "dropdown", options: IMAGE_SUBSYSTEM },
+  "fileHeader:Characteristics":        { type: "bitmask", flags: IMAGE_FILE_CHARACTERISTICS },
+  "optionalHeader:DllCharacteristics": { type: "bitmask", flags: IMAGE_DLLCHARACTERISTICS },
+};
+
 function parseLoadConfigDirectory(view, buffer, dataDirectories, sections, is64) {
   // Load Config is data directory index 10
   if (dataDirectories.length <= 10) return null;
@@ -1737,8 +1750,206 @@ function expandAllNodes(li) {
 // UI: Detail panel
 // ============================================================
 
+// --- Editing support ---
+
+function writeFieldValue(field, newValue) {
+  var offset = field.offset;
+  var size = field.size;
+  if (size === 1) {
+    peView.setUint8(offset, newValue & 0xFF);
+  } else if (size === 2) {
+    peView.setUint16(offset, newValue & 0xFFFF, true);
+  } else if (size === 4) {
+    peView.setUint32(offset, newValue >>> 0, true);
+  }
+  // 8-byte fields handled separately in renderHexInput
+}
+
+function writeField64(field, hexStr) {
+  hexStr = hexStr.replace(/^0x/i, "");
+  while (hexStr.length < 16) hexStr = "0" + hexStr;
+  var hi = parseInt(hexStr.substring(0, hexStr.length - 8), 16) || 0;
+  var lo = parseInt(hexStr.substring(hexStr.length - 8), 16) || 0;
+  peView.setUint32(field.offset, lo >>> 0, true);
+  peView.setUint32(field.offset + 4, hi >>> 0, true);
+}
+
+function updateFileInfoBar() {
+  if (!loadedFileName || !parsedPE) return;
+  var machine = parsedPE.fileHeader.fields[0].value;
+  var machineStr = IMAGE_FILE_MACHINE[machine] || "Unknown";
+  var bitness = parsedPE.is64 ? "PE32+" : "PE32";
+  var sizeKb = (peData.byteLength / 1024).toFixed(1);
+  var text = loadedFileName + " | " + sizeKb + " KB | " + bitness + " | " + machineStr;
+  if (isModified) text += " | (Modified)";
+  document.getElementById("fileInfo").textContent = text;
+}
+
+function onFieldModified(sectionKey) {
+  isModified = true;
+  updateFileInfoBar();
+
+  // Show download button
+  var btn = document.getElementById("downloadBtn");
+  if (btn) btn.style.display = "inline-block";
+
+  // Re-parse the PE from modified buffer
+  try {
+    parsedPE = parsePE(peData);
+  } catch (err) {
+    console.warn("Re-parse after edit failed:", err.message);
+    return;
+  }
+
+  // Re-render the current section
+  var titleMap = { dosHeader: "DOS Header", fileHeader: "File Header", optionalHeader: "Optional Header" };
+  var sectionData = parsedPE[sectionKey];
+  if (sectionData && sectionData.fields) {
+    showFields(titleMap[sectionKey] || sectionKey, sectionKey, sectionData.fields);
+  }
+}
+
+function renderHexInput(container, field, sectionKey) {
+  var input = document.createElement("input");
+  input.type = "text";
+  input.className = "pe-edit-input";
+
+  if (field.size === 8 && field.valueLo !== undefined) {
+    input.value = hex64(field.valueLo, field.valueHi);
+  } else {
+    input.value = hex(field.value, field.size * 2);
+  }
+
+  input.addEventListener("change", function () {
+    var raw = input.value.replace(/^0x/i, "");
+    if (!/^[0-9a-fA-F]+$/.test(raw)) {
+      input.classList.add("invalid");
+      return;
+    }
+    input.classList.remove("invalid");
+
+    if (field.size === 8) {
+      if (raw.length > 16) { input.classList.add("invalid"); return; }
+      writeField64(field, raw);
+    } else {
+      var newVal = parseInt(raw, 16);
+      var maxVal = (field.size === 1) ? 0xFF : (field.size === 2) ? 0xFFFF : 0xFFFFFFFF;
+      if (newVal > maxVal) { input.classList.add("invalid"); return; }
+      writeFieldValue(field, newVal);
+    }
+    onFieldModified(sectionKey);
+  });
+
+  container.parentNode.replaceChild(input, container);
+}
+
+function renderDropdown(container, field, sectionKey, options) {
+  var select = document.createElement("select");
+  select.className = "pe-edit-select";
+
+  var currentVal = field.value;
+  var foundCurrent = false;
+
+  for (var key in options) {
+    var numKey = parseInt(key);
+    var opt = document.createElement("option");
+    opt.value = numKey;
+    opt.textContent = hex(numKey, field.size * 2) + " - " + options[key];
+    if (numKey === currentVal) {
+      opt.selected = true;
+      foundCurrent = true;
+    }
+    select.appendChild(opt);
+  }
+
+  if (!foundCurrent) {
+    var customOpt = document.createElement("option");
+    customOpt.value = currentVal;
+    customOpt.textContent = hex(currentVal, field.size * 2) + " - (custom)";
+    customOpt.selected = true;
+    select.insertBefore(customOpt, select.firstChild);
+  }
+
+  select.addEventListener("change", function () {
+    var newVal = parseInt(select.value);
+    writeFieldValue(field, newVal);
+    onFieldModified(sectionKey);
+  });
+
+  container.parentNode.replaceChild(select, container);
+}
+
+function renderBitmask(container, field, sectionKey, flags) {
+  var wrapper = document.createElement("div");
+
+  var hexDisplay = document.createElement("span");
+  hexDisplay.className = "pe-bitmask-value";
+  hexDisplay.textContent = hex(field.value, field.size * 2);
+  wrapper.appendChild(hexDisplay);
+
+  var checkboxDiv = document.createElement("div");
+  checkboxDiv.className = "pe-bitmask-checkboxes";
+
+  var currentVal = field.value;
+
+  for (var bit in flags) {
+    var bitNum = parseInt(bit);
+    var label = document.createElement("label");
+    label.className = "pe-bitmask-label";
+
+    var cb = document.createElement("input");
+    cb.type = "checkbox";
+    cb.value = bitNum;
+    cb.checked = !!(currentVal & bitNum);
+    cb.style.marginRight = "4px";
+
+    cb.addEventListener("change", (function (hexDisp) {
+      return function () {
+        var newVal = 0;
+        var allCbs = checkboxDiv.querySelectorAll('input[type="checkbox"]');
+        for (var i = 0; i < allCbs.length; i++) {
+          if (allCbs[i].checked) newVal |= parseInt(allCbs[i].value);
+        }
+        hexDisp.textContent = hex(newVal, field.size * 2);
+        writeFieldValue(field, newVal);
+        onFieldModified(sectionKey);
+      };
+    })(hexDisplay));
+
+    label.appendChild(cb);
+    label.appendChild(document.createTextNode(hex(bitNum, 4) + " " + flags[bit]));
+    checkboxDiv.appendChild(label);
+  }
+
+  wrapper.appendChild(checkboxDiv);
+  container.parentNode.replaceChild(wrapper, container);
+}
+
+function downloadModifiedPE() {
+  if (!peData) return;
+  var blob = new Blob([peData], { type: "application/octet-stream" });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.href = url;
+  var name = loadedFileName || "output.exe";
+  var dotIdx = name.lastIndexOf(".");
+  if (dotIdx > 0) {
+    a.download = name.substring(0, dotIdx) + "_modified" + name.substring(dotIdx);
+  } else {
+    a.download = name + "_modified";
+  }
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// --- showFields with editable support ---
+
 function showFields(title, sectionKey, fields) {
   var panel = document.getElementById("detailPanel");
+  var isEditable = EDITABLE_SECTIONS.indexOf(sectionKey) !== -1;
+
   var html = '<div class="pe-detail-header">' + escapeHtml(title) + '</div>';
   html += '<table class="pe-detail-table"><thead><tr>';
   html += '<th class="col-member">Member</th>';
@@ -1748,7 +1959,7 @@ function showFields(title, sectionKey, fields) {
   html += '<th class="col-meaning">Meaning</th>';
   html += '</tr></thead><tbody>';
 
-  fields.forEach(function (f) {
+  fields.forEach(function (f, idx) {
     var valStr;
     if (f.isString) {
       valStr = '"' + escapeHtml(f.value) + '"';
@@ -1765,13 +1976,38 @@ function showFields(title, sectionKey, fields) {
     html += '<td>' + escapeHtml(f.name) + '</td>';
     html += '<td>' + hex(f.offset, 8) + '</td>';
     html += '<td>' + f.size + '</td>';
-    html += '<td>' + valStr + '</td>';
+
+    if (isEditable && !f.isString) {
+      html += '<td><span id="pe-edit-val-' + idx + '"></span></td>';
+    } else {
+      html += '<td>' + valStr + '</td>';
+    }
     html += '<td>' + escapeHtml(meaning) + '</td>';
     html += '</tr>';
   });
 
   html += '</tbody></table>';
   panel.innerHTML = html;
+
+  // Attach interactive controls for editable fields
+  if (isEditable) {
+    fields.forEach(function (f, idx) {
+      if (f.isString) return;
+      var valSpan = document.getElementById("pe-edit-val-" + idx);
+      if (!valSpan) return;
+
+      var editKey = sectionKey + ":" + f.name;
+      var editType = FIELD_EDIT_TYPE[editKey];
+
+      if (editType && editType.type === "dropdown") {
+        renderDropdown(valSpan, f, sectionKey, editType.options);
+      } else if (editType && editType.type === "bitmask") {
+        renderBitmask(valSpan, f, sectionKey, editType.flags);
+      } else {
+        renderHexInput(valSpan, f, sectionKey);
+      }
+    });
+  }
 }
 
 function showDataDirectories(dirs) {
@@ -2666,6 +2902,12 @@ function loadPEFile(file) {
     peData = e.target.result;
     peView = new DataView(peData);
     selectedLabel = null;
+    isModified = false;
+    loadedFileName = file.name;
+
+    // Hide download button
+    var dlBtn = document.getElementById("downloadBtn");
+    if (dlBtn) dlBtn.style.display = "none";
 
     try {
       parsedPE = parsePE(peData);
@@ -2678,11 +2920,7 @@ function loadPEFile(file) {
     }
 
     // Show file info
-    var machine = parsedPE.fileHeader.fields[0].value;
-    var machineStr = IMAGE_FILE_MACHINE[machine] || "Unknown";
-    var bitness = parsedPE.is64 ? "PE32+" : "PE32";
-    document.getElementById("fileInfo").textContent =
-      file.name + " | " + (file.size / 1024).toFixed(1) + " KB | " + bitness + " | " + machineStr;
+    updateFileInfoBar();
 
     // Update drop zone text
     var dropZone = document.getElementById("fileDropZone");
@@ -2750,3 +2988,6 @@ function loadPEFile(file) {
     }
   });
 })();
+
+// Download button
+document.getElementById("downloadBtn").addEventListener("click", downloadModifiedPE);
