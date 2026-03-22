@@ -7,6 +7,7 @@ var parsedPE = null;  // Parsed structure
 var selectedLabel = null; // Currently selected tree label element
 var isModified = false;   // Tracks whether any field has been changed
 var loadedFileName = null; // Stores the original file name for download
+var currentSection = null; // Currently displayed section key (for edit re-render)
 
 // ============================================================
 // PE Constants
@@ -1989,6 +1990,8 @@ function createTreeNode(label, onClick, children) {
     if (selectedLabel) selectedLabel.classList.remove("selected");
     labelDiv.classList.add("selected");
     selectedLabel = labelDiv;
+    // Clear current section tracking (showFields will set it for editable sections)
+    currentSection = null;
     // Fire callback
     if (onClick) onClick();
   });
@@ -2077,7 +2080,9 @@ function onFieldModified(sectionKey) {
     return;
   }
 
-  // Re-render the current section
+  // Only re-render if the user is still viewing this section
+  if (currentSection !== sectionKey) return;
+
   var titleMap = { dosHeader: "DOS Header", fileHeader: "File Header", optionalHeader: "Optional Header" };
   var sectionData = parsedPE[sectionKey];
   if (sectionData && sectionData.fields) {
@@ -2252,6 +2257,7 @@ function downloadModifiedPE() {
 // --- showFields with editable support ---
 
 function showFields(title, sectionKey, fields) {
+  currentSection = sectionKey;
   var panel = document.getElementById("detailPanel");
   var isEditable = EDITABLE_SECTIONS.indexOf(sectionKey) !== -1;
 
