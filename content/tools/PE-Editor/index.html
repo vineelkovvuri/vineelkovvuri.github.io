@@ -105,6 +105,54 @@ tags: ["Tools"]
         font-weight: bold;
         flex-shrink: 0;
         color: #555;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .pe-hex-header-title { white-space: nowrap; }
+      .pe-hex-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-left: auto;
+        font-weight: normal;
+      }
+      .pe-hex-toolbar label {
+        font-size: 0.75rem;
+        white-space: nowrap;
+        color: #555;
+        margin: 0;
+      }
+      .pe-hex-toolbar input {
+        width: 100px;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.75rem;
+        padding: 1px 4px;
+        border: 1px solid #ced4da;
+        border-radius: 3px;
+        background: #fff;
+      }
+      .pe-hex-toolbar input:focus {
+        border-color: #86b7fe;
+        outline: 0;
+        box-shadow: 0 0 0 2px rgba(13,110,253,0.15);
+      }
+      .pe-hex-toolbar button {
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.72rem;
+        padding: 1px 6px;
+        border: 1px solid #ced4da;
+        border-radius: 3px;
+        background: #fff;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .pe-hex-toolbar button:hover { background: #e2e6ea; }
+      .pe-hex-toolbar .pe-hex-sep {
+        width: 1px;
+        height: 16px;
+        background: #ced4da;
+        margin: 0 2px;
       }
       .pe-hex-scroll {
         flex: 1;

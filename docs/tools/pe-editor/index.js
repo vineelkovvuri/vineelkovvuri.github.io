@@ -2630,7 +2630,7 @@ function showBaseRelocationBlock(block, idx) {
     html += '</tr></thead><tbody>';
 
     block.entries.forEach(function (entry, eIdx) {
-      html += '<tr>';
+      html += '<tr data-hex-offset="' + (block.fileOffset + 8 + eIdx * 2) + '" data-hex-size="2">';
       html += '<td>' + eIdx + '</td>';
       html += '<td>' + entry.type + '</td>';
       html += '<td>' + escapeHtml(entry.typeName) + '</td>';
@@ -2813,12 +2813,12 @@ function showResourceDirectoryOverview(dir) {
   html += '<th class="col-value">Value</th>';
   html += '</tr></thead><tbody>';
 
-  html += '<tr><td>File Offset</td><td>' + hex(dir.fileOffset, 8) + '</td></tr>';
-  html += '<tr><td>Characteristics</td><td>' + hex(dir.characteristics, 8) + '</td></tr>';
-  html += '<tr><td>TimeDateStamp</td><td>' + formatTimestamp(dir.timeDateStamp) + '</td></tr>';
-  html += '<tr><td>Version</td><td>' + dir.majorVersion + '.' + dir.minorVersion + '</td></tr>';
-  html += '<tr><td>Number of Named Entries</td><td>' + dir.numberOfNamedEntries + '</td></tr>';
-  html += '<tr><td>Number of ID Entries</td><td>' + dir.numberOfIdEntries + '</td></tr>';
+  html += '<tr data-hex-offset="' + dir.fileOffset + '" data-hex-size="16"><td>File Offset</td><td>' + hex(dir.fileOffset, 8) + '</td></tr>';
+  html += '<tr data-hex-offset="' + dir.fileOffset + '" data-hex-size="4"><td>Characteristics</td><td>' + hex(dir.characteristics, 8) + '</td></tr>';
+  html += '<tr data-hex-offset="' + (dir.fileOffset + 4) + '" data-hex-size="4"><td>TimeDateStamp</td><td>' + formatTimestamp(dir.timeDateStamp) + '</td></tr>';
+  html += '<tr data-hex-offset="' + (dir.fileOffset + 8) + '" data-hex-size="4"><td>Version</td><td>' + dir.majorVersion + '.' + dir.minorVersion + '</td></tr>';
+  html += '<tr data-hex-offset="' + (dir.fileOffset + 12) + '" data-hex-size="2"><td>Number of Named Entries</td><td>' + dir.numberOfNamedEntries + '</td></tr>';
+  html += '<tr data-hex-offset="' + (dir.fileOffset + 14) + '" data-hex-size="2"><td>Number of ID Entries</td><td>' + dir.numberOfIdEntries + '</td></tr>';
   html += '<tr><td>Total Resource Types</td><td>' + dir.entries.length + '</td></tr>';
 
   html += '</tbody></table>';
@@ -2860,12 +2860,12 @@ function showResourceDirEntry(entry) {
     html += '<th class="col-value">Value</th>';
     html += '</tr></thead><tbody>';
 
-    html += '<tr><td>File Offset</td><td>' + hex(dir.fileOffset, 8) + '</td></tr>';
-    html += '<tr><td>Characteristics</td><td>' + hex(dir.characteristics, 8) + '</td></tr>';
-    html += '<tr><td>TimeDateStamp</td><td>' + formatTimestamp(dir.timeDateStamp) + '</td></tr>';
-    html += '<tr><td>Version</td><td>' + dir.majorVersion + '.' + dir.minorVersion + '</td></tr>';
-    html += '<tr><td>Named Entries</td><td>' + dir.numberOfNamedEntries + '</td></tr>';
-    html += '<tr><td>ID Entries</td><td>' + dir.numberOfIdEntries + '</td></tr>';
+    html += '<tr data-hex-offset="' + dir.fileOffset + '" data-hex-size="16"><td>File Offset</td><td>' + hex(dir.fileOffset, 8) + '</td></tr>';
+    html += '<tr data-hex-offset="' + dir.fileOffset + '" data-hex-size="4"><td>Characteristics</td><td>' + hex(dir.characteristics, 8) + '</td></tr>';
+    html += '<tr data-hex-offset="' + (dir.fileOffset + 4) + '" data-hex-size="4"><td>TimeDateStamp</td><td>' + formatTimestamp(dir.timeDateStamp) + '</td></tr>';
+    html += '<tr data-hex-offset="' + (dir.fileOffset + 8) + '" data-hex-size="4"><td>Version</td><td>' + dir.majorVersion + '.' + dir.minorVersion + '</td></tr>';
+    html += '<tr data-hex-offset="' + (dir.fileOffset + 12) + '" data-hex-size="2"><td>Named Entries</td><td>' + dir.numberOfNamedEntries + '</td></tr>';
+    html += '<tr data-hex-offset="' + (dir.fileOffset + 14) + '" data-hex-size="2"><td>ID Entries</td><td>' + dir.numberOfIdEntries + '</td></tr>';
     html += '</tbody></table>';
 
     if (dir.entries.length > 0) {
@@ -2911,11 +2911,11 @@ function showResourceDataEntry(entry) {
     html += '<th class="col-meaning">Description</th>';
     html += '</tr></thead><tbody>';
 
-    html += '<tr><td>OffsetToData (RVA)</td><td>' + hex(de.rva, 8) + '</td><td>RVA of resource data</td></tr>';
-    html += '<tr><td>Size</td><td>' + de.size + '</td><td>' + de.size + ' bytes</td></tr>';
-    html += '<tr><td>CodePage</td><td>' + de.codePage + '</td><td>' + (de.codePage === 0 ? "Unicode" : "Code page " + de.codePage) + '</td></tr>';
-    html += '<tr><td>Reserved</td><td>' + hex(de.reserved, 8) + '</td><td>Must be zero</td></tr>';
-    html += '<tr><td>Entry File Offset</td><td>' + hex(de.fileOffset, 8) + '</td><td>File offset of IMAGE_RESOURCE_DATA_ENTRY</td></tr>';
+    html += '<tr data-hex-offset="' + de.fileOffset + '" data-hex-size="4"><td>OffsetToData (RVA)</td><td>' + hex(de.rva, 8) + '</td><td>RVA of resource data</td></tr>';
+    html += '<tr data-hex-offset="' + (de.fileOffset + 4) + '" data-hex-size="4"><td>Size</td><td>' + de.size + '</td><td>' + de.size + ' bytes</td></tr>';
+    html += '<tr data-hex-offset="' + (de.fileOffset + 8) + '" data-hex-size="4"><td>CodePage</td><td>' + de.codePage + '</td><td>' + (de.codePage === 0 ? "Unicode" : "Code page " + de.codePage) + '</td></tr>';
+    html += '<tr data-hex-offset="' + (de.fileOffset + 12) + '" data-hex-size="4"><td>Reserved</td><td>' + hex(de.reserved, 8) + '</td><td>Must be zero</td></tr>';
+    html += '<tr data-hex-offset="' + de.fileOffset + '" data-hex-size="16"><td>Entry File Offset</td><td>' + hex(de.fileOffset, 8) + '</td><td>File offset of IMAGE_RESOURCE_DATA_ENTRY</td></tr>';
 
     html += '</tbody></table>';
   }
@@ -3603,12 +3603,127 @@ function initHexPanel() {
   var panel = document.getElementById("hexPanel");
   panel.innerHTML = "";
 
-  // Header bar
+  // Header bar with Goto/Find toolbar
   var header = document.createElement("div");
   header.className = "pe-hex-header";
-  header.textContent = "Hex View \u2014 " + peData.byteLength + " bytes (" + hex(peData.byteLength, 8) + ")";
+
+  var titleSpan = document.createElement("span");
+  titleSpan.className = "pe-hex-header-title";
+  titleSpan.textContent = "Hex View \u2014 " + peData.byteLength + " bytes (" + hex(peData.byteLength, 8) + ")";
+  header.appendChild(titleSpan);
+
+  var toolbar = document.createElement("span");
+  toolbar.className = "pe-hex-toolbar";
+
+  // Goto
+  var gotoLabel = document.createElement("label");
+  gotoLabel.textContent = "Goto:";
+  toolbar.appendChild(gotoLabel);
+
+  var gotoInput = document.createElement("input");
+  gotoInput.type = "text";
+  gotoInput.placeholder = "0x offset";
+  gotoInput.title = "Enter hex offset (e.g. 0x1A0 or 1A0)";
+  toolbar.appendChild(gotoInput);
+
+  // separator
+  var sep1 = document.createElement("span");
+  sep1.className = "pe-hex-sep";
+  toolbar.appendChild(sep1);
+
+  // Find
+  var findLabel = document.createElement("label");
+  findLabel.textContent = "Find:";
+  toolbar.appendChild(findLabel);
+
+  var findInput = document.createElement("input");
+  findInput.type = "text";
+  findInput.placeholder = "hex or text";
+  findInput.title = "Hex bytes (e.g. 4D5A) or text (e.g. .text)";
+  findInput.style.width = "120px";
+  toolbar.appendChild(findInput);
+
+  var findBtn = document.createElement("button");
+  findBtn.textContent = "Next";
+  findBtn.title = "Find next occurrence";
+  toolbar.appendChild(findBtn);
+
+  header.appendChild(toolbar);
   panel.appendChild(header);
   hexHeaderEl = header;
+
+  // Goto handler
+  var hexFindLastPos = 0;
+
+  gotoInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      var val = gotoInput.value.trim().replace(/^0x/i, "");
+      var offset = parseInt(val, 16);
+      if (isNaN(offset) || offset < 0 || offset >= peData.byteLength) return;
+      highlightHexBytes(offset, 1);
+    }
+  });
+
+  // Find handler
+  function doFind() {
+    var query = findInput.value.trim();
+    if (!query || !peData) return;
+
+    var searchBytes = null;
+
+    // Try to parse as hex bytes first (all hex chars, even length)
+    var hexOnly = query.replace(/\s+/g, "").replace(/^0x/i, "");
+    if (/^[0-9a-fA-F]+$/.test(hexOnly) && hexOnly.length % 2 === 0 && hexOnly.length >= 2) {
+      searchBytes = [];
+      for (var i = 0; i < hexOnly.length; i += 2) {
+        searchBytes.push(parseInt(hexOnly.substring(i, i + 2), 16));
+      }
+    }
+
+    // Fall back to ASCII text search
+    if (!searchBytes) {
+      searchBytes = [];
+      for (var i = 0; i < query.length; i++) {
+        searchBytes.push(query.charCodeAt(i) & 0xFF);
+      }
+    }
+
+    if (searchBytes.length === 0) return;
+
+    // Search from last position + 1 (wrap around)
+    var view = new Uint8Array(peData);
+    var startPos = hexFindLastPos;
+    var found = -1;
+
+    for (var pos = startPos; pos <= view.length - searchBytes.length; pos++) {
+      var match = true;
+      for (var j = 0; j < searchBytes.length; j++) {
+        if (view[pos + j] !== searchBytes[j]) { match = false; break; }
+      }
+      if (match) { found = pos; break; }
+    }
+
+    // Wrap around if not found
+    if (found === -1 && startPos > 0) {
+      for (var pos = 0; pos < startPos && pos <= view.length - searchBytes.length; pos++) {
+        var match = true;
+        for (var j = 0; j < searchBytes.length; j++) {
+          if (view[pos + j] !== searchBytes[j]) { match = false; break; }
+        }
+        if (match) { found = pos; break; }
+      }
+    }
+
+    if (found >= 0) {
+      hexFindLastPos = found + 1;
+      highlightHexBytes(found, searchBytes.length);
+    }
+  }
+
+  findBtn.addEventListener("click", doFind);
+  findInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") doFind();
+  });
 
   // Scroll container
   var scroll = document.createElement("div");
