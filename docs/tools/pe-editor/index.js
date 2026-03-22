@@ -331,6 +331,12 @@ function parsePE(buffer) {
   // --- Debug Directory ---
   result.debugEntries = parseDebugDirectory(view, buffer, result.dataDirectories, result.sections);
 
+  // --- Export Table ---
+  result.exportTable = parseExportTable(view, buffer, result.dataDirectories, result.sections);
+
+  // --- Import Table ---
+  result.importTable = parseImportTable(view, buffer, result.dataDirectories, result.sections);
+
   return result;
 }
 
@@ -458,6 +464,216 @@ function parseCodeView(view, offset, size) {
       { name: "CvSignature", offset: offset, size: 4, value: signature, meaning: "Unknown CodeView signature: " + sigBytes },
     ],
   };
+}
+
+// Parse the Export Directory Table (Data Directory index 0)
+// IMAGE_EXPORT_DIRECTORY is 40 bytes at the RVA specified in the data directory.
+// It contains pointers to the Export Address Table (EAT), Export Name Pointer Table (ENPT),
+// and Export Ordinal Table (EOT).
+function parseExportTable(view, buffer, dataDirectories, sections) {
+  if (dataDirectories.length < 1) return null;
+  var exportDir = dataDirectories[0];
+  if (exportDir.rva === 0 || exportDir.size === 0) return null;
+
+  var off = rvaToFileOffset(exportDir.rva, sections);
+  if (off + 40 > buffer.byteLength) return null;
+
+  var nameRva = view.getUint32(off + 12, true);
+  var dllName = "";
+  if (nameRva !== 0) {
+    var nameOff = rvaToFileOffset(nameRva, sections);
+    if (nameOff < buffer.byteLength) {
+      dllName = readNullTerminatedString(view, nameOff, 256);
+    }
+  }
+
+  var numberOfFunctions = view.getUint32(off + 20, true);
+  var numberOfNames = view.getUint32(off + 24, true);
+  var addressTableRva = view.getUint32(off + 28, true);
+  var namePointerRva = view.getUint32(off + 32, true);
+  var ordinalTableRva = view.getUint32(off + 36, true);
+  var ordinalBase = view.getUint32(off + 16, true);
+
+  var header = {
+    offset: off,
+    fields: [
+      { name: "Characteristics",      offset: off,      size: 4, value: view.getUint32(off, true) },
+      { name: "TimeDateStamp",        offset: off + 4,  size: 4, value: view.getUint32(off + 4, true) },
+      { name: "MajorVersion",         offset: off + 8,  size: 2, value: view.getUint16(off + 8, true) },
+      { name: "MinorVersion",         offset: off + 10, size: 2, value: view.getUint16(off + 10, true) },
+      { name: "Name (RVA)",           offset: off + 12, size: 4, value: nameRva },
+      { name: "OrdinalBase",          offset: off + 16, size: 4, value: ordinalBase },
+      { name: "NumberOfFunctions",    offset: off + 20, size: 4, value: numberOfFunctions },
+      { name: "NumberOfNames",        offset: off + 24, size: 4, value: numberOfNames },
+      { name: "AddressOfFunctions",   offset: off + 28, size: 4, value: addressTableRva },
+      { name: "AddressOfNames",       offset: off + 32, size: 4, value: namePointerRva },
+      { name: "AddressOfNameOrdinals", offset: off + 36, size: 4, value: ordinalTableRva },
+    ],
+    dllName: dllName,
+  };
+
+  // Build the exported functions list
+  var functions = [];
+  var eatOff = rvaToFileOffset(addressTableRva, sections);
+  var enptOff = namePointerRva !== 0 ? rvaToFileOffset(namePointerRva, sections) : 0;
+  var eotOff = ordinalTableRva !== 0 ? rvaToFileOffset(ordinalTableRva, sections) : 0;
+
+  // Build ordinal-to-name map from the name pointer table and ordinal table
+  var ordinalToName = {};
+  for (var n = 0; n < numberOfNames; n++) {
+    if (enptOff + n * 4 + 4 > buffer.byteLength) break;
+    if (eotOff + n * 2 + 2 > buffer.byteLength) break;
+    var fnNameRva = view.getUint32(enptOff + n * 4, true);
+    var ordIndex = view.getUint16(eotOff + n * 2, true);
+    var fnName = "";
+    if (fnNameRva !== 0) {
+      var fnNameOff = rvaToFileOffset(fnNameRva, sections);
+      if (fnNameOff < buffer.byteLength) {
+        fnName = readNullTerminatedString(view, fnNameOff, 512);
+      }
+    }
+    ordinalToName[ordIndex] = fnName;
+  }
+
+  // Walk the Export Address Table
+  var exportDirRva = exportDir.rva;
+  var exportDirEnd = exportDir.rva + exportDir.size;
+  for (var i = 0; i < numberOfFunctions; i++) {
+    if (eatOff + i * 4 + 4 > buffer.byteLength) break;
+    var funcRva = view.getUint32(eatOff + i * 4, true);
+    if (funcRva === 0) continue; // unused entry
+
+    var ordinal = ordinalBase + i;
+    var name = ordinalToName[i] || "";
+    // Detect forwarder: RVA points inside the export directory itself
+    var forwarder = "";
+    if (funcRva >= exportDirRva && funcRva < exportDirEnd) {
+      var fwdOff = rvaToFileOffset(funcRva, sections);
+      if (fwdOff < buffer.byteLength) {
+        forwarder = readNullTerminatedString(view, fwdOff, 256);
+      }
+    }
+
+    functions.push({
+      ordinal: ordinal,
+      rva: funcRva,
+      name: name,
+      forwarder: forwarder,
+    });
+  }
+
+  return {
+    header: header,
+    functions: functions,
+  };
+}
+
+// Parse the Import Directory Table (Data Directory index 1)
+// An array of IMAGE_IMPORT_DESCRIPTOR (20 bytes each), terminated by an all-zero entry.
+// Each descriptor points to an Import Lookup Table (ILT) with the imported functions.
+function parseImportTable(view, buffer, dataDirectories, sections) {
+  if (dataDirectories.length < 2) return null;
+  var importDir = dataDirectories[1];
+  if (importDir.rva === 0 || importDir.size === 0) return null;
+
+  var baseOff = rvaToFileOffset(importDir.rva, sections);
+  if (baseOff + 20 > buffer.byteLength) return null;
+
+  // Determine if PE32+ by checking optional header magic at a known location.
+  // We can infer this from the data directory layout. For simplicity, check if
+  // result.is64 was set — but we don't have it here, so detect from ILT entry size.
+  // We'll try PE32+ first (8-byte ILT entries) and fall back.
+  // Actually, we pass is64 via the sections array — let's use a global check instead.
+  // parsePE sets result.is64, and we call parseImportTable from parsePE, so we can
+  // check the optional header magic ourselves.
+  var e_lfanew = view.getUint32(60, true);
+  var optMagic = view.getUint16(e_lfanew + 4 + 20, true);
+  var is64 = (optMagic === 0x20B);
+
+  var dlls = [];
+  var off = baseOff;
+  var maxDescriptors = 1000; // safety limit
+
+  for (var d = 0; d < maxDescriptors; d++) {
+    if (off + 20 > buffer.byteLength) break;
+
+    var iltRva = view.getUint32(off, true);       // OriginalFirstThunk / Import Lookup Table RVA
+    var timeDateStamp = view.getUint32(off + 4, true);
+    var forwarderChain = view.getUint32(off + 8, true);
+    var nameRva = view.getUint32(off + 12, true);
+    var iatRva = view.getUint32(off + 16, true);   // FirstThunk / Import Address Table RVA
+
+    // All-zero entry marks end
+    if (iltRva === 0 && nameRva === 0 && iatRva === 0) break;
+
+    var dllName = "";
+    if (nameRva !== 0) {
+      var nameOff = rvaToFileOffset(nameRva, sections);
+      if (nameOff < buffer.byteLength) {
+        dllName = readNullTerminatedString(view, nameOff, 256);
+      }
+    }
+
+    var descriptor = {
+      offset: off,
+      dllName: dllName,
+      fields: [
+        { name: "OriginalFirstThunk (ILT RVA)", offset: off,      size: 4, value: iltRva },
+        { name: "TimeDateStamp",                 offset: off + 4,  size: 4, value: timeDateStamp },
+        { name: "ForwarderChain",                offset: off + 8,  size: 4, value: forwarderChain },
+        { name: "Name (RVA)",                    offset: off + 12, size: 4, value: nameRva },
+        { name: "FirstThunk (IAT RVA)",          offset: off + 16, size: 4, value: iatRva },
+      ],
+      functions: [],
+    };
+
+    // Parse the Import Lookup Table (ILT) to get imported function names/ordinals.
+    // Use OriginalFirstThunk if available, otherwise FirstThunk.
+    var lookupRva = iltRva !== 0 ? iltRva : iatRva;
+    if (lookupRva !== 0) {
+      var lookupOff = rvaToFileOffset(lookupRva, sections);
+      var entrySize = is64 ? 8 : 4;
+      var maxFuncs = 10000; // safety
+
+      for (var f = 0; f < maxFuncs; f++) {
+        if (lookupOff + f * entrySize + entrySize > buffer.byteLength) break;
+
+        var entryLo, entryHi, isOrdinal, ordinal, hintNameRva, hint, funcName;
+        if (is64) {
+          entryLo = view.getUint32(lookupOff + f * 8, true);
+          entryHi = view.getUint32(lookupOff + f * 8 + 4, true);
+          if (entryLo === 0 && entryHi === 0) break; // null terminator
+          isOrdinal = (entryHi & 0x80000000) !== 0;
+          ordinal = entryLo & 0xFFFF;
+          hintNameRva = entryLo; // lower 31 bits when not ordinal
+        } else {
+          entryLo = view.getUint32(lookupOff + f * 4, true);
+          if (entryLo === 0) break; // null terminator
+          isOrdinal = (entryLo & 0x80000000) !== 0;
+          ordinal = entryLo & 0xFFFF;
+          hintNameRva = entryLo & 0x7FFFFFFF;
+        }
+
+        if (isOrdinal) {
+          descriptor.functions.push({ ordinal: ordinal, hint: null, name: "(ordinal " + ordinal + ")" });
+        } else {
+          hint = 0;
+          funcName = "";
+          var hnOff = rvaToFileOffset(hintNameRva, sections);
+          if (hnOff + 2 < buffer.byteLength) {
+            hint = view.getUint16(hnOff, true);
+            funcName = readNullTerminatedString(view, hnOff + 2, 512);
+          }
+          descriptor.functions.push({ ordinal: null, hint: hint, name: funcName });
+        }
+      }
+    }
+
+    dlls.push(descriptor);
+    off += 20;
+  }
+
+  return dlls;
 }
 
 function parseOptionalHeader32(view, off) {
@@ -624,6 +840,14 @@ function buildTree(pe) {
     return createTreeNode(label, function () { showDebugEntry(entry); });
   });
 
+  // Build import table child nodes (one per DLL)
+  var importChildren = [];
+  if (pe.importTable && pe.importTable.length > 0) {
+    importChildren = pe.importTable.map(function (dll) {
+      return createTreeNode(dll.dllName || "(unknown)", function () { showImportDll(dll); });
+    });
+  }
+
   // Root node
   var root = createTreeNode("PE File", null, [
     createTreeNode("DOS Header", function () { showFields("DOS Header", "dosHeader", pe.dosHeader.fields); }),
@@ -636,6 +860,8 @@ function buildTree(pe) {
         return createTreeNode(dir.name, function () { showSingleDataDirectory(dir, idx); });
       })
     ),
+    createTreeNode("Export Table", function () { showExportTable(pe.exportTable); }),
+    createTreeNode("Import Table", function () { showImportTableOverview(pe.importTable); }, importChildren),
     createTreeNode("Debug Directory", function () { showDebugDirectoryOverview(pe.debugEntries); }, debugChildren),
     createTreeNode("Section Headers", null,
       pe.sections.map(function (sec) {
@@ -646,8 +872,8 @@ function buildTree(pe) {
 
   tree.appendChild(root);
 
-  // Auto-expand root + NT Headers
-  expandNode(root);
+  // Expand all nodes
+  expandAllNodes(root);
 }
 
 function createTreeNode(label, onClick, children) {
@@ -713,6 +939,14 @@ function expandNode(li) {
     childUl.classList.add("open");
     if (arrow) arrow.classList.add("expanded");
   }
+}
+
+function expandAllNodes(li) {
+  expandNode(li);
+  var children = li.querySelectorAll(":scope > ul > li");
+  children.forEach(function (child) {
+    expandAllNodes(child);
+  });
 }
 
 // ============================================================
@@ -799,6 +1033,161 @@ function showSingleDataDirectory(dir, idx) {
   html += '<tr><td>Size</td><td>' + hex(dir.offset + 4, 8) + '</td><td>4</td><td>' + hex(dir.size, 8) + '</td><td>' + dir.size + ' bytes' + '</td></tr>';
 
   html += '</tbody></table>';
+  panel.innerHTML = html;
+}
+
+function showExportTable(exportTable) {
+  var panel = document.getElementById("detailPanel");
+  if (!exportTable) {
+    panel.innerHTML = '<div class="pe-detail-header">Export Table</div>' +
+      '<div class="pe-welcome"><p>No export table found in this PE file.</p></div>';
+    return;
+  }
+
+  // Show the Export Directory header fields
+  var html = '<div class="pe-detail-header">Export Directory: ' + escapeHtml(exportTable.header.dllName) + '</div>';
+  html += '<table class="pe-detail-table"><thead><tr>';
+  html += '<th class="col-member">Member</th>';
+  html += '<th class="col-offset">Offset</th>';
+  html += '<th class="col-size">Size</th>';
+  html += '<th class="col-value">Value</th>';
+  html += '<th class="col-meaning">Meaning</th>';
+  html += '</tr></thead><tbody>';
+
+  exportTable.header.fields.forEach(function (f) {
+    var valStr = hex(f.value, f.size * 2);
+    var meaning = "";
+    if (f.name === "Name (RVA)") meaning = exportTable.header.dllName;
+    else if (f.name === "TimeDateStamp") meaning = formatTimestamp(f.value);
+    else if (f.name === "OrdinalBase") meaning = "First ordinal number";
+    else if (f.name === "NumberOfFunctions") meaning = f.value + " exported function(s)";
+    else if (f.name === "NumberOfNames") meaning = f.value + " named export(s)";
+    else if (f.name === "AddressOfFunctions") meaning = "RVA of Export Address Table";
+    else if (f.name === "AddressOfNames") meaning = "RVA of Export Name Pointer Table";
+    else if (f.name === "AddressOfNameOrdinals") meaning = "RVA of Export Ordinal Table";
+
+    html += '<tr>';
+    html += '<td>' + escapeHtml(f.name) + '</td>';
+    html += '<td>' + hex(f.offset, 8) + '</td>';
+    html += '<td>' + f.size + '</td>';
+    html += '<td>' + valStr + '</td>';
+    html += '<td>' + escapeHtml(meaning) + '</td>';
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+
+  // Show the exported functions list
+  if (exportTable.functions.length > 0) {
+    html += '<div class="pe-detail-header" style="margin-top: 0; border-top: 1px solid #ced4da;">Exported Functions (' + exportTable.functions.length + ')</div>';
+    html += '<table class="pe-detail-table"><thead><tr>';
+    html += '<th style="width:10%">Ordinal</th>';
+    html += '<th style="width:15%">RVA</th>';
+    html += '<th style="width:40%">Name</th>';
+    html += '<th style="width:35%">Forwarder</th>';
+    html += '</tr></thead><tbody>';
+
+    exportTable.functions.forEach(function (fn) {
+      html += '<tr>';
+      html += '<td>' + fn.ordinal + '</td>';
+      html += '<td>' + hex(fn.rva, 8) + '</td>';
+      html += '<td>' + escapeHtml(fn.name || "(by ordinal only)") + '</td>';
+      html += '<td>' + (fn.forwarder ? escapeHtml(fn.forwarder) : "-") + '</td>';
+      html += '</tr>';
+    });
+
+    html += '</tbody></table>';
+  }
+
+  panel.innerHTML = html;
+}
+
+function showImportTableOverview(importTable) {
+  var panel = document.getElementById("detailPanel");
+  if (!importTable || importTable.length === 0) {
+    panel.innerHTML = '<div class="pe-detail-header">Import Table</div>' +
+      '<div class="pe-welcome"><p>No import table found in this PE file.</p></div>';
+    return;
+  }
+
+  var html = '<div class="pe-detail-header">Import Table (' + importTable.length + ' DLLs)</div>';
+  html += '<table class="pe-detail-table"><thead><tr>';
+  html += '<th style="width:5%">#</th>';
+  html += '<th style="width:30%">DLL Name</th>';
+  html += '<th style="width:12%">ILT RVA</th>';
+  html += '<th style="width:12%">IAT RVA</th>';
+  html += '<th style="width:12%">Name RVA</th>';
+  html += '<th style="width:10%">Functions</th>';
+  html += '<th style="width:19%">TimeDateStamp</th>';
+  html += '</tr></thead><tbody>';
+
+  importTable.forEach(function (dll, idx) {
+    html += '<tr>';
+    html += '<td>' + idx + '</td>';
+    html += '<td>' + escapeHtml(dll.dllName) + '</td>';
+    html += '<td>' + hex(dll.fields[0].value, 8) + '</td>';
+    html += '<td>' + hex(dll.fields[4].value, 8) + '</td>';
+    html += '<td>' + hex(dll.fields[3].value, 8) + '</td>';
+    html += '<td>' + dll.functions.length + '</td>';
+    html += '<td>' + (dll.fields[1].value === 0 ? "Not bound" : formatTimestamp(dll.fields[1].value)) + '</td>';
+    html += '</tr>';
+  });
+
+  html += '</tbody></table>';
+  panel.innerHTML = html;
+}
+
+function showImportDll(dll) {
+  var panel = document.getElementById("detailPanel");
+  var html = '<div class="pe-detail-header">Import: ' + escapeHtml(dll.dllName) + '</div>';
+
+  // Show the import descriptor fields
+  html += '<table class="pe-detail-table"><thead><tr>';
+  html += '<th class="col-member">Member</th>';
+  html += '<th class="col-offset">Offset</th>';
+  html += '<th class="col-size">Size</th>';
+  html += '<th class="col-value">Value</th>';
+  html += '<th class="col-meaning">Meaning</th>';
+  html += '</tr></thead><tbody>';
+
+  dll.fields.forEach(function (f) {
+    var valStr = hex(f.value, f.size * 2);
+    var meaning = "";
+    if (f.name === "Name (RVA)") meaning = dll.dllName;
+    else if (f.name === "TimeDateStamp") meaning = f.value === 0 ? "Not bound" : formatTimestamp(f.value);
+    else if (f.name === "ForwarderChain") meaning = f.value === 0 ? "No forwarder" : f.value === 0xFFFFFFFF ? "No forwarder (-1)" : "";
+    else if (f.name === "OriginalFirstThunk (ILT RVA)") meaning = f.value === 0 ? "Not set" : "RVA of Import Lookup Table";
+    else if (f.name === "FirstThunk (IAT RVA)") meaning = "RVA of Import Address Table";
+
+    html += '<tr>';
+    html += '<td>' + escapeHtml(f.name) + '</td>';
+    html += '<td>' + hex(f.offset, 8) + '</td>';
+    html += '<td>' + f.size + '</td>';
+    html += '<td>' + valStr + '</td>';
+    html += '<td>' + escapeHtml(meaning) + '</td>';
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+
+  // Show imported functions
+  if (dll.functions.length > 0) {
+    html += '<div class="pe-detail-header" style="margin-top: 0; border-top: 1px solid #ced4da;">Imported Functions (' + dll.functions.length + ')</div>';
+    html += '<table class="pe-detail-table"><thead><tr>';
+    html += '<th style="width:10%">Hint</th>';
+    html += '<th style="width:15%">Ordinal</th>';
+    html += '<th style="width:75%">Name</th>';
+    html += '</tr></thead><tbody>';
+
+    dll.functions.forEach(function (fn) {
+      html += '<tr>';
+      html += '<td>' + (fn.hint !== null ? hex(fn.hint, 4) : "-") + '</td>';
+      html += '<td>' + (fn.ordinal !== null ? fn.ordinal : "-") + '</td>';
+      html += '<td>' + escapeHtml(fn.name) + '</td>';
+      html += '</tr>';
+    });
+
+    html += '</tbody></table>';
+  }
+
   panel.innerHTML = html;
 }
 
