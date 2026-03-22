@@ -62,6 +62,33 @@ var CODEVIEW_SIGNATURE_NB10 = 0x3031424E; // "NB10"
 var CODEVIEW_SIGNATURE_RSDS = 0x53445352; // "RSDS"
 var CODEVIEW_SIGNATURE_MTOC = 0x434F544D; // "MTOC"
 
+// Base Relocation types (4-bit type field in relocation entries)
+var IMAGE_REL_BASED = {
+  0: "ABSOLUTE",        // Padding, skip
+  1: "HIGH",            // High 16 bits of 32-bit field
+  2: "LOW",             // Low 16 bits of 32-bit field
+  3: "HIGHLOW",         // Full 32-bit field
+  4: "HIGHADJ",         // High 16 bits, requires parameter
+  5: "MIPS_JMPADDR",    // MIPS jump address
+  6: "ARM_MOV32",       // ARM MOV32 (also RISCV_HIGH20)
+  7: "RISCV_LOW12I",
+  9: "MIPS_JMPADDR16",  // MIPS16 jump address
+  10: "DIR64",           // Full 64-bit field
+};
+
+// Certificate revision and type constants
+var WIN_CERT_REVISION = {
+  0x0100: "1.0",
+  0x0200: "2.0",
+};
+
+var WIN_CERT_TYPE = {
+  0x0001: "X.509",
+  0x0002: "PKCS SignedData",
+  0x0003: "Reserved",
+  0x0004: "PKCS1_MODULE_SIGN (Terminal Server)",
+};
+
 var SECTION_CHARACTERISTICS = {
   0x00000008: "TYPE_NO_PAD", 0x00000020: "CNT_CODE", 0x00000040: "CNT_INITIALIZED_DATA",
   0x00000080: "CNT_UNINITIALIZED_DATA", 0x00000100: "LNK_OTHER", 0x00000200: "LNK_INFO",
@@ -336,6 +363,15 @@ function parsePE(buffer) {
 
   // --- Import Table ---
   result.importTable = parseImportTable(view, buffer, result.dataDirectories, result.sections);
+
+  // --- Base Relocation Table ---
+  result.baseRelocations = parseBaseRelocationTable(view, buffer, result.dataDirectories, result.sections);
+
+  // --- Certificate Table ---
+  result.certificates = parseCertificateTable(view, buffer, result.dataDirectories);
+
+  // --- TLS Directory ---
+  result.tlsDirectory = parseTlsDirectory(view, buffer, result.dataDirectories, result.sections, result.is64);
 
   return result;
 }
@@ -676,6 +712,159 @@ function parseImportTable(view, buffer, dataDirectories, sections) {
   return dlls;
 }
 
+// Parse the Base Relocation Table (Data Directory index 5)
+// A series of IMAGE_BASE_RELOCATION blocks, each with VirtualAddress + SizeOfBlock
+// followed by an array of 2-byte type/offset entries.
+function parseBaseRelocationTable(view, buffer, dataDirectories, sections) {
+  if (dataDirectories.length <= 5) return null;
+  var relocDir = dataDirectories[5];
+  if (relocDir.rva === 0 || relocDir.size === 0) return null;
+
+  var baseOff = rvaToFileOffset(relocDir.rva, sections);
+  if (baseOff + 8 > buffer.byteLength) return null;
+
+  var blocks = [];
+  var pos = baseOff;
+  var endPos = baseOff + relocDir.size;
+  var maxBlocks = 10000; // safety limit
+
+  for (var b = 0; b < maxBlocks; b++) {
+    if (pos + 8 > buffer.byteLength || pos + 8 > endPos) break;
+
+    var pageRva = view.getUint32(pos, true);
+    var blockSize = view.getUint32(pos + 4, true);
+
+    // End of relocation data
+    if (pageRva === 0 && blockSize === 0) break;
+    if (blockSize < 8) break; // invalid block
+
+    var numEntries = Math.floor((blockSize - 8) / 2);
+    var entries = [];
+
+    for (var e = 0; e < numEntries; e++) {
+      var entryOff = pos + 8 + e * 2;
+      if (entryOff + 2 > buffer.byteLength) break;
+      var word = view.getUint16(entryOff, true);
+      var type = (word >> 12) & 0xF;
+      var offset = word & 0xFFF;
+      entries.push({
+        type: type,
+        typeName: IMAGE_REL_BASED[type] || ("Unknown (" + type + ")"),
+        offset: offset,
+        rva: pageRva + offset,
+      });
+    }
+
+    blocks.push({
+      fileOffset: pos,
+      pageRva: pageRva,
+      blockSize: blockSize,
+      entries: entries,
+    });
+
+    pos += blockSize;
+    // Align to 4-byte boundary
+    if (pos % 4 !== 0) pos += 4 - (pos % 4);
+  }
+
+  return blocks;
+}
+
+// Parse the Certificate Table (Data Directory index 4)
+// Note: Certificate Table uses FILE OFFSET (not RVA!) in the data directory.
+// Contains WIN_CERTIFICATE structures: dwLength(4) + wRevision(2) + wCertificateType(2) + bCertificate(variable)
+function parseCertificateTable(view, buffer, dataDirectories) {
+  if (dataDirectories.length <= 4) return null;
+  var certDir = dataDirectories[4];
+  if (certDir.rva === 0 || certDir.size === 0) return null;
+
+  // For Certificate Table, the RVA field is actually a file offset!
+  var fileOffset = certDir.rva;
+  var endOffset = fileOffset + certDir.size;
+  if (fileOffset + 8 > buffer.byteLength) return null;
+
+  var certs = [];
+  var pos = fileOffset;
+  var maxCerts = 100; // safety limit
+
+  for (var c = 0; c < maxCerts; c++) {
+    if (pos + 8 > buffer.byteLength || pos + 8 > endOffset) break;
+
+    var dwLength = view.getUint32(pos, true);
+    var wRevision = view.getUint16(pos + 4, true);
+    var wCertificateType = view.getUint16(pos + 6, true);
+
+    if (dwLength < 8) break; // invalid
+
+    certs.push({
+      index: c,
+      fileOffset: pos,
+      fields: [
+        { name: "dwLength",          offset: pos,     size: 4, value: dwLength },
+        { name: "wRevision",         offset: pos + 4, size: 2, value: wRevision },
+        { name: "wCertificateType",  offset: pos + 6, size: 2, value: wCertificateType },
+      ],
+      length: dwLength,
+      revision: WIN_CERT_REVISION[wRevision] || ("Unknown (" + hex(wRevision, 4) + ")"),
+      certType: WIN_CERT_TYPE[wCertificateType] || ("Unknown (" + hex(wCertificateType, 4) + ")"),
+      dataOffset: pos + 8,
+      dataSize: dwLength - 8,
+    });
+
+    // Advance to next certificate, aligned to 8-byte boundary
+    pos += dwLength;
+    if (pos % 8 !== 0) pos += 8 - (pos % 8);
+  }
+
+  return certs;
+}
+
+// Parse the TLS Directory (Data Directory index 9)
+// IMAGE_TLS_DIRECTORY32 (24 bytes) or IMAGE_TLS_DIRECTORY64 (40 bytes)
+function parseTlsDirectory(view, buffer, dataDirectories, sections, is64) {
+  if (dataDirectories.length <= 9) return null;
+  var tlsDir = dataDirectories[9];
+  if (tlsDir.rva === 0 || tlsDir.size === 0) return null;
+
+  var off = rvaToFileOffset(tlsDir.rva, sections);
+
+  if (is64) {
+    // IMAGE_TLS_DIRECTORY64: 40 bytes
+    if (off + 40 > buffer.byteLength) return null;
+    return {
+      offset: off,
+      is64: true,
+      fields: [
+        { name: "StartAddressOfRawData", offset: off,      size: 8,
+          valueLo: view.getUint32(off, true), valueHi: view.getUint32(off + 4, true) },
+        { name: "EndAddressOfRawData",   offset: off + 8,  size: 8,
+          valueLo: view.getUint32(off + 8, true), valueHi: view.getUint32(off + 12, true) },
+        { name: "AddressOfIndex",        offset: off + 16, size: 8,
+          valueLo: view.getUint32(off + 16, true), valueHi: view.getUint32(off + 20, true) },
+        { name: "AddressOfCallBacks",    offset: off + 24, size: 8,
+          valueLo: view.getUint32(off + 24, true), valueHi: view.getUint32(off + 28, true) },
+        { name: "SizeOfZeroFill",        offset: off + 32, size: 4, value: view.getUint32(off + 32, true) },
+        { name: "Characteristics",       offset: off + 36, size: 4, value: view.getUint32(off + 36, true) },
+      ],
+    };
+  } else {
+    // IMAGE_TLS_DIRECTORY32: 24 bytes
+    if (off + 24 > buffer.byteLength) return null;
+    return {
+      offset: off,
+      is64: false,
+      fields: [
+        { name: "StartAddressOfRawData", offset: off,      size: 4, value: view.getUint32(off, true) },
+        { name: "EndAddressOfRawData",   offset: off + 4,  size: 4, value: view.getUint32(off + 4, true) },
+        { name: "AddressOfIndex",        offset: off + 8,  size: 4, value: view.getUint32(off + 8, true) },
+        { name: "AddressOfCallBacks",    offset: off + 12, size: 4, value: view.getUint32(off + 12, true) },
+        { name: "SizeOfZeroFill",        offset: off + 16, size: 4, value: view.getUint32(off + 16, true) },
+        { name: "Characteristics",       offset: off + 20, size: 4, value: view.getUint32(off + 20, true) },
+      ],
+    };
+  }
+}
+
 function parseOptionalHeader32(view, off) {
   return [
     { name: "Magic",                       offset: off,      size: 2, value: view.getUint16(off, true) },
@@ -848,6 +1037,24 @@ function buildTree(pe) {
     });
   }
 
+  // Build base relocation child nodes (one per block/page)
+  var relocChildren = [];
+  if (pe.baseRelocations && pe.baseRelocations.length > 0) {
+    relocChildren = pe.baseRelocations.map(function (block, idx) {
+      var label = "Page " + hex(block.pageRva, 8) + " (" + block.entries.length + " entries)";
+      return createTreeNode(label, function () { showBaseRelocationBlock(block, idx); });
+    });
+  }
+
+  // Build certificate child nodes
+  var certChildren = [];
+  if (pe.certificates && pe.certificates.length > 0) {
+    certChildren = pe.certificates.map(function (cert) {
+      var label = "#" + cert.index + " " + cert.certType;
+      return createTreeNode(label, function () { showCertificateEntry(cert); });
+    });
+  }
+
   // Root node
   var root = createTreeNode("PE File", null, [
     createTreeNode("DOS Header", function () { showFields("DOS Header", "dosHeader", pe.dosHeader.fields); }),
@@ -862,6 +1069,9 @@ function buildTree(pe) {
     ),
     createTreeNode("Export Table", function () { showExportTable(pe.exportTable); }),
     createTreeNode("Import Table", function () { showImportTableOverview(pe.importTable); }, importChildren),
+    createTreeNode("Base Relocation Table", function () { showBaseRelocationOverview(pe.baseRelocations); }, relocChildren),
+    createTreeNode("Certificate Table", function () { showCertificateTableOverview(pe.certificates); }, certChildren),
+    createTreeNode("TLS Directory", function () { showTlsDirectory(pe.tlsDirectory); }),
     createTreeNode("Debug Directory", function () { showDebugDirectoryOverview(pe.debugEntries); }, debugChildren),
     createTreeNode("Section Headers", null,
       pe.sections.map(function (sec) {
@@ -1188,6 +1398,208 @@ function showImportDll(dll) {
     html += '</tbody></table>';
   }
 
+  panel.innerHTML = html;
+}
+
+function showBaseRelocationOverview(blocks) {
+  var panel = document.getElementById("detailPanel");
+  if (!blocks || blocks.length === 0) {
+    panel.innerHTML = '<div class="pe-detail-header">Base Relocation Table</div>' +
+      '<div class="pe-welcome"><p>No base relocation table found in this PE file.</p></div>';
+    return;
+  }
+
+  var totalEntries = 0;
+  blocks.forEach(function (b) { totalEntries += b.entries.length; });
+
+  var html = '<div class="pe-detail-header">Base Relocation Table (' + blocks.length + ' blocks, ' + totalEntries + ' total entries)</div>';
+  html += '<table class="pe-detail-table"><thead><tr>';
+  html += '<th style="width:5%">#</th>';
+  html += '<th style="width:20%">Page RVA</th>';
+  html += '<th style="width:20%">Block Size</th>';
+  html += '<th style="width:15%">Entries</th>';
+  html += '<th style="width:20%">File Offset</th>';
+  html += '</tr></thead><tbody>';
+
+  blocks.forEach(function (block, idx) {
+    html += '<tr>';
+    html += '<td>' + idx + '</td>';
+    html += '<td>' + hex(block.pageRva, 8) + '</td>';
+    html += '<td>' + hex(block.blockSize, 8) + ' (' + block.blockSize + ')' + '</td>';
+    html += '<td>' + block.entries.length + '</td>';
+    html += '<td>' + hex(block.fileOffset, 8) + '</td>';
+    html += '</tr>';
+  });
+
+  html += '</tbody></table>';
+  panel.innerHTML = html;
+}
+
+function showBaseRelocationBlock(block, idx) {
+  var panel = document.getElementById("detailPanel");
+  var html = '<div class="pe-detail-header">Base Relocation Block #' + idx + ': Page ' + hex(block.pageRva, 8) + '</div>';
+
+  // Block header fields
+  html += '<table class="pe-detail-table"><thead><tr>';
+  html += '<th class="col-member">Member</th>';
+  html += '<th class="col-offset">Offset</th>';
+  html += '<th class="col-size">Size</th>';
+  html += '<th class="col-value">Value</th>';
+  html += '<th class="col-meaning">Meaning</th>';
+  html += '</tr></thead><tbody>';
+
+  html += '<tr><td>VirtualAddress</td><td>' + hex(block.fileOffset, 8) + '</td><td>4</td><td>' + hex(block.pageRva, 8) + '</td><td>Page RVA for this block</td></tr>';
+  html += '<tr><td>SizeOfBlock</td><td>' + hex(block.fileOffset + 4, 8) + '</td><td>4</td><td>' + hex(block.blockSize, 8) + '</td><td>' + block.blockSize + ' bytes total (' + block.entries.length + ' entries)</td></tr>';
+
+  html += '</tbody></table>';
+
+  // Relocation entries
+  if (block.entries.length > 0) {
+    html += '<div class="pe-detail-header" style="margin-top: 0; border-top: 1px solid #ced4da;">Relocation Entries (' + block.entries.length + ')</div>';
+    html += '<table class="pe-detail-table"><thead><tr>';
+    html += '<th style="width:5%">#</th>';
+    html += '<th style="width:15%">Type</th>';
+    html += '<th style="width:25%">Type Name</th>';
+    html += '<th style="width:15%">Offset</th>';
+    html += '<th style="width:20%">Target RVA</th>';
+    html += '</tr></thead><tbody>';
+
+    block.entries.forEach(function (entry, eIdx) {
+      html += '<tr>';
+      html += '<td>' + eIdx + '</td>';
+      html += '<td>' + entry.type + '</td>';
+      html += '<td>' + escapeHtml(entry.typeName) + '</td>';
+      html += '<td>' + hex(entry.offset, 3) + '</td>';
+      html += '<td>' + hex(entry.rva, 8) + '</td>';
+      html += '</tr>';
+    });
+
+    html += '</tbody></table>';
+  }
+
+  panel.innerHTML = html;
+}
+
+function showCertificateTableOverview(certs) {
+  var panel = document.getElementById("detailPanel");
+  if (!certs || certs.length === 0) {
+    panel.innerHTML = '<div class="pe-detail-header">Certificate Table</div>' +
+      '<div class="pe-welcome"><p>No certificate table found in this PE file.</p></div>';
+    return;
+  }
+
+  var html = '<div class="pe-detail-header">Certificate Table (' + certs.length + ' certificate(s))</div>';
+  html += '<table class="pe-detail-table"><thead><tr>';
+  html += '<th style="width:5%">#</th>';
+  html += '<th style="width:20%">Revision</th>';
+  html += '<th style="width:25%">Certificate Type</th>';
+  html += '<th style="width:15%">Length</th>';
+  html += '<th style="width:15%">Data Size</th>';
+  html += '<th style="width:20%">File Offset</th>';
+  html += '</tr></thead><tbody>';
+
+  certs.forEach(function (cert) {
+    html += '<tr>';
+    html += '<td>' + cert.index + '</td>';
+    html += '<td>' + escapeHtml(cert.revision) + '</td>';
+    html += '<td>' + escapeHtml(cert.certType) + '</td>';
+    html += '<td>' + cert.length + ' bytes</td>';
+    html += '<td>' + cert.dataSize + ' bytes</td>';
+    html += '<td>' + hex(cert.fileOffset, 8) + '</td>';
+    html += '</tr>';
+  });
+
+  html += '</tbody></table>';
+  panel.innerHTML = html;
+}
+
+function showCertificateEntry(cert) {
+  var panel = document.getElementById("detailPanel");
+  var html = '<div class="pe-detail-header">Certificate #' + cert.index + ': ' + escapeHtml(cert.certType) + '</div>';
+
+  html += '<table class="pe-detail-table"><thead><tr>';
+  html += '<th class="col-member">Member</th>';
+  html += '<th class="col-offset">Offset</th>';
+  html += '<th class="col-size">Size</th>';
+  html += '<th class="col-value">Value</th>';
+  html += '<th class="col-meaning">Meaning</th>';
+  html += '</tr></thead><tbody>';
+
+  cert.fields.forEach(function (f) {
+    var valStr = hex(f.value, f.size * 2);
+    var meaning = "";
+    if (f.name === "dwLength") meaning = f.value + " bytes total";
+    else if (f.name === "wRevision") meaning = "Revision " + cert.revision;
+    else if (f.name === "wCertificateType") meaning = cert.certType;
+
+    html += '<tr>';
+    html += '<td>' + escapeHtml(f.name) + '</td>';
+    html += '<td>' + hex(f.offset, 8) + '</td>';
+    html += '<td>' + f.size + '</td>';
+    html += '<td>' + valStr + '</td>';
+    html += '<td>' + escapeHtml(meaning) + '</td>';
+    html += '</tr>';
+  });
+
+  // Show certificate data info
+  html += '<tr><td>bCertificate</td><td>' + hex(cert.dataOffset, 8) + '</td><td>' + cert.dataSize + '</td><td>(binary data)</td><td>' + cert.dataSize + ' bytes of certificate data</td></tr>';
+
+  html += '</tbody></table>';
+  panel.innerHTML = html;
+}
+
+function showTlsDirectory(tlsDir) {
+  var panel = document.getElementById("detailPanel");
+  if (!tlsDir) {
+    panel.innerHTML = '<div class="pe-detail-header">TLS Directory</div>' +
+      '<div class="pe-welcome"><p>No TLS directory found in this PE file.</p></div>';
+    return;
+  }
+
+  var bitness = tlsDir.is64 ? "IMAGE_TLS_DIRECTORY64" : "IMAGE_TLS_DIRECTORY32";
+  var html = '<div class="pe-detail-header">TLS Directory (' + bitness + ')</div>';
+
+  html += '<table class="pe-detail-table"><thead><tr>';
+  html += '<th class="col-member">Member</th>';
+  html += '<th class="col-offset">Offset</th>';
+  html += '<th class="col-size">Size</th>';
+  html += '<th class="col-value">Value</th>';
+  html += '<th class="col-meaning">Meaning</th>';
+  html += '</tr></thead><tbody>';
+
+  tlsDir.fields.forEach(function (f) {
+    var valStr;
+    if (f.valueLo !== undefined && f.valueHi !== undefined) {
+      valStr = hex64(f.valueLo, f.valueHi);
+    } else {
+      valStr = hex(f.value, f.size * 2);
+    }
+
+    var meaning = "";
+    if (f.name === "StartAddressOfRawData") meaning = "VA of TLS template data start";
+    else if (f.name === "EndAddressOfRawData") meaning = "VA of TLS template data end";
+    else if (f.name === "AddressOfIndex") meaning = "VA of TLS index variable";
+    else if (f.name === "AddressOfCallBacks") meaning = "VA of TLS callback function array";
+    else if (f.name === "SizeOfZeroFill") {
+      var val = (f.valueLo !== undefined) ? f.valueLo : f.value;
+      meaning = val + " bytes of zero-fill after template data";
+    }
+    else if (f.name === "Characteristics") {
+      var val = (f.valueLo !== undefined) ? f.valueLo : f.value;
+      var align = (val >> 20) & 0xF;
+      meaning = align === 0 ? "Default alignment" : "Alignment: " + Math.pow(2, align - 1) + " bytes";
+    }
+
+    html += '<tr>';
+    html += '<td>' + escapeHtml(f.name) + '</td>';
+    html += '<td>' + hex(f.offset, 8) + '</td>';
+    html += '<td>' + f.size + '</td>';
+    html += '<td>' + valStr + '</td>';
+    html += '<td>' + escapeHtml(meaning) + '</td>';
+    html += '</tr>';
+  });
+
+  html += '</tbody></table>';
   panel.innerHTML = html;
 }
 
