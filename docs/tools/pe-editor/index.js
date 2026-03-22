@@ -1184,7 +1184,7 @@ var RT_NAMES = {
 };
 
 // Editable section configuration
-var EDITABLE_SECTIONS = ["dosHeader", "fileHeader", "optionalHeader"];
+var EDITABLE_SECTIONS = ["dosHeader", "fileHeader", "optionalHeader", "section"];
 
 var FIELD_EDIT_TYPE = {
   "fileHeader:Machine":                { type: "dropdown", options: IMAGE_FILE_MACHINE },
@@ -1192,6 +1192,7 @@ var FIELD_EDIT_TYPE = {
   "optionalHeader:Subsystem":          { type: "dropdown", options: IMAGE_SUBSYSTEM },
   "fileHeader:Characteristics":        { type: "bitmask", flags: IMAGE_FILE_CHARACTERISTICS },
   "optionalHeader:DllCharacteristics": { type: "bitmask", flags: IMAGE_DLLCHARACTERISTICS },
+  "section:Characteristics":           { type: "bitmask", flags: SECTION_CHARACTERISTICS },
 };
 
 function parseLoadConfigDirectory(view, buffer, dataDirectories, sections, is64) {
@@ -1817,8 +1818,8 @@ function getMeaning(section, fieldName, value, field) {
   if (fieldName.indexOf("SizeOf") === 0) return "";
 
   // Section characteristics
-  if (fieldName === "Characteristics" && section === "section") return decodeFlags(value, SECTION_CHARACTERISTICS);
-  if (fieldName === "Name" && section === "section") return "";
+  if (fieldName === "Characteristics" && (section === "section" || section.indexOf("section:") === 0)) return decodeFlags(value, SECTION_CHARACTERISTICS);
+  if (fieldName === "Name" && (section === "section" || section.indexOf("section:") === 0)) return "";
   if (fieldName === "VirtualSize") return value + " bytes";
   if (fieldName === "VirtualAddress") return "RVA";
   if (fieldName === "SizeOfRawData") return value + " bytes";
@@ -1925,8 +1926,8 @@ function buildTree(pe) {
       })
     ),
     createTreeNode("Section Headers", function () { showSectionHeadersSummary(pe.sections); },
-      pe.sections.map(function (sec) {
-        return createTreeNode(sec.name, function () { showFields("Section: " + sec.name, "section", sec.fields); });
+      pe.sections.map(function (sec, idx) {
+        return createTreeNode(sec.name, function () { showFields("Section: " + sec.name, "section:" + idx, sec.fields); });
       })
     ),
     createTreeNode("Export Table (Decoded)", function () { showExportTable(pe.exportTable); }),
@@ -2085,6 +2086,16 @@ function onFieldModified(sectionKey) {
 
   // Only re-render if the user is still viewing this section
   if (currentSection !== sectionKey) return;
+
+  // Handle section:N keys
+  if (sectionKey.indexOf("section:") === 0) {
+    var secIdx = parseInt(sectionKey.split(":")[1], 10);
+    var sec = parsedPE.sections[secIdx];
+    if (sec) {
+      showFields("Section: " + sec.name, sectionKey, sec.fields);
+    }
+    return;
+  }
 
   var titleMap = { dosHeader: "DOS Header", fileHeader: "File Header", optionalHeader: "Optional Header" };
   var sectionData = parsedPE[sectionKey];
@@ -2262,7 +2273,8 @@ function downloadModifiedPE() {
 function showFields(title, sectionKey, fields) {
   currentSection = sectionKey;
   var panel = document.getElementById("detailPanel");
-  var isEditable = EDITABLE_SECTIONS.indexOf(sectionKey) !== -1;
+  var isEditable = EDITABLE_SECTIONS.indexOf(sectionKey) !== -1 ||
+    sectionKey.indexOf("section:") === 0;
 
   var html = '<div class="pe-detail-header">' + escapeHtml(title) + '</div>';
   html += '<table class="pe-detail-table"><thead><tr>';
@@ -2312,6 +2324,10 @@ function showFields(title, sectionKey, fields) {
 
       var editKey = sectionKey + ":" + f.name;
       var editType = FIELD_EDIT_TYPE[editKey];
+      // For section:N keys, also check section:FieldName
+      if (!editType && sectionKey.indexOf("section:") === 0) {
+        editType = FIELD_EDIT_TYPE["section:" + f.name];
+      }
 
       if (editType && editType.type === "dropdown") {
         renderDropdown(valSpan, f, sectionKey, editType.options);
