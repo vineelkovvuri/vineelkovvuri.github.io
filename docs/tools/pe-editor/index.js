@@ -1930,6 +1930,7 @@ function buildTree(pe) {
         return createTreeNode(sec.name, function () { showFields("Section: " + sec.name, "section:" + idx, sec.fields); });
       })
     ),
+    createTreeSeparator(),
     createTreeNode("Export Table (Decoded)", function () { showExportTable(pe.exportTable); }),
     createTreeNode("Import Table (Decoded)", function () { showImportTableOverview(pe.importTable); }, importChildren),
     createTreeNode("Resource Directory (Decoded)", function () { showResourceDirectoryOverview(pe.resourceDirectory); }, resourceChildren),
@@ -1949,6 +1950,13 @@ function buildTree(pe) {
 
   // Expand only the first level (root node)
   expandNode(root);
+}
+
+function createTreeSeparator() {
+  var li = document.createElement("li");
+  li.style.borderTop = "1px solid #dee2e6";
+  li.style.margin = "3px 6px";
+  return li;
 }
 
 function createTreeNode(label, onClick, children) {
