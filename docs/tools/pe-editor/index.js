@@ -2104,6 +2104,26 @@ function onFieldModified(sectionKey) {
   }
 }
 
+function renderStringInput(container, field, sectionKey) {
+  var input = document.createElement("input");
+  input.type = "text";
+  input.className = "pe-edit-input";
+  input.value = field.value;
+  input.maxLength = field.size;
+
+  function commit() {
+    var newName = input.value;
+    // Write as ASCII, null-padded to field.size bytes
+    for (var i = 0; i < field.size; i++) {
+      peView.setUint8(field.offset + i, i < newName.length ? newName.charCodeAt(i) & 0xFF : 0);
+    }
+    onFieldModified(sectionKey);
+  }
+
+  input.addEventListener("change", commit);
+  container.appendChild(input);
+}
+
 function renderHexInput(container, field, sectionKey) {
   var input = document.createElement("input");
   input.type = "text";
@@ -2303,7 +2323,7 @@ function showFields(title, sectionKey, fields) {
     html += '<td>' + hex(f.offset, 8) + '</td>';
     html += '<td>' + f.size + '</td>';
 
-    if (isEditable && !f.isString) {
+    if (isEditable && (!f.isString || sectionKey.indexOf("section:") === 0)) {
       html += '<td><span id="pe-edit-val-' + idx + '"></span></td>';
     } else {
       html += '<td>' + valStr + '</td>';
@@ -2318,9 +2338,14 @@ function showFields(title, sectionKey, fields) {
   // Attach interactive controls for editable fields
   if (isEditable) {
     fields.forEach(function (f, idx) {
-      if (f.isString) return;
+      if (f.isString && sectionKey.indexOf("section:") !== 0) return;
       var valSpan = document.getElementById("pe-edit-val-" + idx);
       if (!valSpan) return;
+
+      if (f.isString) {
+        renderStringInput(valSpan, f, sectionKey);
+        return;
+      }
 
       var editKey = sectionKey + ":" + f.name;
       var editType = FIELD_EDIT_TYPE[editKey];
