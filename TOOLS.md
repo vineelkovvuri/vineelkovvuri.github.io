@@ -4,7 +4,7 @@ This document describes the conventions, patterns, and requirements for creating
 
 ## Quick Start
 
-```
+```text
 content/tools/my-new-tool/
   index.html        # Required: Hugo page with front matter + inline HTML/CSS/JS
   index.js           # Optional: external JS for large tools
@@ -23,6 +23,7 @@ tags: ["Tools"]
 ```
 
 **Existing examples:**
+
 | Tool                     | Title                           |
 |--------------------------|---------------------------------|
 | Hex Editor               | `"🔢 Hex Editor"`               |
@@ -41,6 +42,7 @@ tags: ["Tools"]
 - Use **lowercase with hyphens**: `my-new-tool/` (not `My-New-Tool/` or `myNewTool/`).
 - GitHub Pages runs on Linux — paths are **case-sensitive**. A directory named `Hex-Editor` will not match the URL `/tools/hex-editor/`.
 - On Windows, `git mv` cannot do a case-only rename directly. Use the two-step trick:
+
   ```bash
   git mv Old-Name old-name-tmp && git mv old-name-tmp old-name
   ```
@@ -113,6 +115,7 @@ Every tool must include a help text section describing its features. Place it at
 ```
 
 **Guidelines:**
+
 - Start with a `<b>Features</b>` heading.
 - Use `&bull;` for bullet points, `<br>` for line breaks.
 - Bold key UI elements and keyboard shortcuts: `<b>Ctrl+Click</b>`.
@@ -138,11 +141,13 @@ Every tool must include a help text section describing its features. Place it at
 
 - Use `var` or `const`/`let` consistently within a tool (either is fine, just be consistent).
 - Wrap tool code in an IIFE to avoid polluting the global scope:
+
   ```js
   (function () {
       // Tool code here
   })();
   ```
+
 - For tools with external JS files, use `<script src="./index.js"></script>` at the bottom of `<body>`.
 - **No module imports** — everything is loaded as plain scripts.
 - Cache DOM references at the top of your IIFE for performance.
@@ -152,7 +157,7 @@ Every tool must include a help text section describing its features. Place it at
 
 ### Simple tool (single file)
 
-```
+```text
 content/tools/my-tool/
   index.html      # Front matter + <style> + HTML + <script>
 ```
@@ -161,7 +166,7 @@ Example: Pomodoro Timer, Whiteboard, World Clocks, Page Table Calculator
 
 ### Medium tool (separate JS)
 
-```
+```text
 content/tools/my-tool/
   index.html      # Front matter + <style> + HTML + <script src="./index.js">
   index.js        # All JavaScript
@@ -171,7 +176,7 @@ Example: Hex to Memory Offsets (inline), Hex Editor (separate JS)
 
 ### Large tool (own CSS + JS)
 
-```
+```text
 content/tools/my-tool/
   index.html      # Full HTML shell with front matter
   index.js        # Application JavaScript

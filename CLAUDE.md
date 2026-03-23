@@ -10,7 +10,7 @@ Personal website and blog built with Hugo, hosted on GitHub Pages.
 
 ## Structure
 
-```
+```text
 content/
   blog/          # Blog posts
   projects/      # Project pages
