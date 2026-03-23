@@ -29,6 +29,6 @@ hugo.exe        # Windows
 
 ## Conventions
 
-- **Tools**: See `content/tools/TOOLS.md` for tool development conventions (layout, styling, help text, directory naming, etc.)
+- **Tools**: See `TOOLS.md` for tool development conventions (layout, styling, help text, directory naming, etc.)
 - **Directory names**: Use lowercase with hyphens (GitHub Pages is case-sensitive)
 - **No frameworks**: Tools use vanilla JS, CSS, and HTML only (CDN libraries OK for significant value like Monaco Editor)
