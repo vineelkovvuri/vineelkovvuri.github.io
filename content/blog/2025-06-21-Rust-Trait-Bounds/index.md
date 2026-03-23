@@ -8,9 +8,9 @@ tags: ["Rust"]
 # Rust: Trait Bounds
 
 
-Traits in Rust is one of core features of the language. But it deserve some
-explanation. Though they may sometimes be called similar to interfaces they are
-far more flexible. Lets try to understand what they are and how they can be
+Traits in Rust are one of the core features of the language. But they deserve some
+explanation. Though they may sometimes be called similar to interfaces, they are
+far more flexible. Let's try to understand what they are and how they can be
 used.
 
 
@@ -20,7 +20,7 @@ trait Book {
 }
 ```
 
-This defines trait not a type. traits != types. Traits can be thought of a
+This defines a trait, not a type. Traits != types. Traits can be thought of as a
 collection of features that are applicable to the implementing type. Traits
 themselves are not very useful unless they are implemented by types.
 
@@ -97,7 +97,7 @@ We’ll discuss them in more detail later.
 > **Tip 2:** Always rely on `cargo check` to get detailed information about any
 > lifetime parameter violations.
 
-Now lets look at some cases to understand the lifetimes better.
+Now let's look at some cases to understand the lifetimes better.
 
 **Case 1: References confined to a single scope:**
 
@@ -150,7 +150,7 @@ fn func(arr: &[u32]) -> &u32 {
     &arr[0]
 }
 ```
-With Rust analyzer inlay hits
+With Rust analyzer inlay hints
 ```rust
 fn func<'0>(arr: &'0 [u32]) -> &'0 u32 {
     &arr[2]
@@ -173,7 +173,7 @@ fn func(arr1: &[u32], arr2: &[u32]) -> &u32 {
 }
 ```
 
-With Rust analyzer inlay hits
+With Rust analyzer inlay hints
 ```rust
 fn func<`0,`1>(arr1: &`0 [u32], arr2: &`1 [u32]) -> &u32 {
     &arr1[0]                                        ^---- Compiler cannot infer
@@ -213,7 +213,7 @@ an element of `arr2` or `arr1`), the returned reference will live long enough.
 
 **Case 4: Structures containing references:**
 
-Now lets look at the case where structure fields can reference some other data.
+Now let's look at the case where structure fields can reference some other data.
 
 ```rust
 struct BookView {

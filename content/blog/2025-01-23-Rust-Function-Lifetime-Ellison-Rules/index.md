@@ -1,22 +1,22 @@
 ---
-title: "Rust: Function Lifetime Ellison Rules"
+title: "Rust: Function Lifetime Elision Rules"
 date: 2025-01-23 00:34:26
 toc: true
 tags: ['Rust']
 ---
 
-# Rust: Function Lifetime Ellison Rules
+# Rust: Function Lifetime Elision Rules
 
 Lifetime elision in functions
 https://doc.rust-lang.org/reference/lifetime-elision.html#lifetime-elision-in-functions
 
 
 ```rust
-// Below is how the rust compiler assigns the lifetime parameters implicitly.
+// Below is how the Rust compiler assigns the lifetime parameters implicitly.
 // Any function parameters(both inputs and outputs) which fall beyond these
 // rules will require explicit lifetime annotations by the programmer.
 //
-// Life Time Ellison Rules:
+// Lifetime Elision Rules:
 // 1. Each elided lifetime in the parameters becomes a distinct lifetime
 //    parameter.
 //      fn foo(x: &i32); => fn foo<'a>(x: &'a i32);

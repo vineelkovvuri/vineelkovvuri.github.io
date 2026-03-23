@@ -17,7 +17,7 @@ raise a page fault exception. In other words, the VA is not mapped(unmapped).
 
 ## How is a Virtual Address (VA) decoded into a Physical Address (PA)?
 
-For example x64 CPUs break the given VA in to below components(assuming 5 Level
+For example, x64 CPUs break the given VA into the below components(assuming 5 Level
 paging)
 
 ```text
@@ -40,7 +40,7 @@ the PML5 page table. This 0th entry contains the physical address (PA) of the
 PML4 page table base. Next, the CPU uses the PML4 component of the VA (which is
 0x24) and indexes into the corresponding PML4 page table. This process continues
 through each level—PDP, PD, and PT—until the CPU finally reaches the physical
-page offset (bits 0-11).In addition to this, each Page Table Entry (PTE)
+page offset (bits 0-11). In addition to this, each Page Table Entry (PTE)
 contains memory protection-related bits (not covered in this document).
 
 The illustration below showcases the page table walk performed by the CPU.
@@ -49,10 +49,10 @@ The illustration below showcases the page table walk performed by the CPU.
 
 ## What does a page table contain(x64)?
 
-Each page table is 4KB in size and each entry with in the page table is of 8
+Each page table is 4KB in size and each entry within the page table is of 8
 bytes(64 bits). Below is the general structure of the page table entry in X64.
 Because of this each page table will have 512 entries(2^9). Hence in the above
-VA to PA translation the virtual address is broken down in to 9 bit components.
+VA to PA translation the virtual address is broken down into 9 bit components.
 The table base-address field points to the physical base address of the
 next-lower-level table in the page-translation hierarchy.
 
@@ -116,11 +116,11 @@ ranges.
 
 ## What are the different kinds of paging schemes?
 
-We mainly consider below three type of paging schemes
+We mainly consider the below three types of paging schemes
 
 1. Identity Mapping(VA always equals PA)
-2. Non-Identity Mapping(VA need not alway equals PA)
-3. Self Mapping(VA need not alway equals PA)
+2. Non-Identity Mapping(VA need not always equal PA)
+3. Self Mapping(VA need not always equal PA)
 
 ## What is Identity mapping?
 
@@ -203,17 +203,16 @@ exactly to its PA.
 removing the restriction of identity mapping. In other words, page tables for
 new memory regions need not be pre-allocated and mapped. How is this achieved?
 
-Firstly, Self-mapping does not change the way the CPU resolves the *"normal"* VA
+Firstly, self-mapping does not change the way the CPU resolves the *"normal"* VA
 to PA translations once it is enabled. But it does change how the page tables
-themselves are access and operated on. Meaning, how the page tables base address
+themselves are accessed and operated on. Meaning, how the page table base addresses
 are decoded and accessed is different. More on this later.
 
 Secondly, the problem that self-mapping is trying to solve is, "**How can we poke
 the page tables which are not mapped up front?**". This is where things get really
 clever — and a bit mind-bending! Remember in order to wire up the intermediate
 page tables we need to first allocate them or grab from a known location (which
-was already mapped). This was always true in the prior mapping schemes. If
-not they don't work.
+was already mapped). This was always true in the prior mapping schemes. If not, they don't work.
 
 However, now imagine that we allocated a page that was not already mapped (i.e.,
 no VA-to-PA translation exists for that page table's base address). In order to
@@ -223,12 +222,12 @@ walk ultimately lands on the physical base address of that allocated page*. What
 this means is that the CPU finishes translating the VA, and the page walk itself
 ends at the desired page table. In other words, the CPU effectively maps the
 page table for us, and we can then have R/W access to its entries. Recollect
-what "mapping" really mean from the first paragraph? If not read it again. Also
+what "mapping" really means from the first paragraph? If not, read it again. Also,
 the current paragraph definitely requires multiple readings to fully grasp!
 
 ## What tricks are we playing with the CPU here?
 
-Lets recap the usual VA to PA translation: Nothing new. Just follow Step 1 to
+Let's recap the usual VA to PA translation: Nothing new. Just follow Step 1 to
 Step 12 in the below illustration. ![Usual VA to PA Mapping](va_to_pa_steps.png)
 
 Imagine what happens to the CPU's address translation when the highest-level
@@ -300,7 +299,7 @@ corresponding page tables to be mapped.
 ```
 
 The generalized formula for accessing any page table base is shown below. It is
-an easier to understand formula if we perform a page walk with it manually.
+an easier formula to understand if we perform a page walk with it manually.
 Remember, 'va' is the new address that we are trying to map, and as part of the
 process, we are trying to locate or map any necessary intermediate page tables.
 
@@ -316,8 +315,8 @@ The key idea in the above formulas is that access to a lower-level page table
 base depends only on the higher-level components of the va being mapped, not on
 the physical address of the lower-level page table itself.
 
-The above explanation assumes the self map is already enabled. Next we will see
-how self mapped paging can be enabled
+The above explanation assumes the self-map is already enabled. Next, we will see
+how self-mapped paging can be enabled.
 
 ## Creating and enabling self-mapped paging
 
@@ -364,15 +363,15 @@ level components of the VA being mapped.
 
 ## Key highlights/differences between self-mapping vs other schemes
 
-1. For updating the page tables, We access the unmapped page tables at a given
-   level with the help of carefully crafted special VA(which are created with
+1. For updating the page tables, we access the unmapped page tables at a given
+   level with the help of carefully crafted special VAs(which are created with
    higher level components of the actual VA to be mapped). In other schemes,
    page tables are accessed directly using their VA. **So in a way, the page
-   table's physical base address(orange pa boxes) stored in the higher level do
-   not matter for self mapping - Thats the point of using self mapping!**
+   table's physical base address(orange PA boxes) stored in the higher level do
+   not matter for self-mapping - That's the point of using self-mapping!**
 2. The key difference from self-mapping arises only during the construction of
    new page tables for mapping new memory regions. Once the page tables are set
    up, for normal VAs, the CPU’s page walk behaves just like in any other scheme
    — no trickery is needed.
-3. In essence, self mapping creates a virtual view of the physical page tables
+3. In essence, self-mapping creates a virtual view of the physical page tables
    for easy manipulation.

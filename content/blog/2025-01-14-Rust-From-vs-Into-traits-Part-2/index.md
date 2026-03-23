@@ -37,8 +37,8 @@ impl From<u64> for Number {
 }
 
 fn main() {
-    // Just because we have implemented the From<u64> do not make the conversion
-    // from 10 to Number implicit. Below line do not compile.
+    // Just because we have implemented From<u64> does not make the conversion
+    // from 10 to Number implicit. The below line does not compile.
     let num = increment(10);
     // You have to explicitly request the conversion by calling .into()
     let num = increment(10.into());

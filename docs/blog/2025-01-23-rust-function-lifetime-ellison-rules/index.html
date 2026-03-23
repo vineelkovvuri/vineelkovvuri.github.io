@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Rust: Function Lifetime Ellison Rules | Vineel Kovvuri</title>
+    <title>Rust: Function Lifetime Elision Rules | Vineel Kovvuri</title>
     
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
@@ -36,7 +36,7 @@
     </nav>
 
 <div class="article-meta">
-<h1><span class="title">Rust: Function Lifetime Ellison Rules</span></h1>
+<h1><span class="title">Rust: Function Lifetime Elision Rules</span></h1>
 
 
 <h3 class="date">
@@ -56,7 +56,7 @@
             <h2>Table of Contents</h2>
             <nav id="TableOfContents">
   <ul>
-    <li><a href="#rust-function-lifetime-ellison-rules">Rust: Function Lifetime Ellison Rules</a></li>
+    <li><a href="#rust-function-lifetime-elision-rules">Rust: Function Lifetime Elision Rules</a></li>
   </ul>
 </nav>
         </aside>
@@ -64,14 +64,14 @@
 
 
 <main>
-<h1 id="rust-function-lifetime-ellison-rules">Rust: Function Lifetime Ellison Rules</h1>
+<h1 id="rust-function-lifetime-elision-rules">Rust: Function Lifetime Elision Rules</h1>
 <p>Lifetime elision in functions
 <a href="https://doc.rust-lang.org/reference/lifetime-elision.html#lifetime-elision-in-functions">https://doc.rust-lang.org/reference/lifetime-elision.html#lifetime-elision-in-functions</a></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#888">// Below is how the rust compiler assigns the lifetime parameters implicitly.
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#888">// Below is how the Rust compiler assigns the lifetime parameters implicitly.
 </span></span></span><span style="display:flex;"><span><span style="color:#888">// Any function parameters(both inputs and outputs) which fall beyond these
 </span></span></span><span style="display:flex;"><span><span style="color:#888">// rules will require explicit lifetime annotations by the programmer.
 </span></span></span><span style="display:flex;"><span><span style="color:#888">//
-</span></span></span><span style="display:flex;"><span><span style="color:#888">// Life Time Ellison Rules:
+</span></span></span><span style="display:flex;"><span><span style="color:#888">// Lifetime Elision Rules:
 </span></span></span><span style="display:flex;"><span><span style="color:#888">// 1. Each elided lifetime in the parameters becomes a distinct lifetime
 </span></span></span><span style="display:flex;"><span><span style="color:#888">//    parameter.
 </span></span></span><span style="display:flex;"><span><span style="color:#888">//      fn foo(x: &amp;i32); =&gt; fn foo&lt;&#39;a&gt;(x: &amp;&#39;a i32);

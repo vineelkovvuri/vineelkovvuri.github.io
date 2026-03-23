@@ -8,8 +8,8 @@ tags: ['Rust']
 # Rust: Rust Aligned vs Unaligned Memory Access
 
 Unlike C, Rust enforces some rules when trying to access memory. Mainly it
-requires consideration to alignment of the data that we are trying to read.
-Below code will illustrate the details.
+requires consideration of the alignment of the data that we are trying to read.
+The below code will illustrate the details.
 
 ```rust
 fn main() {
@@ -29,7 +29,7 @@ fn main() {
     }
 
     // Slices: Accessing elements through a slice will have the same alignment
-    // as its underlying data. So this prevent unaligned access. Also we cannot
+    // as its underlying data. So this prevents unaligned access. Also we cannot
     // interpret a u8 array as a u16 slice unlike raw pointer access
     // Case 2: aligned u8 access from slice
     let slice = &data[1..2];
@@ -50,7 +50,7 @@ fn main() {
 
     // Takeaway 1: The takeaway here is that when interpreting *const u8 as u16
     // or u32, we cannot simply cast *const u8 as *const u16 and dereference
-    // that location and except u16. Instead, we can only access the *const u8
+    // that location and expect u16. Instead, we can only access the *const u8
     // as two u8 values and then use bit math to combine those bytes to form a
     // u16.
 

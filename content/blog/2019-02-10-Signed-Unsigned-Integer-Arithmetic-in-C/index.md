@@ -12,13 +12,13 @@ language. The C standard defines the integer conversion rules agnostic to
 any specific machine architecture. This also makes things more complicated
 for programmers to understand.
 
-First of all, Why do we need integer conversions at all? The answer is
-simple, we need to have single type for any given expression. Let's say we
+First of all, why do we need integer conversions at all? The answer is
+simple: we need to have a single type for any given expression. Let's say we
 have an expression *<expr1><op><expr2>* when expr1 and expr2 are of
 different types, we want the resulting expression from this to have one
 single type.
 
-The C99 specification defines below set of integer types as 'standard
+The C99 specification defines the below set of integer types as 'standard
 integer types'. Interestingly, the sizes of these integer types are not
 defined at all. It only defines the minimum supported size. For example, int
 need not be 8 bytes long on x64 platforms. The only definition for int is,

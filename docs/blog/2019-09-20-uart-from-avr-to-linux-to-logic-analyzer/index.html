@@ -76,8 +76,8 @@
 <h1 id="uart---from-avr-to-linux-to-logic-analyzer">UART - From AVR to Linux to Logic Analyzer</h1>
 <h2 id="introduction">Introduction</h2>
 <p>In this article, let&rsquo;s see how a program running on Atmega328PU microcontroller
-can communicate to external world using UART. In order to run through this
-exercise we need below equipment.</p>
+can communicate to the external world using UART. In order to run through this
+exercise we need the below equipment.</p>
 <ol>
 <li><a href="https://www.aliexpress.com/item/32973635527.html">Atmega328PU Microcontroller</a></li>
 <li>Breadboard</li>
@@ -87,16 +87,16 @@ exercise we need below equipment.</p>
 <li><a href="https://www.aliexpress.com/item/33024255264.html">Digital Oscilloscope</a></li>
 </ol>
 <h2 id="atmega328pu-pinout">Atmega328PU pinout</h2>
-<p>It is an 8-bit microcontroller(uC) with following pinout. All its digital pins
-are grouped in to 4 banks(PA/PB/PC/PD).
+<p>It is an 8-bit microcontroller(uC) with the following pinout. All its digital pins
+are grouped into 4 banks(PA/PB/PC/PD).
 <img src="Atmega328PUPinout.png" alt=""></p>
 <h2 id="usbasp-programmer-pinout">USBASP programmer pinout</h2>
-<p>All of the pins highlighted on uC with pink should be connected to below
+<p>All of the pins highlighted on the uC with pink should be connected to the below
 appropriate usbasp pins</p>
 <p><img src="usbasp_pinout.png" alt=""></p>
 <h2 id="complete-setup-with-host">Complete setup with host</h2>
 <p>Below is the complete setup and USBASP, USB to TTL adapter, Logic Analyzer
-routed through an USB hub connected to the host machine. Hook the USB to TTL
+routed through a USB hub connected to the host machine. Hook the USB to TTL
 Adapter to TX pin to monitor the string in cutecom. Also, to actually see the
 electrical signals transmitted on the TX pin, connect the Logic Analyzer channel
 zero pin to TX pin of the uC.</p>

@@ -7,12 +7,12 @@ tags: ["Rust"]
 
 # Rust: Deref vs AsRef Traits
 
-Rust is definitely not an easily language that can be picked up over a weekend,
+Rust is definitely not an easy language that can be picked up over a weekend.
 It embodies some very new ideas.
 
 In Rust, most of the conversions are not implicit for a good reason. There are
-few implicit conversions(also called as coercions) but all of them are well
-defined and primarily done by the compiler. For example below is the list.
+few implicit conversions(also called coercions) but all of them are well
+defined and primarily done by the compiler. For example, below is the list.
 ```rust
     // Implicit coercion from &T to *const T
     let x = 10;
@@ -26,7 +26,7 @@ defined and primarily done by the compiler. For example below is the list.
     let x = [0, 1, 2, 3];
     let slice_x: &[i32] = &x;
 
-    // Implicit coercion from closure(not capture environment) to fn type
+    // Implicit coercion from closure(not capturing environment) to fn type
     let inc: fn(u32) -> u32 = |x| x + 1;
 
 ```
@@ -65,7 +65,7 @@ fn main() {
 
     // * is also a dereferencing expression in rust. Because Book implementing
     // `Deref` trait we can do *book to capture the name as String. But because
-    // we cannot move it outside of the Book object I also kept a &front of
+    // we cannot move it outside of the Book object I also kept a & in front of
     // *book, to make it a borrow. Now name is effectively of type &String
     let name = &*book;
 
@@ -73,7 +73,7 @@ fn main() {
     // Here &book will be coerced in to &str. compiler see if it can produce
     // &str from &book. So first it converts &book -> &String and then &String
     // -> &str because Deref is implemented on String. NOTE: just using `let
-    // name = &book;` do not perform this conversion. In the last expression
+    // name = &book;` does not perform this conversion. In the last expression
     // name is still &Book type not &str.
     let name: &str = &book;
 

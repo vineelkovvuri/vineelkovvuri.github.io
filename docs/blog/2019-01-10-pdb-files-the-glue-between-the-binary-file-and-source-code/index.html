@@ -57,8 +57,8 @@
             <nav id="TableOfContents">
   <ul>
     <li><a href="#introduction">Introduction</a></li>
-    <li><a href="#how-do-windbg-identify-the-correct-symbol-file">How do Windbg identify the correct symbol file?</a></li>
-    <li><a href="#how-do-windbg-identify-the-correct-source-file">How do Windbg identify the correct source file?</a></li>
+    <li><a href="#how-does-windbg-identify-the-correct-symbol-file">How does Windbg identify the correct symbol file?</a></li>
+    <li><a href="#how-does-windbg-identify-the-correct-source-file">How does Windbg identify the correct source file?</a></li>
     <li><a href="#windbg-symbols-and-sources-search-heuristics">Windbg Symbols and Sources search heuristics</a></li>
     <li><a href="#references">References</a></li>
   </ul>
@@ -70,43 +70,43 @@
 <main>
 <h1 id="introduction">Introduction</h1>
 <p>Have you ever wondered how a debugger magically gets you to the correct pdb and
-correct sources when debugging an application? This article talks exactly that in
+correct sources when debugging an application? This article talks about exactly that in
 the context of Windbg.</p>
-<p>As you might be aware of, PDB files(also called as symbol files) is the glue
+<p>As you might be aware, PDB files(also called symbol files) are the glue
 between your application binary and the source code. There are two key Environment
-variables which configures Windbg about where to look for symbols and sources.
+variables which configure Windbg about where to look for symbols and sources.
 They are _NT_SYMBOL_PATH and _NT_SOURCE_PATH. The _NT_SYMBOL_PATH points
-to the directory containing your PDBs(also called as symbol files) or to a symbol
+to the directory containing your PDBs(also called symbol files) or to a symbol
 server. _NT_SOURCE_PATH points to the directory of your sources or to a source
-server which indexes the soruce files. One important point to remember here is
+server which indexes the source files. One important point to remember here is
 one or more source files make up one or more binary files. But each binary will
 have a single PDB unless the source code is modified. This is important because
-Windbg has to perform lot of book keeping to map binary symbols with their source
+Windbg has to perform a lot of book keeping to map binary symbols with their source
 locations.</p>
 <p>In this article we would like to understand how Windbg brings the right symbols
 and sources from both Symbol Server and Source Server even when the binary changes
 across the debugging sessions. Below are the three topics that we are going to
 understand.</p>
 <ul>
-<li>How do Windbg identify the correct symbol file?</li>
-<li>How do Windbg identify the correct source file?</li>
+<li>How does Windbg identify the correct symbol file?</li>
+<li>How does Windbg identify the correct source file?</li>
 <li>Windbg Symbols and Sources search heuristics</li>
 </ul>
-<h1 id="how-do-windbg-identify-the-correct-symbol-file">How do Windbg identify the correct symbol file?</h1>
+<h1 id="how-does-windbg-identify-the-correct-symbol-file">How does Windbg identify the correct symbol file?</h1>
 <p>Whenever an application is compiled the compiler will generate a pdb file associated
-with it. These pdbs comes in two variants one containing public symbols and other
-contianing private symbols. Public symbols does not contain all the information
-related to the binary and sources. Where as private symbols have every possible
+with it. These pdbs come in two variants: one containing public symbols and the other
+containing private symbols. Public symbols do not contain all the information
+related to the binary and sources. Whereas private symbols have every possible
 information (like line number/local variables/parameters info) related to the
-binary and sources. Every company who tries protect their intellectual property
-does not publish their private symbols because they contains way too much information
-which facilites reverse engineering the binaries much easier. Ofcourse, I should
-mention nothing really stop a skillful reverse engineer. That said, public symbols
-only gives the customer basic information about the components shipped by these
+binary and sources. Every company who tries to protect their intellectual property
+does not publish their private symbols because they contain way too much information
+which facilitates reverse engineering the binaries much easier. Of course, I should
+mention nothing really stops a skillful reverse engineer. That said, public symbols
+only give the customer basic information about the components shipped by these
 companies. Since we are dealing with our own application we can assume we have
 access to private symbols which are much more helpful.</p>
-<p>When application is being built the compiler embeds a GUID and the absolute path
-to the pdb in to binary. Also, it embeds the same GUID in to the generated PDB.
+<p>When an application is being built the compiler embeds a GUID and the absolute path
+to the pdb into the binary. Also, it embeds the same GUID into the generated PDB.
 This GUID acts as a hash for windbg to check whether the pdb located by the embedded
 path or via _NT_SYMBOL_PATH matches or not. In cases where we are using symbol
 server it queries the symbol server for the appropriate pdb based on the guid.</p>
@@ -148,16 +148,16 @@ symbols could not be loaded for Win32Sample.exe.</p>
 </span></span><span style="display:flex;"><span>OK                                             E:<span style="color:#04d;background-color:#fff0f0">\t</span>emp<span style="color:#04d;background-color:#fff0f0">\T</span>esting<span style="color:#04d;background-color:#fff0f0">\x</span>64<span style="color:#04d;background-color:#fff0f0">\R</span>elease<span style="color:#04d;background-color:#fff0f0">\
 </span></span></span><span style="display:flex;"><span><span style="color:#04d;background-color:#fff0f0"></span>*** WARNING: Unable to verify checksum <span style="color:#080;font-weight:bold">for</span> Win32Sample.exe
 </span></span><span style="display:flex;"><span>*** ERROR: Module load completed but symbols could not be loaded <span style="color:#080;font-weight:bold">for</span> Win32Sample.exe
-</span></span></code></pre></div><h1 id="how-do-windbg-identify-the-correct-source-file">How do Windbg identify the correct source file?</h1>
+</span></span></code></pre></div><h1 id="how-does-windbg-identify-the-correct-source-file">How does Windbg identify the correct source file?</h1>
 <p>PDB files contain not only information about symbols like functions/structures/classes
-etc but also about the artifacts(like .obj) involved in generating your application
-binary. Unfortunately examining this information from PDB is little complicated
+etc. but also about the artifacts(like .obj) involved in generating your application
+binary. Unfortunately examining this information from PDB is a little complicated
 because the PDB format is not documented by Microsoft. But the good news is
 Microsoft has provided an API to query the information about any given PDB. This
 API is called <a href="https://docs.microsoft.com/en-us/visualstudio/debugger/debug-interface-access/debug-interface-access-sdk">Debug Interface Access SDK</a>.
 Luckily, every installation of Visual Studio ships with a sample project aptly
-named as Dia2Dump at C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\DIA
-SDK\Samples\DIA2Dump. When you build this project in Visual Studio we get
+named Dia2Dump at C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\DIA
+SDK\Samples\DIA2Dump. When you build this project in Visual Studio you get
 Dia2Dump.exe, Using this we can solve the second puzzle.</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>usage: Dia2Dump.exe [ options ] &lt;filename&gt;
 </span></span><span style="display:flex;"><span>  -?                : print this <span style="color:#038">help</span>
@@ -190,7 +190,7 @@ Dia2Dump.exe, Using this we can solve the second puzzle.</p>
 </span></span><span style="display:flex;"><span>  -maptosrc &lt;RVA&gt;   : dump src RVA <span style="color:#080;font-weight:bold">for</span> this image RVA
 </span></span><span style="display:flex;"><span>  -mapfromsrc &lt;RVA&gt; : dump image RVA <span style="color:#080;font-weight:bold">for</span> src RVA
 </span></span></code></pre></div><p>The most important of all these flags is -sf which will dump out all the source
-files used to create an obj(object file). A sample output form this command
+files used to create an obj(object file). A sample output from this command
 Dia2Dump.exe -sf <path of pdb file> with a PDB will be as shown below</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>....
 </span></span><span style="display:flex;"><span><span style="color:#369">Compiland</span> = C:<span style="color:#04d;background-color:#fff0f0">\.</span>.&lt;snipped&gt;..<span style="color:#04d;background-color:#fff0f0">\W</span>in32Sample<span style="color:#04d;background-color:#fff0f0">\x</span>64<span style="color:#04d;background-color:#fff0f0">\R</span>elease<span style="color:#04d;background-color:#fff0f0">\W</span>in32Sample.obj
@@ -215,12 +215,12 @@ Dia2Dump.exe -sf <path of pdb file> with a PDB will be as shown below</p>
 </span></span><span style="display:flex;"><span>        c:<span style="color:#04d;background-color:#fff0f0">\.</span>.&lt;snipped&gt;..<span style="color:#04d;background-color:#fff0f0">\w</span>in32sample<span style="color:#04d;background-color:#fff0f0">\x</span>64<span style="color:#04d;background-color:#fff0f0">\r</span>elease<span style="color:#04d;background-color:#fff0f0">\w</span>in32sample.pch
 </span></span><span style="display:flex;"><span>....
 </span></span></code></pre></div><p>The above information clearly suggests that PDB also contains hash of all the
-files needed to create a obj. This hash could be MD5 or SHA256(which is often
-denoted with 0x3), This can be verified using simple get-filehash commandlet on
-our source file(Win32Sample.cpp) as shown below. Similar to GUID which binds a
-binary with PDB file this file checksum will bind the binary with its appropriate
-source file. But the checking of source files against its checksum is somewhat
-relax(more on this later).</p>
+files needed to create an obj. This hash could be MD5 or SHA256(which is often
+denoted with 0x3). This can be verified using simple get-filehash commandlet on
+our source file(Win32Sample.cpp) as shown below. Similar to the GUID which binds a
+binary with a PDB file, this file checksum will bind the binary with its appropriate
+source file. But the checking of source files against their checksum is somewhat
+relaxed(more on this later).</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>PS&gt; get-filehash -Algorithm MD5 <span style="color:#d20;background-color:#fff0f0">&#34;c:\&lt;snipped&gt;\win32sample\win32sample.cpp&#34;</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>Algorithm Hash                              Path
@@ -232,12 +232,12 @@ appropriate source file and at the correct line number.</p>
 <p>Whenever windbg tries to open a source file associated with a symbol it tries to
 check for this checksum of the source file.</p>
 <h1 id="windbg-symbols-and-sources-search-heuristics">Windbg Symbols and Sources search heuristics</h1>
-<p>If the absolute paths embeded in the PDB file is all we have then debugging in
-Windbg would not be any interesting and fun. Practically we cannot have the pdbs
+<p>If the absolute paths embedded in the PDB file is all we have then debugging in
+Windbg would not be very interesting and fun. Practically we cannot have the pdbs
 and sources available at the embedded paths(for example a program being debugged
-at the client machine). So how does Windbg figures out the right PDB even when
+at the client machine). So how does Windbg figure out the right PDB even when
 the symbol paths set via .sympath+ or _NT_SYMBOL_PATH and the source path set
-via .srcpath+ or _NT_SOURCE_PATH are different from the actual embeded paths
+via .srcpath+ or _NT_SOURCE_PATH are different from the actual embedded paths
 in the PDB?</p>
 <p>To understand this we need to enable !sym noisy and .srcnoisy 3 when debugging.
 As an example I have my original source code built from C:\users\vineelko\documents\visual
@@ -247,7 +247,7 @@ studio 2017\projects\win32sample which generated below files</p>
 <li>Binary:  C:&lt;snipped&gt;\Win32Sample\x64\Release\Win32Sample.exe</li>
 <li>PDB:     C:&lt;snipped&gt;\Win32Sample\x64\Release\Win32Sample.pdb</li>
 </ul>
-<p>Lets say we moved the folder from C:\Users\vineelko\Documents\Visual Studio
+<p>Let&rsquo;s say we moved the folder from C:\Users\vineelko\Documents\Visual Studio
 2017\Projects\ to E:\Temp\  like below</p>
 <ul>
 <li>Sources: E:\Temp\Win32Sample\Win32Sample.c</li>
@@ -400,15 +400,15 @@ for Win32Sample.exe</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">DBGENG:      found file &#39;</span>e:<span style="color:#04d;background-color:#fff0f0">\t</span>emp<span style="color:#04d;background-color:#fff0f0">\T</span>esting<span style="color:#04d;background-color:#fff0f0">\w</span>in32sample.cpp<span style="color:#a61717;background-color:#e3d2d2">&#39;</span>
 </span></span></code></pre></div><p>Source path heuristics to match a source file is much more involved, It is done
 by prefix and suffix matches by joining the file path and .srcpath directory. If
-the checksum of the file present in PDB does does not match with the file checksum
-then you should see a warning like below(Which is very important). Unlike symbol
-files, Eventhough Windbg throws a warning it opens the source file in code window.
-But we should be vigilient about it.</p>
+the checksum of the file present in PDB does not match with the file checksum
+then you should see a warning like below(which is very important). Unlike symbol
+files, even though Windbg throws a warning it opens the source file in the code window.
+But we should be vigilant about it.</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>windbg&gt; .open -a Win32Sample!main
 </span></span><span style="display:flex;"><span>WARNING: Unable to find <span style="color:#038">source</span> file with matching checksum.  Found
 </span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">&#39;c:\&lt;snipped&gt;\win32sample\win32sample.cpp&#39;</span> with mismatch!
-</span></span></code></pre></div><p>In any case, Understanding these details will help us solve unresolved source and
-symbol files issue with much more confidence!</p>
+</span></span></code></pre></div><p>In any case, understanding these details will help us solve unresolved source and
+symbol file issues with much more confidence!</p>
 <h1 id="references">References</h1>
 <ul>
 <li><a href="https://www.wintellect.com/pdb-files-what-every-developer-must-know/">PDB Files: What Every Developer Must Know</a></li>

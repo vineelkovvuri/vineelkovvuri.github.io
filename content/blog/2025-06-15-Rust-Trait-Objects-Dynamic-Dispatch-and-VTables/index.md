@@ -7,15 +7,15 @@ tags: ["Rust"]
 
 # Rust: Trait Objects, Dynamic Dispatch and VTables
 
-Even though Rust do not support the traditional inheritance/virtual function to
-enable dynamic dispatch(runtime polymorphism). It does support traits based
-runtime polymorphism, which may seems drastically different superficially when
-compared to other OOP languages, under the hood it is all the same(virtual
+Even though Rust does not support the traditional inheritance/virtual function to
+enable dynamic dispatch(runtime polymorphism), it does support trait-based
+runtime polymorphism, which may seem drastically different superficially when
+compared to other OOP languages. Under the hood it is all the same(virtual
 functions/vtables etc).
 
-First of all, Rust based polymorphism is done via Trait objects(aka &dyn T),
-where T is the trait. So lets say we want a function to accept an object that
-implement say an interface I, usually in C# we do below
+First of all, Rust-based polymorphism is done via Trait objects(aka &dyn T),
+where T is the trait. So let's say we want a function to accept an object that
+implements say an interface I, usually in C# we do the below
 
 ```C#
 public void func(IStack istack)
@@ -34,7 +34,7 @@ fn func(istack: &dyn IStack)
 ```
 
 both examples look the same except in the function signature. In Rust `istack:
-IStack` do not make sense because `IStack` do not have size defined at compile
+IStack` does not make sense because `IStack` does not have a size defined at compile
 time. So Rust instead takes only reference to the Trait which is a fat pointer
 whose size is defined at compile time.
 
@@ -139,8 +139,8 @@ fn print_file_type(file_type: &dyn FileType) {
     file_type.get_file_type();
 
     // In essence, vtables provide another level of indirection to the final
-    // implementation. NOTE: Rust compiler do not generate this vtable unless
-    // trait object(&dyn T) is being used in the code.
+    // implementation. NOTE: The Rust compiler does not generate this vtable unless
+    // a trait object(&dyn T) is being used in the code.
 
     // This is a perfect example of below quote :-)
     // "All problems in computer science can be solved by another level of

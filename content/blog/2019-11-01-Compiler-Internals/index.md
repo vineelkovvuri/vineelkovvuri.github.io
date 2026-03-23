@@ -64,7 +64,7 @@ SECTION HEADER #3
           5E .text$mn
 ```
 
-All 3 functions are groups inside the **.text$mn** section and hence **link
+All 3 functions are grouped inside the **.text$mn** section and hence **link
 /dump /section:.text$mn** will have only one header.
 
 # Elimination of unused static functions
@@ -106,8 +106,8 @@ other functions external to this .obj so it removed that function.
 
 With /Gy switch the compiler now spits 3 more headers in .text$mn. This is also
 called COMDAT and will be helpful for linker to eliminate dead code more easily.
-The need for this section will come clear once we look at how linker optimizes
-code. From the output it is clear that each function has got it own section
+The need for this section will become clear once we look at how the linker optimizes
+code. From the output it is clear that each function has got its own section
 header with **COMDAT; sym=** line
 
 ```C
@@ -191,9 +191,9 @@ SECTION HEADER #5
 # Elimination of unused functions by the linker
 
 The complete elimination of unused functions in a program can only be done by
-linker because it is the only component which can see through all the
-intermediatory files like .objs. But interestingly linker only works on sections
-not on functions themselfs. Because of this if a .obj contain one used and one
+the linker because it is the only component which can see through all the
+intermediary files like .objs. But interestingly the linker only works on sections,
+not on functions themselves. Because of this, if a .obj contains one used and one
 unused function inside .text section, the linker will not eliminate the unused
 function. Hence in the below example we still see all the functions
 
@@ -254,14 +254,14 @@ the .map file for the above case we still see myadd2 and sub.
 0001:000000a0       sub                        00000001400010a0 f   b.obj
 0001:000000e0       main                       00000001400010e0 f   main.obj
 ```
-The reason for this is linker like I said before works at section level not
-function level. To help linker in this case, we need to compile the objs with
+The reason for this is the linker, as I said before, works at the section level not the
+function level. To help the linker in this case, we need to compile the objs with
 /Gy flag which as we saw before will produce the functions in their own COMDAT
 sections.
 
 This is exactly where **/Gy** and COMDAT feature come in handy. When compiled
 with /Gy like we saw before, each function will be part of a different section
-and hence linker can eliminate unused functions
+and hence the linker can eliminate unused functions
 
 ```shell
 >cl /c /Gy a.c b.c main.c

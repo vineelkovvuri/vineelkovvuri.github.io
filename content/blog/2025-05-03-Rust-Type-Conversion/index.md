@@ -1,11 +1,11 @@
 ---
-title: "Rust: Type Conversion - From one type to other"
+title: "Rust: Type Conversion - From one type to another"
 date: 2025-05-03 19:04:18
 toc: true
 tags: ["Rust"]
 ---
 
-# Rust: Type Conversion - From one type to other
+# Rust: Type Conversion - From one type to another
 
 Type conversion is a fundamental operation in programming, allowing data to be
 transformed from one representation to another. In Rust, this is often done

@@ -7,9 +7,9 @@ tags: ['Compilers']
 
 # Introduction
 
-During the compilation one of the crucial step after assembling is
+During the compilation, one of the crucial steps after assembling is
 creating the Object files. The collection of these object files is
-called a lib file. We can create these .lib files through following
+called a lib file. We can create these .lib files through the following
 visual studio project types
 1. Static Library
 2. Dynamic Linked Library
@@ -37,7 +37,7 @@ Visual Studio New Project dialog for 'Static Library' and 'Dynamic Linked Librar
 Static Library is created when you want to provide the complete code to
 link into another dll or exe. For example, If a static library
 project contains 4 files add.c,sub.c,mul.c,div.c containing functions
-for their operations like below respectively.
+for their operations as shown below respectively.
 ```C
 int add(int a) {
     return a + 1;
@@ -48,7 +48,7 @@ of each of the above .c file. So a static library contains all
 the code that gets compiled from your project, and this .lib will
 be consumed by any other project types(dll or exe).
 
-NOTE: The functions inside a Static Library is not declared with
+NOTE: The functions inside a Static Library are not declared with
 __declspec(dllexport) because all functions declared in a static
 library are meant to be consumed/included by others directly.
 
@@ -69,8 +69,8 @@ it also provides the code to be used by other projects like dll or exe,
 but the difference is in the way the code gets re-used by consumers.
 In DLL, the outcome of the project is not only a .lib file but also a
 .dll file. In fact, in case of DLL project, the .lib file does not contain
-any .obj file instead it contains only pointers of exported functions to
-the dll containing the actual code. In a Dll, all of the code is indeed
+any .obj file; instead, it contains only pointers of exported functions to
+the dll containing the actual code. In a DLL, all of the code is indeed
 present inside the .dll file.
 
 Since .lib does not contain any real .obj unlike static lib, we can
@@ -96,7 +96,7 @@ by others(indirectly).
 
 This is interesting. When a function inside a static library is declared
 with __declspec(dllexport), like any other function, it gets included
-by the consumer in his binary(dll) but because it is declared as
+by the consumer in their binary(dll) but because it is declared as
 __declspec(dllexport) that function gets exported as well from the consumer
 binary! Below is a screenshot of Consumer.exe which is exporting sub2 function
 because sub2 is actually declared with __declspec(dllexport) in the
@@ -106,7 +106,7 @@ original static library.
 sub2 function got exported from the final consumer binary
 
 The takeaway here is Static Libraries are just a convenient archive format
-to hold multiple .obj files nothing more or nothing less! So we should be
+to hold multiple .obj files, nothing more or nothing less! So we should be
 cautious of how the functions are declared.
 
 # References

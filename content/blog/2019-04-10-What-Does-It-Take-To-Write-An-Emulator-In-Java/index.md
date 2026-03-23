@@ -7,46 +7,46 @@ tags: ['Java', 'Emulator']
 
 # Introduction
 
-I am proud, This weekend I did some productive work. I was able to code Chip
+I am proud. This weekend I did some productive work. I was able to code a Chip
 8 emulator in Java over a night. I have always been fascinated by them and
 finally I was able to get the damn thing to work! For those of you who are
-not familiar with software emulator, It is a software which can emulate the
+not familiar with software emulators, it is software which can emulate the
 functionality of other hardware or software components. Notable examples are
 video game emulators([Dosbox](https://en.wikipedia.org/wiki/DOSBox) ,[NES Emulator](https://en.wikipedia.org/wiki/List_of_video_game_emulators)),
 general purpose software emulators([QEmu](https://en.wikipedia.org/wiki/QEMU))
 
 # What is Chip 8?
 
-It was the software used in some of earlier 8 bit microprocessors. Which
+It was the software used in some of the earlier 8 bit microprocessors, which
 provided portability across multiple computer models. Think of it as the JVM
 of 1970. Similar to JVM byte codes, it has an instruction set. Any program
 written in this instruction set can be interpreted by the Chip 8
-interpreter(which will be preloaded in to memory @ 0x0). Over the weekend, I
+interpreter(which will be preloaded into memory @ 0x0). Over the weekend, I
 was trying to write an emulator for this instruction set. Fortunately, I
-tried and succeeded in do it. In this article I would like to share my
+tried and succeeded in doing it. In this article I would like to share my
 thoughts about how to write an emulator in its most basic form. More info of
 chip 8 can be found [here](https://en.wikipedia.org/wiki/CHIP-8).
 
 # How does a CPU work?
 
-Lets quickly go back to computer organization 101 class. In its most basic
-form, Every CPU need two inputs.
+Let's quickly go back to computer organization 101 class. In its most basic
+form, every CPU needs two inputs.
 
 1. Data
 2. Instructions
 
 To store and retrieve these, CPU also needs a storage location, we call this
-as RAM.  Along with this we may also need couple more input/output devices.
+RAM.  Along with this we may also need a couple more input/output devices.
 The simplest of these are keyboard and display.
 
-Now lets see how all of these interact with one another.  Every CPU when
+Now let's see how all of these interact with one another.  Every CPU when
 powered on will have to read its first instruction to execute. The location
 of this very first instruction in RAM is usually hard coded to a predefined
 location by convention. This is when CPU starts interacting with RAM for the
 first time. Once it fetches the instruction from RAM. It tries to decode it,
-meaning, it tries to understand want it should do with it. After that, it
+meaning, it tries to understand what it should do with it. After that, it
 will execute the operation. As part of this execution any new results will
-be saved backed to RAM. This process repeats forever. This is the classic
+be saved back to RAM. This process repeats forever. This is the classic
 Fetch-Decode-Execute cycle. In the process CPU may also interact with
 keyboard and display. Below illustration explains the process.
 
@@ -59,19 +59,19 @@ components it has to essentially emulate all the above modules and any
 associated peripherals. First, we need to get familiar with the Chip 8
 Technical Reference found
 [here](http://devernay.free.fr/hacks/chip8/C8TECH10.HTM). This reference covers
-pretty much every thing we need. Enough theory, Now lets get to the meat of
+pretty much everything we need. Enough theory, now let's get to the meat of
 the show, THE CODE.
 
 Technically, an emulator can be written in any language. I have chosen Java
 for its included batteries/libraries. I have organized the source code of my
-implementation into below 5 Objects.
+implementation into the below 5 Objects.
 
 1. CPU(Chip8Cpu.java) - This is the core module which implements the instruction
    set of Chip 8 and its decode logic
 2. Memory(Chip8Memory.java) - This emulates the RAM and associated constraint to
    interact with Chip 8 CPU
 3. Display(Chip8Display.java) - This emulates the Dxyn - DRW Vx, Vy, nibble
-4. instruction to capture the output on to the display
+4. instruction to capture the output onto the display
 5. Keyboard(Chip8Keyboard.java) - This emulates the keyboard input
 6. Main(Main.java) - The main driver program which sets up the system
 
@@ -165,16 +165,16 @@ public class Chip8Display extends JFrame {
     public void clear() {...}
 }
 ```
-The one and only instruction in the Chip 8 instruction set that interact
-with display is Dxyn - DRW Vx, Vy, nibble. When CPU has decoded this
-instruction, it interface with the Display object and calls setPixel()
+The one and only instruction in the Chip 8 instruction set that interacts
+with the display is Dxyn - DRW Vx, Vy, nibble. When CPU has decoded this
+instruction, it interfaces with the Display object and calls setPixel()
 method to turn on/off a pixel. Display is interesting and it deserves some
 explanation. The way the instruction works is, given a starting pixel (Vx,
 Vy). CPU first reads nibble number of bytes from the memory location pointer
 by I register. Now each bit in each byte corresponds to one pixel starting
-from (Vx, Vy). For example if jth bit of ith byte is 1 then the pixel at
-display[Vx + j][Vy + i] XOR with its previous value. This mechanism is also
-called  Stripping in the reference. The Display object simulates each pixel
+from (Vx, Vy). For example, if the jth bit of the ith byte is 1 then the pixel at
+display[Vx + j][Vy + i] is XORed with its previous value. This mechanism is also
+called Stripping in the reference. The Display object simulates each pixel
 as a 12Ã—12 size JPanel. The entire display contains 64Ã—32 such pixels or
 JPanels. These JPanels are initially added to JFrame window and these will
 be set to black for 'off' state and green for 'on' state by setPixel()
@@ -193,12 +193,12 @@ public class Chip8Keyboard implements KeyListener {
     public void keyReleased(KeyEvent e) {...}
 }
 ```
-There are few instructions which interfaces with keyboard. This object is
-hooked as the keyboard listener on to the JFrame of Display. This is the
+There are a few instructions which interface with the keyboard. This object is
+hooked as the keyboard listener onto the JFrame of Display. This is the
 only way that I know in Java to capture the keyboard events. Chip 8 has 15
 keys starting with 0-9 and A-F. We maintain the state of these keys using an
 array of 16 integers and convert the A-F key events to their corresponding
-10-15 indexes in to the above array.
+10-15 indexes into the above array.
 
 # Main
 ```java
@@ -224,8 +224,8 @@ especially by hard coding the file path to load.
 # Output
 
 Now in order to test this, we need some chip 8 programs/games, also called
-as ROM files. A simple google search will return good number of ROM files.
-Let's see the output of loading few of them.
+ROM files. A simple google search will return a good number of ROM files.
+Let's see the output of loading a few of them.
 
 Invaders
 ![](2.Emulator.png)
@@ -235,7 +235,7 @@ Tetris
 ![](4.Emulator.png)
 PingPong
 ![](5.Emulator.png)
-This one is for my wife, It is really not a game, but this ROM file exist
+This one is for my wife. It is really not a game, but this ROM file exists
 beside other game files. I know we cannot play with them. IBM ROM for my
 wife ;)
 ![](6.Emulator.png)

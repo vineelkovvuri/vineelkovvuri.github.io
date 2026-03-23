@@ -9,7 +9,7 @@ tags: ['WinDbg', 'Windows']
 
 When performing KD(Kernel Debugging) in Windows with Windbg if you have to set a
 break point in a user mode process we should always use **.process /i address;
-g; .reload /user**. Lot of good content is written on the
+g; .reload /user**. A lot of good content is written on the
 [internet](https://www.osronline.com/article.cfm%5Earticle=576.htm) on this
 command, but nothing seemed to explain why this command should be used instead
 of the familiar **.process /r /p address**. I would like to shed some light on
@@ -34,7 +34,7 @@ Below are the steps involved for a break point to work in debugging a user mode 
   target resumes to execute
 - g - when you hit "g" the debugger replaces the byte with 0xcc and stores
   the original byte with it
-- After execution when processor execute the modified byte (0xcc) this
+- After execution when the processor executes the modified byte (0xcc) this
   causes the debugger to break in and debugger puts back the original byte
   as if nothing has happened to the program
 - More details:
@@ -42,7 +42,7 @@ Below are the steps involved for a break point to work in debugging a user mode 
 
 # User mode break points from KD
 
-When debugging a user mode process from KD the steps works exactly same as above
+When debugging a user mode process from KD the steps work exactly the same as above
 but with a slight twist.
 
 - Let's assume during KD, when the debugger broke, the processor is
@@ -84,7 +84,7 @@ This .process /i is not required if you are putting breakpoints in system dlls
 like kernelbase, ntdll etc because these dlls are loaded at the same virtual
 address in all the user mode processes and they have a single copy in the
 physical memory. So once a break point set in a process the break point is
-visible in all other processes which uses that system dll. Below we illustrate
+visible in all other processes which use that system dll. Below we illustrate
 this by setting a break point in ntdll.dll. (Even here just make sure when you
 broke initially you are not in System process as it will not have ntdll!)
 

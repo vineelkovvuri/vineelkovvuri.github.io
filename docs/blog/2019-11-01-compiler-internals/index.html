@@ -117,7 +117,7 @@ be accessed by functions in other libs.</p>
 </span></span><span style="display:flex;"><span>         Execute Read
 </span></span><span style="display:flex;"><span>  Summary
 </span></span><span style="display:flex;"><span>          5E .text<span style="color:#369">$mn</span>
-</span></span></code></pre></div><p>All 3 functions are groups inside the <strong>.text$mn</strong> section and hence <strong>link
+</span></span></code></pre></div><p>All 3 functions are grouped inside the <strong>.text$mn</strong> section and hence <strong>link
 /dump /section:.text$mn</strong> will have only one header.</p>
 <h1 id="elimination-of-unused-static-functions">Elimination of unused static functions</h1>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#888">//a.c
@@ -151,8 +151,8 @@ other functions external to this .obj so it removed that function.</p>
 <h1 id="comdat-and-gy-switch">COMDAT and /Gy switch</h1>
 <p>With /Gy switch the compiler now spits 3 more headers in .text$mn. This is also
 called COMDAT and will be helpful for linker to eliminate dead code more easily.
-The need for this section will come clear once we look at how linker optimizes
-code. From the output it is clear that each function has got it own section
+The need for this section will become clear once we look at how the linker optimizes
+code. From the output it is clear that each function has got its own section
 header with <strong>COMDAT; sym=</strong> line</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#888">//a.c
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#888;font-weight:bold">int</span> <span style="color:#06b;font-weight:bold">myadd</span>() {
@@ -229,9 +229,9 @@ header with <strong>COMDAT; sym=</strong> line</p>
 </span></span><span style="display:flex;"><span>          8C .text<span style="color:#369">$mn</span>
 </span></span></code></pre></div><h1 id="elimination-of-unused-functions-by-the-linker">Elimination of unused functions by the linker</h1>
 <p>The complete elimination of unused functions in a program can only be done by
-linker because it is the only component which can see through all the
-intermediatory files like .objs. But interestingly linker only works on sections
-not on functions themselfs. Because of this if a .obj contain one used and one
+the linker because it is the only component which can see through all the
+intermediary files like .objs. But interestingly the linker only works on sections,
+not on functions themselves. Because of this, if a .obj contains one used and one
 unused function inside .text section, the linker will not eliminate the unused
 function. Hence in the below example we still see all the functions</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#888">//a.c
@@ -283,13 +283,13 @@ the .map file for the above case we still see myadd2 and sub.</p>
 </span></span><span style="display:flex;"><span>0001:00000050       myadd2                     <span style="color:#00d;font-weight:bold">0000000140001050</span> f   a.obj
 </span></span><span style="display:flex;"><span>0001:000000a0       sub                        00000001400010a0 f   b.obj
 </span></span><span style="display:flex;"><span>0001:000000e0       main                       00000001400010e0 f   main.obj
-</span></span></code></pre></div><p>The reason for this is linker like I said before works at section level not
-function level. To help linker in this case, we need to compile the objs with
+</span></span></code></pre></div><p>The reason for this is the linker, as I said before, works at the section level not the
+function level. To help the linker in this case, we need to compile the objs with
 /Gy flag which as we saw before will produce the functions in their own COMDAT
 sections.</p>
 <p>This is exactly where <strong>/Gy</strong> and COMDAT feature come in handy. When compiled
 with /Gy like we saw before, each function will be part of a different section
-and hence linker can eliminate unused functions</p>
+and hence the linker can eliminate unused functions</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&gt;cl /c /Gy a.c b.c main.c
 </span></span><span style="display:flex;"><span>&gt;link a.obj b.obj main.obj /nodefaultlib /entry:main /map /opt:ref
 </span></span><span style="display:flex;"><span>0001:00000000       myadd                      <span style="color:#00d;font-weight:bold">0000000140001000</span> f   a.obj

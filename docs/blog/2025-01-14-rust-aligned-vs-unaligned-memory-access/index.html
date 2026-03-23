@@ -66,8 +66,8 @@
 <main>
 <h1 id="rust-rust-aligned-vs-unaligned-memory-access">Rust: Rust Aligned vs Unaligned Memory Access</h1>
 <p>Unlike C, Rust enforces some rules when trying to access memory. Mainly it
-requires consideration to alignment of the data that we are trying to read.
-Below code will illustrate the details.</p>
+requires consideration of the alignment of the data that we are trying to read.
+The below code will illustrate the details.</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">main</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>data: [<span style="color:#888;font-weight:bold">u8</span>;<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">10</span>]<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>[<span style="color:#00d;font-weight:bold">0x11</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0x22</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0x33</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0x44</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0x55</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0x66</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0x77</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0x88</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0x99</span>,<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0xAA</span>];<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">
@@ -85,7 +85,7 @@ Below code will illustrate the details.</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// Slices: Accessing elements through a slice will have the same alignment
-</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// as its underlying data. So this prevent unaligned access. Also we cannot
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// as its underlying data. So this prevents unaligned access. Also we cannot
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// interpret a u8 array as a u16 slice unlike raw pointer access
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// Case 2: aligned u8 access from slice
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>slice<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>&amp;data[<span style="color:#00d;font-weight:bold">1</span>..<span style="color:#00d;font-weight:bold">2</span>];<span style="color:#bbb">
@@ -106,7 +106,7 @@ Below code will illustrate the details.</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// Takeaway 1: The takeaway here is that when interpreting *const u8 as u16
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// or u32, we cannot simply cast *const u8 as *const u16 and dereference
-</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// that location and except u16. Instead, we can only access the *const u8
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// that location and expect u16. Instead, we can only access the *const u8
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// as two u8 values and then use bit math to combine those bytes to form a
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// u16.
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">

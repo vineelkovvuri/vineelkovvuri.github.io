@@ -7,32 +7,33 @@ tags: ['C', 'Asm', 'Reversing']
 
 # Introduction
 
-Compilers are surely the complex programs of all times. Even today, writing a
-compiler with minimum set of tools is considered to be challenging. This
+Compilers are surely the most complex programs of all time. Even today, writing a
+compiler with a minimum set of tools is considered to be challenging. This
 tutorial scratches the surface of different compiler phases involved in
-translating a given source code to executable and also shows how this
-information is useful in context of reverse engineering.
+translating a given source code to an executable and also shows how this
+information is useful in the context of reverse engineering.
 
 [GNU compiler collection](https://en.wikipedia.org/wiki/GNU_Compiler_Collection)
 provides an excellent set of tools for dissecting the compilation process and to
 understand the working of bits and bytes in the final executable. For this
-tutorial I am using the following tools and considers C language to illustrate
+tutorial I am using the following tools and consider C language to illustrate
 the examples.
 
-- [Dev-Cpp](http://orwelldevcpp.blogspot.com/) is a IDE with GNU C compiler collection(Mingw) as backend
+- [Dev-Cpp](http://orwelldevcpp.blogspot.com/) is an IDE with GNU C compiler collection(Mingw) as backend
 - [OllyDbg](http://www.ollydbg.de/) An excellent debugger/reverse engineering tool
 
-for Linux environment are also available for Windows(thanks to Many people don't
-know that the powerful programmer tools that are available Cygwin/Mingw).
-Dev-Cpp is an IDE which consists of entire GNU compiler collection(GCC). This
+Many people don't
+know that the powerful programmer tools that are available
+for Linux environment are also available for Windows(thanks to Cygwin/Mingw).
+Dev-Cpp is an IDE which consists of the entire GNU compiler collection(GCC). This
 IDE uses gcc.exe, g++.exe for compiling C, C++ programs and gdb.exe for
-debugging. Also, The Dev-Cpp's installation(c:\dev-cpp\bin) directory consists
+debugging. Also, the Dev-Cpp's installation(c:\dev-cpp\bin) directory consists
 of all the GNU compiler tools. To start this tutorial set the PATH variable to
 Dev-Cpp's bin directory as we will be working completely from the command prompt
 and not going to use the IDE.
 
 For debugging, using command line GNU Debugger (gdb.exe) may seem daunting.
-To compensate this, we have an excellent user mode debugger for Windows
+To compensate for this, we have an excellent user mode debugger for Windows
 called OllyDbg. This helps in debugging a running process or a normal exe or
 dll file.
 
@@ -40,7 +41,7 @@ dll file.
 
 Preprocessing is the first phase of C/C++ Compilation. It is the act of
 processing(textual substitutions) the input sources before being handed over
-for parsing(i.e., before splitting in to tokens). The existence of
+for parsing(i.e., before splitting into tokens). The existence of
 preprocessing phase in the first place is very specific to C/C++ languages
 for historic reasons. Let's consider the following code to understand what
 this phase will do
@@ -69,13 +70,13 @@ main() {
 ```
 
 The preprocessing phase of the compiler replaced all preprocessor directives
-like PI e.t.c in the output. To keep the output simple I have not included
-any header files. By observing the output we can conclude few points.
+like PI etc in the output. To keep the output simple I have not included
+any header files. By observing the output we can conclude a few points.
 
 - Preprocessor will not compute the expression values. For example in
   the above output the preprocessor just replaced PI with its macro
   definition and the expression 3.14156*2 is left as it is
-- Preprocessor don't check for syntax errors because the above output
+- Preprocessor doesn't check for syntax errors because the above output
   contains no compiler errors even though we used a variable f without
   declaring it
 
@@ -98,14 +99,14 @@ this again replaced with Add,Sub macros as *10 + 2 * 10 - 2 = 10 + (2 * 10) - 2
 
 # Compilation
 
-Compilation phase translates the output file from preprocessor in to
+Compilation phase translates the output file from the preprocessor into
 architecture specific assembly code. It is one of the core phases of a
-compiler. It comprises of following 4 stages
+compiler. It comprises the following 4 stages
 
 # Lexical Analysis
 
 The responsibility of a lexical analyzer(or Lexer for short) is to split the
-given program in to valid language tokens(or lexems).  For example consider
+given program into valid language tokens(or lexems).  For example consider
 the following code.
 ```C
 main() {
@@ -154,8 +155,8 @@ because the internal representation of int is different from float.
 
 # Code Generation
 
-Once the program passes above stages the compiler translate the high level
-program in to its equivalent assembly language program(may not have one-one
+Once the program passes the above stages the compiler translates the high level
+program into its equivalent assembly language program(may not have one-one
 correspondence due to code optimizations)
 ```C
 add() {
@@ -173,7 +174,7 @@ of assembly code.
 By default, GCC uses AT\&T assembly language syntax but as we are working in
 Windows we feel homely if GCC can generate
 [MASM](https://en.wikipedia.org/wiki/Microsoft_Macro_Assembler) like assembly
-syntax. This is exactly what -masm=intel (Machines Assembly) option do. The
+syntax. This is exactly what -masm=intel (Machines Assembly) option does. The
 above command automatically generates a file named test.s. This is a text
 file and can be viewed in text editor.
 
@@ -182,15 +183,15 @@ file and can be viewed in text editor.
 Observe the above code, in line 14 even though test.s contains no definition
 for printf, a call is made to printf function. How can the compiler produce
 the final executable for the above program without knowing the definition of
-printf? The answer is simple, compilation have no idea on where the
+printf? The answer is simple, the compilation phase has no idea where the
 function(printf) is actually located(glibc). It only checks for the
 prototype(function signature). If function prototype exists(here in stdio.h)
 and there is a mismatch in the prototype of the calling function(printf)
 then the compiler issues an error (test.c:5: error: too few arguments to
-function `printf'). The scenario where the function don't have a prototype
-in the source file is dealt in linker phase(will be discussed later). The
-compiler only know how to convert a given high level language function to an
-equal assembly language instructions.
+function `printf'). The scenario where the function doesn't have a prototype
+in the source file is dealt with in the linker phase(will be discussed later). The
+compiler only knows how to convert a given high level language function to
+equivalent assembly language instructions.
 
 Similarly, whenever your program contains an external variable(like external
 function printf) the machine code generated for the memory address of that
@@ -249,7 +250,7 @@ controlled using -O flag of the compiler.
 
 ## Assembling
 
-It is the process of converting a given assembly language program in to its
+It is the process of converting a given assembly language program into its
 equivalent architecture specific machine language code. This can be
 x86/x64/arm. Consider the following code
 ```C
@@ -314,10 +315,10 @@ requires a Hex Editor or PE Tools
 
 ## Disassembling
 
-It is exactly the reverse process of assembling. Given a binary file, The
-tool(disassembler) will decode the bytes in to human readable assembly
+It is exactly the reverse process of assembling. Given a binary file, the
+tool(disassembler) will decode the bytes into human readable assembly
 instructions. We use a program called objdump.exe(object dumper) to know the
-ingredients of test.o. It disassemble the given test.o. But the beauty of
+ingredients of test.o. It disassembles the given test.o. But the beauty of
 objdump.exe is, it also displays the opcode information(binary information)
 of each instruction.
 
@@ -336,7 +337,7 @@ these object files is, they are relocatable.
 # Linking
 
 Linking is the process of rearranging(relocating) the functions from various
-object files(*.obj or *.o) and library files(*.lib) in to a single exe or a
+object files(*.obj or *.o) and library files(*.lib) into a single exe or a
 dll file. But the real crux of linking lies in relocating. Consider two
 programs test1.c test2.c whose contents are shown below.
 ```C
@@ -373,29 +374,29 @@ beside main() and test2(). Of all the Startup and Finalizing functions we
 are concern only with ___mingw_CRTStartup()
 
 In the figure below we can observe that ___mingw_CRTStartup() is responsible
-for calling the function main() in Line 149 priors calling main(). It also
+for calling the function main() in Line 149 prior to calling main(). It also
 calls some startup routines like allocating the Heap Memory for the program
 using HeapAllocWin32 API function and retrieving the command line arguments
-e.t.c ( stripped off). Once the main() function is returned there is call to
+etc (stripped off). Once the main() function is returned there is call to
 ExitProcess Win32 API function(_ExitProcess@4 is the mangled form of
 ExitProcess) with return value of main() as argument. This function causes
 the current process to terminate.
 
 From the disassembly of a.exe we can understand that the linker also
-includes other functions which are necessary for running the program beside
-test(),main()
+includes other functions which are necessary for running the program besides
+test(), main()
 
 ![Opcodes listing](Linking2.png)
 
 Besides relocating the functions, Linking also does various other tasks to
 create an exe file, Like incorporating the symbol table, debug information,
-exported functions, imported functions e.t.c.(explaining these concepts is
+exported functions, imported functions etc.(explaining these concepts is
 beyond the scope of this tutorial and requires a firm understanding of the
 structure of a PE(EXE) file)
 
 ## Static Linking
 
-In static linking the code for library functions(printf) is included in to
+In static linking the code for library functions(printf) is included into
 the final exe. To understand this scenario consider the following code
 snippet.
 ```C
@@ -413,7 +414,7 @@ files will be large. The advantage of static linking is, a.out requires no
 external libraries for running. But the biggest disadvantage is
 
 - Increase in the size of final executable
-- Duplication of common library routines in each and very static executable
+- Duplication of common library routines in each and every static executable
 
 ![disassembled output of a.out](Linking3.png)
 
@@ -421,7 +422,7 @@ external libraries for running. But the biggest disadvantage is
 
 Dynamic linking overcomes the disadvantages of static linking. It does not
 duplicate the code from C runtime libraries in final executable, As a result
-the file size is very less compared to statically linked once. It simply
+the file size is very less compared to statically linked ones. It simply
 refers to the location where that function(printf) is present in Runtime
 Libraries(glibc or msvcr71.dll). So when the executable is run the loader of
 the operating system resolves the functions that are external to this
@@ -446,7 +447,7 @@ terminated if it is not registered.
 ```C
 main() {
     //if reg == 1 the application is registered and not registered otherwise
-    int reg = 0 ; //Let's pretend this value is comming from external sources like reg key/config/license
+    int reg = 0 ; //Let's pretend this value is coming from external sources like reg key/config/license
     if(reg == 0 ) {
         printf("Not Registered");
         exit(1);
@@ -457,7 +458,7 @@ main() {
 }
 ```
 In real world we would not have access to source code of the application.
-This is when tools like disassembler and debuggers come in to play. Assuming
+This is when tools like disassemblers and debuggers come into play. Assuming
 we only have access to the program binary, let us see, with the help of
 OllyDBG how to reverse engineer this application and patch the bytes that
 are making the application to take the if control path. After patching the

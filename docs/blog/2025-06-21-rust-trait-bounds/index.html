@@ -69,14 +69,14 @@
 
 <main>
 <h1 id="rust-trait-bounds">Rust: Trait Bounds</h1>
-<p>Traits in Rust is one of core features of the language. But it deserve some
-explanation. Though they may sometimes be called similar to interfaces they are
-far more flexible. Lets try to understand what they are and how they can be
+<p>Traits in Rust are one of the core features of the language. But they deserve some
+explanation. Though they may sometimes be called similar to interfaces, they are
+far more flexible. Let&rsquo;s try to understand what they are and how they can be
 used.</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">trait</span><span style="color:#bbb"> </span>Book<span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">get_type</span>(&amp;<span style="color:#038">self</span>)<span style="color:#bbb"> </span>-&gt; <span style="color:#038">String</span>;<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
-</span></span></span></code></pre></div><p>This defines trait not a type. traits != types. Traits can be thought of a
+</span></span></span></code></pre></div><p>This defines a trait, not a type. Traits != types. Traits can be thought of as a
 collection of features that are applicable to the implementing type. Traits
 themselves are not very useful unless they are implemented by types.</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span>Book<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span>EBook<span style="color:#bbb"> </span>{<span style="color:#bbb">
@@ -135,7 +135,7 @@ be quite handy at times.</p></blockquote>
 <blockquote>
 <p><strong>Tip 2:</strong> Always rely on <code>cargo check</code> to get detailed information about any
 lifetime parameter violations.</p></blockquote>
-<p>Now lets look at some cases to understand the lifetimes better.</p>
+<p>Now let&rsquo;s look at some cases to understand the lifetimes better.</p>
 <p><strong>Case 1: References confined to a single scope:</strong></p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>x<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">10</span>;<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>y<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>&amp;x;<span style="color:#bbb">
@@ -171,7 +171,7 @@ talk about this later).</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">func</span>(arr: <span style="color:#080">&amp;</span>[<span style="color:#888;font-weight:bold">u32</span>])<span style="color:#bbb"> </span>-&gt; <span style="color:#080">&amp;</span><span style="color:#888;font-weight:bold">u32</span> {<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>&amp;arr[<span style="color:#00d;font-weight:bold">0</span>]<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
-</span></span></span></code></pre></div><p>With Rust analyzer inlay hits</p>
+</span></span></span></code></pre></div><p>With Rust analyzer inlay hints</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">func</span>&lt;<span style="color:#369">&#39;</span><span style="color:#00d;font-weight:bold">0</span>&gt;(arr: <span style="color:#080">&amp;</span><span style="color:#369">&#39;</span><span style="color:#00d;font-weight:bold">0</span><span style="color:#bbb"> </span>[<span style="color:#888;font-weight:bold">u32</span>])<span style="color:#bbb"> </span>-&gt; <span style="color:#080">&amp;</span><span style="color:#369">&#39;</span><span style="color:#00d;font-weight:bold">0</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">u32</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>&amp;arr[<span style="color:#00d;font-weight:bold">2</span>]<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
@@ -186,7 +186,7 @@ tied to, as shown below.</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">func</span>(arr1: <span style="color:#080">&amp;</span>[<span style="color:#888;font-weight:bold">u32</span>],<span style="color:#bbb"> </span>arr2: <span style="color:#080">&amp;</span>[<span style="color:#888;font-weight:bold">u32</span>])<span style="color:#bbb"> </span>-&gt; <span style="color:#080">&amp;</span><span style="color:#888;font-weight:bold">u32</span> {<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>&amp;arr1[<span style="color:#00d;font-weight:bold">0</span>]<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
-</span></span></span></code></pre></div><p>With Rust analyzer inlay hits</p>
+</span></span></span></code></pre></div><p>With Rust analyzer inlay hints</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">func</span>&lt;<span style="color:#a61717;background-color:#e3d2d2">`</span><span style="color:#00d;font-weight:bold">0</span>,<span style="color:#a61717;background-color:#e3d2d2">`</span><span style="color:#00d;font-weight:bold">1</span>&gt;(arr1: <span style="color:#080">&amp;</span><span style="color:#a61717;background-color:#e3d2d2">`</span><span style="color:#00d;font-weight:bold">0</span><span style="color:#bbb"> </span>[<span style="color:#888;font-weight:bold">u32</span>],<span style="color:#bbb"> </span>arr2: <span style="color:#080">&amp;</span><span style="color:#a61717;background-color:#e3d2d2">`</span><span style="color:#00d;font-weight:bold">1</span><span style="color:#bbb"> </span>[<span style="color:#888;font-weight:bold">u32</span>])<span style="color:#bbb"> </span>-&gt; <span style="color:#080">&amp;</span><span style="color:#888;font-weight:bold">u32</span> {<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>&amp;arr1[<span style="color:#00d;font-weight:bold">0</span>]<span style="color:#bbb">                                        </span>^----<span style="color:#bbb"> </span>Compiler<span style="color:#bbb"> </span>cannot<span style="color:#bbb"> </span>infer<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">                                                         </span>the<span style="color:#bbb"> </span>lifetime<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>there<span style="color:#bbb">
@@ -212,7 +212,7 @@ this, we guarantee to the compiler that no matter what we return (a reference to
 an element of <code>arr2</code> or <code>arr1</code>), the returned reference will live long enough.
 <strong>Note:</strong> We specify the shortest lifetime annotation (<code>'b</code>) in the return type.</p>
 <p><strong>Case 4: Structures containing references:</strong></p>
-<p>Now lets look at the case where structure fields can reference some other data.</p>
+<p>Now let&rsquo;s look at the case where structure fields can reference some other data.</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">struct</span> <span style="color:#b06;font-weight:bold">BookView</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">  </span>price: <span style="color:#080">&amp;</span><span style="color:#888;font-weight:bold">u32</span>,<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">  </span>pages: <span style="color:#080">&amp;</span><span style="color:#888;font-weight:bold">u32</span>,<span style="color:#bbb">

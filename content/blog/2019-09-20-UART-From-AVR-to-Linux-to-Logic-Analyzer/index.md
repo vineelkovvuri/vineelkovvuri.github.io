@@ -10,8 +10,8 @@ tags: ['Embedded']
 ## Introduction
 
 In this article, let's see how a program running on Atmega328PU microcontroller
-can communicate to external world using UART. In order to run through this
-exercise we need below equipment.
+can communicate to the external world using UART. In order to run through this
+exercise we need the below equipment.
 
 1. [Atmega328PU Microcontroller](https://www.aliexpress.com/item/32973635527.html)
 2. Breadboard
@@ -22,12 +22,12 @@ exercise we need below equipment.
 
 ## Atmega328PU pinout
 
-It is an 8-bit microcontroller(uC) with following pinout. All its digital pins
-are grouped in to 4 banks(PA/PB/PC/PD).
+It is an 8-bit microcontroller(uC) with the following pinout. All its digital pins
+are grouped into 4 banks(PA/PB/PC/PD).
  ![](Atmega328PUPinout.png)
 
 ## USBASP programmer pinout
-All of the pins highlighted on uC with pink should be connected to below
+All of the pins highlighted on the uC with pink should be connected to the below
 appropriate usbasp pins
 
 ![](usbasp_pinout.png)
@@ -35,7 +35,7 @@ appropriate usbasp pins
 
 ## Complete setup with host
 Below is the complete setup and USBASP, USB to TTL adapter, Logic Analyzer
-routed through an USB hub connected to the host machine. Hook the USB to TTL
+routed through a USB hub connected to the host machine. Hook the USB to TTL
 Adapter to TX pin to monitor the string in cutecom. Also, to actually see the
 electrical signals transmitted on the TX pin, connect the Logic Analyzer channel
 zero pin to TX pin of the uC.
