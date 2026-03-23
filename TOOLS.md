@@ -27,7 +27,7 @@ tags: ["Tools"]
 | Tool                     | Title                           |
 |--------------------------|---------------------------------|
 | Hex Editor               | `"🔢 Hex Editor"`               |
-| PE Editor                | `"🛠️ PE Editor"`               |
+| PE Editor                | `"🛠️ PE Editor"`                |
 | UEFI Log Explorer        | `"🔬 UEFI Log Explorer"`        |
 | Page Table Calculator    | `"📋 Page Table Calculator"`    |
 | Hex to Memory Offsets    | `"🧮 Hex to Memory Offsets"`    |
