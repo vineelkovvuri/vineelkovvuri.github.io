@@ -56,11 +56,15 @@
             <h2>Table of Contents</h2>
             <nav id="TableOfContents">
   <ul>
-    <li><a href="#introduction">Introduction</a></li>
-    <li><a href="#how-does-windbg-identify-the-correct-symbol-file">How does Windbg identify the correct symbol file?</a></li>
-    <li><a href="#how-does-windbg-identify-the-correct-source-file">How does Windbg identify the correct source file?</a></li>
-    <li><a href="#windbg-symbols-and-sources-search-heuristics">Windbg Symbols and Sources search heuristics</a></li>
-    <li><a href="#references">References</a></li>
+    <li>
+      <ul>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#how-does-windbg-identify-the-correct-symbol-file">How does Windbg identify the correct symbol file?</a></li>
+        <li><a href="#how-does-windbg-identify-the-correct-source-file">How does Windbg identify the correct source file?</a></li>
+        <li><a href="#windbg-symbols-and-sources-search-heuristics">Windbg Symbols and Sources search heuristics</a></li>
+        <li><a href="#references">References</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
         </aside>
@@ -68,16 +72,16 @@
 
 
 <main>
-<h1 id="introduction">Introduction</h1>
+<h2 id="introduction">Introduction</h2>
 <p>Have you ever wondered how a debugger magically gets you to the correct pdb and
 correct sources when debugging an application? This article talks about exactly that in
 the context of Windbg.</p>
 <p>As you might be aware, PDB files(also called symbol files) are the glue
 between your application binary and the source code. There are two key Environment
 variables which configure Windbg about where to look for symbols and sources.
-They are _NT_SYMBOL_PATH and _NT_SOURCE_PATH. The _NT_SYMBOL_PATH points
+They are _NT_SYMBOL_PATH and_NT_SOURCE_PATH. The _NT_SYMBOL_PATH points
 to the directory containing your PDBs(also called symbol files) or to a symbol
-server. _NT_SOURCE_PATH points to the directory of your sources or to a source
+server._NT_SOURCE_PATH points to the directory of your sources or to a source
 server which indexes the source files. One important point to remember here is
 one or more source files make up one or more binary files. But each binary will
 have a single PDB unless the source code is modified. This is important because
@@ -92,7 +96,7 @@ understand.</p>
 <li>How does Windbg identify the correct source file?</li>
 <li>Windbg Symbols and Sources search heuristics</li>
 </ul>
-<h1 id="how-does-windbg-identify-the-correct-symbol-file">How does Windbg identify the correct symbol file?</h1>
+<h2 id="how-does-windbg-identify-the-correct-symbol-file">How does Windbg identify the correct symbol file?</h2>
 <p>Whenever an application is compiled the compiler will generate a pdb file associated
 with it. These pdbs come in two variants: one containing public symbols and the other
 containing private symbols. Public symbols do not contain all the information
@@ -148,7 +152,7 @@ symbols could not be loaded for Win32Sample.exe.</p>
 </span></span><span style="display:flex;"><span>OK                                             E:<span style="color:#04d;background-color:#fff0f0">\t</span>emp<span style="color:#04d;background-color:#fff0f0">\T</span>esting<span style="color:#04d;background-color:#fff0f0">\x</span>64<span style="color:#04d;background-color:#fff0f0">\R</span>elease<span style="color:#04d;background-color:#fff0f0">\
 </span></span></span><span style="display:flex;"><span><span style="color:#04d;background-color:#fff0f0"></span>*** WARNING: Unable to verify checksum <span style="color:#080;font-weight:bold">for</span> Win32Sample.exe
 </span></span><span style="display:flex;"><span>*** ERROR: Module load completed but symbols could not be loaded <span style="color:#080;font-weight:bold">for</span> Win32Sample.exe
-</span></span></code></pre></div><h1 id="how-does-windbg-identify-the-correct-source-file">How does Windbg identify the correct source file?</h1>
+</span></span></code></pre></div><h2 id="how-does-windbg-identify-the-correct-source-file">How does Windbg identify the correct source file?</h2>
 <p>PDB files contain not only information about symbols like functions/structures/classes
 etc. but also about the artifacts(like .obj) involved in generating your application
 binary. Unfortunately examining this information from PDB is a little complicated
@@ -231,13 +235,13 @@ relaxed(more on this later).</p>
 appropriate source file and at the correct line number.</p>
 <p>Whenever windbg tries to open a source file associated with a symbol it tries to
 check for this checksum of the source file.</p>
-<h1 id="windbg-symbols-and-sources-search-heuristics">Windbg Symbols and Sources search heuristics</h1>
+<h2 id="windbg-symbols-and-sources-search-heuristics">Windbg Symbols and Sources search heuristics</h2>
 <p>If the absolute paths embedded in the PDB file is all we have then debugging in
 Windbg would not be very interesting and fun. Practically we cannot have the pdbs
 and sources available at the embedded paths(for example a program being debugged
 at the client machine). So how does Windbg figure out the right PDB even when
 the symbol paths set via .sympath+ or _NT_SYMBOL_PATH and the source path set
-via .srcpath+ or _NT_SOURCE_PATH are different from the actual embedded paths
+via .srcpath+ or_NT_SOURCE_PATH are different from the actual embedded paths
 in the PDB?</p>
 <p>To understand this we need to enable !sym noisy and .srcnoisy 3 when debugging.
 As an example I have my original source code built from C:\users\vineelko\documents\visual
@@ -322,7 +326,7 @@ respectively.</p>
 </span></span><span style="display:flex;"><span>00007ff9<span style="color:#d20;background-color:#fff0f0">`</span>2f400000 00007ff9<span style="color:#d20;background-color:#fff0f0">`</span>2f5e0000   ntdll      (<span style="color:#038">export</span> symbols)
 </span></span><span style="display:flex;"><span>C:<span style="color:#04d;background-color:#fff0f0">\W</span>INDOWS<span style="color:#04d;background-color:#fff0f0">\S</span>YSTEM32<span style="color:#04d;background-color:#fff0f0">\n</span>tdll.dll
 </span></span></code></pre></div><p>Looking at the .reload command output we can say Windbg expects symbol files to
-be present inside the same directory as the application or the folder named &rsquo;exe'
+be present inside the same directory as the application or the folder named &rsquo;exe&rsquo;
 inside .sympath directory or the folder named &lsquo;dll&rsquo; inside the .sympath directory
 or at the actual embedded path. Running lm confirms that symbols are recognized
 for Win32Sample.exe</p>
@@ -409,7 +413,7 @@ But we should be vigilant about it.</p>
 </span></span><span style="display:flex;"><span><span style="color:#d20;background-color:#fff0f0">&#39;c:\&lt;snipped&gt;\win32sample\win32sample.cpp&#39;</span> with mismatch!
 </span></span></code></pre></div><p>In any case, understanding these details will help us solve unresolved source and
 symbol file issues with much more confidence!</p>
-<h1 id="references">References</h1>
+<h2 id="references">References</h2>
 <ul>
 <li><a href="https://www.wintellect.com/pdb-files-what-every-developer-must-know/">PDB Files: What Every Developer Must Know</a></li>
 <li><a href="https://docs.microsoft.com/en-us/visualstudio/debugger/debug-interface-access/debug-interface-access-sdk">Debug Interface Access SDK</a></li>

@@ -5,7 +5,7 @@ toc: true
 tags: ['Embedded']
 ---
 
-# UART - From AVR to Linux to Logic Analyzer
+## UART - From AVR to Linux to Logic Analyzer
 
 ## Introduction
 
@@ -24,31 +24,31 @@ exercise we need the below equipment.
 
 It is an 8-bit microcontroller(uC) with the following pinout. All its digital pins
 are grouped into 4 banks(PA/PB/PC/PD).
- ![](Atmega328PUPinout.png)
+ ![Atmega328PU microcontroller pinout diagram](Atmega328PUPinout.png)
 
 ## USBASP programmer pinout
+
 All of the pins highlighted on the uC with pink should be connected to the below
 appropriate usbasp pins
 
-![](usbasp_pinout.png)
-
+![USBASP programmer pinout diagram](usbasp_pinout.png)
 
 ## Complete setup with host
+
 Below is the complete setup and USBASP, USB to TTL adapter, Logic Analyzer
 routed through a USB hub connected to the host machine. Hook the USB to TTL
 Adapter to TX pin to monitor the string in cutecom. Also, to actually see the
 electrical signals transmitted on the TX pin, connect the Logic Analyzer channel
 zero pin to TX pin of the uC.
 
-![](setup.png)
+![Complete breadboard setup with USBASP, USB to TTL adapter, and Logic Analyzer connected via USB hub](setup.png)
 
 ## Simple UART program to send information out of Atmega328PU
 
 Below sample program will initialize the UART and transmits "Hello UART" string
 on TXD(PD1) pin on the uC.
 
-![](UART_Registers.png)
-
+![Atmega328P UART register configuration reference](UART_Registers.png)
 
 ```c
 #include <string.h>
@@ -98,8 +98,8 @@ Flash the above program to the uC(check references for the sample makefile) and
 connect USB to TTL adapter to TX pin of the uC. Then fire up cutecom(as sudo)
 and connect the appropriate ttyUSB and make sure the baudrate is set to 9600.
 
- ![](USB_to_TTL_Adapater.png)
- ![](UART_in_cutecom.png)
+ ![USB to TTL adapter connected to microcontroller TX pin](USB_to_TTL_Adapater.png)
+ ![UART output displaying Hello UART in cutecom terminal](UART_in_cutecom.png)
 
 This confirms both the transmission of data from uC and reception on the host
 machine. But in order to actually look at the electrical signals we can use a
@@ -108,10 +108,10 @@ software](https://www.saleae.com/downloads/).
 
 Below is the waveforms captured and appropriately decoded in the logic analyzer
  software
- ![](UART_in_saleae_logic.png)
+ ![UART waveforms captured and decoded in Saleae Logic Analyzer software](UART_in_saleae_logic.png)
 
 Finally, If you are curious, you can also watch the same in a cheap oscilloscope
- like below! ![](Final.png)
+ like below! ![UART signal viewed on oscilloscope](Final.png)
 
 ## References
 

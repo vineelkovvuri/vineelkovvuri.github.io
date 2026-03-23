@@ -5,9 +5,9 @@ toc: true
 tags: ['Operating Systems']
 ---
 
-# Paging/Identity Mapping/Self Mapping 101
+## Paging/Identity Mapping/Self Mapping 101
 
-## What is memory mapping?
+### What is memory mapping?
 
 Memory mapping, in the context of paging, refers to the ability of the CPU to
 *decode* a virtual address (VA) into a physical address (PA) by successfully
@@ -15,7 +15,7 @@ walking the page tables. When this happens, we say that the given VA has a PA
 mapping. If, for some reason, the CPU is unable to walk the page tables, it will
 raise a page fault exception. In other words, the VA is not mapped(unmapped).
 
-## How is a Virtual Address (VA) decoded into a Physical Address (PA)?
+### How is a Virtual Address (VA) decoded into a Physical Address (PA)?
 
 For example, x64 CPUs break the given VA into the below components(assuming 5 Level
 paging)
@@ -47,7 +47,7 @@ The illustration below showcases the page table walk performed by the CPU.
 
 ![VA to PA page walking](va_to_pa.png)
 
-## What does a page table contain(x64)?
+### What does a page table contain(x64)?
 
 Each page table is 4KB in size and each entry within the page table is of 8
 bytes(64 bits). Below is the general structure of the page table entry in X64.
@@ -58,7 +58,7 @@ next-lower-level table in the page-translation hierarchy.
 
 ![Page table entry structure](page_table_entry.png)
 
-## What does setting up of Page tables involve?
+### What does setting up of Page tables involve?
 
 Setting up the above-illustrated page tables requires creating the necessary
 page tables and appropriately wiring them together so that the CPU can perform
@@ -73,7 +73,7 @@ question of whether those pages are mapped. Again, this restriction — that pag
 tables must already be mapped — applies only to us, the programmers, when making
 changes to them during setup.
 
-### Quick Detour of x64 Processor Modes
+#### Quick Detour of x64 Processor Modes
 
 1. **Real Mode:** No paging, and there is no concept of virtual addresses (VA)
    or protection. Everything is accessible (meaning everything is already
@@ -94,7 +94,7 @@ changes to them during setup.
 This is also the order in which the processor switches from one mode to the
 next.
 
-## What happens after enabling paging?
+### What happens after enabling paging?
 
 One of the problems we will run into immediately once paging is enabled is:
 **how do we map new memory ranges?** Isn't it straightforward to simply walk the
@@ -114,7 +114,7 @@ To avoid this, **when we create the page tables for the first time, we are**
 careful dance**, which will later be used for setting up mappings for new memory
 ranges.
 
-## What are the different kinds of paging schemes?
+### What are the different kinds of paging schemes?
 
 We mainly consider the below three types of paging schemes
 
@@ -122,7 +122,7 @@ We mainly consider the below three types of paging schemes
 2. Non-Identity Mapping(VA need not always equal PA)
 3. Self Mapping(VA need not always equal PA)
 
-## What is Identity mapping?
+### What is Identity mapping?
 
 Identity mapping in paging is a technique where virtual addresses are mapped
 directly to the **same** physical addresses. By using identity mapping, the
@@ -185,7 +185,7 @@ memory regions are not pre-allocated and mapped, adding new mappings is not
 possible. This makes identity mapping more rigid compared to more flexible
 memory mapping schemes.
 
-## What is Non-Identity Mapping?
+### What is Non-Identity Mapping?
 
 In this scheme, the internal wiring of page tables works very similar to
 identity mapping; however, the wiring itself is non-deterministic because, in
@@ -197,7 +197,7 @@ exactly to its PA.
 
 ![Non-Identity Mapping](non_identity_mapping.png)
 
-## What is Self mapping?
+### What is Self mapping?
 
 **Self-mapping** is a clever way to create page tables and map them on the fly
 removing the restriction of identity mapping. In other words, page tables for
@@ -225,7 +225,7 @@ page table for us, and we can then have R/W access to its entries. Recollect
 what "mapping" really means from the first paragraph? If not, read it again. Also,
 the current paragraph definitely requires multiple readings to fully grasp!
 
-## What tricks are we playing with the CPU here?
+### What tricks are we playing with the CPU here?
 
 Let's recap the usual VA to PA translation: Nothing new. Just follow Step 1 to
 Step 12 in the below illustration. ![Usual VA to PA Mapping](va_to_pa_steps.png)
@@ -318,9 +318,9 @@ the physical address of the lower-level page table itself.
 The above explanation assumes the self-map is already enabled. Next, we will see
 how self-mapped paging can be enabled.
 
-## Creating and enabling self-mapped paging
+### Creating and enabling self-mapped paging
 
-### Self mapping is not already enabled
+#### Self mapping is not already enabled
 
 When self-mapping is not active, the assumption is that the pages provided by
 the allocator are already mapped. This is because, without self-mapping being
@@ -328,7 +328,7 @@ enabled (since CR3 points to non-self-mapped page tables), we cannot use the
 self-mapping trick to modify those pages. As a result, we are required to have
 those pages mapped in advance in order to wire them properly.
 
-### Self mapping is already active
+#### Self mapping is already active
 
 Once self-mapping is enabled (i.e., when CR3 is already updated to point to the
 self-mapped page tables), any page tables needed to map new memory regions no
@@ -336,7 +336,7 @@ longer need to be pre-mapped. Since CR3 now references the self-mapped page
 tables, we can leverage the trick to map and access the corresponding page table
 bases, even if they have not been mapped yet.
 
-## Steps involved in creating a page table entry for a given VA in Non-Identity mapping vs Self mapping
+### Steps involved in creating a page table entry for a given VA in Non-Identity mapping vs Self mapping
 
 Steps involved in creating a page table entry for a given VA in Non-Identity
 Mapping. At each level we have 4 primary steps
@@ -361,7 +361,7 @@ level components of the VA being mapped.
 
 ![Steps involved in creating a page table entry for a given VA in Self Mapping](self_mapping_steps_involved_in_creating_pg_entry.png)
 
-## Key highlights/differences between self-mapping vs other schemes
+### Key highlights/differences between self-mapping vs other schemes
 
 1. For updating the page tables, we access the unmapped page tables at a given
    level with the help of carefully crafted special VAs(which are created with

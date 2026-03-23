@@ -57,9 +57,13 @@
             <h2>Table of Contents</h2>
             <nav id="TableOfContents">
   <ul>
-    <li><a href="#introduction">Introduction</a></li>
-    <li><a href="#breakpoints-theory">Breakpoints Theory</a></li>
-    <li><a href="#breakpoints-practice">Breakpoints Practice</a></li>
+    <li>
+      <ul>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#breakpoints-theory">Breakpoints Theory</a></li>
+        <li><a href="#breakpoints-practice">Breakpoints Practice</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
         </aside>
@@ -67,13 +71,13 @@
 
 
 <main>
-<h1 id="introduction">Introduction</h1>
+<h2 id="introduction">Introduction</h2>
 <p>It&rsquo;s been a while, I have got a chance to blog about low-level stuff. In this
 article, I am going to explain how breakpoints work in debuggers. I am assuming
 the reader is already familiar with what a breakpoint is and how to set it in
 your debugger of choice. The goal of this post is to explain the interplay
 between Debugger, Debuggee, Operating System and the CPU.</p>
-<h1 id="breakpoints-theory">Breakpoints Theory</h1>
+<h2 id="breakpoints-theory">Breakpoints Theory</h2>
 <p>To get there, we have to ask ourselves  What does it mean by debugging a
 program/process?. To keep it simple, It&rsquo;s the controlled execution of a program
 by another program. The devil is in the word controlled. Whenever you open a
@@ -119,7 +123,7 @@ in debug mode, also this is exactly what we expect because we don&rsquo;t want o
 instructions garbled by the debugger with random 0xCC instructions when we
 want to examine. Now fasten your seat belts and let&rsquo;s see all of this in
 action!</p>
-<h1 id="breakpoints-practice">Breakpoints Practice</h1>
+<h2 id="breakpoints-practice">Breakpoints Practice</h2>
 <p>Let&rsquo;s consider the above program and see what happens when we set the
 breakpoint on the main and second printf lines in WinDbg. Once we set the
 breakpoints WinDbg only makes a note of these line addresses. Now when we

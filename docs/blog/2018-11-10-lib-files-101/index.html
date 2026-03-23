@@ -56,11 +56,15 @@
             <h2>Table of Contents</h2>
             <nav id="TableOfContents">
   <ul>
-    <li><a href="#introduction">Introduction</a></li>
-    <li><a href="#static-library">Static Library</a></li>
-    <li><a href="#dynamic-linked-library">Dynamic Linked Library</a></li>
-    <li><a href="#static-library-with-__declspecdllexport">Static Library with __declspec(dllexport)</a></li>
-    <li><a href="#references">References</a></li>
+    <li>
+      <ul>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#static-library">Static Library</a></li>
+        <li><a href="#dynamic-linked-library">Dynamic Linked Library</a></li>
+        <li><a href="#static-library-with-__declspecdllexport">Static Library with __declspec(dllexport)</a></li>
+        <li><a href="#references">References</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
         </aside>
@@ -68,7 +72,7 @@
 
 
 <main>
-<h1 id="introduction">Introduction</h1>
+<h2 id="introduction">Introduction</h2>
 <p>During the compilation, one of the crucial steps after assembling is
 creating the Object files. The collection of these object files is
 called a lib file. We can create these .lib files through the following
@@ -90,9 +94,9 @@ or
 ar -x StaticLib1.lib
 or
 use 7-Zip to extract it</p>
-<p><img src="6.VSProjectDialog.png" alt="">
+<p><img src="6.VSProjectDialog.png" alt="Visual Studio New Project dialog for Static Library and Dynamic Linked Library">
 Visual Studio New Project dialog for &lsquo;Static Library&rsquo; and &lsquo;Dynamic Linked Library&rsquo;</p>
-<h1 id="static-library">Static Library</h1>
+<h2 id="static-library">Static Library</h2>
 <p>Static Library is created when you want to provide the complete code to
 link into another dll or exe. For example, If a static library
 project contains 4 files add.c,sub.c,mul.c,div.c containing functions
@@ -110,11 +114,11 @@ library are meant to be consumed/included by others directly.</p>
 <p>dumpbin /exports StaticLib.lib  &lt;&ndash; shows nothing because .lib itself does not
 export anything
 dumpbin /symbols StaticLib.lib  &lt;&ndash; shows all the symbols present</p>
-<p><img src="1.StaticLib.png" alt="">
+<p><img src="1.StaticLib.png" alt="Workflow for Static Library creation and consumption">
 Workflow for Static Library creation and consumption</p>
-<p><img src="2.StructureStaticLib.png" alt="">
+<p><img src="2.StructureStaticLib.png" alt="Structure of a Static Library file in HxD hex editor">
 Concluded based on HxD view of the file</p>
-<h1 id="dynamic-linked-library">Dynamic Linked Library</h1>
+<h2 id="dynamic-linked-library">Dynamic Linked Library</h2>
 <p>Dynamic Linked Library(DLL) is in many ways similar to Static Library because
 it also provides the code to be used by other projects like dll or exe,
 but the difference is in the way the code gets re-used by consumers.
@@ -129,14 +133,14 @@ only see the exported symbols but not their code in case of dll&rsquo;s .lib fil
 </span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> a + <span style="color:#00d;font-weight:bold">1</span>;
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>dumpbin /exports Dll1.lib &lt;&ndash; shows all the exported functions</p>
-<p><img src="3.Dll.png" alt="">
+<p><img src="3.Dll.png" alt="Workflow for Dynamic Linked Library creation and consumption">
 Workflow for Dynamic Linked Library creation and consumption</p>
-<p><img src="4.StructureDll.png" alt="">
+<p><img src="4.StructureDll.png" alt="Structure of a DLL lib file in HxD hex editor">
 Concluded based on HxD view of the file</p>
 <p>NOTE: The functions inside a Dynamic Linked Library need to be declared
 with __declspec(dllexport) if they have to be visible and consumed
 by others(indirectly).</p>
-<h1 id="static-library-with-__declspecdllexport">Static Library with __declspec(dllexport)</h1>
+<h2 id="static-library-with-__declspecdllexport">Static Library with __declspec(dllexport)</h2>
 <p>This is interesting. When a function inside a static library is declared
 with __declspec(dllexport), like any other function, it gets included
 by the consumer in their binary(dll) but because it is declared as
@@ -144,12 +148,12 @@ __declspec(dllexport) that function gets exported as well from the consumer
 binary! Below is a screenshot of Consumer.exe which is exporting sub2 function
 because sub2 is actually declared with __declspec(dllexport) in the
 original static library.</p>
-<p><img src="5.StaticLibWithDeclSpec(DllExport).png" alt="">
+<p><img src="5.StaticLibWithDeclSpec(DllExport).png" alt="Static Library with dllexport showing sub2 exported from consumer binary">
 sub2 function got exported from the final consumer binary</p>
 <p>The takeaway here is Static Libraries are just a convenient archive format
 to hold multiple .obj files, nothing more or nothing less! So we should be
 cautious of how the functions are declared.</p>
-<h1 id="references">References</h1>
+<h2 id="references">References</h2>
 <ul>
 <li><a href="https://docs.microsoft.com/en-us/windows/desktop/debug/pe-format">PE Format</a></li>
 </ul>

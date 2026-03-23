@@ -57,11 +57,15 @@
             <h2>Table of Contents</h2>
             <nav id="TableOfContents">
   <ul>
-    <li><a href="#introduction">Introduction</a></li>
-    <li><a href="#how-do-break-points-work-in-user-mode-debugging">How do break points work in user mode debugging</a></li>
-    <li><a href="#user-mode-break-points-from-kd">User mode break points from KD</a></li>
-    <li><a href="#setting-breakpoints-in-system-dlls">Setting breakpoints in system dlls</a></li>
-    <li><a href="#references">References</a></li>
+    <li>
+      <ul>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#how-do-break-points-work-in-user-mode-debugging">How do break points work in user mode debugging</a></li>
+        <li><a href="#user-mode-break-points-from-kd">User mode break points from KD</a></li>
+        <li><a href="#setting-breakpoints-in-system-dlls">Setting breakpoints in system dlls</a></li>
+        <li><a href="#references">References</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
         </aside>
@@ -69,7 +73,7 @@
 
 
 <main>
-<h1 id="introduction">Introduction</h1>
+<h2 id="introduction">Introduction</h2>
 <p>When performing KD(Kernel Debugging) in Windows with Windbg if you have to set a
 break point in a user mode process we should always use <strong>.process /i address;
 g; .reload /user</strong>. A lot of good content is written on the
@@ -86,7 +90,7 @@ question.</p>
 have to make the user mode process the current process context by running
 .process /i ?</p></blockquote>
 <p>To explain this we need to quickly understand how break points work.</p>
-<h1 id="how-do-break-points-work-in-user-mode-debugging">How do break points work in user mode debugging</h1>
+<h2 id="how-do-break-points-work-in-user-mode-debugging">How do break points work in user mode debugging</h2>
 <p>Below are the steps involved for a break point to work in debugging a user mode process.</p>
 <ul>
 <li>bp address - you are just instructing the debugger to make a note of
@@ -100,7 +104,7 @@ as if nothing has happened to the program</li>
 <li>More details:
 <a href="https://vineelkovvuri.github.io/blog/how-do-breakpoints-work-in-debuggers/">https://vineelkovvuri.github.io/blog/how-do-breakpoints-work-in-debuggers/</a></li>
 </ul>
-<h1 id="user-mode-break-points-from-kd">User mode break points from KD</h1>
+<h2 id="user-mode-break-points-from-kd">User mode break points from KD</h2>
 <p>When debugging a user mode process from KD the steps work exactly the same as above
 but with a slight twist.</p>
 <ul>
@@ -118,11 +122,11 @@ when target resumes to execute</li>
 the currently executing process which happens to be multihasher.exe not
 fscapture.exe!</li>
 </ul>
-<p><img src="UsermodeBreakPointFromKD1.png" alt="">
+<p><img src="UsermodeBreakPointFromKD1.png" alt="WinDbg before break point getting updated">
 Before break point getting updated</p>
-<p><img src="UsermodeBreakPointFromKD2.png" alt="">
+<p><img src="UsermodeBreakPointFromKD2.png" alt="WinDbg setting the user mode break point from kernel debugger">
 Setting the break point</p>
-<p><img src="UsermodeBreakPointFromKD3.png" alt="">
+<p><img src="UsermodeBreakPointFromKD3.png" alt="WinDbg after break point is updated">
 After break point is updated</p>
 <ul>
 <li>This means, &ldquo;g&rdquo; command used to resume the target is the culprit(may be it
@@ -134,7 +138,7 @@ else</li>
 </ul>
 <p>NOTE: I initially made multihasher.exe the process context by using .process /i
 multihasher address;g;</p>
-<h1 id="setting-breakpoints-in-system-dlls">Setting breakpoints in system dlls</h1>
+<h2 id="setting-breakpoints-in-system-dlls">Setting breakpoints in system dlls</h2>
 <p>This .process /i is not required if you are putting breakpoints in system dlls
 like kernelbase, ntdll etc because these dlls are loaded at the same virtual
 address in all the user mode processes and they have a single copy in the
@@ -142,11 +146,11 @@ physical memory. So once a break point set in a process the break point is
 visible in all other processes which use that system dll. Below we illustrate
 this by setting a break point in ntdll.dll. (Even here just make sure when you
 broke initially you are not in System process as it will not have ntdll!)</p>
-<p><img src="UsermodeBreakPointFromKD4.png" alt="">
+<p><img src="UsermodeBreakPointFromKD4.png" alt="Break point set in ntdll of explorer process">
 Break point is set only in ntdll of explorer process</p>
-<p><img src="UsermodeBreakPointFromKD5.png" alt="">
+<p><img src="UsermodeBreakPointFromKD5.png" alt="Break point in ntdll of explorer reflected in ntdll of notepad">
 Break point set in ntdll of explorer gets reflected in ntdll of notepad also</p>
-<h1 id="references">References</h1>
+<h2 id="references">References</h2>
 <ul>
 <li><a href="https://www.osronline.com/article.cfm%5Earticle=576.htm">Analyst&rsquo;s Perspective: Analyzing User Mode State from a Kernel Connection</a></li>
 <li><a href="https://www.microsoftpressstore.com/articles/article.aspx?p=2201303&amp;seqNum=2">How Windows Debuggers Work?</a></li>

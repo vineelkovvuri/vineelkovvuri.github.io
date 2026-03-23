@@ -56,8 +56,9 @@
             <h2>Table of Contents</h2>
             <nav id="TableOfContents">
   <ul>
-    <li><a href="#uart---from-avr-to-linux-to-logic-analyzer">UART - From AVR to Linux to Logic Analyzer</a>
+    <li>
       <ul>
+        <li><a href="#uart---from-avr-to-linux-to-logic-analyzer">UART - From AVR to Linux to Logic Analyzer</a></li>
         <li><a href="#introduction">Introduction</a></li>
         <li><a href="#atmega328pu-pinout">Atmega328PU pinout</a></li>
         <li><a href="#usbasp-programmer-pinout">USBASP programmer pinout</a></li>
@@ -73,7 +74,7 @@
 
 
 <main>
-<h1 id="uart---from-avr-to-linux-to-logic-analyzer">UART - From AVR to Linux to Logic Analyzer</h1>
+<h2 id="uart---from-avr-to-linux-to-logic-analyzer">UART - From AVR to Linux to Logic Analyzer</h2>
 <h2 id="introduction">Introduction</h2>
 <p>In this article, let&rsquo;s see how a program running on Atmega328PU microcontroller
 can communicate to the external world using UART. In order to run through this
@@ -89,22 +90,22 @@ exercise we need the below equipment.</p>
 <h2 id="atmega328pu-pinout">Atmega328PU pinout</h2>
 <p>It is an 8-bit microcontroller(uC) with the following pinout. All its digital pins
 are grouped into 4 banks(PA/PB/PC/PD).
-<img src="Atmega328PUPinout.png" alt=""></p>
+<img src="Atmega328PUPinout.png" alt="Atmega328PU microcontroller pinout diagram"></p>
 <h2 id="usbasp-programmer-pinout">USBASP programmer pinout</h2>
 <p>All of the pins highlighted on the uC with pink should be connected to the below
 appropriate usbasp pins</p>
-<p><img src="usbasp_pinout.png" alt=""></p>
+<p><img src="usbasp_pinout.png" alt="USBASP programmer pinout diagram"></p>
 <h2 id="complete-setup-with-host">Complete setup with host</h2>
 <p>Below is the complete setup and USBASP, USB to TTL adapter, Logic Analyzer
 routed through a USB hub connected to the host machine. Hook the USB to TTL
 Adapter to TX pin to monitor the string in cutecom. Also, to actually see the
 electrical signals transmitted on the TX pin, connect the Logic Analyzer channel
 zero pin to TX pin of the uC.</p>
-<p><img src="setup.png" alt=""></p>
+<p><img src="setup.png" alt="Complete breadboard setup with USBASP, USB to TTL adapter, and Logic Analyzer connected via USB hub"></p>
 <h2 id="simple-uart-program-to-send-information-out-of-atmega328pu">Simple UART program to send information out of Atmega328PU</h2>
 <p>Below sample program will initialize the UART and transmits &ldquo;Hello UART&rdquo; string
 on TXD(PD1) pin on the uC.</p>
-<p><img src="UART_Registers.png" alt=""></p>
+<p><img src="UART_Registers.png" alt="Atmega328P UART register configuration reference"></p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#c00;font-weight:bold">#include</span> <span style="color:#c00;font-weight:bold">&lt;string.h&gt;</span><span style="color:#c00;font-weight:bold">
 </span></span></span><span style="display:flex;"><span><span style="color:#c00;font-weight:bold">#include</span> <span style="color:#c00;font-weight:bold">&lt;avr/io.h&gt;</span><span style="color:#c00;font-weight:bold">
 </span></span></span><span style="display:flex;"><span><span style="color:#c00;font-weight:bold">#include</span> <span style="color:#c00;font-weight:bold">&lt;util/delay.h&gt;</span><span style="color:#c00;font-weight:bold">
@@ -148,17 +149,17 @@ on TXD(PD1) pin on the uC.</p>
 </span></span></code></pre></div><p>Flash the above program to the uC(check references for the sample makefile) and
 connect USB to TTL adapter to TX pin of the uC. Then fire up cutecom(as sudo)
 and connect the appropriate ttyUSB and make sure the baudrate is set to 9600.</p>
-<p><img src="USB_to_TTL_Adapater.png" alt="">
-<img src="UART_in_cutecom.png" alt=""></p>
+<p><img src="USB_to_TTL_Adapater.png" alt="USB to TTL adapter connected to microcontroller TX pin">
+<img src="UART_in_cutecom.png" alt="UART output displaying Hello UART in cutecom terminal"></p>
 <p>This confirms both the transmission of data from uC and reception on the host
 machine. But in order to actually look at the electrical signals we can use a
 cheap logic analyzer. This logic analyzer works with <a href="https://www.saleae.com/downloads/">Saleae Logic Analyzer
 software</a>.</p>
 <p>Below is the waveforms captured and appropriately decoded in the logic analyzer
 software
-<img src="UART_in_saleae_logic.png" alt=""></p>
+<img src="UART_in_saleae_logic.png" alt="UART waveforms captured and decoded in Saleae Logic Analyzer software"></p>
 <p>Finally, If you are curious, you can also watch the same in a cheap oscilloscope
-like below! <img src="Final.png" alt=""></p>
+like below! <img src="Final.png" alt="UART signal viewed on oscilloscope"></p>
 <h2 id="references">References</h2>
 <ul>
 <li><a href="https://www.saleae.com/downloads/">Saleae Logic Analyzer</a></li>

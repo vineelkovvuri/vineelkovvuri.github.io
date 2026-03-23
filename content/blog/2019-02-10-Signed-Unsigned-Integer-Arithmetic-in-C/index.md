@@ -5,7 +5,7 @@ toc: true
 tags: ['C']
 ---
 
-# Introduction
+## Introduction
 
 This article is about understanding how integer conversions happen in C
 language. The C standard defines the integer conversion rules agnostic to
@@ -29,18 +29,20 @@ the size of these basic types are determined. Windows x64 follows
 LLP64(meaning only 'long long' and pointer size are 64 bit wide), So below
 are the sizes of the standard types that we are sticking to in this article.
 
-    Type                | Size
-    --------------------+---------
-    signed char         | 1 bytes
-    unsigned char       | 1 bytes
-    signed short        | 2 bytes
-    unsigned short      | 2 bytes
-    signed int          | 4 bytes
-    unsigned int        | 4 bytes
-    signed long         | 4 bytes
-    unsigned long       | 4 bytes
-    signed long long    | 8 bytes
-    unsigned long long  | 8 bytes
+```console
+Type                | Size
+--------------------+---------
+signed char         | 1 bytes
+unsigned char       | 1 bytes
+signed short        | 2 bytes
+unsigned short      | 2 bytes
+signed int          | 4 bytes
+unsigned int        | 4 bytes
+signed long         | 4 bytes
+unsigned long       | 4 bytes
+signed long long    | 8 bytes
+unsigned long long  | 8 bytes
+```
 
 Also, The specification leaves other aspects of C language definition
 undefined and this leave room for optimizations for compilers. For example,
@@ -51,7 +53,7 @@ virtually every modern architecture now uses 2's complement representation
 for -ve numbers. Hence the result of unsigned overflow/underflow is well
 defined but not signed overflow/underflow!
 
-# How signed-ness is represented in the hardware?
+## How signed-ness is represented in the hardware?
 
 Processors do have the concept of signed/unsigned, but unlike in C language,
 where this information is baked into the variable definition, processor
@@ -70,7 +72,7 @@ complement representation of -5). 'add' and 'sub' instructions themselves
 are not affected by signed and unsigned numbers because of modulo
 arithmetic.
 
-# How signed-ness is interpreted in assembly?
+## How signed-ness is interpreted in assembly?
 
 In one of the above paragraphs, we said, processor registers does not hold
 any signed/unsigned type information with them and it's up to the
@@ -81,14 +83,15 @@ Status Flags represent the status of arithmetic operations the happened with
 the previous instruction.
 
 The most important flags of these for our discussion are
-1.  Carry flag - Set if an arithmetic operation generates a carry or a
+
+1. Carry flag - Set if an arithmetic operation generates a carry or a
     borrow out of the most significant bit of the result; cleared otherwise.
     This flag indicates an overflow condition for unsigned-integer
     arithmetic.
-2.  Sign flag - Set equal to the most significant bit of the result, which
+2. Sign flag - Set equal to the most significant bit of the result, which
     is the sign bit of a signed integer. (0 indicates a positive value and 1
     indicates a negative value.)
-3.  Overflow flag - Set if the integer result is too large a positive number
+3. Overflow flag - Set if the integer result is too large a positive number
     or too small a negative number (excluding the sign-bit) to fit in the
     destination operand, cleared otherwise. This flag indicates an overflow
     condition for signed-integer (two's complement) arithmetic
@@ -104,18 +107,22 @@ after executing 'sub' instruction indicates this possibility in Sign Flag.
 So operations(JA/JB) who want to treat the result an unsigned will ignore
 this sign flag whereas operations (like JG/JL) who treat it as signed will
 take this sign flag into account.
+
 ```nasm
 mov al, 0x81
 sub al, 0x1 // This triggers sign flag
 ```
+
 Overflow flag is a little different. First of all, the Overflow flag is not
 set when an operation results in an overflow of the number that can be
 represented in a register. Like for example, if we try to add 1 to 0xff does
 not set this bit.
+
 ```nasm
 mov al, 0xFF // 0b11111111
 add al, 0x1  // This will not trigger Overflow flag
 ```
+
 Overflow flag is mainly meant for indicating if there is a chance of result if
 interpreted as signed will cross beyond what can be represented in the register.
 For example, if we take a byte(al) it can contain value from 0b00000000(0) to
@@ -123,20 +130,25 @@ For example, if we take a byte(al) it can contain value from 0b00000000(0) to
 number. Now overflow flag is set when a result goes beyond 0b01111111 i.e., too
 large a positive number and less than 0b10000000 i.e., too small a negative
 number
+
 ```nasm
 mov al, 0x7e // This is always positive
 add al, 0x2  // This will trigger overflow flag
 ```
+
 Let us see how overflow flag is used to determine the below conditional when
 var1 and var2 are signed numbers.
+
 ```c
 if (var1 < var2) {
     printf("var1 < var2");
 }
 ```
+
 The above code is translated to cmp followed by jl. cmp does var1-var2. And jl
 says execute printf if SF != OF. Now lets see the combinations why SF needs to
 be not equal to OF
+
 ```c
 var1 = -125;
 var2 = 10;
@@ -150,10 +162,11 @@ var1 - var2 => -20 => this can be represented in a byte and its -ve so SF = 1
                         but because it is still under the range of singed
                         numbers representable in a byte OF = 0
 ```
+
 That is why jl is defined as SF != OF, When this is true it means var1 < var2
 even if var1 and var2 are signed(meaning -ve numbers)
 
-# Signed vs Unsigned integers in C
+## Signed vs Unsigned integers in C
 
 Signed numbers are the way -ve and +ve numbers are represented and unsigned
 numbers are the way in which only +ve numbers are represented. If let's say
@@ -167,7 +180,7 @@ if we include -ve numbers in the available 255 slots then we will represent
 from -128 to 127. According to 2's complement notation -128 is represented
 as 0b10000000(0x80) whereas 127 is represented as 0b01111111 (0x7F).
 
-# Integer Arithmetic Conversions in C
+## Integer Arithmetic Conversions in C
 
 C language defines below set of rules to convert the arguments in an expression.
 
@@ -175,23 +188,23 @@ C language defines below set of rules to convert the arguments in an expression.
 
 Every integer type has an integer conversion rank defined as follows:
 
-1.  No two signed integer types shall have the same rank, even if they have
+1. No two signed integer types shall have the same rank, even if they have
     the same representation.
-2.  The rank of a signed integer type shall be greater than the rank of any
+2. The rank of a signed integer type shall be greater than the rank of any
     signed integer type with less precision.
-3.  The rank of long long int shall be greater than the rank of long int,
+3. The rank of long long int shall be greater than the rank of long int,
     which shall be greater than the rank of int, which shall be greater than
     the rank of short int, which shall be greater than the rank of signed char.
-4.  The rank of any unsigned integer type shall equal the rank of the
+4. The rank of any unsigned integer type shall equal the rank of the
     corresponding signed integer type, if any.
-5.  The rank of any standard integer type shall be greater than the rank of
+5. The rank of any standard integer type shall be greater than the rank of
     any extended integer type with the same width.
-6.  The rank of char shall equal the rank of signed char and unsigned char.
-7.  The rank of Bool shall be less than the rank of all other standard
+6. The rank of char shall equal the rank of signed char and unsigned char.
+7. The rank of Bool shall be less than the rank of all other standard
     integer types.
-8.  The rank of any enumerated type shall equal the rank of the compatible
+8. The rank of any enumerated type shall equal the rank of the compatible
     integer type (see 6.7.2.2).
-9.  The rank of any extended signed integer type relative to another
+9. The rank of any extended signed integer type relative to another
     extended signed integer type with the same precision is
     implementation-defined, but still subject to the other rules for
     determining the integer conversion rank.
@@ -208,32 +221,32 @@ Every integer type has an integer conversion rank defined as follows:
 The following may be used in an expression wherever an int or unsigned int may be
 used:
 
-*   An object or expression with an integer type whose integer conversion rank
+* An object or expression with an integer type whose integer conversion rank
     is less than or equal to the rank of int and unsigned int.
-*   A bit-field of type Bool, int, signed int, or unsigned int.
-*   1a) If an int can represent all values of the original type, the value is
+* A bit-field of type Bool, int, signed int, or unsigned int.
+* 1a) If an int can represent all values of the original type, the value is
     converted to an int;
-*   1b) otherwise, it is converted to an unsigned int. These are called the
+* 1b) otherwise, it is converted to an unsigned int. These are called the
     integer promotions. All other types are unchanged by the integer
     promotions.
 
 ## Usual arithmetic conversions
 
-*   2a) If both operands have the same type, then no further conversion is
+* 2a) If both operands have the same type, then no further conversion is
     needed.
-*   2b) Otherwise, if both operands have signed integer types or both have
+* 2b) Otherwise, if both operands have signed integer types or both have
     unsigned integer types, the operand with the type of lesser integer
     conversion rank is converted to the type of the operand with greater
     rank.
-*   2c) Otherwise, if the operand that has unsigned integer type has rank
+* 2c) Otherwise, if the operand that has unsigned integer type has rank
     greater or equal to the rank of the type of the other operand, then the
     operand with signed integer type is converted to the type of the operand
     with unsigned integer type.
-*   2d) Otherwise, if the type of the operand with signed integer type can
+* 2d) Otherwise, if the type of the operand with signed integer type can
     represent all of the values of the type of the operand with unsigned
     integer type, then the operand with unsigned integer type is converted
     to the type of the operand with a signed integer type.
-*   2e) Otherwise, both operands are converted to the unsigned integer type
+* 2e) Otherwise, both operands are converted to the unsigned integer type
     corresponding to the type of the operand with signed integer type.
 
 ### Rule 2c interpretation
@@ -250,12 +263,14 @@ long so statements like below will result in unexpected behavior. Since the
 var1+var2 is an unsigned expression the compiler will enforce it by using a
 unsigned jump instruction called jae instead of jge instruction.
 
-                    .----------------This bit will sign extend to all 1's
-                    11111011            signed short a = -5
-            1111111111111011            unsigned int a = -5
-          + 0000000000001010            unsigned int b = 10
-          = 0000000000000101            unsigned int
-    Figure 1: signed number converted to unsigned numbers
+```console
+                .----------------This bit will sign extend to all 1's
+                11111011            signed short a = -5
+        1111111111111011            unsigned int a = -5
+      + 0000000000001010            unsigned int b = 10
+      = 0000000000000101            unsigned int
+Figure 1: signed number converted to unsigned numbers
+```
 
 Whenever a signed data type has to be converted to unsigned data type the
 absolute value remains unchanged because sign extension will be done using
@@ -267,6 +282,7 @@ represent for -10 for 2 byte storage and 4 byte storage yields the same.
 godbolt's compiler explorer is very helpful in understanding how the compiler
 translates expressions and apply the above rules. Clang AST view especially
 helps in graphically looking at how these promotions/conversion happen
+
 ```c
 signed int var1 = -100;
 unsigned long long var2 = 10;
@@ -275,6 +291,7 @@ if (var1 + var2 < 0) {
     printf("This will never get printed");
 }
 ```
+
 ```nasm
 $LN4:
     sub rsp, 56 ; 00000038H
@@ -292,6 +309,7 @@ $LN2@main:
     ret 0
 main ENDP
 ```
+
 ```console
 Fragment of clang's AST for above program
 |-BinaryOperator <line:7:9, col:23> 'bool' '<'
@@ -305,6 +323,7 @@ Fragment of clang's AST for above program
 | `-ImplicitCastExpr <col:23> 'unsigned long long' <IntegralCast>
 | `-IntegerLiteral <col:23> 'int' 0
 ```
+
 These rules can only dictate what need to be done for each expression in a
 statement one at a time. It cannot determine the type of the complete
 statement at once, because of this, we might end up with unexpected results
@@ -320,18 +339,21 @@ number(smaller) and signed number in an expression and the singed storage
 can hold the unsigned number entirely, then by this rule, the unsigned
 number gets converted to signed number.
 
-                    .----------------The value is not sign extended in case of
-                    |                unsigned numbers because 1 here does not
-                    |                mean anything special except some large +ve
-                    V                value
-                    00000101            unsigned short a = 5
-            0000000011111011            signed int a = 5
-          + 1111111111110110            signed int b = -10
-          = 1111111111111011            signed int
+```console
+                .----------------The value is not sign extended in case of
+                |                unsigned numbers because 1 here does not
+                |                mean anything special except some large +ve
+                V                value
+                00000101            unsigned short a = 5
+        0000000011111011            signed int a = 5
+      + 1111111111110110            signed int b = -10
+      = 1111111111111011            signed int
 
-    Figure 2: unsigned number converted to signed numbers
+Figure 2: unsigned number converted to signed numbers
+```
 
 For example:
+
 ```c
 unsigned int var1 = 100;
 signed long long var2 = -10;
@@ -339,6 +361,7 @@ if (var1 + var2 < 0) { //resulting in signed long long expression
     printf("This gets printed if var1 + var2 is < 0");
 }
 ```
+
 ```nasm
     sub rsp, 56 ; 00000038H
     mov DWORD PTR var1$[rsp], 100 ; 00000064H
@@ -355,6 +378,7 @@ $LN2@main:
     ret 0
 main ENDP
 ```
+
 ```console
 Fragment of clang's AST for above program
 |-BinaryOperator <line:7:9, col:23> 'bool' '<'
@@ -369,6 +393,7 @@ Fragment of clang's AST for above program
 | `-ImplicitCastExpr <col:23> 'long long' <IntegralCast>
 | `-IntegerLiteral <col:23> 'int' 0
 ```
+
 ### Rule 2e interpretation
 
 And finally, Rule 2e is applied only between unsigned int and signed long
@@ -376,6 +401,7 @@ because neither 2c,2d fits these type on LLP64 model. One interesting thing
 we can observe is, the resultant type has unsignedness but the type is of
 signed variable and also both operand types are converted unlike other
 rules. For example:
+
 ```c
 unsigned int var1 = 100; // this gets converted to unsigned long
 signed long var2 = -10;  // this will also converted to unsigned long
@@ -383,6 +409,7 @@ if (var1 + var2 < 0) {   // resulting type is unsigned long
     printf("This will not be printed");
 }
 ```
+
 ```nasm
     sub rsp, 56 ; 00000038H
     mov DWORD PTR var1$[rsp], 100 ; 00000064H
@@ -401,6 +428,7 @@ $LN2@main:
     ret 0
 main ENDP
 ```
+
 ```console
 Fragment of clang's AST for above program
 |-BinaryOperator <line:7:9, col:23> 'bool' '<'
@@ -418,6 +446,7 @@ Fragment of clang's AST for above program
 ## Integer conversion matrix on LLP64 Programming Model
 
 Below table summaries the rules applied for each expression combination
+
 ```console
 +------------------------+---------------------+------------------------------------------------------------------------------------+
 |                        |    Size(MSVC x64)   |  1       1        2       2        4       4        4      4        8      8       |
@@ -440,9 +469,11 @@ Below table summaries the rules applied for each expression combination
 | 8             | 5      |unsigned long long   |                                                                            2a      |
 +---------------+--------+---------------------+------------------------------------------------------------------------------------+
 ```
+
 Figure 3: Rules applied for each combination of expression
 
 Below table summaries the resulting data type of the expression
+
 ```console
 +------------------------+---------------------+--------------------------------------------------------------------------------------+
 |                        |    Size(MSVC x64)   |  1       1        2       2        4       4        4        4        8      8       |
@@ -485,9 +516,10 @@ Below table summaries the resulting data type of the expression
 |               |        |                     |                                                                              long    |
 +---------------+--------+---------------------+--------------------------------------------------------------------------------------+
 ```
+
 Figure 4: Resulting type of the expression
 
-# References
+## References
 
 1. [INT02-C. Understand integer conversion rules](https://wiki.sei.cmu.edu/confluence/display/c/INT02-C.+Understand+integer+conversion+rules)
 2. [C99 Standard](http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf)
@@ -500,9 +532,10 @@ Figure 4: Resulting type of the expression
 9. [Why did the Win64 team choose the LLP64 model?](https://blogs.msdn.microsoft.com/oldnewthing/20050131-00/?p=36563)
 10. [Abstract Data Models](https://docs.microsoft.com/en-us/windows/desktop/winprog64/abstract-data-models)
 
-# Binary representation
+## Binary representation
 
 ## unsigned numbers
+
 ```console
 000|0x0 |00000000 # 064|0x40|01000000 # 128|0x80|10000000 # 192|0xc0|11000000
 001|0x1 |00000001 # 065|0x41|01000001 # 129|0x81|10000001 # 193|0xc1|11000001
@@ -569,7 +602,9 @@ Figure 4: Resulting type of the expression
 062|0x3e|00111110 # 126|0x7e|01111110 # 190|0xbe|10111110 # 254|0xfe|11111110
 063|0x3f|00111111 # 127|0x7f|01111111 # 191|0xbf|10111111 # 255|0xff|11111111
 ```
+
 ## signed numbers
+
 ```console
 -128|0x80|10000000 # -064|0xc0|11000000 # 0000|0x0 |00000000 # 0064|0x40|01000000
 -127|0x81|10000001 # -063|0xc1|11000001 # 0001|0x1 |00000001 # 0065|0x41|01000001

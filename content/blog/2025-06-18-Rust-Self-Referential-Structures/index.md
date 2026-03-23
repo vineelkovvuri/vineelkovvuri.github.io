@@ -5,7 +5,7 @@ toc: true
 tags: ["Rust"]
 ---
 
-# Rust: Self-Referential Structures
+## Rust: Self-Referential Structures
 
 Today, I learned something very interesting about Rust references—specifically,
 fields of a structure referring to other fields in the same structure.
@@ -34,7 +34,7 @@ impl<'a> BadOne<'a> {
 VSCode’s Rust Analyzer immediately reported the following error at the line
 `BadOne { age, reference }`:
 
-```
+```text
 cannot return value referencing local variable `age`
 returns a value referencing data owned by the current function
 main.rs(10, 35): `age` is borrowed here
@@ -44,7 +44,7 @@ Unfortunately, the error message is not very comprehensible. When working with
 lifetimes and references, it’s better to use `cargo check` instead of relying
 solely on Rust Analyzer. Below is the much clearer output from `cargo check`:
 
-```
+```text
 error[E0515]: cannot return value referencing local variable `age`
   --> src/main.rs:11:9
    |
@@ -91,7 +91,7 @@ In this example, we try to hide the fact that a reference to `age` is taken—no
 during construction—but later, in the `take_ref()` method. However, trying to
 compile this will still result in an error:
 
-```
+```text
 error: lifetime may not live long enough
   --> src/main.rs:14:9
    |
@@ -162,7 +162,7 @@ afterward.
 So in the `main()` function, once we call `b2.take_ref()`, we cannot call
 `b2.print()` anymore:
 
-```
+```text
 error[E0502]: cannot borrow `b2` as immutable because it is also borrowed as mutable
   --> src/main.rs:28:5
    |

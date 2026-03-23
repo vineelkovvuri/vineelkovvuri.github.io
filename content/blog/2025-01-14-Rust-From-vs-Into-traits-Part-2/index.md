@@ -5,7 +5,7 @@ toc: true
 tags: ['Rust']
 ---
 
-# Rust: From and Into trait usage
+## Rust: From and Into trait usage
 
 Knowing how Rust's `From` and `Into` traits work is one part of the story, but
 being able to use them efficiently is another. In this code sample, we will

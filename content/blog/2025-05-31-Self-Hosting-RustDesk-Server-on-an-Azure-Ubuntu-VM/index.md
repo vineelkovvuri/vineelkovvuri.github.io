@@ -5,7 +5,7 @@ toc: true
 tags: ['Rust']
 ---
 
-# Self-Hosting RustDesk Server on an Azure Ubuntu VM
+## Self-Hosting RustDesk Server on an Azure Ubuntu VM
 
 I've been a heavy user of TeamViewer and AnyDesk for over 15 years, primarily to
 help my family and friends with troubleshooting. Over time, these tools have
@@ -25,13 +25,12 @@ Azure Ubuntu VM.
 
 ---
 
-## Setting Up the RustDesk Server on an Azure VM
+### Setting Up the RustDesk Server on an Azure VM
 
 First, spin up a small Ubuntu VM on Azure. The private key will be downloaded
 during the VM creation process, and the public IP address can be found on the
 VM's **Overview** page. I used `rustdeskuser` as the username and connected to
 the VM via SSH.
-
 
 ```bash
 ssh -i rustdeskserver_key.pem rustdeskuser@<VM_IP_ADDRESS>
@@ -80,7 +79,7 @@ That’s it! Your RustDesk server is now set up.
 
 ---
 
-## Configuring the RustDesk Client
+### Configuring the RustDesk Client
 
 On your client machine, open the RustDesk app and go to the settings section.
 Enter the IP address of your new RustDesk server along with the public key.

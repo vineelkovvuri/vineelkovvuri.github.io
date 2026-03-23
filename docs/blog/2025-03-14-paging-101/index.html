@@ -56,30 +56,25 @@
             <h2>Table of Contents</h2>
             <nav id="TableOfContents">
   <ul>
-    <li><a href="#pagingidentity-mappingself-mapping-101">Paging/Identity Mapping/Self Mapping 101</a>
+    <li>
       <ul>
-        <li><a href="#what-is-memory-mapping">What is memory mapping?</a></li>
-        <li><a href="#how-is-a-virtual-address-va-decoded-into-a-physical-address-pa">How is a Virtual Address (VA) decoded into a Physical Address (PA)?</a></li>
-        <li><a href="#what-does-a-page-table-containx64">What does a page table contain(x64)?</a></li>
-        <li><a href="#what-does-setting-up-of-page-tables-involve">What does setting up of Page tables involve?</a>
+        <li><a href="#pagingidentity-mappingself-mapping-101">Paging/Identity Mapping/Self Mapping 101</a>
           <ul>
-            <li><a href="#quick-detour-of-x64-processor-modes">Quick Detour of x64 Processor Modes</a></li>
+            <li><a href="#what-is-memory-mapping">What is memory mapping?</a></li>
+            <li><a href="#how-is-a-virtual-address-va-decoded-into-a-physical-address-pa">How is a Virtual Address (VA) decoded into a Physical Address (PA)?</a></li>
+            <li><a href="#what-does-a-page-table-containx64">What does a page table contain(x64)?</a></li>
+            <li><a href="#what-does-setting-up-of-page-tables-involve">What does setting up of Page tables involve?</a></li>
+            <li><a href="#what-happens-after-enabling-paging">What happens after enabling paging?</a></li>
+            <li><a href="#what-are-the-different-kinds-of-paging-schemes">What are the different kinds of paging schemes?</a></li>
+            <li><a href="#what-is-identity-mapping">What is Identity mapping?</a></li>
+            <li><a href="#what-is-non-identity-mapping">What is Non-Identity Mapping?</a></li>
+            <li><a href="#what-is-self-mapping">What is Self mapping?</a></li>
+            <li><a href="#what-tricks-are-we-playing-with-the-cpu-here">What tricks are we playing with the CPU here?</a></li>
+            <li><a href="#creating-and-enabling-self-mapped-paging">Creating and enabling self-mapped paging</a></li>
+            <li><a href="#steps-involved-in-creating-a-page-table-entry-for-a-given-va-in-non-identity-mapping-vs-self-mapping">Steps involved in creating a page table entry for a given VA in Non-Identity mapping vs Self mapping</a></li>
+            <li><a href="#key-highlightsdifferences-between-self-mapping-vs-other-schemes">Key highlights/differences between self-mapping vs other schemes</a></li>
           </ul>
         </li>
-        <li><a href="#what-happens-after-enabling-paging">What happens after enabling paging?</a></li>
-        <li><a href="#what-are-the-different-kinds-of-paging-schemes">What are the different kinds of paging schemes?</a></li>
-        <li><a href="#what-is-identity-mapping">What is Identity mapping?</a></li>
-        <li><a href="#what-is-non-identity-mapping">What is Non-Identity Mapping?</a></li>
-        <li><a href="#what-is-self-mapping">What is Self mapping?</a></li>
-        <li><a href="#what-tricks-are-we-playing-with-the-cpu-here">What tricks are we playing with the CPU here?</a></li>
-        <li><a href="#creating-and-enabling-self-mapped-paging">Creating and enabling self-mapped paging</a>
-          <ul>
-            <li><a href="#self-mapping-is-not-already-enabled">Self mapping is not already enabled</a></li>
-            <li><a href="#self-mapping-is-already-active">Self mapping is already active</a></li>
-          </ul>
-        </li>
-        <li><a href="#steps-involved-in-creating-a-page-table-entry-for-a-given-va-in-non-identity-mapping-vs-self-mapping">Steps involved in creating a page table entry for a given VA in Non-Identity mapping vs Self mapping</a></li>
-        <li><a href="#key-highlightsdifferences-between-self-mapping-vs-other-schemes">Key highlights/differences between self-mapping vs other schemes</a></li>
       </ul>
     </li>
   </ul>
@@ -89,14 +84,14 @@
 
 
 <main>
-<h1 id="pagingidentity-mappingself-mapping-101">Paging/Identity Mapping/Self Mapping 101</h1>
-<h2 id="what-is-memory-mapping">What is memory mapping?</h2>
+<h2 id="pagingidentity-mappingself-mapping-101">Paging/Identity Mapping/Self Mapping 101</h2>
+<h3 id="what-is-memory-mapping">What is memory mapping?</h3>
 <p>Memory mapping, in the context of paging, refers to the ability of the CPU to
 <em>decode</em> a virtual address (VA) into a physical address (PA) by successfully
 walking the page tables. When this happens, we say that the given VA has a PA
 mapping. If, for some reason, the CPU is unable to walk the page tables, it will
 raise a page fault exception. In other words, the VA is not mapped(unmapped).</p>
-<h2 id="how-is-a-virtual-address-va-decoded-into-a-physical-address-pa">How is a Virtual Address (VA) decoded into a Physical Address (PA)?</h2>
+<h3 id="how-is-a-virtual-address-va-decoded-into-a-physical-address-pa">How is a Virtual Address (VA) decoded into a Physical Address (PA)?</h3>
 <p>For example, x64 CPUs break the given VA into the below components(assuming 5 Level
 paging)</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>  63           57 56           48 47           39 38           30 29            21 20            12 11               0
@@ -120,7 +115,7 @@ page offset (bits 0-11). In addition to this, each Page Table Entry (PTE)
 contains memory protection-related bits (not covered in this document).</p>
 <p>The illustration below showcases the page table walk performed by the CPU.</p>
 <p><img src="va_to_pa.png" alt="VA to PA page walking"></p>
-<h2 id="what-does-a-page-table-containx64">What does a page table contain(x64)?</h2>
+<h3 id="what-does-a-page-table-containx64">What does a page table contain(x64)?</h3>
 <p>Each page table is 4KB in size and each entry within the page table is of 8
 bytes(64 bits). Below is the general structure of the page table entry in X64.
 Because of this each page table will have 512 entries(2^9). Hence in the above
@@ -128,7 +123,7 @@ VA to PA translation the virtual address is broken down into 9 bit components.
 The table base-address field points to the physical base address of the
 next-lower-level table in the page-translation hierarchy.</p>
 <p><img src="page_table_entry.png" alt="Page table entry structure"></p>
-<h2 id="what-does-setting-up-of-page-tables-involve">What does setting up of Page tables involve?</h2>
+<h3 id="what-does-setting-up-of-page-tables-involve">What does setting up of Page tables involve?</h3>
 <p>Setting up the above-illustrated page tables requires creating the necessary
 page tables and appropriately wiring them together so that the CPU can perform
 the VA-to-PA translation. This means that setting up the page tables is not free
@@ -140,7 +135,7 @@ physical addresses (PAs), not virtual addresses (VAs), so there will be no
 question of whether those pages are mapped. Again, this restriction — that page
 tables must already be mapped — applies only to us, the programmers, when making
 changes to them during setup.</p>
-<h3 id="quick-detour-of-x64-processor-modes">Quick Detour of x64 Processor Modes</h3>
+<h4 id="quick-detour-of-x64-processor-modes">Quick Detour of x64 Processor Modes</h4>
 <ol>
 <li><strong>Real Mode:</strong> No paging, and there is no concept of virtual addresses (VA)
 or protection. Everything is accessible (meaning everything is already
@@ -160,7 +155,7 @@ with paging enabled. If so, we are good to proceed.</li>
 </ol>
 <p>This is also the order in which the processor switches from one mode to the
 next.</p>
-<h2 id="what-happens-after-enabling-paging">What happens after enabling paging?</h2>
+<h3 id="what-happens-after-enabling-paging">What happens after enabling paging?</h3>
 <p>One of the problems we will run into immediately once paging is enabled is:
 <strong>how do we map new memory ranges?</strong> Isn&rsquo;t it straightforward to simply walk the
 existing page tables and add any intermediate page tables as required?</p>
@@ -175,14 +170,14 @@ memory → need page tables → &hellip;&rdquo;</p>
 <strong>expected to map a sufficiently large chunk of memory upfront and perform a
 careful dance</strong>, which will later be used for setting up mappings for new memory
 ranges.</p>
-<h2 id="what-are-the-different-kinds-of-paging-schemes">What are the different kinds of paging schemes?</h2>
+<h3 id="what-are-the-different-kinds-of-paging-schemes">What are the different kinds of paging schemes?</h3>
 <p>We mainly consider the below three types of paging schemes</p>
 <ol>
 <li>Identity Mapping(VA always equals PA)</li>
 <li>Non-Identity Mapping(VA need not always equal PA)</li>
 <li>Self Mapping(VA need not always equal PA)</li>
 </ol>
-<h2 id="what-is-identity-mapping">What is Identity mapping?</h2>
+<h3 id="what-is-identity-mapping">What is Identity mapping?</h3>
 <p>Identity mapping in paging is a technique where virtual addresses are mapped
 directly to the <strong>same</strong> physical addresses. By using identity mapping, the
 system can access hardware and memory locations without dealing with non-trivial
@@ -237,7 +232,7 @@ page table). Once this is done, we move to the next PD page table, and so on.</p
 memory regions are not pre-allocated and mapped, adding new mappings is not
 possible. This makes identity mapping more rigid compared to more flexible
 memory mapping schemes.</p>
-<h2 id="what-is-non-identity-mapping">What is Non-Identity Mapping?</h2>
+<h3 id="what-is-non-identity-mapping">What is Non-Identity Mapping?</h3>
 <p>In this scheme, the internal wiring of page tables works very similar to
 identity mapping; however, the wiring itself is non-deterministic because, in
 non-identity mapping, the lower-level page tables (PTs) do not need to point to
@@ -246,7 +241,7 @@ illustration below shows that the top PT page table points to a lower memory
 region compared to the bottom PT page table. This causes the VA to not map
 exactly to its PA.</p>
 <p><img src="non_identity_mapping.png" alt="Non-Identity Mapping"></p>
-<h2 id="what-is-self-mapping">What is Self mapping?</h2>
+<h3 id="what-is-self-mapping">What is Self mapping?</h3>
 <p><strong>Self-mapping</strong> is a clever way to create page tables and map them on the fly
 removing the restriction of identity mapping. In other words, page tables for
 new memory regions need not be pre-allocated and mapped. How is this achieved?</p>
@@ -269,7 +264,7 @@ ends at the desired page table. In other words, the CPU effectively maps the
 page table for us, and we can then have R/W access to its entries. Recollect
 what &ldquo;mapping&rdquo; really means from the first paragraph? If not, read it again. Also,
 the current paragraph definitely requires multiple readings to fully grasp!</p>
-<h2 id="what-tricks-are-we-playing-with-the-cpu-here">What tricks are we playing with the CPU here?</h2>
+<h3 id="what-tricks-are-we-playing-with-the-cpu-here">What tricks are we playing with the CPU here?</h3>
 <p>Let&rsquo;s recap the usual VA to PA translation: Nothing new. Just follow Step 1 to
 Step 12 in the below illustration. <img src="va_to_pa_steps.png" alt="Usual VA to PA Mapping"></p>
 <p>Imagine what happens to the CPU&rsquo;s address translation when the highest-level
@@ -338,20 +333,20 @@ base depends only on the higher-level components of the va being mapped, not on
 the physical address of the lower-level page table itself.</p>
 <p>The above explanation assumes the self-map is already enabled. Next, we will see
 how self-mapped paging can be enabled.</p>
-<h2 id="creating-and-enabling-self-mapped-paging">Creating and enabling self-mapped paging</h2>
-<h3 id="self-mapping-is-not-already-enabled">Self mapping is not already enabled</h3>
+<h3 id="creating-and-enabling-self-mapped-paging">Creating and enabling self-mapped paging</h3>
+<h4 id="self-mapping-is-not-already-enabled">Self mapping is not already enabled</h4>
 <p>When self-mapping is not active, the assumption is that the pages provided by
 the allocator are already mapped. This is because, without self-mapping being
 enabled (since CR3 points to non-self-mapped page tables), we cannot use the
 self-mapping trick to modify those pages. As a result, we are required to have
 those pages mapped in advance in order to wire them properly.</p>
-<h3 id="self-mapping-is-already-active">Self mapping is already active</h3>
+<h4 id="self-mapping-is-already-active">Self mapping is already active</h4>
 <p>Once self-mapping is enabled (i.e., when CR3 is already updated to point to the
 self-mapped page tables), any page tables needed to map new memory regions no
 longer need to be pre-mapped. Since CR3 now references the self-mapped page
 tables, we can leverage the trick to map and access the corresponding page table
 bases, even if they have not been mapped yet.</p>
-<h2 id="steps-involved-in-creating-a-page-table-entry-for-a-given-va-in-non-identity-mapping-vs-self-mapping">Steps involved in creating a page table entry for a given VA in Non-Identity mapping vs Self mapping</h2>
+<h3 id="steps-involved-in-creating-a-page-table-entry-for-a-given-va-in-non-identity-mapping-vs-self-mapping">Steps involved in creating a page table entry for a given VA in Non-Identity mapping vs Self mapping</h3>
 <p>Steps involved in creating a page table entry for a given VA in Non-Identity
 Mapping. At each level we have 4 primary steps</p>
 <ol>
@@ -373,7 +368,7 @@ level components of the VA being mapped.</p>
 <li>Update the entry with the lower-level page table&rsquo;s PA - Purple boxes</li>
 </ol>
 <p><img src="self_mapping_steps_involved_in_creating_pg_entry.png" alt="Steps involved in creating a page table entry for a given VA in Self Mapping"></p>
-<h2 id="key-highlightsdifferences-between-self-mapping-vs-other-schemes">Key highlights/differences between self-mapping vs other schemes</h2>
+<h3 id="key-highlightsdifferences-between-self-mapping-vs-other-schemes">Key highlights/differences between self-mapping vs other schemes</h3>
 <ol>
 <li>For updating the page tables, we access the unmapped page tables at a given
 level with the help of carefully crafted special VAs(which are created with

@@ -5,7 +5,7 @@ toc: true
 tags: ['Rust']
 ---
 
-# Rust: Rust Aligned vs Unaligned Memory Access
+## Rust: Rust Aligned vs Unaligned Memory Access
 
 Unlike C, Rust enforces some rules when trying to access memory. Mainly it
 requires consideration of the alignment of the data that we are trying to read.

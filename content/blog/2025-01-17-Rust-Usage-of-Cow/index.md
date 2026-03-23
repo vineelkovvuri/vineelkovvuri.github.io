@@ -5,10 +5,10 @@ toc: true
 tags: ['Rust']
 ---
 
-# Rust: Usage of Cow(Clone on Write)
+## Rust: Usage of Cow(Clone on Write)
 
 Today, after reading the following blog
-post(https://hermanradtke.com/2015/05/29/creating-a-rust-function-that-returns-string-or-str.html/),
+post(<https://hermanradtke.com/2015/05/29/creating-a-rust-function-that-returns-string-or-str.html/>),
 I finally understood the need for Cow in Rust. Below is my code sample with
 relevant comments.
 

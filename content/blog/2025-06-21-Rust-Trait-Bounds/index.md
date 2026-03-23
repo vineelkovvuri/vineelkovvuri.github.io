@@ -5,14 +5,12 @@ toc: true
 tags: ["Rust"]
 ---
 
-# Rust: Trait Bounds
-
+## Rust: Trait Bounds
 
 Traits in Rust are one of the core features of the language. But they deserve some
 explanation. Though they may sometimes be called similar to interfaces, they are
 far more flexible. Let's try to understand what they are and how they can be
 used.
-
 
 ```rust
 trait Book {
@@ -42,7 +40,6 @@ By applying `Book` trait to `Ebook` and `HardBook` we are establishing a
 contract with the implementing types(like interfaces). Now the beauty is we can
 write functions which can work on the trait generically.
 
-
 ```rust
 fn protect<T>(book: T)
 where
@@ -51,14 +48,13 @@ T: Book {
 }
 ```
 
-## Generic Traits
+### Generic Traits
 
 ```rust
 trait Book<F> {
     fn set_type(&self, book_type: F);
 }
 ```
-
 
 Jokes apart, Rust lifetimes are notoriously difficult to master. I have to
 confess — I don't fully understand them either. But today’s article will shed
@@ -93,7 +89,7 @@ We’ll discuss them in more detail later.
 > compiler-inferred lifetimes. You can enable this by going to **Settings >
 > Extensions > Rust Analyzer > Inlay Hints > Lifetime Elision Hints**. This can
 > be quite handy at times.
-
+>
 > **Tip 2:** Always rely on `cargo check` to get detailed information about any
 > lifetime parameter violations.
 
@@ -150,7 +146,9 @@ fn func(arr: &[u32]) -> &u32 {
     &arr[0]
 }
 ```
+
 With Rust analyzer inlay hints
+
 ```rust
 fn func<'0>(arr: &'0 [u32]) -> &'0 u32 {
     &arr[2]
@@ -174,6 +172,7 @@ fn func(arr1: &[u32], arr2: &[u32]) -> &u32 {
 ```
 
 With Rust analyzer inlay hints
+
 ```rust
 fn func<`0,`1>(arr1: &`0 [u32], arr2: &`1 [u32]) -> &u32 {
     &arr1[0]                                        ^---- Compiler cannot infer
@@ -210,7 +209,6 @@ this, we guarantee to the compiler that no matter what we return (a reference to
 an element of `arr2` or `arr1`), the returned reference will live long enough.
 **Note:** We specify the shortest lifetime annotation (`'b`) in the return type.
 
-
 **Case 4: Structures containing references:**
 
 Now let's look at the case where structure fields can reference some other data.
@@ -227,7 +225,6 @@ references inside the object point to data that can live as long as the struct
 itself. The only way the compiler can guarantee this is by assigning a lifetime
 parameter. **Note:** Each reference can have its own lifetime parameter. For
 simplicity, let's assume both references point to data with the same lifetime.
-
 
 ```rust
 struct BookView<'a> {
@@ -272,7 +269,6 @@ Now we are trying to create a `BookView` using parameters that have different
 lifetimes, so the compiler cannot infer the struct's lifetime parameter. By now,
 the fix should be obvious.
 
-
 ```rust
 fn create_book_view<'a>(price: &'a u32, pages: &'a u32) -> BookView<'a> {
     BookView { price, pages }
@@ -287,7 +283,7 @@ struct’s fields can live as long as the input parameters.
 > unlike in our previous examples. However, the output parameter **does**
 > require lifetime information to manage its fields. So, we are **not**
 > returning `&BookView`.
-
+>
 > The lifetime parameter of the output is **only** inferred when there is
 > exactly one input to the function. When the function has more than one
 > parameter, even if the lifetimes of those parameters are explicitly specified,

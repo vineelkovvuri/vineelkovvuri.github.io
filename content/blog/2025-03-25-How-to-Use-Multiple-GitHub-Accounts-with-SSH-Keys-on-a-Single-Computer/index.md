@@ -5,14 +5,14 @@ toc: true
 tags: ['Git', 'SSH', 'GitHub']
 ---
 
-# How to Use Multiple GitHub Accounts with SSH Keys on a Single Computer?
+## How to Use Multiple GitHub Accounts with SSH Keys on a Single Computer?
 
 For a long time, I wanted to access both my personal account (`vineelkovvuri`)
 and my Microsoft work account (`vineelko`) from my work laptop. Naturally, using
 the same `.ssh/id_rsa.pub` key for both GitHub accounts wouldn't work. This
 article explains the workaround I came across.
 
-## Step 1: Generate Separate SSH Keys
+### Step 1: Generate Separate SSH Keys
 
 First, generate different SSH key pairs for each account:
 
@@ -26,7 +26,7 @@ The crucial part here is saving the RSA file with a distinct name (`id_rsa_vinee
 
 Repeat this process for your work account, saving it as `C:\Users\vineelko/.ssh/id_rsa_vineelko_github`.
 
-## Step 2: Configure SSH
+### Step 2: Configure SSH
 
 Add the following configuration to `C:\Users\vineelko\.ssh\config`:
 
@@ -44,14 +44,16 @@ Host github-vineelko
     IdentityFile ~/.ssh/id_rsa_vineelko_github
 ```
 
-## Step 3: Clone Repositories with Modified URLs
+### Step 3: Clone Repositories with Modified URLs
 
 When cloning repositories from your personal account, instead of:
+
 ```powershell
 git clone git@github.com:vineelkovvuri/vin-pro.git
 ```
 
 Use:
+
 ```powershell
 git clone git@github-vineelkovvuri:vineelkovvuri/vin-pro.git
 ```
@@ -59,7 +61,7 @@ git clone git@github-vineelkovvuri:vineelkovvuri/vin-pro.git
 The modified hostname (`github-vineelkovvuri`) tells SSH which key file to use
 when authenticating with GitHub.com.
 
-## Step 4: Configure Repository-Specific Git Settings
+### Step 4: Configure Repository-Specific Git Settings
 
 On my work laptop, I keep my work email and username in the global
 `~/.gitconfig` since that's my primary account. For personal repositories, I set

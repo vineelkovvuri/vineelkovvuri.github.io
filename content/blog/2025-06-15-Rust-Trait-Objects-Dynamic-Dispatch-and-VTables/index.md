@@ -5,7 +5,7 @@ toc: true
 tags: ["Rust"]
 ---
 
-# Rust: Trait Objects, Dynamic Dispatch and VTables
+## Rust: Trait Objects, Dynamic Dispatch and VTables
 
 Even though Rust does not support the traditional inheritance/virtual function to
 enable dynamic dispatch(runtime polymorphism), it does support trait-based
@@ -45,8 +45,7 @@ whose size is defined at compile time.
   - The syntax conflicted with potential future features (like associated types or trait aliases).
 - Introducing `dyn` made the language more consistent and future-proof.
 
-
-## How is dynamic dispatch achieved with trait objects?
+### How is dynamic dispatch achieved with trait objects?
 
 Below we have two structs `HardBook` and `EBook` and trait called `FileType`
 which will be implemented by both the structs. Below code explains how the

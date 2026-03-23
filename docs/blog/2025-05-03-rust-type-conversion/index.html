@@ -56,30 +56,17 @@
             <h2>Table of Contents</h2>
             <nav id="TableOfContents">
   <ul>
-    <li><a href="#rust-type-conversion---from-one-type-to-another">Rust: Type Conversion - From one type to another</a>
+    <li>
       <ul>
-        <li><a href="#1-the-basics-converting-strings-to-numbers"><strong>1. The Basics: Converting Strings to Numbers</strong></a>
+        <li><a href="#rust-type-conversion---from-one-type-to-another">Rust: Type Conversion - From one type to another</a>
           <ul>
-            <li><a href="#cs-approach-static"><strong>C#’s Approach: Static <code>Parse()</code> Methods</strong></a></li>
-            <li><a href="#rusts-approach-the"><strong>Rust’s Approach: The <code>FromStr</code> Trait</strong></a></li>
+            <li><a href="#1-the-basics-converting-strings-to-numbers"><strong>1. The Basics: Converting Strings to Numbers</strong></a></li>
+            <li><a href="#2-extending-rusts-approach-custom-type-conversions"><strong>2. Extending Rust’s Approach: Custom Type Conversions</strong></a></li>
+            <li><a href="#3-why-rusts-approach-is-powerful"><strong>3. Why Rust’s Approach is Powerful</strong></a></li>
+            <li><a href="#4-when-to-use-which-approach"><strong>4. When to Use Which Approach?</strong></a></li>
+            <li><a href="#final-thoughts"><strong>Final Thoughts</strong></a></li>
           </ul>
         </li>
-        <li><a href="#2-extending-rusts-approach-custom-type-conversions"><strong>2. Extending Rust’s Approach: Custom Type Conversions</strong></a>
-          <ul>
-            <li><a href="#defining-a-conversion-trait"><strong>Defining a Conversion Trait</strong></a></li>
-            <li><a href="#adding-a-helper-method-for-chaining"><strong>Adding a Helper Method for Chaining</strong></a></li>
-            <li><a href="#usage-example"><strong>Usage Example</strong></a></li>
-          </ul>
-        </li>
-        <li><a href="#3-why-rusts-approach-is-powerful"><strong>3. Why Rust’s Approach is Powerful</strong></a>
-          <ul>
-            <li><a href="#1-method-chaining"><strong>1. Method Chaining</strong></a></li>
-            <li><a href="#2-uniform-api"><strong>2. Uniform API</strong></a></li>
-            <li><a href="#3-works-with-generics"><strong>3. Works with Generics</strong></a></li>
-          </ul>
-        </li>
-        <li><a href="#4-when-to-use-which-approach"><strong>4. When to Use Which Approach?</strong></a></li>
-        <li><a href="#final-thoughts"><strong>Final Thoughts</strong></a></li>
       </ul>
     </li>
   </ul>
@@ -89,7 +76,7 @@
 
 
 <main>
-<h1 id="rust-type-conversion---from-one-type-to-another">Rust: Type Conversion - From one type to another</h1>
+<h2 id="rust-type-conversion---from-one-type-to-another">Rust: Type Conversion - From one type to another</h2>
 <p>Type conversion is a fundamental operation in programming, allowing data to be
 transformed from one representation to another. In Rust, this is often done
 using <strong>traits</strong>, which provide a flexible and powerful way to define
@@ -98,9 +85,9 @@ conversions between types.</p>
 C#’s approach, and see how Rust’s trait-based system enables <strong>method chaining,
 uniform APIs, and better composability</strong>.</p>
 <hr>
-<h2 id="1-the-basics-converting-strings-to-numbers"><strong>1. The Basics: Converting Strings to Numbers</strong></h2>
+<h3 id="1-the-basics-converting-strings-to-numbers"><strong>1. The Basics: Converting Strings to Numbers</strong></h3>
 <p>A common conversion is parsing a string into a number. Let’s see how Rust and C# handle this differently.</p>
-<h3 id="cs-approach-static"><strong>C#’s Approach: Static <code>Parse()</code> Methods</strong></h3>
+<h4 id="cs-approach-static"><strong>C#’s Approach: Static <code>Parse()</code> Methods</strong></h4>
 <p>In C#, parsing is done via <strong>static methods</strong> on the target type:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span><span style="color:#888;font-weight:bold">string</span> input = <span style="color:#d20;background-color:#fff0f0">&#34;100&#34;</span>;
 </span></span><span style="display:flex;"><span><span style="color:#888;font-weight:bold">int</span> x = <span style="color:#888;font-weight:bold">int</span>.Parse(input);       <span style="color:#888">// Convert to int</span>
@@ -114,7 +101,7 @@ uniform APIs, and better composability</strong>.</p>
 </ul>
 </li>
 </ul>
-<h3 id="rusts-approach-the"><strong>Rust’s Approach: The <code>FromStr</code> Trait</strong></h3>
+<h4 id="rusts-approach-the"><strong>Rust’s Approach: The <code>FromStr</code> Trait</strong></h4>
 <p>In Rust, parsing is done via the <strong><code>FromStr</code> trait</strong>, implemented on the <strong>input type (<code>&amp;str</code>)</strong>:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>input<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#d20;background-color:#fff0f0">&#34;100&#34;</span>;<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>x: <span style="color:#888;font-weight:bold">u32</span> =<span style="color:#bbb"> </span>input.parse().unwrap();<span style="color:#bbb"> </span><span style="color:#888">// Convert to u32
@@ -129,9 +116,9 @@ uniform APIs, and better composability</strong>.</p>
 </li>
 </ul>
 <hr>
-<h2 id="2-extending-rusts-approach-custom-type-conversions"><strong>2. Extending Rust’s Approach: Custom Type Conversions</strong></h2>
+<h3 id="2-extending-rusts-approach-custom-type-conversions"><strong>2. Extending Rust’s Approach: Custom Type Conversions</strong></h3>
 <p>Rust’s trait system allows us to define <strong>custom conversions</strong> between types. Let’s implement a <code>FromMyType</code> trait to convert between two structs.</p>
-<h3 id="defining-a-conversion-trait"><strong>Defining a Conversion Trait</strong></h3>
+<h4 id="defining-a-conversion-trait"><strong>Defining a Conversion Trait</strong></h4>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">struct</span> <span style="color:#b06;font-weight:bold">MyType</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>x: <span style="color:#888;font-weight:bold">u32</span>,<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>y: <span style="color:#888;font-weight:bold">u32</span>,<span style="color:#bbb">
@@ -154,7 +141,7 @@ uniform APIs, and better composability</strong>.</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
-</span></span></span></code></pre></div><h3 id="adding-a-helper-method-for-chaining"><strong>Adding a Helper Method for Chaining</strong></h3>
+</span></span></span></code></pre></div><h4 id="adding-a-helper-method-for-chaining"><strong>Adding a Helper Method for Chaining</strong></h4>
 <p>To make conversion more ergonomic, we can add a <code>.convert()</code> method to <code>MyType</code>:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span>MyType<span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">convert</span>&lt;F&gt;(&amp;<span style="color:#038">self</span>)<span style="color:#bbb"> </span>-&gt; <span style="color:#b06;font-weight:bold">F</span><span style="color:#bbb">
@@ -164,7 +151,7 @@ uniform APIs, and better composability</strong>.</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>F::from_mytype(<span style="color:#038">self</span>)<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
-</span></span></span></code></pre></div><h3 id="usage-example"><strong>Usage Example</strong></h3>
+</span></span></span></code></pre></div><h4 id="usage-example"><strong>Usage Example</strong></h4>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">main</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>my_type<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>MyType<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>x: <span style="color:#00d;font-weight:bold">10</span>,<span style="color:#bbb"> </span>y: <span style="color:#00d;font-weight:bold">20</span><span style="color:#bbb"> </span>};<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>my_type2: <span style="color:#b06;font-weight:bold">MyType2</span><span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>my_type.convert();<span style="color:#bbb"> </span><span style="color:#888">// Converts to MyType2
@@ -179,26 +166,26 @@ uniform APIs, and better composability</strong>.</p>
 </li>
 </ul>
 <hr>
-<h2 id="3-why-rusts-approach-is-powerful"><strong>3. Why Rust’s Approach is Powerful</strong></h2>
-<h3 id="1-method-chaining"><strong>1. Method Chaining</strong></h3>
+<h3 id="3-why-rusts-approach-is-powerful"><strong>3. Why Rust’s Approach is Powerful</strong></h3>
+<h4 id="1-method-chaining"><strong>1. Method Chaining</strong></h4>
 <p>Rust’s design allows <strong>fluent APIs</strong>:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>num<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#d20;background-color:#fff0f0">&#34; 123 &#34;</span>.trim().parse::&lt;<span style="color:#888;font-weight:bold">u32</span>&gt;().unwrap();<span style="color:#bbb">
 </span></span></span></code></pre></div><p>vs. C#’s nested calls:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span><span style="color:#888;font-weight:bold">string</span> input = <span style="color:#d20;background-color:#fff0f0">&#34; 123 &#34;</span>;
 </span></span><span style="display:flex;"><span><span style="color:#888;font-weight:bold">int</span> num = <span style="color:#888;font-weight:bold">int</span>.Parse(input.Trim());
-</span></span></code></pre></div><h3 id="2-uniform-api"><strong>2. Uniform API</strong></h3>
+</span></span></code></pre></div><h4 id="2-uniform-api"><strong>2. Uniform API</strong></h4>
 <ul>
 <li>In Rust, <strong>all conversions use <code>.parse()</code> or <code>.convert()</code></strong>.</li>
 <li>In C#, each type has its own method (<code>int.Parse</code>, <code>double.Parse</code>, <code>DateTime.Parse</code>).</li>
 </ul>
-<h3 id="3-works-with-generics"><strong>3. Works with Generics</strong></h3>
+<h4 id="3-works-with-generics"><strong>3. Works with Generics</strong></h4>
 <p>Rust’s traits enable <strong>generic functions</strong> that work with any convertible type:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">parse_anything</span>&lt;T: <span style="color:#b06;font-weight:bold">FromStr</span>&gt;(s: <span style="color:#080">&amp;</span><span style="color:#888;font-weight:bold">str</span>)<span style="color:#bbb"> </span>-&gt; <span style="color:#038">Option</span>&lt;T&gt;<span style="color:#bbb"> </span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>s.parse().ok()<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
 </span></span></span></code></pre></div><p>In C#, you’d need <strong>reflection</strong> or <strong>overloads</strong> for each type.</p>
 <hr>
-<h2 id="4-when-to-use-which-approach"><strong>4. When to Use Which Approach?</strong></h2>
+<h3 id="4-when-to-use-which-approach"><strong>4. When to Use Which Approach?</strong></h3>
 <table>
   <thead>
       <tr>
@@ -226,7 +213,7 @@ uniform APIs, and better composability</strong>.</p>
   </tbody>
 </table>
 <hr>
-<h2 id="final-thoughts"><strong>Final Thoughts</strong></h2>
+<h3 id="final-thoughts"><strong>Final Thoughts</strong></h3>
 <p>Rust’s trait-based type conversion might seem complex at first, but it enables:</p>
 <ul>
 <li><strong>Method chaining</strong> (<code>.trim().parse()</code>).</li>

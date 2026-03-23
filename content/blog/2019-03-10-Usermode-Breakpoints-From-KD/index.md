@@ -5,7 +5,7 @@ toc: true
 tags: ['WinDbg', 'Windows']
 ---
 
-# Introduction
+## Introduction
 
 When performing KD(Kernel Debugging) in Windows with Windbg if you have to set a
 break point in a user mode process we should always use **.process /i address;
@@ -25,7 +25,7 @@ have to make the user mode process the current process context by running
 
 To explain this we need to quickly understand how break points work.
 
-# How do break points work in user mode debugging
+## How do break points work in user mode debugging
 
 Below are the steps involved for a break point to work in debugging a user mode process.
 
@@ -38,9 +38,9 @@ Below are the steps involved for a break point to work in debugging a user mode 
   causes the debugger to break in and debugger puts back the original byte
   as if nothing has happened to the program
 - More details:
-  https://vineelkovvuri.github.io/blog/how-do-breakpoints-work-in-debuggers/
+  <https://vineelkovvuri.github.io/blog/how-do-breakpoints-work-in-debuggers/>
 
-# User mode break points from KD
+## User mode break points from KD
 
 When debugging a user mode process from KD the steps work exactly the same as above
 but with a slight twist.
@@ -59,13 +59,13 @@ but with a slight twist.
   the currently executing process which happens to be multihasher.exe not
   fscapture.exe!
 
-![](UsermodeBreakPointFromKD1.png)
+![WinDbg before break point getting updated](UsermodeBreakPointFromKD1.png)
 Before break point getting updated
 
-![](UsermodeBreakPointFromKD2.png)
+![WinDbg setting the user mode break point from kernel debugger](UsermodeBreakPointFromKD2.png)
 Setting the break point
 
-![](UsermodeBreakPointFromKD3.png)
+![WinDbg after break point is updated](UsermodeBreakPointFromKD3.png)
 After break point is updated
 
 - This means, "g" command used to resume the target is the culprit(may be it
@@ -78,7 +78,7 @@ After break point is updated
 NOTE: I initially made multihasher.exe the process context by using .process /i
       multihasher address;g;
 
-# Setting breakpoints in system dlls
+## Setting breakpoints in system dlls
 
 This .process /i is not required if you are putting breakpoints in system dlls
 like kernelbase, ntdll etc because these dlls are loaded at the same virtual
@@ -88,14 +88,13 @@ visible in all other processes which use that system dll. Below we illustrate
 this by setting a break point in ntdll.dll. (Even here just make sure when you
 broke initially you are not in System process as it will not have ntdll!)
 
-![](UsermodeBreakPointFromKD4.png)
+![Break point set in ntdll of explorer process](UsermodeBreakPointFromKD4.png)
 Break point is set only in ntdll of explorer process
 
-![](UsermodeBreakPointFromKD5.png)
+![Break point in ntdll of explorer reflected in ntdll of notepad](UsermodeBreakPointFromKD5.png)
 Break point set in ntdll of explorer gets reflected in ntdll of notepad also
 
-# References
+## References
 
 - [Analyst's Perspective: Analyzing User Mode State from a Kernel Connection](https://www.osronline.com/article.cfm%5Earticle=576.htm)
 - [How Windows Debuggers Work?](https://www.microsoftpressstore.com/articles/article.aspx?p=2201303&seqNum=2)
-

@@ -5,7 +5,7 @@ toc: true
 tags: ['Rust']
 ---
 
-# Rust: Orphan Rules
+## Rust: Orphan Rules
 
 ```rust
 use std::fmt;

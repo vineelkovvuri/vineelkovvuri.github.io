@@ -5,12 +5,13 @@ toc: true
 tags: ['Compilers']
 ---
 
-# Introduction
+## Introduction
 
 During the compilation, one of the crucial steps after assembling is
 creating the Object files. The collection of these object files is
 called a lib file. We can create these .lib files through the following
 visual studio project types
+
 1. Static Library
 2. Dynamic Linked Library
 
@@ -29,20 +30,22 @@ ar -x StaticLib1.lib
 or
 use 7-Zip to extract it
 
-![](6.VSProjectDialog.png)
+![Visual Studio New Project dialog for Static Library and Dynamic Linked Library](6.VSProjectDialog.png)
 Visual Studio New Project dialog for 'Static Library' and 'Dynamic Linked Library'
 
-# Static Library
+## Static Library
 
 Static Library is created when you want to provide the complete code to
 link into another dll or exe. For example, If a static library
 project contains 4 files add.c,sub.c,mul.c,div.c containing functions
 for their operations as shown below respectively.
+
 ```C
 int add(int a) {
     return a + 1;
 }
 ```
+
 When you build the project what we get is a .lib file containing obj files
 of each of the above .c file. So a static library contains all
 the code that gets compiled from your project, and this .lib will
@@ -56,13 +59,13 @@ dumpbin /exports StaticLib.lib  <-- shows nothing because .lib itself does not
 export anything
 dumpbin /symbols StaticLib.lib  <-- shows all the symbols present
 
-![](1.StaticLib.png)
+![Workflow for Static Library creation and consumption](1.StaticLib.png)
 Workflow for Static Library creation and consumption
 
-![](2.StructureStaticLib.png)
+![Structure of a Static Library file in HxD hex editor](2.StructureStaticLib.png)
 Concluded based on HxD view of the file
 
-# Dynamic Linked Library
+## Dynamic Linked Library
 
 Dynamic Linked Library(DLL) is in many ways similar to Static Library because
 it also provides the code to be used by other projects like dll or exe,
@@ -75,24 +78,26 @@ present inside the .dll file.
 
 Since .lib does not contain any real .obj unlike static lib, we can
 only see the exported symbols but not their code in case of dll's .lib file.
+
 ```C
 __declspec(dllexport) int add(int a) {
     return a + 1;
 }
 ```
+
 dumpbin /exports Dll1.lib <-- shows all the exported functions
 
-![](3.Dll.png)
+![Workflow for Dynamic Linked Library creation and consumption](3.Dll.png)
 Workflow for Dynamic Linked Library creation and consumption
 
-![](4.StructureDll.png)
+![Structure of a DLL lib file in HxD hex editor](4.StructureDll.png)
 Concluded based on HxD view of the file
 
 NOTE: The functions inside a Dynamic Linked Library need to be declared
 with __declspec(dllexport) if they have to be visible and consumed
 by others(indirectly).
 
-# Static Library with __declspec(dllexport)
+## Static Library with __declspec(dllexport)
 
 This is interesting. When a function inside a static library is declared
 with __declspec(dllexport), like any other function, it gets included
@@ -102,13 +107,13 @@ binary! Below is a screenshot of Consumer.exe which is exporting sub2 function
 because sub2 is actually declared with __declspec(dllexport) in the
 original static library.
 
-![](5.StaticLibWithDeclSpec(DllExport).png)
+![Static Library with dllexport showing sub2 exported from consumer binary](5.StaticLibWithDeclSpec(DllExport).png)
 sub2 function got exported from the final consumer binary
 
 The takeaway here is Static Libraries are just a convenient archive format
 to hold multiple .obj files, nothing more or nothing less! So we should be
 cautious of how the functions are declared.
 
-# References
+## References
 
 - [PE Format](https://docs.microsoft.com/en-us/windows/desktop/debug/pe-format)

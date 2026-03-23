@@ -5,7 +5,7 @@ toc: true
 tags: ['Compilers']
 ---
 
-# Basics
+## Basics
 
 ```c
 //a.c
@@ -31,6 +31,7 @@ int main() {
     return myadd();
 }
 ```
+
 ```shell
 >cl /c a.c
 >link /dump /symbols a.obj
@@ -38,6 +39,7 @@ int main() {
 009 00000050 SECT3  notype ()    External     | myadd2
 00A 000000A0 SECT3  notype ()    External     | main
 ```
+
 The **link /dump** command dumps the symbols that are part of the obj file. The
 compiler cannot optimize myadd2 because technically these unused functions can
 be accessed by functions in other libs.
@@ -67,7 +69,7 @@ SECTION HEADER #3
 All 3 functions are grouped inside the **.text$mn** section and hence **link
 /dump /section:.text$mn** will have only one header.
 
-# Elimination of unused static functions
+## Elimination of unused static functions
 
 ```C
 //a.c
@@ -93,16 +95,18 @@ int main() {
     return myadd();
 }
 ```
+
 ```shell
 >cl /c a.c
 >link /dump /symbols a.obj
 008 00000000 SECT3  notype ()    External     | myadd
 009 00000050 SECT3  notype ()    External     | main
 ```
+
 Since myadd2 is made static the compiler can for sure know it cannot be used by
 other functions external to this .obj so it removed that function.
 
-# COMDAT and /Gy switch
+## COMDAT and /Gy switch
 
 With /Gy switch the compiler now spits 3 more headers in .text$mn. This is also
 called COMDAT and will be helpful for linker to eliminate dead code more easily.
@@ -134,6 +138,7 @@ int main() {
     return myadd();
 }
 ```
+
 ```shell
 >cl /c /Gy a.c
 >link /dump /section:.text$mn a.obj
@@ -188,7 +193,7 @@ SECTION HEADER #5
           8C .text$mn
 ```
 
-# Elimination of unused functions by the linker
+## Elimination of unused functions by the linker
 
 The complete elimination of unused functions in a program can only be done by
 the linker because it is the only component which can see through all the
@@ -232,6 +237,7 @@ int main() {
     return myadd();
 }
 ```
+
 ```shell
 >cl /c a.c b.c main.c
 This will produce a.obj, b.obj, main.obj files.
@@ -254,6 +260,7 @@ the .map file for the above case we still see myadd2 and sub.
 0001:000000a0       sub                        00000001400010a0 f   b.obj
 0001:000000e0       main                       00000001400010e0 f   main.obj
 ```
+
 The reason for this is the linker, as I said before, works at the section level not the
 function level. To help the linker in this case, we need to compile the objs with
 /Gy flag which as we saw before will produce the functions in their own COMDAT
@@ -269,7 +276,6 @@ and hence the linker can eliminate unused functions
 0001:00000000       myadd                      0000000140001000 f   a.obj
 0001:00000040       main                       0000000140001040 f   main.obj
 ```
+
 Now we can see the binary indeed optimized to not contain myadd2 and sub
 functions
-
-

@@ -5,11 +5,10 @@ toc: true
 tags: ['Rust']
 ---
 
-# Rust: Function Lifetime Elision Rules
+## Rust: Function Lifetime Elision Rules
 
 Lifetime elision in functions
-https://doc.rust-lang.org/reference/lifetime-elision.html#lifetime-elision-in-functions
-
+<https://doc.rust-lang.org/reference/lifetime-elision.html#lifetime-elision-in-functions>
 
 ```rust
 // Below is how the Rust compiler assigns the lifetime parameters implicitly.

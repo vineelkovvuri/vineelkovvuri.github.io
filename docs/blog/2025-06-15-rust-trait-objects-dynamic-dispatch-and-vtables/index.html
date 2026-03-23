@@ -56,14 +56,14 @@
             <h2>Table of Contents</h2>
             <nav id="TableOfContents">
   <ul>
-    <li><a href="#rust-trait-objects-dynamic-dispatch-and-vtables">Rust: Trait Objects, Dynamic Dispatch and VTables</a>
+    <li>
       <ul>
-        <li>
+        <li><a href="#rust-trait-objects-dynamic-dispatch-and-vtables">Rust: Trait Objects, Dynamic Dispatch and VTables</a>
           <ul>
             <li><a href="#why-dyn-t-why-not-t">Why <code>&amp;dyn T</code> why not <code>&amp;T</code>?</a></li>
+            <li><a href="#how-is-dynamic-dispatch-achieved-with-trait-objects">How is dynamic dispatch achieved with trait objects?</a></li>
           </ul>
         </li>
-        <li><a href="#how-is-dynamic-dispatch-achieved-with-trait-objects">How is dynamic dispatch achieved with trait objects?</a></li>
       </ul>
     </li>
   </ul>
@@ -73,7 +73,7 @@
 
 
 <main>
-<h1 id="rust-trait-objects-dynamic-dispatch-and-vtables">Rust: Trait Objects, Dynamic Dispatch and VTables</h1>
+<h2 id="rust-trait-objects-dynamic-dispatch-and-vtables">Rust: Trait Objects, Dynamic Dispatch and VTables</h2>
 <p>Even though Rust does not support the traditional inheritance/virtual function to
 enable dynamic dispatch(runtime polymorphism), it does support trait-based
 runtime polymorphism, which may seem drastically different superficially when
@@ -91,7 +91,7 @@ implements say an interface I, usually in C# we do the below</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>{<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>istack.push(...);<span style="color:#bbb">
 </span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
-</span></span></span></code></pre></div><p>both examples look the same except in the function signature. In Rust <code>istack: IStack</code> does not make sense because <code>IStack</code> does not have a size defined at compile
+</span></span></span></code></pre></div><p>both examples look the same except in the function signature. In Rust <code>istack: IStack</code> does not make sense because <code>IStack</code> does not have a size defined at compile
 time. So Rust instead takes only reference to the Trait which is a fat pointer
 whose size is defined at compile time.</p>
 <h3 id="why-dyn-t-why-not-t">Why <code>&amp;dyn T</code> why not <code>&amp;T</code>?</h3>
@@ -104,7 +104,7 @@ whose size is defined at compile time.</p>
 </li>
 <li>Introducing <code>dyn</code> made the language more consistent and future-proof.</li>
 </ul>
-<h2 id="how-is-dynamic-dispatch-achieved-with-trait-objects">How is dynamic dispatch achieved with trait objects?</h2>
+<h3 id="how-is-dynamic-dispatch-achieved-with-trait-objects">How is dynamic dispatch achieved with trait objects?</h3>
 <p>Below we have two structs <code>HardBook</code> and <code>EBook</code> and trait called <code>FileType</code>
 which will be implemented by both the structs. Below code explains how the
 function <code>print_file_type()</code> which takes trait object performs dynamic

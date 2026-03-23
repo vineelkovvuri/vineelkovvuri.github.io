@@ -5,7 +5,7 @@ toc: true
 tags: ["Rust"]
 ---
 
-# Rust: Deref vs AsRef Traits
+## Rust: Deref vs AsRef Traits
 
 Rust is definitely not an easy language that can be picked up over a weekend.
 It embodies some very new ideas.
@@ -13,6 +13,7 @@ It embodies some very new ideas.
 In Rust, most of the conversions are not implicit for a good reason. There are
 few implicit conversions(also called coercions) but all of them are well
 defined and primarily done by the compiler. For example, below is the list.
+
 ```rust
     // Implicit coercion from &T to *const T
     let x = 10;
@@ -30,6 +31,7 @@ defined and primarily done by the compiler. For example, below is the list.
     let inc: fn(u32) -> u32 = |x| x + 1;
 
 ```
+
 There is one coercion which can be dictated by the user for user defined types
 by implementing `Deref` trait. Rust compiler tries to leverage the `Deref` trait
 implementation when it encounters a dereferencing expression like `x.`, `*x` or

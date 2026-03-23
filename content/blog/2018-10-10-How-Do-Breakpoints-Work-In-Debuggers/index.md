@@ -5,7 +5,7 @@ toc: true
 tags: ['Debuggers', 'WinDbg']
 ---
 
-# Introduction
+## Introduction
 
 It's been a while, I have got a chance to blog about low-level stuff. In this
 article, I am going to explain how breakpoints work in debuggers. I am assuming
@@ -13,7 +13,7 @@ the reader is already familiar with what a breakpoint is and how to set it in
 your debugger of choice. The goal of this post is to explain the interplay
 between Debugger, Debuggee, Operating System and the CPU.
 
-# Breakpoints Theory
+## Breakpoints Theory
 
 To get there, we have to ask ourselves  What does it mean by debugging a
 program/process?. To keep it simple, It's the controlled execution of a program
@@ -65,7 +65,7 @@ instructions garbled by the debugger with random 0xCC instructions when we
 want to examine. Now fasten your seat belts and let's see all of this in
 action!
 
-# Breakpoints Practice
+## Breakpoints Practice
 
 Let's consider the above program and see what happens when we set the
 breakpoint on the main and second printf lines in WinDbg. Once we set the
@@ -80,6 +80,7 @@ running.  The below screenshot shows the contents of main function at printf
 line before hitting go command. So as expected no change at the push
 mnemonic before call instruction (just windbg kept a note of the
 breakpoints).
+
 ```C
 #include <stdio.h>
 int main () {
@@ -95,6 +96,7 @@ int main () {
      return 0;
 }
 ```
+
 ![Breakpoints in debuggers](3.Breakpoints-in-Debuggers.png)
 
 ![Breakpoints in debuggers](4.Breakpoints-in-Debuggers.png)
@@ -113,4 +115,3 @@ for example, when the program is running and we want to forcefully break in by
 hitting toolbar break button or ctrl+break etc then debuggers in Windows uses
 [CreateRemoteThread](https://msdn.microsoft.com/en-us/library/windows/desktop/ms682437(v=vs.85).aspx) Win32 API to create a new remote thread in the debuggee and calls the
 ntdll!DbgBreakPoint.
-

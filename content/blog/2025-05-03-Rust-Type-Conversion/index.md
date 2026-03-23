@@ -5,7 +5,7 @@ toc: true
 tags: ["Rust"]
 ---
 
-# Rust: Type Conversion - From one type to another
+## Rust: Type Conversion - From one type to another
 
 Type conversion is a fundamental operation in programming, allowing data to be
 transformed from one representation to another. In Rust, this is often done
@@ -18,11 +18,11 @@ uniform APIs, and better composability**.
 
 ---
 
-## **1. The Basics: Converting Strings to Numbers**
+### **1. The Basics: Converting Strings to Numbers**
 
 A common conversion is parsing a string into a number. Let’s see how Rust and C# handle this differently.
 
-### **C#’s Approach: Static `Parse()` Methods**
+#### **C#’s Approach: Static `Parse()` Methods**
 
 In C#, parsing is done via **static methods** on the target type:
 
@@ -37,7 +37,7 @@ double y = double.Parse(input); // Convert to double
   - Doesn’t support method chaining (e.g., `input.Trim().Parse()` isn’t possible).
   - Each type defines its own `Parse()` method, leading to inconsistency.
 
-### **Rust’s Approach: The `FromStr` Trait**
+#### **Rust’s Approach: The `FromStr` Trait**
 
 In Rust, parsing is done via the **`FromStr` trait**, implemented on the **input type (`&str`)**:
 
@@ -54,11 +54,11 @@ let y: f64 = input.parse().unwrap(); // Convert to f64
 
 ---
 
-## **2. Extending Rust’s Approach: Custom Type Conversions**
+### **2. Extending Rust’s Approach: Custom Type Conversions**
 
 Rust’s trait system allows us to define **custom conversions** between types. Let’s implement a `FromMyType` trait to convert between two structs.
 
-### **Defining a Conversion Trait**
+#### **Defining a Conversion Trait**
 
 ```rust
 struct MyType {
@@ -85,7 +85,7 @@ impl FromMyType for MyType2 {
 }
 ```
 
-### **Adding a Helper Method for Chaining**
+#### **Adding a Helper Method for Chaining**
 
 To make conversion more ergonomic, we can add a `.convert()` method to `MyType`:
 
@@ -100,7 +100,7 @@ impl MyType {
 }
 ```
 
-### **Usage Example**
+#### **Usage Example**
 
 ```rust
 fn main() {
@@ -116,9 +116,9 @@ fn main() {
 
 ---
 
-## **3. Why Rust’s Approach is Powerful**
+### **3. Why Rust’s Approach is Powerful**
 
-### **1. Method Chaining**
+#### **1. Method Chaining**
 
 Rust’s design allows **fluent APIs**:
 
@@ -133,12 +133,12 @@ string input = " 123 ";
 int num = int.Parse(input.Trim());
 ```
 
-### **2. Uniform API**
+#### **2. Uniform API**
 
 - In Rust, **all conversions use `.parse()` or `.convert()`**.
 - In C#, each type has its own method (`int.Parse`, `double.Parse`, `DateTime.Parse`).
 
-### **3. Works with Generics**
+#### **3. Works with Generics**
 
 Rust’s traits enable **generic functions** that work with any convertible type:
 
@@ -152,7 +152,7 @@ In C#, you’d need **reflection** or **overloads** for each type.
 
 ---
 
-## **4. When to Use Which Approach?**
+### **4. When to Use Which Approach?**
 
 | **Rust’s Trait-Based Conversion** | **C#’s Static Method Approach**                    |
 | --------------------------------- | -------------------------------------------------- |
@@ -163,7 +163,7 @@ In C#, you’d need **reflection** or **overloads** for each type.
 
 ---
 
-## **Final Thoughts**
+### **Final Thoughts**
 
 Rust’s trait-based type conversion might seem complex at first, but it enables:
 

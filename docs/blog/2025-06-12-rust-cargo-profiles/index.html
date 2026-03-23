@@ -56,12 +56,16 @@
             <h2>Table of Contents</h2>
             <nav id="TableOfContents">
   <ul>
-    <li><a href="#rust-cargo-profiles">Rust: Cargo: Profiles</a>
+    <li>
       <ul>
-        <li><a href="#example-demonstration">Example Demonstration</a></li>
-        <li><a href="#digging-deeper-with---verbose">Digging Deeper with <code>--verbose</code></a></li>
-        <li><a href="#what-about-workspaces">What About Workspaces?</a></li>
-        <li><a href="#conclusion">Conclusion</a></li>
+        <li><a href="#rust-cargo-profiles">Rust: Cargo: Profiles</a>
+          <ul>
+            <li><a href="#example-demonstration">Example Demonstration</a></li>
+            <li><a href="#digging-deeper-with---verbose">Digging Deeper with <code>--verbose</code></a></li>
+            <li><a href="#what-about-workspaces">What About Workspaces?</a></li>
+            <li><a href="#conclusion">Conclusion</a></li>
+          </ul>
+        </li>
       </ul>
     </li>
   </ul>
@@ -71,7 +75,7 @@
 
 
 <main>
-<h1 id="rust-cargo-profiles">Rust: Cargo: Profiles</h1>
+<h2 id="rust-cargo-profiles">Rust: Cargo: Profiles</h2>
 <p>Cargo has a concept called
 <a href="https://doc.rust-lang.org/cargo/reference/profiles.html"><strong>profiles</strong></a>, mainly
 <code>dev</code> and <code>release</code> (in the .NET/Windows world, these are equivalent to <code>debug</code>
@@ -90,7 +94,7 @@ normal library crates(excluding other types of library crates). When Cargo
 builds the binary crate, it compiles all dependent library crates using the
 binary crate&rsquo;s profile settings.</p>
 <hr>
-<h2 id="example-demonstration">Example Demonstration</h2>
+<h3 id="example-demonstration">Example Demonstration</h3>
 <p>To verify this, I ran a small experiment.</p>
 <p>I created a simple library crate that intentionally causes an integer overflow.
 Normally, Rust panics on overflow in debug builds. You can disable this behavior
@@ -150,7 +154,7 @@ them in the binary — the panic does <strong>not</strong> occur:</p>
 </span></span><span style="display:flex;"><span>    Finished dev [unoptimized + debuginfo] target(s) in 0.01s
 </span></span><span style="display:flex;"><span>     Running `target\debug\myexe.exe`
 </span></span></code></pre></div><hr>
-<h2 id="digging-deeper-with---verbose">Digging Deeper with <code>--verbose</code></h2>
+<h3 id="digging-deeper-with---verbose">Digging Deeper with <code>--verbose</code></h3>
 <p>To understand what’s happening under the hood, we can inspect the compiler flags using <code>cargo build --verbose</code>.</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cmd" data-lang="cmd"><span style="display:flex;"><span>cargo clean
 </span></span><span style="display:flex;"><span>cargo build --verbose
@@ -165,13 +169,13 @@ the binary crate’s Cargo.toml explicitly had <code>overflow-checks=true</code>
 that the binary crate&rsquo;s profile settings <strong>are applied across the board</strong>, even
 to dependent libraries.</p>
 <hr>
-<h2 id="what-about-workspaces">What About Workspaces?</h2>
+<h3 id="what-about-workspaces">What About Workspaces?</h3>
 <p>The behavior doesn&rsquo;t change even if the library crate is inside the same
 workspace. The profile settings declared at the workspace level mainly apply to
 test targets, examples, benchmarks, and binaries. Regular libraries will still
 inherit the settings from the crate that depends on them.</p>
 <hr>
-<h2 id="conclusion">Conclusion</h2>
+<h3 id="conclusion">Conclusion</h3>
 <p>Library-specific profile settings are mostly <strong>ignored</strong> during normal
 compilation. The consuming binary crate&rsquo;s profile dictates how all dependencies
 are compiled. If you need strict guarantees for how a library is compiled (e.g.,

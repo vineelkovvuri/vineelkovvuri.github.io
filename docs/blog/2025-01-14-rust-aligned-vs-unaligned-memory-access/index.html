@@ -56,7 +56,11 @@
             <h2>Table of Contents</h2>
             <nav id="TableOfContents">
   <ul>
-    <li><a href="#rust-rust-aligned-vs-unaligned-memory-access">Rust: Rust Aligned vs Unaligned Memory Access</a></li>
+    <li>
+      <ul>
+        <li><a href="#rust-rust-aligned-vs-unaligned-memory-access">Rust: Rust Aligned vs Unaligned Memory Access</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
         </aside>
@@ -64,7 +68,7 @@
 
 
 <main>
-<h1 id="rust-rust-aligned-vs-unaligned-memory-access">Rust: Rust Aligned vs Unaligned Memory Access</h1>
+<h2 id="rust-rust-aligned-vs-unaligned-memory-access">Rust: Rust Aligned vs Unaligned Memory Access</h2>
 <p>Unlike C, Rust enforces some rules when trying to access memory. Mainly it
 requires consideration of the alignment of the data that we are trying to read.
 The below code will illustrate the details.</p>

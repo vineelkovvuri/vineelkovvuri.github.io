@@ -56,12 +56,13 @@
             <h2>Table of Contents</h2>
             <nav id="TableOfContents">
   <ul>
-    <li><a href="#introduction">Introduction</a></li>
-    <li><a href="#how-signed-ness-is-represented-in-the-hardware">How signed-ness is represented in the hardware?</a></li>
-    <li><a href="#how-signed-ness-is-interpreted-in-assembly">How signed-ness is interpreted in assembly?</a></li>
-    <li><a href="#signed-vs-unsigned-integers-in-c">Signed vs Unsigned integers in C</a></li>
-    <li><a href="#integer-arithmetic-conversions-in-c">Integer Arithmetic Conversions in C</a>
+    <li>
       <ul>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#how-signed-ness-is-represented-in-the-hardware">How signed-ness is represented in the hardware?</a></li>
+        <li><a href="#how-signed-ness-is-interpreted-in-assembly">How signed-ness is interpreted in assembly?</a></li>
+        <li><a href="#signed-vs-unsigned-integers-in-c">Signed vs Unsigned integers in C</a></li>
+        <li><a href="#integer-arithmetic-conversions-in-c">Integer Arithmetic Conversions in C</a></li>
         <li><a href="#rank">Rank</a></li>
         <li><a href="#integer-promotions">Integer Promotions</a></li>
         <li><a href="#usual-arithmetic-conversions">Usual arithmetic conversions</a>
@@ -72,11 +73,8 @@
           </ul>
         </li>
         <li><a href="#integer-conversion-matrix-on-llp64-programming-model">Integer conversion matrix on LLP64 Programming Model</a></li>
-      </ul>
-    </li>
-    <li><a href="#references">References</a></li>
-    <li><a href="#binary-representation">Binary representation</a>
-      <ul>
+        <li><a href="#references">References</a></li>
+        <li><a href="#binary-representation">Binary representation</a></li>
         <li><a href="#unsigned-numbers">unsigned numbers</a></li>
         <li><a href="#signed-numbers">signed numbers</a></li>
       </ul>
@@ -88,7 +86,7 @@
 
 
 <main>
-<h1 id="introduction">Introduction</h1>
+<h2 id="introduction">Introduction</h2>
 <p>This article is about understanding how integer conversions happen in C
 language. The C standard defines the integer conversion rules agnostic to
 any specific machine architecture. This also makes things more complicated
@@ -108,20 +106,19 @@ architecture, ABI (Application Binary Interface) and the programming model,
 the size of these basic types are determined. Windows x64 follows
 LLP64(meaning only &rsquo;long long&rsquo; and pointer size are 64 bit wide), So below
 are the sizes of the standard types that we are sticking to in this article.</p>
-<pre><code>Type                | Size
---------------------+---------
-signed char         | 1 bytes
-unsigned char       | 1 bytes
-signed short        | 2 bytes
-unsigned short      | 2 bytes
-signed int          | 4 bytes
-unsigned int        | 4 bytes
-signed long         | 4 bytes
-unsigned long       | 4 bytes
-signed long long    | 8 bytes
-unsigned long long  | 8 bytes
-</code></pre>
-<p>Also, The specification leaves other aspects of C language definition
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span><span style="color:#888">Type                | Size
+</span></span></span><span style="display:flex;"><span><span style="color:#888">--------------------+---------
+</span></span></span><span style="display:flex;"><span><span style="color:#888">signed char         | 1 bytes
+</span></span></span><span style="display:flex;"><span><span style="color:#888">unsigned char       | 1 bytes
+</span></span></span><span style="display:flex;"><span><span style="color:#888">signed short        | 2 bytes
+</span></span></span><span style="display:flex;"><span><span style="color:#888">unsigned short      | 2 bytes
+</span></span></span><span style="display:flex;"><span><span style="color:#888">signed int          | 4 bytes
+</span></span></span><span style="display:flex;"><span><span style="color:#888">unsigned int        | 4 bytes
+</span></span></span><span style="display:flex;"><span><span style="color:#888">signed long         | 4 bytes
+</span></span></span><span style="display:flex;"><span><span style="color:#888">unsigned long       | 4 bytes
+</span></span></span><span style="display:flex;"><span><span style="color:#888">signed long long    | 8 bytes
+</span></span></span><span style="display:flex;"><span><span style="color:#888">unsigned long long  | 8 bytes
+</span></span></span></code></pre></div><p>Also, The specification leaves other aspects of C language definition
 undefined and this leave room for optimizations for compilers. For example,
 the result of signed arithmetic leading to overflow/underflow is not defined
 because the specification predates to the machine architectures when 2&rsquo;s
@@ -129,7 +126,7 @@ complement representation for -ve numbers is not universal, even though
 virtually every modern architecture now uses 2&rsquo;s complement representation
 for -ve numbers. Hence the result of unsigned overflow/underflow is well
 defined but not signed overflow/underflow!</p>
-<h1 id="how-signed-ness-is-represented-in-the-hardware">How signed-ness is represented in the hardware?</h1>
+<h2 id="how-signed-ness-is-represented-in-the-hardware">How signed-ness is represented in the hardware?</h2>
 <p>Processors do have the concept of signed/unsigned, but unlike in C language,
 where this information is baked into the variable definition, processor
 registers do not hold the type/signed/unsigned information. After all,
@@ -146,7 +143,7 @@ result say -5 then destination register will be written 11111011(2&rsquo;s
 complement representation of -5). &lsquo;add&rsquo; and &lsquo;sub&rsquo; instructions themselves
 are not affected by signed and unsigned numbers because of modulo
 arithmetic.</p>
-<h1 id="how-signed-ness-is-interpreted-in-assembly">How signed-ness is interpreted in assembly?</h1>
+<h2 id="how-signed-ness-is-interpreted-in-assembly">How signed-ness is interpreted in assembly?</h2>
 <p>In one of the above paragraphs, we said, processor registers does not hold
 any signed/unsigned type information with them and it&rsquo;s up to the
 instructions to interpret the data as either signed or unsigned. But the
@@ -216,7 +213,7 @@ be not equal to OF</p>
 </span></span><span style="display:flex;"><span>                        numbers representable in a byte OF = <span style="color:#00d;font-weight:bold">0</span>
 </span></span></code></pre></div><p>That is why jl is defined as SF != OF, When this is true it means var1 &lt; var2
 even if var1 and var2 are signed(meaning -ve numbers)</p>
-<h1 id="signed-vs-unsigned-integers-in-c">Signed vs Unsigned integers in C</h1>
+<h2 id="signed-vs-unsigned-integers-in-c">Signed vs Unsigned integers in C</h2>
 <p>Signed numbers are the way -ve and +ve numbers are represented and unsigned
 numbers are the way in which only +ve numbers are represented. If let&rsquo;s say
 a data type has 1 byte of storage then the possible bit representation will
@@ -228,7 +225,7 @@ use 2&rsquo;s complement notation to represent -ve numbers. The take away here i
 if we include -ve numbers in the available 255 slots then we will represent
 from -128 to 127. According to 2&rsquo;s complement notation -128 is represented
 as 0b10000000(0x80) whereas 127 is represented as 0b01111111 (0x7F).</p>
-<h1 id="integer-arithmetic-conversions-in-c">Integer Arithmetic Conversions in C</h1>
+<h2 id="integer-arithmetic-conversions-in-c">Integer Arithmetic Conversions in C</h2>
 <p>C language defines below set of rules to convert the arguments in an expression.</p>
 <h2 id="rank">Rank</h2>
 <p>Every integer type has an integer conversion rank defined as follows:</p>
@@ -305,14 +302,13 @@ according to these rules the expression will have the type unsigned long
 long so statements like below will result in unexpected behavior. Since the
 var1+var2 is an unsigned expression the compiler will enforce it by using a
 unsigned jump instruction called jae instead of jge instruction.</p>
-<pre><code>                .----------------This bit will sign extend to all 1's
-                11111011            signed short a = -5
-        1111111111111011            unsigned int a = -5
-      + 0000000000001010            unsigned int b = 10
-      = 0000000000000101            unsigned int
-Figure 1: signed number converted to unsigned numbers
-</code></pre>
-<p>Whenever a signed data type has to be converted to unsigned data type the
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span><span style="color:#888">                .----------------This bit will sign extend to all 1&#39;s
+</span></span></span><span style="display:flex;"><span><span style="color:#888">                11111011            signed short a = -5
+</span></span></span><span style="display:flex;"><span><span style="color:#888">        1111111111111011            unsigned int a = -5
+</span></span></span><span style="display:flex;"><span><span style="color:#888">      + 0000000000001010            unsigned int b = 10
+</span></span></span><span style="display:flex;"><span><span style="color:#888">      = 0000000000000101            unsigned int
+</span></span></span><span style="display:flex;"><span><span style="color:#888">Figure 1: signed number converted to unsigned numbers
+</span></span></span></code></pre></div><p>Whenever a signed data type has to be converted to unsigned data type the
 absolute value remains unchanged because sign extension will be done using
 movsx instruction. So if a variable is type signed short with value -10,
 when this variable is sign extended to unsigned int the value of even after
@@ -365,18 +361,17 @@ with exp1 and might result in an unexpected result.</p>
 number(smaller) and signed number in an expression and the singed storage
 can hold the unsigned number entirely, then by this rule, the unsigned
 number gets converted to signed number.</p>
-<pre><code>                .----------------The value is not sign extended in case of
-                |                unsigned numbers because 1 here does not
-                |                mean anything special except some large +ve
-                V                value
-                00000101            unsigned short a = 5
-        0000000011111011            signed int a = 5
-      + 1111111111110110            signed int b = -10
-      = 1111111111111011            signed int
-
-Figure 2: unsigned number converted to signed numbers
-</code></pre>
-<p>For example:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span><span style="color:#888">                .----------------The value is not sign extended in case of
+</span></span></span><span style="display:flex;"><span><span style="color:#888">                |                unsigned numbers because 1 here does not
+</span></span></span><span style="display:flex;"><span><span style="color:#888">                |                mean anything special except some large +ve
+</span></span></span><span style="display:flex;"><span><span style="color:#888">                V                value
+</span></span></span><span style="display:flex;"><span><span style="color:#888">                00000101            unsigned short a = 5
+</span></span></span><span style="display:flex;"><span><span style="color:#888">        0000000011111011            signed int a = 5
+</span></span></span><span style="display:flex;"><span><span style="color:#888">      + 1111111111110110            signed int b = -10
+</span></span></span><span style="display:flex;"><span><span style="color:#888">      = 1111111111111011            signed int
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#a61717;background-color:#e3d2d2">
+</span></span></span><span style="display:flex;"><span><span style="color:#a61717;background-color:#e3d2d2"></span><span style="color:#888">Figure 2: unsigned number converted to signed numbers
+</span></span></span></code></pre></div><p>For example:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#888;font-weight:bold">unsigned</span> <span style="color:#888;font-weight:bold">int</span> var1 = <span style="color:#00d;font-weight:bold">100</span>;
 </span></span><span style="display:flex;"><span><span style="color:#888;font-weight:bold">signed</span> <span style="color:#888;font-weight:bold">long</span> <span style="color:#888;font-weight:bold">long</span> var2 = -<span style="color:#00d;font-weight:bold">10</span>;
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">if</span> (var1 + var2 &lt; <span style="color:#00d;font-weight:bold">0</span>) { <span style="color:#888">//resulting in signed long long expression
@@ -511,7 +506,7 @@ rules. For example:</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#888">|               |        |                     |                                                                              long    |
 </span></span></span><span style="display:flex;"><span><span style="color:#888">+---------------+--------+---------------------+--------------------------------------------------------------------------------------+
 </span></span></span></code></pre></div><p>Figure 4: Resulting type of the expression</p>
-<h1 id="references">References</h1>
+<h2 id="references">References</h2>
 <ol>
 <li><a href="https://wiki.sei.cmu.edu/confluence/display/c/INT02-C.+Understand+integer+conversion+rules">INT02-C. Understand integer conversion rules</a></li>
 <li><a href="http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf">C99 Standard</a></li>
@@ -524,7 +519,7 @@ rules. For example:</p>
 <li><a href="https://blogs.msdn.microsoft.com/oldnewthing/20050131-00/?p=36563">Why did the Win64 team choose the LLP64 model?</a></li>
 <li><a href="https://docs.microsoft.com/en-us/windows/desktop/winprog64/abstract-data-models">Abstract Data Models</a></li>
 </ol>
-<h1 id="binary-representation">Binary representation</h1>
+<h2 id="binary-representation">Binary representation</h2>
 <h2 id="unsigned-numbers">unsigned numbers</h2>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span><span style="color:#888">000|0x0 |00000000 # 064|0x40|01000000 # 128|0x80|10000000 # 192|0xc0|11000000
 </span></span></span><span style="display:flex;"><span><span style="color:#888">001|0x1 |00000001 # 065|0x41|01000001 # 129|0x81|10000001 # 193|0xc1|11000001

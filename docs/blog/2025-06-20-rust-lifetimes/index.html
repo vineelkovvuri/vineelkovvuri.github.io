@@ -56,7 +56,11 @@
             <h2>Table of Contents</h2>
             <nav id="TableOfContents">
   <ul>
-    <li><a href="#rust-lifetimes">Rust: Lifetimes</a></li>
+    <li>
+      <ul>
+        <li><a href="#rust-lifetimes">Rust: Lifetimes</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
         </aside>
@@ -64,7 +68,7 @@
 
 
 <main>
-<h1 id="rust-lifetimes">Rust: Lifetimes</h1>
+<h2 id="rust-lifetimes">Rust: Lifetimes</h2>
 <p>&ldquo;Lifetimes, Lifetimes, Lifetimes. I don&rsquo;t like it. I avoid it. But Lifetimes
 likes me. I cannot avoid it&rdquo; - <a href="https://www.youtube.com/shorts/zE5NDOCSm4g">KGF 2</a></p>
 <p>Jokes apart, Rust lifetimes are notoriously difficult to master. I have to
@@ -96,8 +100,7 @@ We’ll discuss them in more detail later.</p>
 <p><strong>Tip 1:</strong> Rust Analyzer in VS Code helps display inlay hints for
 compiler-inferred lifetimes. You can enable this by going to <strong>Settings &gt;
 Extensions &gt; Rust Analyzer &gt; Inlay Hints &gt; Lifetime Elision Hints</strong>. This can
-be quite handy at times.</p></blockquote>
-<blockquote>
+be quite handy at times.</p>
 <p><strong>Tip 2:</strong> Always rely on <code>cargo check</code> to get detailed information about any
 lifetime parameter violations.</p></blockquote>
 <p>Now let&rsquo;s look at some cases to understand the lifetimes better.</p>
@@ -224,8 +227,7 @@ struct’s fields can live as long as the input parameters.</p>
 <p>One thing to note here is that the output parameter is not a reference itself,
 unlike in our previous examples. However, the output parameter <strong>does</strong>
 require lifetime information to manage its fields. So, we are <strong>not</strong>
-returning <code>&amp;BookView</code>.</p></blockquote>
-<blockquote>
+returning <code>&amp;BookView</code>.</p>
 <p>The lifetime parameter of the output is <strong>only</strong> inferred when there is
 exactly one input to the function. When the function has more than one
 parameter, even if the lifetimes of those parameters are explicitly specified,

@@ -56,12 +56,11 @@
             <h2>Table of Contents</h2>
             <nav id="TableOfContents">
   <ul>
-    <li><a href="#rust-toolchains-vs-targets">Rust: Toolchains vs Targets</a>
+    <li>
       <ul>
-        <li>
+        <li><a href="#rust-toolchains-vs-targets">Rust: Toolchains vs Targets</a>
           <ul>
             <li><a href="#can-i-install-other-toolchains-on-windows">Can I install other toolchains on Windows?</a></li>
-            <li><a href="#conclusion">Conclusion</a></li>
           </ul>
         </li>
       </ul>
@@ -73,7 +72,7 @@
 
 
 <main>
-<h1 id="rust-toolchains-vs-targets">Rust: Toolchains vs Targets</h1>
+<h2 id="rust-toolchains-vs-targets">Rust: Toolchains vs Targets</h2>
 <p>I&rsquo;ve been using Rust for a year but never took the time to understand the
 difference between a <em>toolchain</em> and a <em>target</em>. For most people, this
 distinction isn&rsquo;t necessary—but I work on UEFI, which is not a typical
@@ -259,7 +258,7 @@ This is the default behavior.</p>
 <li><code>x86_64-unknown-linux-gnu</code></li>
 </ul>
 <p>Now, back to the question—can we install, say, <code>stable-aarch64-apple-darwin</code> on a Windows machine?</p>
-<p>The short answer: <strong>Yes</strong>, you can install it <code>rustup toolchain install stable-aarch64-apple-darwin</code>. But the long answer is: you <strong>can&rsquo;t run</strong> the
+<p>The short answer: <strong>Yes</strong>, you can install it <code>rustup toolchain install stable-aarch64-apple-darwin</code>. But the long answer is: you <strong>can&rsquo;t run</strong> the
 binaries in that toolchain (like <code>rustc</code>) on Windows because they&rsquo;re not PE
 executables. <code>rustup</code> will even warn you:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cmd" data-lang="cmd"><span style="display:flex;"><span>C:<span style="color:#369;font-style:italic">\</span><span style="color:#888">&gt;rustup toolchain install stable-aarch64-apple-darwin</span>
@@ -267,7 +266,7 @@ executables. <code>rustup</code> will even warn you:</p>
 </span></span><span style="display:flex;"><span>warning: toolchain &#39;stable-aarch64-apple-darwin&#39; may not be able to run on this system.
 </span></span><span style="display:flex;"><span>warning: If you meant to build software to target that platform, perhaps try `rustup target add aarch64-apple-darwin` instead?
 </span></span></code></pre></div><hr>
-<h3 id="conclusion">Conclusion</h3>
+<h4 id="conclusion">Conclusion</h4>
 <p>To summarize: <strong>a toolchain</strong> refers to the <code>rustc</code> compiler that can run on the
 host, whereas <strong>a target</strong> refers to the Rust libraries used for cross-compiling
 to other platforms (including UEFI).</p>
@@ -276,7 +275,7 @@ to other platforms (including UEFI).</p>
 <li><strong>Target</strong>: The platform you&rsquo;re compiling <em>for</em>—each target has its own <code>.rlib</code> files for <code>core</code>, <code>std</code>, etc.</li>
 <li><strong>Channels</strong> (<code>stable</code>, <code>beta</code>, <code>nightly</code>) are versions of Rust, each of which can have toolchains and targets.</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>Channels (stable/beta/nightly)
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Channels (stable/beta/nightly)
 </span></span><span style="display:flex;"><span>└── Toolchains (x86_64-pc-windows-msvc / aarch64-apple-darwin)
 </span></span><span style="display:flex;"><span>    └── Targets (x86_64-pc-windows-msvc / x86_64-unknown-uefi / ...)
 </span></span></code></pre></div><p>The available targets can be seen on the <a href="https://rust-lang.github.io/rustup-components-history/">rustup components history

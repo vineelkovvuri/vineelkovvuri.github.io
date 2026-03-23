@@ -5,7 +5,7 @@ toc: true
 tags: ["Rust"]
 ---
 
-# Rust: Cargo: Profiles
+## Rust: Cargo: Profiles
 
 Cargo has a concept called
 [**profiles**](https://doc.rust-lang.org/cargo/reference/profiles.html), mainly
@@ -29,7 +29,7 @@ binary crate's profile settings.
 
 ---
 
-## Example Demonstration
+### Example Demonstration
 
 To verify this, I ran a small experiment.
 
@@ -116,7 +116,7 @@ D:\repos\testing\myexe>cargo run
 
 ---
 
-## Digging Deeper with `--verbose`
+### Digging Deeper with `--verbose`
 
 To understand what’s happening under the hood, we can inspect the compiler flags using `cargo build --verbose`.
 
@@ -142,7 +142,7 @@ to dependent libraries.
 
 ---
 
-## What About Workspaces?
+### What About Workspaces?
 
 The behavior doesn't change even if the library crate is inside the same
 workspace. The profile settings declared at the workspace level mainly apply to
@@ -151,7 +151,7 @@ inherit the settings from the crate that depends on them.
 
 ---
 
-## Conclusion
+### Conclusion
 
 Library-specific profile settings are mostly **ignored** during normal
 compilation. The consuming binary crate's profile dictates how all dependencies
@@ -160,4 +160,3 @@ turning on or off overflow checks), you'll have to enforce those via build
 scripts, CI, or external tooling — not just Cargo profiles.
 
 Let me know if you've found any workarounds, because I’m still hunting for one!
-

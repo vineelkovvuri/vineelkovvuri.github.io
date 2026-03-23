@@ -5,7 +5,7 @@ toc: true
 tags: ["Rust"]
 ---
 
-# Rust: Toolchains vs Targets
+## Rust: Toolchains vs Targets
 
 I've been using Rust for a year but never took the time to understand the
 difference between a *toolchain* and a *target*. For most people, this
@@ -50,6 +50,7 @@ If we explore that directory, it becomes clearer:
     ├── man
     └── zsh
 ```
+
 Inside `lib/rustlib`:
 
 ```cmd
@@ -190,7 +191,6 @@ lib/rustlib
 
 Note that this new target is still added *within the same toolchain* path:`~\.rustup\toolchains\stable-x86_64-pc-windows-msvc`
 
-
 ---
 
 ### Can I install other toolchains on Windows?
@@ -229,7 +229,7 @@ warning: If you meant to build software to target that platform, perhaps try `ru
 
 ---
 
-### Conclusion
+#### Conclusion
 
 To summarize: **a toolchain** refers to the `rustc` compiler that can run on the
 host, whereas **a target** refers to the Rust libraries used for cross-compiling
@@ -239,7 +239,7 @@ to other platforms (including UEFI).
 * **Target**: The platform you're compiling *for*—each target has its own `.rlib` files for `core`, `std`, etc.
 * **Channels** (`stable`, `beta`, `nightly`) are versions of Rust, each of which can have toolchains and targets.
 
-```
+```text
 Channels (stable/beta/nightly)
 └── Toolchains (x86_64-pc-windows-msvc / aarch64-apple-darwin)
     └── Targets (x86_64-pc-windows-msvc / x86_64-unknown-uefi / ...)

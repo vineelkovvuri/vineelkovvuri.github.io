@@ -56,10 +56,14 @@
             <h2>Table of Contents</h2>
             <nav id="TableOfContents">
   <ul>
-    <li><a href="#self-hosting-rustdesk-server-on-an-azure-ubuntu-vm">Self-Hosting RustDesk Server on an Azure Ubuntu VM</a>
+    <li>
       <ul>
-        <li><a href="#setting-up-the-rustdesk-server-on-an-azure-vm">Setting Up the RustDesk Server on an Azure VM</a></li>
-        <li><a href="#configuring-the-rustdesk-client">Configuring the RustDesk Client</a></li>
+        <li><a href="#self-hosting-rustdesk-server-on-an-azure-ubuntu-vm">Self-Hosting RustDesk Server on an Azure Ubuntu VM</a>
+          <ul>
+            <li><a href="#setting-up-the-rustdesk-server-on-an-azure-vm">Setting Up the RustDesk Server on an Azure VM</a></li>
+            <li><a href="#configuring-the-rustdesk-client">Configuring the RustDesk Client</a></li>
+          </ul>
+        </li>
       </ul>
     </li>
   </ul>
@@ -69,7 +73,7 @@
 
 
 <main>
-<h1 id="self-hosting-rustdesk-server-on-an-azure-ubuntu-vm">Self-Hosting RustDesk Server on an Azure Ubuntu VM</h1>
+<h2 id="self-hosting-rustdesk-server-on-an-azure-ubuntu-vm">Self-Hosting RustDesk Server on an Azure Ubuntu VM</h2>
 <p>I&rsquo;ve been a heavy user of TeamViewer and AnyDesk for over 15 years, primarily to
 help my family and friends with troubleshooting. Over time, these tools have
 become increasingly buggy and locked behind paywalls. I recently started looking
@@ -84,7 +88,7 @@ control.</p>
 <p>In this tutorial, I’ll walk you through how to self-host a RustDesk server on an
 Azure Ubuntu VM.</p>
 <hr>
-<h2 id="setting-up-the-rustdesk-server-on-an-azure-vm">Setting Up the RustDesk Server on an Azure VM</h2>
+<h3 id="setting-up-the-rustdesk-server-on-an-azure-vm">Setting Up the RustDesk Server on an Azure VM</h3>
 <p>First, spin up a small Ubuntu VM on Azure. The private key will be downloaded
 during the VM creation process, and the public IP address can be found on the
 VM&rsquo;s <strong>Overview</strong> page. I used <code>rustdeskuser</code> as the username and connected to
@@ -116,7 +120,7 @@ allow access to those ports from inside the VM as well.</p>
 </span></span><span style="display:flex;"><span>Your public key is xxxxxxxxxxxxxxxxxxxxxxxxxxx+hBoAn8=
 </span></span></code></pre></div><p>That’s it! Your RustDesk server is now set up.</p>
 <hr>
-<h2 id="configuring-the-rustdesk-client">Configuring the RustDesk Client</h2>
+<h3 id="configuring-the-rustdesk-client">Configuring the RustDesk Client</h3>
 <p>On your client machine, open the RustDesk app and go to the settings section.
 Enter the IP address of your new RustDesk server along with the public key.</p>
 <p><img src="configure_rustdesk_client.png" alt="Configure RustDesk Client"></p>
