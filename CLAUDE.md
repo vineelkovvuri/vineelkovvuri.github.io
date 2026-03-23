@@ -6,7 +6,7 @@ Personal website and blog built with Hugo, hosted on GitHub Pages.
 
 - **Hugo** static site generator (`hugo.yaml`, theme: `hugo-xmin`)
 - **Build output**: `docs/` directory (served by GitHub Pages)
-- **Site URL**: https://vineelkovvuri.github.io/
+- **Site URL**: [https://vineelkovvuri.github.io/](https://vineelkovvuri.github.io/)
 
 ## Structure
 
