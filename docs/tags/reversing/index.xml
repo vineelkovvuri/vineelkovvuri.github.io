@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Reversing on Vineel Kovvuri</title>
-    <link>//localhost:1313/tags/reversing/</link>
+    <link>/tags/reversing/</link>
     <description>Recent content in Reversing on Vineel Kovvuri</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 10 Aug 2018 18:33:07 -0700</lastBuildDate>
-    <atom:link href="//localhost:1313/tags/reversing/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/tags/reversing/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>A Newbie&#39;s Introduction To Compilation Process And Reverse Engineering</title>
-      <link>//localhost:1313/blog/2018-08-10-a-newbies-introduction-to-compilation-process-and-reverse-engineering/</link>
+      <link>/blog/2018-08-10-a-newbies-introduction-to-compilation-process-and-reverse-engineering/</link>
       <pubDate>Fri, 10 Aug 2018 18:33:07 -0700</pubDate>
-      <guid>//localhost:1313/blog/2018-08-10-a-newbies-introduction-to-compilation-process-and-reverse-engineering/</guid>
+      <guid>/blog/2018-08-10-a-newbies-introduction-to-compilation-process-and-reverse-engineering/</guid>
       <description>&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;&#xA;&lt;p&gt;Compilers are surely the complex programs of all times. Even today, writing a&#xA;compiler with minimum set of tools is considered to be challenging. This&#xA;tutorial scratches the surface of different compiler phases involved in&#xA;translating a given source code to executable and also shows how this&#xA;information is useful in context of reverse engineering.&lt;/p&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/GNU_Compiler_Collection&#34;&gt;GNU compiler collection&lt;/a&gt;&#xA;provides an excellent set of tools for dissecting the compilation process and to&#xA;understand the working of bits and bytes in the final executable. For this&#xA;tutorial I am using the following tools and considers C language to illustrate&#xA;the examples.&lt;/p&gt;</description>
     </item>
   </channel>
