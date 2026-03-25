@@ -300,17 +300,18 @@ function scanForFvLoads() {
   select.innerHTML = '<option value="">Jump to FV load...</option>';
 
   // First pass: collect "Installing ... FV @" entries keyed by handle
-  var installRegex = /Installing\s+(.+?)\s+FV\s+@\s+(0x[0-9A-Fa-f]+),\s*size:\s*(0x[0-9A-Fa-f]+)/i;
+  var installRegex = /Installing\s+(.+?)\s+FV(?::\s+FdfAddr\s+@\s+(0x[0-9A-Fa-f]+)\s*->\s*RebasedAddr\s+@\s+(0x[0-9A-Fa-f]+)|\s+@\s+(0x[0-9A-Fa-f]+)),\s*size:\s*(0x[0-9A-Fa-f]+)/i;
   var fvByHandle = {}; // handle -> { name, handle, size, lineNumber }
 
   lines.forEach(function (line, idx) {
     var match = line.match(installRegex);
     if (match) {
-      var handle = match[2].toUpperCase();
+      var addr = match[3] || match[4]; // RebasedAddr if present, else direct addr
+      var handle = addr.toUpperCase();
       fvByHandle[handle] = {
         name: match[1],
-        handle: match[2],
-        size: match[3],
+        handle: addr,
+        size: match[5],
         loadAddress: null,
         lineNumber: idx + 1,
       };
