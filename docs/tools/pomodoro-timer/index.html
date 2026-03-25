@@ -332,6 +332,175 @@
     .pomo-btn-clear:hover {
         background: #c0392b;
     }
+
+    /* Daily task list */
+    .pomo-daily {
+        width: 100%;
+        max-width: 500px;
+        margin-top: 8px;
+        border-top: 2px solid #e0ecf5;
+        padding-top: 18px;
+    }
+
+    .pomo-daily-header {
+        font-size: 14px;
+        font-weight: 700;
+        color: #2c3e50;
+        letter-spacing: 0.5px;
+        margin-bottom: 10px;
+    }
+
+    .pomo-daily-add {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 12px;
+    }
+
+    .pomo-daily-add input {
+        flex: 1;
+        padding: 9px 14px;
+        border: 2px solid #b0c4de;
+        border-radius: 10px;
+        font-size: 14px;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+
+    .pomo-daily-add input:focus {
+        border-color: #5a9fd4;
+    }
+
+    .pomo-daily-add input::placeholder {
+        color: #a0a8b4;
+    }
+
+    .pomo-daily-add button {
+        padding: 9px 18px;
+        border: none;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        background: #5a9fd4;
+        color: #fff;
+        transition: background 0.2s;
+        white-space: nowrap;
+    }
+
+    .pomo-daily-add button:hover {
+        background: #4a8fc4;
+    }
+
+    .pomo-daily-list {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 12px;
+    }
+
+    .pomo-daily-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        background: #f4f8fc;
+        border-radius: 10px;
+        border-left: 4px solid #5a9fd4;
+    }
+
+    .pomo-daily-item.completed {
+        border-left-color: #27ae60;
+        opacity: 0.7;
+    }
+
+    .pomo-daily-item .pomo-daily-cb {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+        accent-color: #27ae60;
+        flex-shrink: 0;
+    }
+
+    .pomo-daily-item .pomo-daily-name {
+        flex: 1;
+        font-size: 14px;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    .pomo-daily-item.completed .pomo-daily-name {
+        text-decoration: line-through;
+        color: #7f8c8d;
+    }
+
+    .pomo-daily-item .pomo-daily-count {
+        font-size: 12px;
+        color: #7f8c8d;
+        font-family: 'Consolas', 'Courier New', monospace;
+        white-space: nowrap;
+    }
+
+    .pomo-daily-item .pomo-daily-play {
+        padding: 3px 8px;
+        border: none;
+        border-radius: 6px;
+        font-size: 13px;
+        cursor: pointer;
+        background: #27ae60;
+        color: #fff;
+        transition: background 0.2s;
+    }
+
+    .pomo-daily-item .pomo-daily-play:hover {
+        background: #219a52;
+    }
+
+    .pomo-daily-item.completed .pomo-daily-play {
+        display: none;
+    }
+
+    .pomo-daily-item .pomo-daily-del {
+        padding: 3px 8px;
+        border: none;
+        border-radius: 6px;
+        font-size: 13px;
+        cursor: pointer;
+        background: #ecf0f1;
+        color: #e74c3c;
+        font-weight: 700;
+        transition: background 0.2s;
+    }
+
+    .pomo-daily-item .pomo-daily-del:hover {
+        background: #fadbd8;
+    }
+
+    .pomo-daily-empty {
+        font-size: 13px;
+        color: #a0a8b4;
+        text-align: center;
+        padding: 16px 0;
+    }
+
+    .pomo-daily-download {
+        padding: 8px 18px;
+        border: 2px solid #5a9fd4;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        background: #fff;
+        color: #5a9fd4;
+        transition: background 0.2s, color 0.2s;
+    }
+
+    .pomo-daily-download:hover {
+        background: #5a9fd4;
+        color: #fff;
+    }
 </style>
 
 <div class="pomo-wrap">
@@ -390,6 +559,19 @@
     </div>
     <span class="pomo-session-label" id="pomoSessionLabel">0 / 20 sessions</span>
 
+    <!-- Daily task list -->
+    <div class="pomo-daily" id="pomoDailySection">
+        <div class="pomo-daily-header">Today's Tasks</div>
+        <div class="pomo-daily-add">
+            <input type="text" id="pomoDailyInput" placeholder="Add a task for today..." autocomplete="off" />
+            <button id="pomoDailyAddBtn">Add</button>
+        </div>
+        <ul class="pomo-daily-list" id="pomoDailyList">
+            <li class="pomo-daily-empty" id="pomoDailyEmpty">No tasks planned yet.</li>
+        </ul>
+        <button class="pomo-daily-download" id="pomoDailyDownload" style="display:none;">Download Report</button>
+    </div>
+
     <!-- Task log -->
     <div class="pomo-task-log" id="pomoTaskLog">
         <div class="pomo-task-log-header">
@@ -416,6 +598,10 @@
         &bull; Bell sound notification when a session ends<br>
         &bull; Timer shows in the browser tab title while running<br>
         &bull; Tasks and session count persist across page reloads<br>
+        &bull; <b>Today's Tasks</b> &mdash; plan your day by adding tasks, mark them completed or delete them<br>
+        &bull; Click <b>&#x25B6;</b> on a daily task to load it into the timer<br>
+        &bull; Pomodoro sessions are automatically counted per daily task<br>
+        &bull; <b>Download Report</b> &mdash; export a text summary of tasks and pomodoro counts for weekly status<br>
     </div>
 </div>
 
@@ -440,8 +626,15 @@
     const taskTotal = document.getElementById('pomoTaskTotal');
     const clearBtn = document.getElementById('pomoClearBtn');
 
+    const dailyInput = document.getElementById('pomoDailyInput');
+    const dailyAddBtn = document.getElementById('pomoDailyAddBtn');
+    const dailyList = document.getElementById('pomoDailyList');
+    const dailyEmpty = document.getElementById('pomoDailyEmpty');
+    const dailyDownloadBtn = document.getElementById('pomoDailyDownload');
+
     const STORAGE_KEY_TASKS = 'pomoCompletedTasks';
     const STORAGE_KEY_SESSIONS = 'pomoCompletedSessions';
+    const STORAGE_KEY_DAILY = 'pomoDailyTasks';
     const ORIGINAL_TITLE = document.title;
 
     function saveTasks() {
@@ -464,6 +657,16 @@
         } catch (e) {}
         return 0;
     }
+    function saveDailyTasks() {
+        try { localStorage.setItem(STORAGE_KEY_DAILY, JSON.stringify(dailyTasks)); } catch (e) {}
+    }
+    function loadDailyTasks() {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY_DAILY);
+            if (raw) { const arr = JSON.parse(raw); if (Array.isArray(arr)) return arr; }
+        } catch (e) {}
+        return [];
+    }
 
     ring.style.strokeDasharray = CIRCUMFERENCE;
     ring.style.strokeDashoffset = '0';
@@ -477,6 +680,7 @@
     let currentTaskName = '';
     let currentTaskStartTime = null;
     const completedTasks = loadTasks();
+    const dailyTasks = loadDailyTasks();
 
     // Wall-clock tracking to survive browser throttling
     let startedAt = null;       // Date.now() when timer was started/resumed
@@ -593,6 +797,117 @@
             ' \u00B7 ' + (h > 0 ? h + 'h ' : '') + m + 'min';
     }
 
+    function renderDailyTasks() {
+        dailyList.querySelectorAll('.pomo-daily-item').forEach(el => el.remove());
+        if (dailyTasks.length === 0) {
+            dailyEmpty.style.display = '';
+            dailyDownloadBtn.style.display = 'none';
+            return;
+        }
+        dailyEmpty.style.display = 'none';
+        dailyDownloadBtn.style.display = '';
+        for (let i = 0; i < dailyTasks.length; i++) {
+            const t = dailyTasks[i];
+            const li = document.createElement('li');
+            li.className = 'pomo-daily-item' + (t.completed ? ' completed' : '');
+
+            const cb = document.createElement('input');
+            cb.type = 'checkbox';
+            cb.className = 'pomo-daily-cb';
+            cb.checked = t.completed;
+            cb.addEventListener('change', function () {
+                t.completed = cb.checked;
+                saveDailyTasks();
+                renderDailyTasks();
+            });
+
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'pomo-daily-name';
+            nameSpan.textContent = t.name;
+
+            const countSpan = document.createElement('span');
+            countSpan.className = 'pomo-daily-count';
+            countSpan.textContent = '\uD83C\uDF45\u00D7' + t.pomodoroCount;
+
+            li.appendChild(cb);
+            li.appendChild(nameSpan);
+            li.appendChild(countSpan);
+
+            if (!t.completed) {
+                const playBtn = document.createElement('button');
+                playBtn.className = 'pomo-daily-play';
+                playBtn.textContent = '\u25B6';
+                playBtn.title = 'Start pomodoro for this task';
+                playBtn.addEventListener('click', function () {
+                    taskInput.value = t.name;
+                    switchMode('pomodoro');
+                    taskInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
+                li.appendChild(playBtn);
+            }
+
+            const delBtn = document.createElement('button');
+            delBtn.className = 'pomo-daily-del';
+            delBtn.textContent = '\u2715';
+            delBtn.title = 'Delete task';
+            delBtn.addEventListener('click', function () {
+                dailyTasks.splice(i, 1);
+                saveDailyTasks();
+                renderDailyTasks();
+            });
+            li.appendChild(delBtn);
+
+            dailyList.insertBefore(li, dailyEmpty);
+        }
+    }
+
+    function addDailyTask(name) {
+        name = name.trim();
+        if (!name) return;
+        dailyTasks.push({
+            id: Date.now(),
+            name: name,
+            completed: false,
+            pomodoroCount: 0,
+            dateAdded: new Date().toISOString().slice(0, 10)
+        });
+        saveDailyTasks();
+        renderDailyTasks();
+    }
+
+    function downloadReport() {
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('en-US', {
+            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+        });
+        let report = 'Pomodoro Report - ' + dateStr + '\n';
+        report += '='.repeat(report.length - 1) + '\n\n';
+
+        let completedCount = 0;
+        let totalPomos = 0;
+        for (let i = 0; i < dailyTasks.length; i++) {
+            const t = dailyTasks[i];
+            const check = t.completed ? '[x]' : '[ ]';
+            const sessions = t.pomodoroCount === 1 ? '1 pomodoro session' : t.pomodoroCount + ' pomodoro sessions';
+            report += check + ' ' + t.name + ' - ' + sessions + '\n';
+            if (t.completed) completedCount++;
+            totalPomos += t.pomodoroCount;
+        }
+
+        report += '\nSummary: ' + completedCount + '/' + dailyTasks.length + ' tasks completed, ' +
+            totalPomos + ' pomodoro session' + (totalPomos !== 1 ? 's' : '') + ' total\n';
+
+        const blob = new Blob([report], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'pomodoro-report-' + now.toISOString().slice(0, 10) + '.txt';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
     function onTimerComplete() {
         running = false;
         clearInterval(timerInterval);
@@ -614,6 +929,14 @@
             completedTasks.push({ name, time });
             saveTasks();
             renderTaskLog();
+
+            // Increment pomodoro count for matching daily task
+            const matchedTask = dailyTasks.find(t => t.name === name);
+            if (matchedTask) {
+                matchedTask.pomodoroCount++;
+                saveDailyTasks();
+                renderDailyTasks();
+            }
 
             completedSessions++;
             if (completedSessions >= 20) completedSessions = 0;
@@ -690,11 +1013,24 @@
         renderTaskLog();
         updateSessionDots();
     });
+    dailyAddBtn.addEventListener('click', function () {
+        addDailyTask(dailyInput.value);
+        dailyInput.value = '';
+        dailyInput.focus();
+    });
+    dailyInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+            addDailyTask(dailyInput.value);
+            dailyInput.value = '';
+        }
+    });
+    dailyDownloadBtn.addEventListener('click', downloadReport);
 
     // Initial render
     updateDisplay();
     updateSessionDots();
     renderTaskLog();
+    renderDailyTasks();
 </script>
 
 </main>
