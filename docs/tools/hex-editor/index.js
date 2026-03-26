@@ -42,7 +42,7 @@ function hex(val, width) {
   if (width) {
     while (s.length < width) s = "0" + s;
   }
-  return "0x" + s;
+  return s;
 }
 
 function escapeHtmlChar(charCode) {
@@ -186,15 +186,18 @@ function showPlaceholder(show) {
   var placeholder = document.getElementById("hexPlaceholder");
   var header = document.getElementById("hexHeader");
   var scroll = document.getElementById("hexScroll");
+  var overlay = document.getElementById("hexDropOverlay");
 
   if (show) {
     placeholder.style.display = "flex";
     header.style.display = "none";
     scroll.style.display = "none";
+    overlay.style.display = "flex";
   } else {
     placeholder.style.display = "none";
     header.style.display = "flex";
     scroll.style.display = "block";
+    overlay.style.display = "none";
   }
 }
 
@@ -964,6 +967,10 @@ function loadFile(file) {
   var overlay = document.getElementById("hexDropOverlay");
   var dragCounter = 0;
 
+  function hasOpenTabs() {
+    return document.getElementById("tabBar").children.length > 0;
+  }
+
   container.addEventListener("dragenter", function (e) {
     e.preventDefault();
     dragCounter++;
@@ -975,7 +982,9 @@ function loadFile(file) {
     dragCounter--;
     if (dragCounter <= 0) {
       dragCounter = 0;
-      overlay.style.display = "none";
+      if (hasOpenTabs()) {
+        overlay.style.display = "none";
+      }
     }
   });
 

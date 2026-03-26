@@ -130,6 +130,7 @@
         flex-shrink: 0;
         color: #555;
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
         gap: 8px;
       }
@@ -138,8 +139,9 @@
         display: flex;
         align-items: center;
         gap: 4px;
-        margin-left: auto;
         font-weight: normal;
+        flex-wrap: wrap;
+        width: 100%;
       }
       .hex-toolbar label {
         font-size: 0.75rem;
@@ -229,7 +231,7 @@
 
       /* Drop overlay on main container */
       .hex-drop-overlay {
-        display: none;
+        display: flex;
         position: absolute;
         top: 0;
         left: 0;
