@@ -959,6 +959,41 @@ function loadFile(file) {
   });
 })();
 
+(function setupContainerDragDrop() {
+  var container = document.querySelector(".hex-container");
+  var overlay = document.getElementById("hexDropOverlay");
+  var dragCounter = 0;
+
+  container.addEventListener("dragenter", function (e) {
+    e.preventDefault();
+    dragCounter++;
+    overlay.style.display = "flex";
+  });
+
+  container.addEventListener("dragleave", function (e) {
+    e.preventDefault();
+    dragCounter--;
+    if (dragCounter <= 0) {
+      dragCounter = 0;
+      overlay.style.display = "none";
+    }
+  });
+
+  container.addEventListener("dragover", function (e) {
+    e.preventDefault();
+  });
+
+  container.addEventListener("drop", function (e) {
+    e.preventDefault();
+    dragCounter = 0;
+    overlay.style.display = "none";
+    var files = e.dataTransfer.files;
+    for (var i = 0; i < files.length; i++) {
+      loadFile(files[i]);
+    }
+  });
+})();
+
 // ============================================================
 // Section G: Initialize
 // ============================================================
