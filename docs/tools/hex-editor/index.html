@@ -216,6 +216,29 @@
       .hb, .ab { cursor: default; }
       .hex-tab-modified { color: #dc3545; margin-left: 4px; font-size: 0.7rem; }
 
+      /* Context menu */
+      .hex-context-menu {
+        display: none;
+        position: fixed;
+        z-index: 200;
+        background: #fff;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.78rem;
+        padding: 4px 0;
+        min-width: 140px;
+      }
+      .hex-context-menu-item {
+        padding: 4px 12px;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .hex-context-menu-item:hover {
+        background: #e2e6ea;
+      }
+
       /* Placeholder */
       .hex-placeholder {
         padding: 2rem;
@@ -320,6 +343,9 @@
     </main>
 
     <hr/>
+    <div class="hex-context-menu" id="hexContextMenu">
+      <div class="hex-context-menu-item" id="hexContextCopy">Copy</div>
+    </div>
     <script src="./index.js"></script>
   </body>
 </html>

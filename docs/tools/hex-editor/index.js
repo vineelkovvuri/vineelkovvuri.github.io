@@ -739,6 +739,7 @@ function initHexView() {
 
   // Manual byte selection via click-and-drag
   hexScrollEl.addEventListener("mousedown", function (e) {
+    if (e.button === 2) return; // don't reset selection on right-click
     var span = e.target.closest(".hb");
     if (!span) return;
     var byteOff = parseInt(span.getAttribute("data-byte"), 10);
@@ -904,6 +905,70 @@ function initHexView() {
       e.preventDefault();
       return;
     }
+  });
+
+  // Context menu for copying selected bytes
+  var contextMenu = document.getElementById("hexContextMenu");
+  var contextCopyBtn = document.getElementById("hexContextCopy");
+  var contextCopyMode = "hex"; // "hex" or "ascii"
+
+  function hideContextMenu() {
+    contextMenu.style.display = "none";
+  }
+
+  hexScrollEl.addEventListener("contextmenu", function (e) {
+    var tab = getActiveTab();
+    if (!tab || tab.highlightOffset < 0 || tab.highlightSize <= 0) return;
+
+    var target = e.target.closest(".hb, .ab");
+    if (!target) return;
+
+    e.preventDefault();
+    contextCopyMode = target.classList.contains("ab") ? "ascii" : "hex";
+    contextCopyBtn.textContent = contextCopyMode === "ascii" ? "Copy text bytes" : "Copy hex bytes";
+    contextMenu.style.display = "block";
+    contextMenu.style.left = e.clientX + "px";
+    contextMenu.style.top = e.clientY + "px";
+
+    // Keep menu within viewport
+    var rect = contextMenu.getBoundingClientRect();
+    if (rect.right > window.innerWidth) {
+      contextMenu.style.left = (e.clientX - rect.width) + "px";
+    }
+    if (rect.bottom > window.innerHeight) {
+      contextMenu.style.top = (e.clientY - rect.height) + "px";
+    }
+  });
+
+  contextCopyBtn.addEventListener("click", function () {
+    var tab = getActiveTab();
+    hideContextMenu();
+    if (!tab || tab.highlightOffset < 0 || tab.highlightSize <= 0) return;
+
+    var view = new Uint8Array(tab.data);
+    var off = tab.highlightOffset;
+    var len = Math.min(tab.highlightSize, view.length - off);
+    var text = "";
+
+    if (contextCopyMode === "ascii") {
+      for (var i = 0; i < len; i++) {
+        var b = view[off + i];
+        text += (b >= 32 && b <= 126) ? String.fromCharCode(b) : ".";
+      }
+    } else {
+      var parts = [];
+      for (var i = 0; i < len; i++) {
+        parts.push(hex(view[off + i], 2));
+      }
+      text = parts.join(" ");
+    }
+
+    navigator.clipboard.writeText(text);
+  });
+
+  document.addEventListener("click", function () { hideContextMenu(); });
+  document.addEventListener("contextmenu", function (e) {
+    if (!hexScrollEl.contains(e.target)) hideContextMenu();
   });
 
   // Save button handler
