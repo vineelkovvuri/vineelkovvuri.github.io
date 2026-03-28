@@ -159,9 +159,13 @@
   </url><url>
     <loc>/tools/page-table-calculator/</loc>
   </url><url>
+    <loc>/tools/pe-rebase/</loc>
+  </url><url>
     <loc>/tools/multi-search-highlighter/</loc>
   </url><url>
     <loc>/tools/hex-editor/</loc>
+  </url><url>
+    <loc>/tools/calculator/</loc>
   </url><url>
     <loc>/tools/uefi-log-explorer/</loc>
   </url><url>
@@ -228,6 +232,8 @@
     <loc>/bookmarks/windows-winget/</loc>
   </url><url>
     <loc>/tags/windowssetup/</loc>
+  </url><url>
+    <loc>/tools/elf-editor/</loc>
   </url><url>
     <loc>/tools/pe-editor/</loc>
   </url><url>

@@ -1,0 +1,581 @@
+---
+title: "🔀 PE Rebase"
+tags: ["Tools"]
+category: "Dev Tools"
+---
+
+<style>
+.rebase {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #24292e;
+}
+.rebase *, .rebase *::before, .rebase *::after { box-sizing: border-box; }
+
+/* Drop zone */
+.rebase .drop-zone {
+  border: 2px dashed #b0c4de;
+  border-radius: 10px;
+  padding: 32px;
+  text-align: center;
+  color: #586069;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  margin-bottom: 20px;
+}
+.rebase .drop-zone:hover,
+.rebase .drop-zone.drag-over {
+  border-color: #5a9fd4;
+  background: #f0f7ff;
+}
+.rebase .drop-zone .icon { font-size: 28px; margin-bottom: 6px; }
+.rebase .drop-zone .label { font-size: 14px; font-weight: 600; }
+.rebase .drop-zone .hint { font-size: 12px; color: #7f8c8d; margin-top: 4px; }
+
+/* File info bar */
+.rebase .file-info {
+  display: none;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: #f6f8fa;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  flex-wrap: wrap;
+}
+.rebase .file-info.visible { display: flex; }
+.rebase .file-info .fname { font-weight: 600; color: #2c3e50; }
+.rebase .file-info .meta { color: #586069; }
+.rebase .file-info .badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+.rebase .file-info .badge-pe32 { background: #e8f5e9; color: #2e7d32; }
+.rebase .file-info .badge-pe64 { background: #e3f2fd; color: #1565c0; }
+
+/* Editor panel */
+.rebase .editor {
+  display: none;
+  border: 1px solid #d0d5dd;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.rebase .editor.visible { display: block; }
+.rebase .editor-header {
+  background: #f6f8fa;
+  border-bottom: 1px solid #d0d5dd;
+  padding: 10px 16px;
+  font-weight: 700;
+  font-size: 13px;
+  color: #2c3e50;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.rebase .editor-body { padding: 20px; }
+
+/* Field rows */
+.rebase .field-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.rebase .field-row:last-child { margin-bottom: 0; }
+.rebase .field-label {
+  width: 180px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #586069;
+  flex-shrink: 0;
+}
+.rebase .field-value {
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  color: #24292e;
+  padding: 7px 12px;
+  background: #f8f9fb;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  min-width: 200px;
+}
+.rebase .field-input {
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  color: #24292e;
+  padding: 7px 12px;
+  border: 1.5px solid #d1d5da;
+  border-radius: 6px;
+  width: 200px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.rebase .field-input:focus {
+  border-color: #5a9fd4;
+  box-shadow: 0 0 0 3px rgba(90, 159, 212, 0.15);
+}
+.rebase .field-input.invalid {
+  border-color: #e74c3c;
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.12);
+}
+.rebase .field-hint {
+  font-size: 11px;
+  color: #7f8c8d;
+}
+
+/* Offset / size info */
+.rebase .offset-info {
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 11px;
+  color: #959da5;
+}
+
+/* Section table */
+.rebase .section-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-top: 8px;
+}
+.rebase .section-table th {
+  text-align: left;
+  padding: 6px 10px;
+  background: #f6f8fa;
+  border-bottom: 2px solid #d0d5dd;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: #586069;
+}
+.rebase .section-table td {
+  padding: 5px 10px;
+  border-bottom: 1px solid #e1e4e8;
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 12px;
+}
+.rebase .section-table tr:hover td { background: #f8f9fb; }
+
+/* Buttons */
+.rebase .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s;
+}
+.rebase .btn-primary {
+  background: #0d6efd;
+  color: #fff;
+}
+.rebase .btn-primary:hover { background: #0b5ed7; }
+.rebase .btn-primary:disabled {
+  background: #a0c4f1;
+  cursor: not-allowed;
+}
+.rebase .btn-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+/* Status message */
+.rebase .status {
+  display: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+.rebase .status.visible { display: block; }
+.rebase .status.success { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+.rebase .status.error { background: #ffebee; color: #c62828; border: 1px solid #ef9a9a; }
+</style>
+
+<div class="rebase">
+  <!-- Drop zone -->
+  <div class="drop-zone" id="dropZone">
+    <div class="icon">📄</div>
+    <div class="label">Drop a PE file here or click to browse</div>
+    <div class="hint">.exe, .dll, .sys, .efi, .ocx, .scr, .drv</div>
+  </div>
+  <input type="file" id="fileInput" accept=".exe,.dll,.sys,.efi,.ocx,.scr,.drv,.cpl,.mui" style="display:none">
+
+  <!-- File info -->
+  <div class="file-info" id="fileInfo">
+    <span class="fname" id="fileName"></span>
+    <span class="meta" id="fileMeta"></span>
+    <span class="badge" id="fileBadge"></span>
+  </div>
+
+  <!-- Status -->
+  <div class="status" id="status"></div>
+
+  <!-- Editor -->
+  <div class="editor" id="editor">
+    <div class="editor-header">ImageBase</div>
+    <div class="editor-body">
+      <div class="field-row">
+        <span class="field-label">Current ImageBase</span>
+        <span class="field-value" id="currentBase"></span>
+        <span class="offset-info" id="baseOffset"></span>
+      </div>
+      <div class="field-row">
+        <span class="field-label">New ImageBase</span>
+        <input type="text" class="field-input" id="newBase" spellcheck="false" autocomplete="off" placeholder="0x...">
+        <span class="field-hint">Enter a hex address (e.g. <code>0x10000</code>)</span>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="applyBtn" disabled>Apply &amp; Download</button>
+      </div>
+    </div>
+
+    <!-- Section overview -->
+    <div class="editor-header">Section Headers (read-only)</div>
+    <div class="editor-body">
+      <table class="section-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>VirtualSize</th>
+            <th>VirtualAddress</th>
+            <th>RawSize</th>
+            <th>RawOffset</th>
+            <th>Characteristics</th>
+          </tr>
+        </thead>
+        <tbody id="sectionBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div style="font-size: 13px; color: #7f8c8d; line-height: 2; margin-top: 8px;">
+    <b style="color: #2c3e50;">Features</b><br>
+    &bull; Load a PE file (.exe, .dll, .sys, .efi) via <b>drag-and-drop</b> or file picker<br>
+    &bull; Displays current <b>ImageBase</b> with file offset and field size<br>
+    &bull; Supports both <b>PE32</b> (4-byte ImageBase) and <b>PE32+</b> (8-byte ImageBase) formats<br>
+    &bull; Enter a new hex address (e.g. <code>0x10000</code> or <code>0x00007FF700000000</code>) to rebase<br>
+    &bull; Section headers displayed for reference<br>
+    &bull; Downloads the modified PE file — no data leaves your browser<br>
+</div>
+
+<script>
+(function () {
+  var fileBuffer = null;  // ArrayBuffer
+  var fileView = null;    // DataView
+  var fileName = null;
+  var is64 = false;
+  var imageBaseOffset = 0;
+  var imageBaseSize = 0;
+
+  // DOM refs
+  var dropZone = document.getElementById('dropZone');
+  var fileInput = document.getElementById('fileInput');
+  var fileInfo = document.getElementById('fileInfo');
+  var fileNameEl = document.getElementById('fileName');
+  var fileMeta = document.getElementById('fileMeta');
+  var fileBadge = document.getElementById('fileBadge');
+  var editor = document.getElementById('editor');
+  var currentBaseEl = document.getElementById('currentBase');
+  var baseOffsetEl = document.getElementById('baseOffset');
+  var newBaseInput = document.getElementById('newBase');
+  var applyBtn = document.getElementById('applyBtn');
+  var sectionBody = document.getElementById('sectionBody');
+  var statusEl = document.getElementById('status');
+
+  // --- Helpers ---
+  function hex(val, width) {
+    var s = val.toString(16).toUpperCase();
+    while (s.length < width) s = '0' + s;
+    return '0x' + s;
+  }
+
+  function hex64(lo, hi) {
+    var h = hi.toString(16).toUpperCase();
+    var l = lo.toString(16).toUpperCase();
+    while (l.length < 8) l = '0' + l;
+    return '0x' + h + l;
+  }
+
+  function parseHexInput(s) {
+    s = (s || '').replace(/_/g, '').trim();
+    if (s.startsWith('0x') || s.startsWith('0X')) s = s.slice(2);
+    if (!s || !/^[0-9a-fA-F]+$/.test(s)) return null;
+    try { return BigInt('0x' + s); } catch (e) { return null; }
+  }
+
+  function readAscii(view, offset, maxLen) {
+    var str = '';
+    for (var i = 0; i < maxLen; i++) {
+      var ch = view.getUint8(offset + i);
+      if (ch === 0) break;
+      str += String.fromCharCode(ch);
+    }
+    return str;
+  }
+
+  function formatSize(bytes) {
+    if (bytes >= 1048576) return (bytes / 1048576).toFixed(1) + ' MB';
+    if (bytes >= 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return bytes + ' bytes';
+  }
+
+  function showStatus(msg, type) {
+    statusEl.textContent = msg;
+    statusEl.className = 'status visible ' + type;
+  }
+
+  function hideStatus() {
+    statusEl.className = 'status';
+  }
+
+  // --- PE Parsing (minimal, just what we need) ---
+  function loadPE(buffer) {
+    var view = new DataView(buffer);
+
+    // Check MZ
+    if (view.getUint16(0, true) !== 0x5A4D) {
+      throw new Error('Not a valid PE file: missing MZ signature');
+    }
+
+    var e_lfanew = view.getUint32(60, true);
+    if (e_lfanew + 4 > buffer.byteLength) {
+      throw new Error('e_lfanew points beyond file end');
+    }
+
+    // Check PE\0\0
+    if (view.getUint32(e_lfanew, true) !== 0x00004550) {
+      throw new Error('Invalid PE signature');
+    }
+
+    // File Header
+    var fhOff = e_lfanew + 4;
+    var machine = view.getUint16(fhOff, true);
+    var numSections = view.getUint16(fhOff + 2, true);
+    var sizeOfOptionalHeader = view.getUint16(fhOff + 16, true);
+
+    // Optional Header
+    var ohOff = fhOff + 20;
+    var magic = view.getUint16(ohOff, true);
+
+    if (magic === 0x20B) {
+      // PE32+
+      is64 = true;
+      imageBaseOffset = ohOff + 24;
+      imageBaseSize = 8;
+    } else if (magic === 0x10B) {
+      // PE32
+      is64 = false;
+      imageBaseOffset = ohOff + 28;
+      imageBaseSize = 4;
+    } else {
+      throw new Error('Unknown optional header magic: ' + hex(magic, 4));
+    }
+
+    // Read current ImageBase
+    var currentBase;
+    if (is64) {
+      var lo = view.getUint32(imageBaseOffset, true);
+      var hi = view.getUint32(imageBaseOffset + 4, true);
+      currentBase = hex64(lo, hi);
+    } else {
+      currentBase = hex(view.getUint32(imageBaseOffset, true), 8);
+    }
+
+    // Read sections
+    var shOff = ohOff + sizeOfOptionalHeader;
+    var sections = [];
+    for (var i = 0; i < numSections; i++) {
+      var sec = shOff + i * 40;
+      sections.push({
+        name: readAscii(view, sec, 8),
+        virtualSize: view.getUint32(sec + 8, true),
+        virtualAddress: view.getUint32(sec + 12, true),
+        rawSize: view.getUint32(sec + 16, true),
+        rawOffset: view.getUint32(sec + 20, true),
+        characteristics: view.getUint32(sec + 36, true),
+      });
+    }
+
+    // Machine name
+    var machineNames = {
+      0x14c: 'i386', 0x8664: 'AMD64', 0xaa64: 'ARM64',
+      0x1c0: 'ARM', 0x1c4: 'ARM NT', 0x200: 'IA64', 0xebc: 'EFI BC',
+    };
+
+    return {
+      currentBase: currentBase,
+      machineName: machineNames[machine] || hex(machine, 4),
+      is64: is64,
+      sections: sections,
+    };
+  }
+
+  // --- UI Updates ---
+  function displayPE(info) {
+    // File info bar
+    fileNameEl.textContent = fileName;
+    fileMeta.textContent = formatSize(fileBuffer.byteLength) + ' \u2022 ' + info.machineName;
+    fileBadge.textContent = info.is64 ? 'PE32+' : 'PE32';
+    fileBadge.className = 'badge ' + (info.is64 ? 'badge-pe64' : 'badge-pe32');
+    fileInfo.classList.add('visible');
+
+    // ImageBase fields
+    currentBaseEl.textContent = info.currentBase;
+    baseOffsetEl.textContent = 'offset: ' + hex(imageBaseOffset, 4) + ', size: ' + imageBaseSize + ' bytes';
+    newBaseInput.value = info.currentBase;
+    applyBtn.disabled = false;
+
+    // Sections
+    sectionBody.innerHTML = '';
+    info.sections.forEach(function (s) {
+      var tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td>' + s.name + '</td>' +
+        '<td>' + hex(s.virtualSize, 8) + '</td>' +
+        '<td>' + hex(s.virtualAddress, 8) + '</td>' +
+        '<td>' + hex(s.rawSize, 8) + '</td>' +
+        '<td>' + hex(s.rawOffset, 8) + '</td>' +
+        '<td>' + hex(s.characteristics, 8) + '</td>';
+      sectionBody.appendChild(tr);
+    });
+
+    // Show editor
+    editor.classList.add('visible');
+    hideStatus();
+  }
+
+  // --- Apply & Download ---
+  function applyAndDownload() {
+    var val = parseHexInput(newBaseInput.value);
+    if (val === null) {
+      showStatus('Invalid hex value. Enter an address like 0x10000 or 0x00007FF700000000.', 'error');
+      newBaseInput.classList.add('invalid');
+      return;
+    }
+
+    // Validate range
+    if (is64) {
+      if (val > BigInt('0xFFFFFFFFFFFFFFFF')) {
+        showStatus('Value exceeds 64-bit range (max 0xFFFFFFFFFFFFFFFF).', 'error');
+        return;
+      }
+    } else {
+      if (val > BigInt('0xFFFFFFFF')) {
+        showStatus('Value exceeds 32-bit range (max 0xFFFFFFFF) for PE32.', 'error');
+        return;
+      }
+    }
+
+    // Clone the buffer
+    var modified = fileBuffer.slice(0);
+    var modView = new DataView(modified);
+
+    if (is64) {
+      var lo = Number(val & BigInt(0xFFFFFFFF));
+      var hi = Number((val >> BigInt(32)) & BigInt(0xFFFFFFFF));
+      modView.setUint32(imageBaseOffset, lo, true);
+      modView.setUint32(imageBaseOffset + 4, hi, true);
+    } else {
+      modView.setUint32(imageBaseOffset, Number(val), true);
+    }
+
+    // Trigger download
+    var blob = new Blob([modified], { type: 'application/octet-stream' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+
+    var baseName = fileName.replace(/(\.[^.]+)$/, '_rebased$1');
+    if (baseName === fileName) baseName = fileName + '_rebased';
+
+    a.href = url;
+    a.download = baseName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    // Update display
+    var displayVal;
+    if (is64) {
+      var dlo = Number(val & BigInt(0xFFFFFFFF));
+      var dhi = Number((val >> BigInt(32)) & BigInt(0xFFFFFFFF));
+      displayVal = hex64(dlo, dhi);
+    } else {
+      displayVal = hex(Number(val), 8);
+    }
+
+    showStatus('Downloaded ' + baseName + ' with ImageBase = ' + displayVal, 'success');
+  }
+
+  // --- File loading ---
+  function handleFile(file) {
+    if (!file) return;
+    fileName = file.name;
+
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      fileBuffer = e.target.result;
+      fileView = new DataView(fileBuffer);
+      try {
+        var info = loadPE(fileBuffer);
+        displayPE(info);
+      } catch (err) {
+        showStatus(err.message, 'error');
+        editor.classList.remove('visible');
+      }
+    };
+    reader.readAsArrayBuffer(file);
+  }
+
+  // --- Events ---
+  dropZone.addEventListener('click', function () { fileInput.click(); });
+  fileInput.addEventListener('change', function () {
+    if (fileInput.files.length) handleFile(fileInput.files[0]);
+  });
+
+  dropZone.addEventListener('dragover', function (e) {
+    e.preventDefault();
+    dropZone.classList.add('drag-over');
+  });
+  dropZone.addEventListener('dragleave', function () {
+    dropZone.classList.remove('drag-over');
+  });
+  dropZone.addEventListener('drop', function (e) {
+    e.preventDefault();
+    dropZone.classList.remove('drag-over');
+    if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+  });
+
+  newBaseInput.addEventListener('input', function () {
+    newBaseInput.classList.remove('invalid');
+    hideStatus();
+  });
+
+  applyBtn.addEventListener('click', applyAndDownload);
+
+  // Allow Enter key to trigger apply
+  newBaseInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      applyAndDownload();
+    }
+  });
+})();
+</script>

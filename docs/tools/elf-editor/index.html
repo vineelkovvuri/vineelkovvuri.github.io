@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>🛠️ ELF Editor | Vineel Kovvuri</title>
+    
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/copy-button.css" />
+    <link rel="stylesheet" href="/css/forms.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/projects/">Projects</a></li>
+      
+      <li><a href="/tools/">Toolsᴬᴵ</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">🛠️ ELF Editor</span></h1>
+
+
+</div>
+
+
+
+<main>
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>🛠️ ELF Editor | Vineel Kovvuri</title>
+
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/fonts.css" />
+    <link rel="stylesheet" href="./css/copy-button.css" />
+    <link rel="stylesheet" href="./css/forms.css" />
+
+    <style>
+      /* Toolbar */
+      .elf-toolbar {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        padding: 0.4rem 0;
+      }
+
+      /* Main container: tree + detail */
+      .elf-container {
+        display: flex;
+        height: calc(100vh - 80px);
+        border: 1px solid #ced4da;
+        border-radius: 0.375rem;
+        overflow: hidden;
+        background: #fff;
+      }
+
+      /* Left tree panel */
+      .elf-tree-panel {
+        width: 280px;
+        min-width: 200px;
+        border-right: 1px solid #ced4da;
+        overflow-y: auto;
+        overflow-x: auto;
+        background: #f8f9fa;
+        padding: 0.25rem 0;
+        flex-shrink: 0;
+      }
+
+      /* Resizer handle */
+      .elf-resizer {
+        width: 4px;
+        cursor: col-resize;
+        background: #ced4da;
+        flex-shrink: 0;
+      }
+      .elf-resizer:hover { background: #86b7fe; }
+
+      /* Right panel (vertical flex: detail + hex resizer + hex view) */
+      .elf-right-panel {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        overflow: hidden;
+      }
+
+      /* Right detail panel */
+      .elf-detail-panel {
+        flex: 1;
+        min-height: 0;
+        overflow: auto;
+        padding: 0;
+        background: #fff;
+      }
+
+      /* Hex view resizer */
+      .elf-hex-resizer {
+        height: 4px;
+        cursor: row-resize;
+        background: #ced4da;
+        flex-shrink: 0;
+      }
+      .elf-hex-resizer:hover { background: #86b7fe; }
+
+      /* Hex view panel */
+      .elf-hex-panel {
+        height: 250px;
+        min-height: 80px;
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        background: #fff;
+        border-top: 1px solid #ced4da;
+      }
+      .elf-hex-header {
+        padding: 4px 8px;
+        background: #e9ecef;
+        border-bottom: 1px solid #ced4da;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.78rem;
+        font-weight: bold;
+        flex-shrink: 0;
+        color: #555;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .elf-hex-header-title { white-space: nowrap; }
+      .elf-hex-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-left: auto;
+        font-weight: normal;
+      }
+      .elf-hex-toolbar label {
+        font-size: 0.75rem;
+        white-space: nowrap;
+        color: #555;
+        margin: 0;
+      }
+      .elf-hex-toolbar input {
+        width: 100px;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.75rem;
+        padding: 1px 4px;
+        border: 1px solid #ced4da;
+        border-radius: 3px;
+        background: #fff;
+      }
+      .elf-hex-toolbar input:focus {
+        border-color: #86b7fe;
+        outline: 0;
+        box-shadow: 0 0 0 2px rgba(13,110,253,0.15);
+      }
+      .elf-hex-toolbar button {
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.72rem;
+        padding: 1px 6px;
+        border: 1px solid #ced4da;
+        border-radius: 3px;
+        background: #fff;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .elf-hex-toolbar button:hover { background: #e2e6ea; }
+      .elf-hex-toolbar .elf-hex-sep {
+        width: 1px;
+        height: 16px;
+        background: #ced4da;
+        margin: 0 2px;
+      }
+      .elf-hex-scroll {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+        position: relative;
+      }
+      .elf-hex-spacer {
+        width: 100%;
+      }
+      .elf-hex-rows {
+        position: absolute;
+        left: 0;
+        right: 0;
+      }
+      .elf-hex-row {
+        height: 18px;
+        line-height: 18px;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.78rem;
+        white-space: pre;
+        padding: 0 8px;
+      }
+      .elf-hex-row:nth-child(even) { background: #f8f9fa; }
+      .elf-hex-offset { color: #888; }
+      .elf-hex-ascii { color: #2e7d32; }
+      .elf-hex-highlight { background: #cce5ff; color: #000; }
+      .elf-hb, .elf-ab { cursor: default; }
+      .elf-hex-placeholder {
+        padding: 2rem;
+        color: #999;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.82rem;
+        text-align: center;
+      }
+      .elf-field-selected { background: #cce5ff !important; }
+
+      /* Tree view styles */
+      .elf-tree { list-style: none; margin: 0; padding: 0 0 0 0.25rem; font-family: Consolas, 'Courier New', monospace; font-size: 0.82rem; }
+      .elf-tree ul { list-style: none; margin: 0; padding: 0 0 0 1rem; }
+      .elf-tree li { user-select: none; }
+      .elf-tree-label {
+        display: flex;
+        align-items: center;
+        padding: 2px 6px;
+        cursor: pointer;
+        white-space: nowrap;
+        border-radius: 3px;
+      }
+      .elf-tree-label:hover { background: #e2e6ea; }
+      .elf-tree-label.selected { background: #0d6efd; color: #fff; }
+      .elf-tree-arrow {
+        display: inline-block;
+        width: 14px;
+        text-align: center;
+        font-size: 0.7em;
+        flex-shrink: 0;
+        margin-right: 2px;
+        transition: transform 0.15s;
+      }
+      .elf-tree-arrow.expanded { transform: rotate(90deg); }
+      .elf-tree-arrow.leaf { visibility: hidden; }
+      .elf-tree-children { display: none; }
+      .elf-tree-children.open { display: block; }
+
+      /* Detail table */
+      .elf-detail-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.82rem;
+        table-layout: fixed;
+      }
+      .elf-detail-table thead th {
+        position: sticky;
+        top: 0;
+        background: #e9ecef;
+        border-bottom: 2px solid #ced4da;
+        padding: 6px 8px;
+        text-align: left;
+        font-weight: bold;
+        z-index: 1;
+      }
+      .elf-detail-table tbody td {
+        padding: 4px 8px;
+        border-bottom: 1px solid #eee;
+        vertical-align: top;
+        word-break: break-all;
+      }
+      .elf-detail-table tbody tr:nth-child(even) { background: #f8f9fa; }
+      .elf-detail-table tbody tr:hover { background: #e8f0fe; }
+
+      /* Column widths */
+      .elf-detail-table .col-member { width: 28%; }
+      .elf-detail-table .col-offset { width: 10%; }
+      .elf-detail-table .col-size { width: 8%; }
+      .elf-detail-table .col-value { width: 20%; }
+      .elf-detail-table .col-meaning { width: 34%; }
+
+      /* Section header in detail */
+      .elf-detail-header {
+        padding: 8px 12px;
+        background: linear-gradient(135deg, #f0f4ff 0%, #e8f5e9 100%);
+        border-bottom: 2px solid #3182ce;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.9rem;
+        font-weight: bold;
+        position: sticky;
+        top: 0;
+        z-index: 2;
+      }
+
+      /* Welcome / empty state */
+      .elf-welcome {
+        padding: 2rem;
+        color: #666;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.85rem;
+        line-height: 1.8;
+      }
+      .elf-welcome h2 { color: #333; margin-top: 0; }
+
+      /* Editable field controls */
+      .elf-edit-input, .elf-edit-select {
+        width: 100%;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.82rem;
+        padding: 2px 4px;
+        border: 1px solid #ced4da;
+        border-radius: 3px;
+        box-sizing: border-box;
+        background: #fffff0;
+      }
+      .elf-edit-input:focus, .elf-edit-select:focus {
+        border-color: #86b7fe;
+        outline: 0;
+        box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.15);
+      }
+      .elf-edit-input.invalid {
+        border-color: #dc3545;
+        background: #fff5f5;
+      }
+      /* Bitmask dropdown combobox */
+      .elf-bitmask-combo {
+        position: relative;
+        width: 100%;
+      }
+      .elf-bitmask-trigger {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.82rem;
+        padding: 2px 4px;
+        border: 1px solid #ced4da;
+        border-radius: 3px;
+        box-sizing: border-box;
+        background: #fffff0;
+        cursor: pointer;
+        user-select: none;
+      }
+      .elf-bitmask-trigger:hover { border-color: #86b7fe; }
+      .elf-bitmask-trigger .elf-bitmask-arrow {
+        font-size: 0.6rem;
+        margin-left: 6px;
+        color: #666;
+      }
+      .elf-bitmask-dropdown {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        max-height: 200px;
+        overflow-y: auto;
+        background: #fff;
+        border: 1px solid #ced4da;
+        border-top: none;
+        border-radius: 0 0 3px 3px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+      }
+      .elf-bitmask-dropdown.open { display: block; }
+      .elf-bitmask-dropdown label {
+        display: flex;
+        align-items: center;
+        font-size: 0.78rem;
+        font-family: Consolas, 'Courier New', monospace;
+        cursor: pointer;
+        padding: 3px 6px;
+        white-space: nowrap;
+        gap: 5px;
+      }
+      .elf-bitmask-dropdown label:hover { background: #f0f4ff; }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <!-- Toolbar -->
+      <div class="elf-toolbar">
+        <label style="white-space: nowrap; margin: 0; font-weight: bold;">ELF File:</label>
+        <div id="fileDropZone" style="flex: 1; max-width: 500px; padding: 0.375rem 0.75rem; border: 1px dashed #0d6efd; border-radius: 0.25rem; cursor: pointer; font-family: Consolas, 'Courier New', monospace; font-size: 0.85rem; color: #0d6efd; background: rgba(13,110,253,0.04); text-align: center; user-select: none;">
+          Drop ELF file here or click to browse...
+        </div>
+        <input type="file" id="fileInput" accept=".elf,.so,.o,.ko,.out,.axf,.bin" style="display: none;" />
+        <span id="fileInfo" style="font-family: Consolas, 'Courier New', monospace; font-size: 0.82rem; color: #666;"></span>
+        <button id="downloadBtn" class="btn btn-primary" style="display: none; font-family: Consolas, 'Courier New', monospace; font-size: 0.82rem; padding: 4px 12px; white-space: nowrap;">Save ELF</button>
+      </div>
+
+      <!-- Main split view -->
+      <div class="elf-container">
+        <div class="elf-tree-panel" id="treePanel">
+          <ul class="elf-tree" id="elfTree"></ul>
+        </div>
+        <div class="elf-resizer" id="resizer"></div>
+        <div class="elf-right-panel" id="rightPanel">
+          <div class="elf-detail-panel" id="detailPanel">
+            <div class="elf-welcome" id="welcomeMsg">
+              <h2>ELF Editor</h2>
+              <p>Load an ELF file (.elf, .so, .o, .ko, .out) to explore its structure.</p>
+              <p>
+                <strong>Features:</strong><br>
+                - Parses ELF Header (ELF32 and ELF64)<br>
+                - Shows Program Headers (segments: LOAD, DYNAMIC, INTERP, NOTE, etc.)<br>
+                - Shows Section Headers with flags decoded<br>
+                - Parses Symbol Tables (.symtab, .dynsym) with binding/type/visibility<br>
+                - Parses Dynamic Section (.dynamic) with tag decoding<br>
+                - Parses Relocation Tables (.rel, .rela) with type decoding<br>
+                - Parses Note Sections (.note.*) including GNU Build ID and ABI<br>
+                - Decodes String Tables (.strtab, .dynstr, .shstrtab)<br>
+                - Editable ELF header fields with Save ELF download<br>
+                - Hex view with click-to-highlight field bytes<br>
+                - Tree navigation on the left, detail table on the right<br>
+              </p>
+            </div>
+          </div>
+          <div class="elf-hex-resizer" id="hexResizer"></div>
+          <div class="elf-hex-panel" id="hexPanel">
+            <div class="elf-hex-placeholder">Load an ELF file to see its hex dump.</div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <hr/>
+    <script src="./index.js"></script>
+  </body>
+</html>
+
+</main>
+
+<hr/>
+
+<section id="comments" class="giscus">
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
+
+  <footer>
+  
+<script defer src="/js/center-img.js"></script>
+<script defer src="/js/pre-tag.js"></script>
+
+
+
+
+
+
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2026 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+

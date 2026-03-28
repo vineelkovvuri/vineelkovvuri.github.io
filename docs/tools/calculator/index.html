@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>🔣 Calculator | Vineel Kovvuri</title>
+    
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/copy-button.css" />
+    <link rel="stylesheet" href="/css/forms.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/projects/">Projects</a></li>
+      
+      <li><a href="/tools/">Toolsᴬᴵ</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">🔣 Calculator</span></h1>
+
+
+</div>
+
+
+
+<main>
+
+<style>
+    .calc, .calc * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .calc {
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        width: 450px;
+        transition: box-shadow 0.15s;
+    }
+
+    .calc:focus {
+        box-shadow: 0 0 0 2px #5a9fd4, 0 2px 12px rgba(42, 90, 153, 0.3);
+    }
+
+    /* Title bar */
+    .calc-titlebar {
+        background: linear-gradient(180deg, #4580c4 0%, #3568a8 40%, #2a5a99 100%);
+        color: #fff;
+        padding: 6px 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        border-radius: 8px 8px 0 0;
+        border: 1px solid #1e4a82;
+        border-bottom: none;
+        font-size: 13px;
+        font-weight: 400;
+        user-select: none;
+    }
+
+    .calc-titlebar-icon {
+        width: 16px;
+        height: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+    }
+
+    .calc-titlebar-btns {
+        margin-left: auto;
+        display: flex;
+        gap: 2px;
+    }
+
+    .calc-titlebar-btn {
+        width: 26px;
+        height: 20px;
+        border: none;
+        border-radius: 3px;
+        font-size: 16px;
+        line-height: 1;
+        cursor: pointer;
+        background: linear-gradient(180deg, #d2e6f9 0%, #a8cbe8 50%, #7eb4d8 100%);
+        color: #1a3c5e;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .calc-titlebar-btn:hover {
+        background: linear-gradient(180deg, #e0eeff 0%, #b8d8f0 50%, #90c8e8 100%);
+    }
+
+    .calc-titlebar-btn.close {
+        background: linear-gradient(180deg, #f1a9a0 0%, #e06050 50%, #c94030 100%);
+        color: #fff;
+    }
+
+    .calc-titlebar-btn.close:hover {
+        background: linear-gradient(180deg, #f8c0b8 0%, #e87060 50%, #d05040 100%);
+    }
+
+    /* Main body */
+    .calc-body {
+        background: linear-gradient(180deg, #dce6f0 0%, #c8d8e8 100%);
+        border: 1px solid #a0a0a0;
+        border-top: none;
+        border-radius: 0 0 8px 8px;
+        padding: 8px 10px 10px;
+    }
+
+    /* Display */
+    .calc-display-wrap {
+        background: #fff;
+        border: 1px solid #888;
+        border-radius: 0;
+        margin-bottom: 8px;
+        padding: 0;
+    }
+
+    .calc-display-expr {
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        font-size: 11px;
+        color: #666;
+        text-align: right;
+        padding: 2px 8px 0;
+        min-height: 16px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .calc-display {
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        font-size: 28px;
+        font-weight: 400;
+        text-align: right;
+        padding: 0 8px 4px;
+        color: #1a1a1a;
+        overflow: hidden;
+        white-space: nowrap;
+        word-break: break-all;
+    }
+
+    .calc-radix-readout {
+        display: grid;
+        grid-template-columns: 32px 1fr;
+        gap: 1px 6px;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 11px;
+        margin-bottom: 8px;
+        padding: 4px 6px;
+        background: #f4f8fc;
+        border: 1px solid #ccd8e8;
+        border-radius: 3px;
+    }
+
+    .calc-radix-readout-label {
+        color: #6688aa;
+        font-weight: 700;
+        text-align: right;
+    }
+
+    .calc-radix-readout-val {
+        color: #1a1a1a;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .calc-radix-readout-val.active {
+        font-weight: 700;
+        color: #2a5a99;
+    }
+
+    /* Radix selector */
+    .calc-radix-row {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 6px;
+        font-size: 12px;
+        color: #1a1a1a;
+    }
+
+    .calc-radix-row label {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .calc-radix-row input[type="radio"] {
+        margin: 0;
+        cursor: pointer;
+    }
+
+    /* Bit display */
+    .calc-bits {
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 11px;
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        gap: 2px 6px;
+        margin-bottom: 8px;
+        background: #eaf0f8;
+        border: 1px solid #bbb;
+        padding: 4px 6px;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .calc-bit-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .calc-bit-label {
+        font-size: 8px;
+        color: #888;
+    }
+
+    .calc-bit-val {
+        font-size: 11px;
+        color: #1a1a1a;
+        letter-spacing: 1px;
+    }
+
+    .calc-bit-val .calc-bit {
+        cursor: pointer;
+        padding: 0 1px;
+        border-radius: 2px;
+    }
+
+    .calc-bit-val .calc-bit:hover {
+        background: #d0e0f8;
+    }
+
+    .calc-bit-val .calc-bit-space {
+        display: inline-block;
+        width: 3px;
+    }
+
+    /* Button grid */
+    .calc-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 3px;
+    }
+
+    .calc-btn {
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        font-size: 13px;
+        font-weight: 400;
+        padding: 7px 2px;
+        border: 1px solid #999;
+        border-radius: 3px;
+        cursor: pointer;
+        text-align: center;
+        background: linear-gradient(180deg, #eef3fa 0%, #dce6f0 50%, #ccd8e8 100%);
+        color: #1a1a1a;
+        user-select: none;
+        transition: none;
+    }
+
+    .calc-btn:hover {
+        background: linear-gradient(180deg, #e8f0ff 0%, #d0e0f8 50%, #b8d0f0 100%);
+        border-color: #6699cc;
+    }
+
+    .calc-btn:active {
+        background: linear-gradient(180deg, #c0d0e8 0%, #a8c0e0 50%, #90b0d8 100%);
+    }
+
+    .calc-btn.disabled {
+        color: #bbb;
+        cursor: default;
+        pointer-events: none;
+    }
+
+    .calc-btn.num {
+        background: linear-gradient(180deg, #f4f8fd 0%, #e4ecf6 50%, #d4e0f0 100%);
+        font-weight: 600;
+    }
+
+    .calc-btn.num:hover {
+        background: linear-gradient(180deg, #e8f0ff 0%, #d8e8f8 50%, #c8d8f0 100%);
+        border-color: #6699cc;
+    }
+
+    .calc-btn.op-eq {
+        background: linear-gradient(180deg, #e0eaf4 0%, #c8d8e8 50%, #b0c4d8 100%);
+        font-weight: 700;
+    }
+
+    .calc-btn.op-red {
+        color: #cc0000;
+    }
+
+    /* Multi-calculator container */
+    .calc-container {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        align-items: flex-start;
+    }
+</style>
+
+<div class="calc-container" id="calcContainer">
+    <div class="calc" id="calcApp">
+        <!-- Title bar -->
+        <div class="calc-titlebar">
+            <div class="calc-titlebar-icon">🔣</div>
+            <span>Calculator</span>
+            <div class="calc-titlebar-btns">
+                <div class="calc-titlebar-btn" id="calcAddBtn" title="New calculator">+</div>
+            </div>
+        </div>
+
+    <!-- Body -->
+    <div class="calc-body">
+        <!-- Display -->
+        <div class="calc-display-wrap">
+            <div class="calc-display-expr" id="calcExpr"></div>
+            <div class="calc-display" id="calcDisplay">0</div>
+        </div>
+
+        <!-- Radix selector -->
+        <div class="calc-radix-row">
+            <label><input type="radio" name="calcRadix" value="16"> Hex</label>
+            <label><input type="radio" name="calcRadix" value="10" checked> Dec</label>
+            <label><input type="radio" name="calcRadix" value="8"> Oct</label>
+            <label><input type="radio" name="calcRadix" value="2"> Bin</label>
+        </div>
+
+        <!-- Bit display -->
+        <div class="calc-bits" id="calcBits"></div>
+
+        <!-- Buttons -->
+        <div class="calc-grid" id="calcGrid"></div>
+    </div>
+</div>
+</div>
+
+<div style="font-size: 13px; color: #7f8c8d; line-height: 2; margin-top: 8px;">
+    <b style="color: #2c3e50;">Features</b><br>
+    &bull; Windows 7 Programmer Calculator look and feel<br>
+    &bull; <b>Hex</b>, <b>Dec</b>, <b>Oct</b>, <b>Bin</b> radix modes with live conversion<br>
+    &bull; Multi-base readout &mdash; always shows value in all four bases simultaneously<br>
+    &bull; Bitwise operations: <b>And</b>, <b>Or</b>, <b>Xor</b>, <b>Not</b>, <b>Lsh</b>, <b>Rsh</b><br>
+    &bull; Rotate operations: <b>RoL</b>, <b>RoR</b><br>
+    &bull; Arithmetic: <b>+</b>, <b>-</b>, <b>*</b>, <b>/</b>, <b>Mod</b>, <b>&#xB1;</b><br>
+    &bull; Interactive 64-bit binary display &mdash; click bits to toggle them<br>
+    &bull; Hex digit buttons <b>A&ndash;F</b> auto-enable/disable based on radix<br>
+    &bull; Full keyboard support &mdash; type digits and operators directly<br>
+    &bull; <b>Ctrl+C</b> to copy the displayed value, <b>Ctrl+V</b> to paste a number<br>
+    &bull; Click <b>+</b> in the title bar to spawn additional independent calculators<br>
+</div>
+
+<script src="./index.js"></script>
+
+</main>
+
+<hr/>
+
+<section id="comments" class="giscus">
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
+
+  <footer>
+  
+<script defer src="/js/center-img.js"></script>
+<script defer src="/js/pre-tag.js"></script>
+
+
+
+
+
+
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2026 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+
