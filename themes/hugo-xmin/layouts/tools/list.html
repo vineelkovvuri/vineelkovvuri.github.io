@@ -4,14 +4,15 @@
 
 <h1>Tools</h1>
 
+{{ range .Pages.GroupByParam "category" }}
+<h2>{{ if .Key }}{{ .Key }}{{ else }}Other Tools{{ end }}</h2>
 <ul>
-  {{ $pages := .Pages }}
-  {{ if .IsHome }}{{ $pages = .Site.RegularPages }}{{ end }}
-  {{ range (where $pages "Section" "!=" "") }}
-    <li>
-      <a href="{{ .RelPermalink }}">{{ .Title | markdownify }}</a>
-    </li>
+  {{ range .Pages }}
+  <li>
+    <a href="{{ .RelPermalink }}">{{ .Title | markdownify }}</a>
+  </li>
   {{ end }}
 </ul>
+{{ end }}
 
 {{ partial "footer.html" . }}
