@@ -83,12 +83,9 @@ let fvCount = 0;
 // type: "count"  — count all matches, show total
 // type: "multi"  — extract named groups from the first match and compose a value
 // lineRef: true  — make the badge clickable to jump to the source line
+var LOG_INSIGHT_GROUPS = ["Hardware", "Firmware", "Boot", "Security"];
 var LOG_INSIGHTS = [
-  { label: "BIOS Version",   pattern: /BIOS version:\s*([^\s|]+)/i,                                          type: "first", lineRef: true,  color: "#2b6cb0" },
-  { label: "Commit",         pattern: /Commit SHA:\s*([0-9a-f]{8})[0-9a-f]*/i,                               type: "first", lineRef: true,  color: "#4a5568", format: function(m) { return m[1] + "..."; } },
-  { label: "CPUID",          pattern: /FSP CPUID\s+[-:]\s*(0x[0-9A-Fa-f]+)/i,                                type: "first", lineRef: true,  color: "#6b46c1" },
-  { label: "Microcode",      pattern: /FSP PatchID\s+[-:]\s*(0x[0-9A-Fa-f]+)/i,                              type: "first", lineRef: true,  color: "#6b46c1" },
-  { label: "SoC",            pattern: /SoC Series\s*:\s*(.+)/i,                                              type: "multi", lineRef: true,  color: "#6b46c1",
+  { label: "SoC",            pattern: /SoC Series\s*:\s*(.+)/i,                                              type: "multi", lineRef: true,  color: "#6b46c1", group: "Hardware",
     parts: [
       { pattern: /SoC Series\s*:\s*(.+)/i },
       { pattern: /SoC Stepping\s*:\s*(\S+)/i },
@@ -96,12 +93,16 @@ var LOG_INSIGHTS = [
     ],
     format: function(vals) { return vals[0].trim() + " " + vals[1].trim() + " (" + vals[2].trim() + ")"; }
   },
-  { label: "FSP Mode",       pattern: /FspMode-(\S+)/i,                                                      type: "first", lineRef: true,  color: "#2c7a7b" },
-  { label: "FSP Arch",       pattern: /FspArch-(\S+)/i,                                                      type: "first", lineRef: true,  color: "#2c7a7b" },
-  { label: "Boot Mode",      pattern: /System boot mode:\s*\S+\s*-\s*(\S+)/i,                                type: "first", lineRef: true,  color: "#b7791f" },
-  { label: "Memory",         pattern: /Total System Memory Size\s+(\S+)/i,                                   type: "first", lineRef: true,  color: "#2f855a" },
-  { label: "DRAM Vendor",    pattern: /Vendor:\s*([^,]+),\s*Speed\s+(\S+\s*\S*)/i,                           type: "first", lineRef: true,  color: "#2f855a", format: function(m) { return m[1].trim() + " @ " + m[2].trim(); } },
-  { label: "ME FW",          pattern: /ME FW MajorVersion\s*:\s*(\d+)/i,                                     type: "multi", lineRef: true,  color: "#c05621",
+  { label: "Memory",         pattern: /Total System Memory Size\s+(\S+)/i,                                   type: "first", lineRef: true,  color: "#2f855a", group: "Hardware" },
+  { label: "DRAM Vendor",    pattern: /Vendor:\s*([^,]+),\s*Speed\s+(\S+\s*\S*)/i,                           type: "first", lineRef: true,  color: "#2f855a", group: "Hardware", format: function(m) { return m[1].trim() + " @ " + m[2].trim(); } },
+  { label: "Flash Size",    pattern: /Total Flash Size\s*:\s*([0-9A-Fa-f]+)/i,                                type: "first", lineRef: true,  color: "#4a5568", group: "Hardware",
+    format: function(m) { var bytes = parseInt(m[1], 16); return (bytes / (1024 * 1024)) + " MB"; }
+  },
+  { label: "BIOS Version",   pattern: /BIOS version:\s*([^\s|]+)/i,                                          type: "first", lineRef: true,  color: "#2b6cb0", group: "Firmware" },
+  { label: "Commit",         pattern: /Commit SHA:\s*([0-9a-f]{8})[0-9a-f]*/i,                               type: "first", lineRef: true,  color: "#4a5568", group: "Firmware", format: function(m) { return m[1] + "..."; } },
+  { label: "FSP Mode",       pattern: /FspMode-(\S+)/i,                                                      type: "first", lineRef: true,  color: "#2c7a7b", group: "Firmware" },
+  { label: "FSP Arch",       pattern: /FspArch-(\S+)/i,                                                      type: "first", lineRef: true,  color: "#2c7a7b", group: "Firmware" },
+  { label: "ME FW",          pattern: /ME FW MajorVersion\s*:\s*(\d+)/i,                                     type: "multi", lineRef: true,  color: "#c05621", group: "Firmware",
     parts: [
       { pattern: /ME FW MajorVersion\s*:\s*(\d+)/i },
       { pattern: /ME FW MinorVersion\s*:\s*(\d+)/i },
@@ -110,28 +111,21 @@ var LOG_INSIGHTS = [
     ],
     format: function(vals) { return vals.join("."); }
   },
-  { label: "TBT FW",        pattern: /TBT FW version:\s*(0x[0-9A-Fa-f]+)/i,                                 type: "first", lineRef: true,  color: "#9b2c2c" },
-  { label: "Secure Boot",   pattern: /IsSecureBootOn\s*-\s*(.+?)(?:\.|$)/i,                                  type: "first", lineRef: true,  color: "#e53e3e",
+  { label: "TBT FW",        pattern: /TBT FW version:\s*(0x[0-9A-Fa-f]+)/i,                                 type: "first", lineRef: true,  color: "#9b2c2c", group: "Firmware" },
+  { label: "SAM Version",   pattern: /SAM Version:\s*(\S+)/i,                                                type: "first", lineRef: true,  color: "#c05621", group: "Firmware" },
+  { label: "Boot Mode",      pattern: /System boot mode:\s*\S+\s*-\s*(\S+)/i,                                type: "first", lineRef: true,  color: "#b7791f", group: "Boot" },
+  { label: "Secure Boot",   pattern: /IsSecureBootOn\s*-\s*(.+?)(?:\.|$)/i,                                  type: "first", lineRef: true,  color: "#e53e3e", group: "Security",
     format: function(m) {
       var v = m[1].trim().toLowerCase();
       return v.indexOf("off") !== -1 || v.indexOf("doesn") !== -1 ? "OFF" : "ON";
     },
     badgeColor: function(val) { return val === "ON" ? "#2f855a" : "#e53e3e"; }
   },
-  { label: "Boot Guard",    pattern: /Boot Guard Support status:\s*(\d+)/i,                                   type: "first", lineRef: true,  color: "#6b46c1",
+  { label: "Boot Guard",    pattern: /Boot Guard Support status:\s*(\d+)/i,                                   type: "first", lineRef: true,  color: "#6b46c1", group: "Security",
     format: function(m) { return m[1] === "1" ? "Enabled" : "Disabled"; }
   },
-  { label: "TPM",           pattern: /TPM Type is\s+(\d+)/i,                                                  type: "first", lineRef: true,  color: "#6b46c1",
+  { label: "TPM",           pattern: /TPM Type is\s+(\d+)/i,                                                  type: "first", lineRef: true,  color: "#6b46c1", group: "Security",
     format: function(m) { var t = parseInt(m[1]); return t === 3 ? "fTPM 2.0" : t === 2 ? "dTPM 2.0" : t === 1 ? "TPM 1.2" : t === 0 ? "None" : "Type " + m[1]; }
-  },
-  { label: "Flash Size",    pattern: /Total Flash Size\s*:\s*([0-9A-Fa-f]+)/i,                                type: "first", lineRef: true,  color: "#4a5568",
-    format: function(m) { var bytes = parseInt(m[1], 16); return (bytes / (1024 * 1024)) + " MB"; }
-  },
-  { label: "ERRORs",        pattern: /\bERROR\b/,                                                             type: "count", color: "#e53e3e",
-    badgeColor: function(val) { return parseInt(val) > 0 ? "#e53e3e" : "#2f855a"; }
-  },
-  { label: "ASSERTs",       pattern: /\bASSERT\b/,                                                            type: "count", color: "#e53e3e",
-    badgeColor: function(val) { return parseInt(val) > 0 ? "#e53e3e" : "#2f855a"; }
   },
 ];
 
@@ -432,27 +426,49 @@ function updateSummary() {
 
   var sep = ' &nbsp;<span style="color: #aaa;">&bull;</span>&nbsp; ';
 
-  // Row 1: Log Insights (version/platform info extracted from patterns)
+  // Row 1: Log Insights grouped by category
   var html = '';
   if (logInsights.length > 0) {
-    html += '<div style="display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; margin-bottom: ' + (total > 0 || ppiCount > 0 || fvCount > 0 ? '6px' : '0') + ';">';
-    html += '<span style="font-size: 0.85rem; margin-right: 2px;">&#x1F50D;</span>';
+    // Build a map of group -> insights that have values
+    var groupedInsights = {};
     logInsights.forEach(function (insight) {
-      var badgeColor = insight.badgeColor || insight.color;
-      var cursor = insight.lineNumber ? 'cursor: pointer;' : '';
-      var onclick = insight.lineNumber ? ' onclick="editor.revealLineInCenter(' + insight.lineNumber + '); editor.setPosition({lineNumber:' + insight.lineNumber + ',column:1}); editor.focus();"' : '';
-      var title = insight.lineNumber ? ' title="Click to jump to line ' + insight.lineNumber + '"' : '';
-      html += '<span style="display: inline-flex; align-items: center; background: ' + badgeColor + '15; border: 1px solid ' + badgeColor + '40; border-radius: 4px; padding: 1px 8px; font-size: 0.8rem; ' + cursor + '"' + onclick + title + '>';
-      html += '<span style="color: #666; margin-right: 4px;">' + insight.label + ':</span>';
-      html += '<span style="color: ' + badgeColor + '; font-weight: bold;">' + insight.value + '</span>';
-      html += '</span>';
+      var g = insight.group || "Other";
+      if (!groupedInsights[g]) groupedInsights[g] = [];
+      groupedInsights[g].push(insight);
     });
-    html += '</div>';
+    // Render as a 2-column table: section name | badges
+    html += '<table style="border-collapse: collapse; width: 100%; font-size: 0.8rem;">';
+    LOG_INSIGHT_GROUPS.forEach(function (groupName) {
+      var items = groupedInsights[groupName];
+      if (!items || items.length === 0) return;
+      html += '<tr>';
+      html += '<td style="vertical-align: top; padding: 3px 10px 3px 0; white-space: nowrap; font-weight: bold; color: #555;">' + groupName + '</td>';
+      html += '<td style="padding: 3px 0;">';
+      html += '<div style="display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center;">';
+      items.forEach(function (insight) {
+        var badgeColor = insight.badgeColor || insight.color;
+        var cursor = insight.lineNumber ? 'cursor: pointer;' : '';
+        var onclick = insight.lineNumber ? ' onclick="editor.revealLineInCenter(' + insight.lineNumber + '); editor.setPosition({lineNumber:' + insight.lineNumber + ',column:1}); editor.focus();"' : '';
+        var title = insight.lineNumber ? ' title="Click to jump to line ' + insight.lineNumber + '"' : '';
+        html += '<span style="display: inline-flex; align-items: center; background: ' + badgeColor + '15; border: 1px solid ' + badgeColor + '40; border-radius: 4px; padding: 1px 8px; ' + cursor + '"' + onclick + title + '>';
+        html += '<span style="color: #666; margin-right: 4px;">' + insight.label + ':</span>';
+        html += '<span style="color: ' + badgeColor + '; font-weight: bold;">' + insight.value + '</span>';
+        html += '</span>';
+      });
+      html += '</div>';
+      html += '</td>';
+      html += '</tr>';
+    });
+    html += '</table>';
   }
 
-  // Row 2: Driver/PPI/FV counts
+  // Stats row as another table row style
   if (total > 0 || ppiCount > 0 || fvCount > 0) {
-    html += '<div style="display: flex; flex-wrap: wrap; gap: 4px; align-items: center;">';
+    if (logInsights.length === 0) {
+      html += '<div style="display: flex; flex-wrap: wrap; gap: 4px; align-items: center;">';
+    } else {
+      html += '<div style="display: flex; flex-wrap: wrap; gap: 4px; align-items: center; margin-top: 4px;">';
+    }
     html += '<span style="font-weight: bold; font-size: 0.85rem; margin-right: 4px;">&#x1F4CA; Stats</span>';
     html += '<span style="color: #3182ce;">PEI Drivers: ' + pei + '</span>';
     html += sep;
@@ -484,7 +500,7 @@ function scanLogInsights() {
         if (match) {
           var value = def.format ? def.format(match) : match[1];
           var color = def.badgeColor ? def.badgeColor(value) : def.color;
-          logInsights.push({ label: def.label, value: value, lineNumber: def.lineRef ? (i + 1) : null, color: def.color, badgeColor: color });
+          logInsights.push({ label: def.label, value: value, lineNumber: def.lineRef ? (i + 1) : null, color: def.color, badgeColor: color, group: def.group });
           break;
         }
       }
@@ -501,7 +517,7 @@ function scanLogInsights() {
       }
       var value = String(count);
       var color = def.badgeColor ? def.badgeColor(value) : def.color;
-      logInsights.push({ label: def.label, value: value, lineNumber: firstLine, color: def.color, badgeColor: color });
+      logInsights.push({ label: def.label, value: value, lineNumber: firstLine, color: def.color, badgeColor: color, group: def.group });
     } else if (def.type === "multi") {
       // Find first match to get the line number
       var firstLineNum = null;
@@ -528,7 +544,7 @@ function scanLogInsights() {
       if (allFound && vals.length > 0) {
         var value = def.format(vals);
         var color = def.badgeColor ? def.badgeColor(value) : def.color;
-        logInsights.push({ label: def.label, value: value, lineNumber: def.lineRef ? firstLineNum : null, color: def.color, badgeColor: color });
+        logInsights.push({ label: def.label, value: value, lineNumber: def.lineRef ? firstLineNum : null, color: def.color, badgeColor: color, group: def.group });
       }
     }
   });
