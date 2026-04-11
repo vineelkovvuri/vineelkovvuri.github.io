@@ -6,20 +6,20 @@
     <description>Recent content in Tags on Vineel Kovvuri</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 18 Jan 2026 10:45:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 11 Apr 2026 10:00:00 +0000</lastBuildDate>
     <atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rust</title>
+      <link>/tags/rust/</link>
+      <pubDate>Sat, 11 Apr 2026 10:00:00 +0000</pubDate>
+      <guid>/tags/rust/</guid>
+      <description></description>
+    </item>
     <item>
       <title>General</title>
       <link>/tags/general/</link>
       <pubDate>Sun, 18 Jan 2026 10:45:00 +0000</pubDate>
       <guid>/tags/general/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Rust</title>
-      <link>/tags/rust/</link>
-      <pubDate>Sat, 21 Jun 2025 21:11:47 +0000</pubDate>
-      <guid>/tags/rust/</guid>
       <description></description>
     </item>
     <item>

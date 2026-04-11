@@ -6,8 +6,15 @@
     <description>Recent content in Rust on Vineel Kovvuri</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 21 Jun 2025 21:11:47 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 11 Apr 2026 10:00:00 +0000</lastBuildDate>
     <atom:link href="/tags/rust/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rust: Why References Are Unsound for Volatile MMIO Access</title>
+      <link>/blog/2026-04-11-rust-references-and-volatile-mmio/</link>
+      <pubDate>Sat, 11 Apr 2026 10:00:00 +0000</pubDate>
+      <guid>/blog/2026-04-11-rust-references-and-volatile-mmio/</guid>
+      <description>&lt;h2 id=&#34;rust-why-references-are-unsound-for-volatile-mmio-access&#34;&gt;Rust: Why References Are Unsound for Volatile MMIO Access&lt;/h2&gt;&#xA;&lt;p&gt;Rust references (&lt;code&gt;&amp;amp;T&lt;/code&gt; / &lt;code&gt;&amp;amp;mut T&lt;/code&gt;) carry a powerful guarantee: they are always valid and dereferenceable. The compiler and LLVM lean on this guarantee to generate faster code, sometimes reading through a reference &lt;em&gt;before&lt;/em&gt; your code actually asks for it. For normal memory that&amp;rsquo;s a free optimization. For Memory-Mapped I/O (MMIO) registers, it&amp;rsquo;s a disaster - every read can trigger a hardware side-effect.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Rust: Trait Bounds</title>
       <link>/blog/2025-06-21-rust-trait-bounds/</link>

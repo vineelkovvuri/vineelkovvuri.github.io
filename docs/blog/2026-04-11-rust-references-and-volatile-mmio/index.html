@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rust: Why References Are Unsound for Volatile MMIO Access | Vineel Kovvuri</title>
+    
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/copy-button.css" />
+    <link rel="stylesheet" href="/css/forms.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/projects/">Projects</a></li>
+      
+      <li><a href="/tools/">Toolsᴬᴵ</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Rust: Why References Are Unsound for Volatile MMIO Access</span></h1>
+
+
+<h3 class="date">
+    2026/04/11
+    
+        |
+        <a href="/tags/rust">Rust</a>
+        
+    
+</h3>
+
+</div>
+
+
+    
+        <aside class="toc">
+            <h2>Table of Contents</h2>
+            <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#rust-why-references-are-unsound-for-volatile-mmio-access">Rust: Why References Are Unsound for Volatile MMIO Access</a>
+          <ul>
+            <li><a href="#how-llvm-exploits-dereferenceable-references">How LLVM Exploits Dereferenceable References</a></li>
+            <li><a href="#the-mmio-problem">The MMIO Problem</a></li>
+            <li><a href="#volatile-reads-through-references-are-still-unsound">Volatile Reads Through References Are Still Unsound</a></li>
+            <li><a href="#the-sound-approach-raw-pointers">The Sound Approach: Raw Pointers</a></li>
+            <li><a href="#quick-reference">Quick Reference</a></li>
+            <li><a href="#takeaway">Takeaway</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+        </aside>
+    
+
+
+<main>
+<h2 id="rust-why-references-are-unsound-for-volatile-mmio-access">Rust: Why References Are Unsound for Volatile MMIO Access</h2>
+<p>Rust references (<code>&amp;T</code> / <code>&amp;mut T</code>) carry a powerful guarantee: they are always valid and dereferenceable. The compiler and LLVM lean on this guarantee to generate faster code, sometimes reading through a reference <em>before</em> your code actually asks for it. For normal memory that&rsquo;s a free optimization. For Memory-Mapped I/O (MMIO) registers, it&rsquo;s a disaster - every read can trigger a hardware side-effect.</p>
+<h3 id="how-llvm-exploits-dereferenceable-references">How LLVM Exploits Dereferenceable References</h3>
+<p>Consider a simple function:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">foo</span>(x: <span style="color:#080">&amp;</span><span style="color:#888;font-weight:bold">u32</span>)<span style="color:#bbb"> </span>-&gt; <span style="color:#888;font-weight:bold">u32</span> {<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">if</span><span style="color:#bbb"> </span>some_condition()<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>*x<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">else</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#00d;font-weight:bold">0</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><p>Because <code>x</code> is a Rust reference, the compiler knows it is non-null and always points to valid, readable memory. LLVM is free to <strong>speculatively load</strong> the value early - before the branch:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>tmp = *x            // speculative read - always safe for normal memory
+</span></span><span style="display:flex;"><span>if some_condition()
+</span></span><span style="display:flex;"><span>    return tmp
+</span></span><span style="display:flex;"><span>else
+</span></span><span style="display:flex;"><span>    return 0
+</span></span></code></pre></div><p>This is perfectly sound for regular memory: reading a <code>u32</code> from a valid address twice (or early) has no observable side-effects. The value is the same whether you read it now or later.</p>
+<h3 id="the-mmio-problem">The MMIO Problem</h3>
+<p>MMIO registers are mapped into the processor&rsquo;s address space, but they are <em>not</em> regular memory. Reading an MMIO register can:</p>
+<ul>
+<li>Clear an interrupt status bit</li>
+<li>Advance a hardware FIFO</li>
+<li>Start or stop a DMA transfer</li>
+<li>Return a different value each time (e.g., a timestamp counter)</li>
+</ul>
+<p>A speculative read that LLVM inserts <em>on its own</em> could silently corrupt hardware state, and you&rsquo;d never see it in your source code.</p>
+<h3 id="volatile-reads-through-references-are-still-unsound">Volatile Reads Through References Are Still Unsound</h3>
+<p>You might think: &ldquo;I&rsquo;ll use <code>ptr::read_volatile()</code> - that tells the compiler not to optimize the read away.&rdquo; And you&rsquo;d be half-right. <code>read_volatile</code> does prevent the <em>specific</em> read from being reordered or eliminated. But the reference <em>itself</em> still carries the <code>dereferenceable</code> attribute in LLVM IR.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">read_from_ref</span>(mmio_addr: <span style="color:#080">&amp;</span><span style="color:#888;font-weight:bold">u64</span>)<span style="color:#bbb"> </span>-&gt; <span style="color:#888;font-weight:bold">u64</span> {<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">unsafe</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>mmio_addr_ptr<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>mmio_addr<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">const</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">u64</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>ptr::read_volatile(mmio_addr_ptr)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><p>The issue is that even before your <code>read_volatile</code> executes, LLVM might have already inserted its own load from <code>mmio_addr</code> because the <code>&amp;u64</code> reference told it &ldquo;this memory is always safe to read.&rdquo; Your hand-written volatile read is correct, but the <em>compiler-inserted</em> speculative read is uncontrolled and non-volatile.</p>
+<p><strong>In summary:</strong> any function that accepts an MMIO address as <code>&amp;T</code> is unsound, regardless of whether you use <code>read_volatile</code> inside. The unsoundness comes from the reference itself, not from how you use it.</p>
+<h3 id="the-sound-approach-raw-pointers">The Sound Approach: Raw Pointers</h3>
+<p>Raw pointers (<code>*const T</code> / <code>*mut T</code>) carry <strong>none</strong> of the <code>dereferenceable</code> guarantees that references do. LLVM will not speculatively load through a raw pointer because it makes no assumptions about its validity.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">read_mmio</span>(base: *<span style="color:#080;font-weight:bold">const</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">u64</span>)<span style="color:#bbb"> </span>-&gt; <span style="color:#888;font-weight:bold">u64</span> {<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">unsafe</span><span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>base.read_volatile()<span style="color:#bbb"> </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><p>Or if you start from a numeric address:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>base: <span style="color:#888;font-weight:bold">usize</span> =<span style="color:#bbb"> </span><span style="color:#00d;font-weight:bold">0xFED0_0000</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>reg<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">unsafe</span><span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>(base<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">const</span><span style="color:#bbb"> </span><span style="color:#888;font-weight:bold">u64</span>).read_volatile()<span style="color:#bbb"> </span>};<span style="color:#bbb">
+</span></span></span></code></pre></div><p>Here, there is no reference in sight. The raw pointer is only dereferenced inside the <code>read_volatile</code> call, which emits a volatile load in the LLVM IR - no speculative reads are possible.</p>
+<h3 id="quick-reference">Quick Reference</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Approach</th>
+          <th>Sound for MMIO?</th>
+          <th>Why</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>&amp;T</code> → dereference</td>
+          <td><strong>No</strong></td>
+          <td>LLVM may speculatively read through <code>&amp;T</code></td>
+      </tr>
+      <tr>
+          <td><code>&amp;T</code> → cast to <code>*const T</code> → <code>read_volatile</code></td>
+          <td><strong>No</strong></td>
+          <td>The <code>&amp;T</code> still carries <code>dereferenceable</code>; speculative reads may happen before your volatile read</td>
+      </tr>
+      <tr>
+          <td><code>*const T</code> → <code>read_volatile</code></td>
+          <td><strong>Yes</strong></td>
+          <td>No <code>dereferenceable</code> attribute, no speculative reads</td>
+      </tr>
+      <tr>
+          <td><code>usize</code> → cast to <code>*const T</code> → <code>read_volatile</code></td>
+          <td><strong>Yes</strong></td>
+          <td>Same as above - no reference involved</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="takeaway">Takeaway</h3>
+<p>The Rust rule is straightforward: <strong>never let an MMIO address live inside a reference.</strong> Keep it as a raw pointer (or a plain <code>usize</code>) from the moment you obtain it. The <code>dereferenceable</code> contract that makes references so powerful for normal code is exactly what makes them dangerous for hardware I/O.</p>
+
+</main>
+
+<hr/>
+
+<section id="comments" class="giscus">
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
+
+  <footer>
+  
+<script defer src="/js/center-img.js"></script>
+<script defer src="/js/pre-tag.js"></script>
+
+
+
+
+
+
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2026 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+
