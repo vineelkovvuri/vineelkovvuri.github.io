@@ -428,6 +428,22 @@ require(["vs/editor/editor.main"], function () {
     automaticLayout: true,
   });
 
+  // Hide drop overlay and initialize state when user pastes/types content
+  editor.onDidChangeModelContent(function () {
+    var overlay = document.getElementById("editorDropOverlay");
+    if (overlay && overlay.style.display !== "none") {
+      overlay.style.display = "none";
+    }
+    if (!originalContent && editor.getValue().trim()) {
+      originalContent = editor.getValue();
+      scanForPhases();
+      scanForDrivers();
+      scanForPpiInstalls();
+      scanForFvLoads();
+      updateSummary();
+    }
+  });
+
   // Load GUIDs after editor is ready
   loadGuids();
 
