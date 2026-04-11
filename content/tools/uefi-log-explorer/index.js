@@ -78,6 +78,66 @@ let driverCounts = {}; // { "PEI Drivers": N, ... }
 let ppiCount = 0;
 let fvCount = 0;
 
+// Log Insights: pattern-based extraction of interesting info from UEFI logs
+// type: "first"  — extract the first match, show captured group as value
+// type: "count"  — count all matches, show total
+// type: "multi"  — extract named groups from the first match and compose a value
+// lineRef: true  — make the badge clickable to jump to the source line
+var LOG_INSIGHTS = [
+  { label: "BIOS Version",   pattern: /BIOS version:\s*([^\s|]+)/i,                                          type: "first", lineRef: true,  color: "#2b6cb0" },
+  { label: "Commit",         pattern: /Commit SHA:\s*([0-9a-f]{8})[0-9a-f]*/i,                               type: "first", lineRef: true,  color: "#4a5568", format: function(m) { return m[1] + "..."; } },
+  { label: "CPUID",          pattern: /FSP CPUID\s+[-:]\s*(0x[0-9A-Fa-f]+)/i,                                type: "first", lineRef: true,  color: "#6b46c1" },
+  { label: "Microcode",      pattern: /FSP PatchID\s+[-:]\s*(0x[0-9A-Fa-f]+)/i,                              type: "first", lineRef: true,  color: "#6b46c1" },
+  { label: "SoC",            pattern: /SoC Series\s*:\s*(.+)/i,                                              type: "multi", lineRef: true,  color: "#6b46c1",
+    parts: [
+      { pattern: /SoC Series\s*:\s*(.+)/i },
+      { pattern: /SoC Stepping\s*:\s*(\S+)/i },
+      { pattern: /SoC SKU\s*:\s*(.+)/i },
+    ],
+    format: function(vals) { return vals[0].trim() + " " + vals[1].trim() + " (" + vals[2].trim() + ")"; }
+  },
+  { label: "FSP Mode",       pattern: /FspMode-(\S+)/i,                                                      type: "first", lineRef: true,  color: "#2c7a7b" },
+  { label: "FSP Arch",       pattern: /FspArch-(\S+)/i,                                                      type: "first", lineRef: true,  color: "#2c7a7b" },
+  { label: "Boot Mode",      pattern: /System boot mode:\s*\S+\s*-\s*(\S+)/i,                                type: "first", lineRef: true,  color: "#b7791f" },
+  { label: "Memory",         pattern: /Total System Memory Size\s+(\S+)/i,                                   type: "first", lineRef: true,  color: "#2f855a" },
+  { label: "DRAM Vendor",    pattern: /Vendor:\s*([^,]+),\s*Speed\s+(\S+\s*\S*)/i,                           type: "first", lineRef: true,  color: "#2f855a", format: function(m) { return m[1].trim() + " @ " + m[2].trim(); } },
+  { label: "ME FW",          pattern: /ME FW MajorVersion\s*:\s*(\d+)/i,                                     type: "multi", lineRef: true,  color: "#c05621",
+    parts: [
+      { pattern: /ME FW MajorVersion\s*:\s*(\d+)/i },
+      { pattern: /ME FW MinorVersion\s*:\s*(\d+)/i },
+      { pattern: /ME FW HotfixVersion\s*:\s*(\d+)/i },
+      { pattern: /ME FW BuildVersion\s*:\s*(\d+)/i },
+    ],
+    format: function(vals) { return vals.join("."); }
+  },
+  { label: "TBT FW",        pattern: /TBT FW version:\s*(0x[0-9A-Fa-f]+)/i,                                 type: "first", lineRef: true,  color: "#9b2c2c" },
+  { label: "Secure Boot",   pattern: /IsSecureBootOn\s*-\s*(.+?)(?:\.|$)/i,                                  type: "first", lineRef: true,  color: "#e53e3e",
+    format: function(m) {
+      var v = m[1].trim().toLowerCase();
+      return v.indexOf("off") !== -1 || v.indexOf("doesn") !== -1 ? "OFF" : "ON";
+    },
+    badgeColor: function(val) { return val === "ON" ? "#2f855a" : "#e53e3e"; }
+  },
+  { label: "Boot Guard",    pattern: /Boot Guard Support status:\s*(\d+)/i,                                   type: "first", lineRef: true,  color: "#6b46c1",
+    format: function(m) { return m[1] === "1" ? "Enabled" : "Disabled"; }
+  },
+  { label: "TPM",           pattern: /TPM Type is\s+(\d+)/i,                                                  type: "first", lineRef: true,  color: "#6b46c1",
+    format: function(m) { var t = parseInt(m[1]); return t === 3 ? "fTPM 2.0" : t === 2 ? "dTPM 2.0" : t === 1 ? "TPM 1.2" : t === 0 ? "None" : "Type " + m[1]; }
+  },
+  { label: "Flash Size",    pattern: /Total Flash Size\s*:\s*([0-9A-Fa-f]+)/i,                                type: "first", lineRef: true,  color: "#4a5568",
+    format: function(m) { var bytes = parseInt(m[1], 16); return (bytes / (1024 * 1024)) + " MB"; }
+  },
+  { label: "ERRORs",        pattern: /\bERROR\b/,                                                             type: "count", color: "#e53e3e",
+    badgeColor: function(val) { return parseInt(val) > 0 ? "#e53e3e" : "#2f855a"; }
+  },
+  { label: "ASSERTs",       pattern: /\bASSERT\b/,                                                            type: "count", color: "#e53e3e",
+    badgeColor: function(val) { return parseInt(val) > 0 ? "#e53e3e" : "#2f855a"; }
+  },
+];
+
+// Extracted insights: [ { label, value, lineNumber, color } ]
+let logInsights = [];
+
 // Inject phase marker CSS classes
 function injectPhaseCss() {
   var style = document.createElement("style");
@@ -365,25 +425,113 @@ function updateSummary() {
   var dxe = driverCounts["DXE Drivers"] || 0;
   var total = pei + mm + dxe;
 
-  if (total === 0 && ppiCount === 0 && fvCount === 0) {
+  if (total === 0 && ppiCount === 0 && fvCount === 0 && logInsights.length === 0) {
     section.style.display = "none";
     return;
   }
 
   var sep = ' &nbsp;<span style="color: #aaa;">&bull;</span>&nbsp; ';
-  var html = '<span style="font-weight: bold; font-size: 0.85rem;">Summary</span> &nbsp; ';
-  html += '<span style="color: #3182ce;">PEI Drivers: ' + pei + '</span>';
-  html += sep;
-  html += '<span style="color: #805ad5;">MM Drivers: ' + mm + '</span>';
-  html += sep;
-  html += '<span style="color: #38a169;">DXE Drivers: ' + dxe + '</span>';
-  html += sep;
-  html += '<span style="color: #3182ce;">PPIs: ' + ppiCount + '</span>';
-  html += sep;
-  html += '<span style="color: #d69e2e;">FVs: ' + fvCount + '</span>';
+
+  // Row 1: Log Insights (version/platform info extracted from patterns)
+  var html = '';
+  if (logInsights.length > 0) {
+    html += '<div style="display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; margin-bottom: ' + (total > 0 || ppiCount > 0 || fvCount > 0 ? '6px' : '0') + ';">';
+    html += '<span style="font-size: 0.85rem; margin-right: 2px;">&#x1F50D;</span>';
+    logInsights.forEach(function (insight) {
+      var badgeColor = insight.badgeColor || insight.color;
+      var cursor = insight.lineNumber ? 'cursor: pointer;' : '';
+      var onclick = insight.lineNumber ? ' onclick="editor.revealLineInCenter(' + insight.lineNumber + '); editor.setPosition({lineNumber:' + insight.lineNumber + ',column:1}); editor.focus();"' : '';
+      var title = insight.lineNumber ? ' title="Click to jump to line ' + insight.lineNumber + '"' : '';
+      html += '<span style="display: inline-flex; align-items: center; background: ' + badgeColor + '15; border: 1px solid ' + badgeColor + '40; border-radius: 4px; padding: 1px 8px; font-size: 0.8rem; ' + cursor + '"' + onclick + title + '>';
+      html += '<span style="color: #666; margin-right: 4px;">' + insight.label + ':</span>';
+      html += '<span style="color: ' + badgeColor + '; font-weight: bold;">' + insight.value + '</span>';
+      html += '</span>';
+    });
+    html += '</div>';
+  }
+
+  // Row 2: Driver/PPI/FV counts
+  if (total > 0 || ppiCount > 0 || fvCount > 0) {
+    html += '<div style="display: flex; flex-wrap: wrap; gap: 4px; align-items: center;">';
+    html += '<span style="font-weight: bold; font-size: 0.85rem; margin-right: 4px;">&#x1F4CA; Stats</span>';
+    html += '<span style="color: #3182ce;">PEI Drivers: ' + pei + '</span>';
+    html += sep;
+    html += '<span style="color: #805ad5;">MM Drivers: ' + mm + '</span>';
+    html += sep;
+    html += '<span style="color: #38a169;">DXE Drivers: ' + dxe + '</span>';
+    html += sep;
+    html += '<span style="color: #3182ce;">PPIs: ' + ppiCount + '</span>';
+    html += sep;
+    html += '<span style="color: #d69e2e;">FVs: ' + fvCount + '</span>';
+    html += '</div>';
+  }
 
   section.innerHTML = html;
   section.style.display = "block";
+}
+
+// Scan content for log insights using LOG_INSIGHTS patterns
+function scanLogInsights() {
+  logInsights = [];
+  if (!originalContent) return;
+
+  var lines = originalContent.split("\n");
+
+  LOG_INSIGHTS.forEach(function (def) {
+    if (def.type === "first") {
+      for (var i = 0; i < lines.length; i++) {
+        var match = lines[i].match(def.pattern);
+        if (match) {
+          var value = def.format ? def.format(match) : match[1];
+          var color = def.badgeColor ? def.badgeColor(value) : def.color;
+          logInsights.push({ label: def.label, value: value, lineNumber: def.lineRef ? (i + 1) : null, color: def.color, badgeColor: color });
+          break;
+        }
+      }
+    } else if (def.type === "count") {
+      var count = 0;
+      var firstLine = null;
+      for (var i = 0; i < lines.length; i++) {
+        if (def.pattern.test(lines[i])) {
+          count++;
+          if (firstLine === null) firstLine = i + 1;
+        }
+        // Reset lastIndex for stateful regexes
+        def.pattern.lastIndex = 0;
+      }
+      var value = String(count);
+      var color = def.badgeColor ? def.badgeColor(value) : def.color;
+      logInsights.push({ label: def.label, value: value, lineNumber: firstLine, color: def.color, badgeColor: color });
+    } else if (def.type === "multi") {
+      // Find first match to get the line number
+      var firstLineNum = null;
+      for (var i = 0; i < lines.length; i++) {
+        if (def.pattern.test(lines[i])) {
+          firstLineNum = i + 1;
+          def.pattern.lastIndex = 0;
+          break;
+        }
+      }
+      if (firstLineNum === null) return;
+
+      // Extract each part's value from the full content
+      var vals = [];
+      var allFound = true;
+      def.parts.forEach(function (part) {
+        var m = originalContent.match(part.pattern);
+        if (m) {
+          vals.push(m[1]);
+        } else {
+          allFound = false;
+        }
+      });
+      if (allFound && vals.length > 0) {
+        var value = def.format(vals);
+        var color = def.badgeColor ? def.badgeColor(value) : def.color;
+        logInsights.push({ label: def.label, value: value, lineNumber: def.lineRef ? firstLineNum : null, color: def.color, badgeColor: color });
+      }
+    }
+  });
 }
 
 // Load Monaco Editor and GUIDs
@@ -440,6 +588,7 @@ require(["vs/editor/editor.main"], function () {
       scanForDrivers();
       scanForPpiInstalls();
       scanForFvLoads();
+      scanLogInsights();
       updateSummary();
     }
   });
@@ -533,6 +682,7 @@ function loadFile(file) {
     scanForDrivers();
     scanForPpiInstalls();
     scanForFvLoads();
+    scanLogInsights();
     updateSummary();
   };
   reader.readAsText(file);
@@ -703,6 +853,7 @@ document.getElementById("convertBtn").addEventListener("click", function () {
     scanForPhases();
     scanForPpiInstalls();
     findUnresolvedGuids();
+    scanLogInsights();
     updateSummary();
     isConverted = true;
   } else {
@@ -710,6 +861,7 @@ document.getElementById("convertBtn").addEventListener("click", function () {
     editor.setValue(originalContent);
     scanForPhases();
     scanForPpiInstalls();
+    scanLogInsights();
     updateSummary();
     // Hide unresolved section when showing raw GUIDs
     document.getElementById("unresolvedSection").style.display = "none";
