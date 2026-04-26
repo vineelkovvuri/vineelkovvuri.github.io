@@ -28,7 +28,7 @@
             diff: "vs 8008: 4\u00d7 clock speed (2 MHz vs 0.5 MHz); 64 KB address space vs 16 KB; 40-pin DIP with separate address/data bus; 6 \u00b5m vs 10 \u00b5m process; stack moved to external RAM"
         },
         {
-            year: 1975, name: "MOS 6502", cat: "other",
+            year: 1975, name: "MOS 6502", cat: "other", company: "MOS Technology",
             desc: "Extremely low-cost ($25) 8-bit processor that democratized computing. Powered the Apple I, Apple II, Commodore 64, BBC Micro, Atari 2600, and NES.",
             specs: { "Bits": "8-bit", "Transistors": "3,510", "Clock": "1\u20133 MHz", "Process": "8 \u00b5m", "Cost": "$25" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/MOS_6502AD_4585_top.jpg/280px-MOS_6502AD_4585_top.jpg"
@@ -40,7 +40,7 @@
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Intel_P8048H.jpg/280px-Intel_P8048H.jpg"
         },
         {
-            year: 1976, name: "Zilog Z80", cat: "other",
+            year: 1976, name: "Zilog Z80", cat: "other", company: "Zilog",
             desc: "Binary-compatible with the 8080 but with many improvements. Dominated the CP/M era. Used in Sinclair ZX Spectrum, TRS-80, and TI graphing calculators. Discontinued in 2024 after 48 years.",
             specs: { "Bits": "8-bit", "Transistors": "8,500", "Clock": "2.5\u201320 MHz", "Process": "4 \u00b5m", "Lifespan": "1976\u20132024" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Z80-Z0840004PSC-HD.jpg/280px-Z80-Z0840004PSC-HD.jpg"
@@ -59,7 +59,7 @@
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/KL_Intel_i8087.jpg/280px-KL_Intel_i8087.jpg"
         },
         {
-            year: 1979, name: "Motorola 68000", cat: "other",
+            year: 1979, name: "Motorola 68000", cat: "other", company: "Motorola",
             desc: "Elegant 16/32-bit processor with clean architecture. Powered the original Apple Macintosh, Commodore Amiga, Atari ST, and Sega Genesis.",
             specs: { "Bits": "16/32-bit", "Transistors": "68,000", "Clock": "8\u201316.67 MHz", "Process": "3.5 \u00b5m", "Address": "16 MB" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/KL_Motorola_MC68000.jpg/280px-KL_Motorola_MC68000.jpg"
@@ -86,7 +86,7 @@
             diff: "vs 80286: 16-bit \u2192 32-bit; 4 GB address space vs 16 MB; paging and virtual memory; virtual 8086 mode; flat memory model; 275K transistors vs 134K"
         },
         {
-            year: 1985, name: "ARM1", cat: "arm",
+            year: 1985, name: "ARM1", cat: "arm", company: "Acorn / ARM",
             desc: "The first ARM (Acorn RISC Machine) processor. Designed by Sophie Wilson and Steve Furber at Acorn Computers. Remarkably simple and power-efficient \u2014 the start of the ARM empire.",
             specs: { "Bits": "32-bit", "Transistors": "25,000", "Clock": "8 MHz", "Process": "3 \u00b5m", "Power": "~0.1 W" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Acorn-ARM-Evaluation-System.jpg/280px-Acorn-ARM-Evaluation-System.jpg"
@@ -99,13 +99,13 @@
             diff: "vs 80386: On-die FPU (was separate 387 chip); 8 KB L1 cache on-die; 5-stage pipeline (2\u00d7 IPC); 1.2M transistors vs 275K; up to 100 MHz vs 40 MHz"
         },
         {
-            year: 1985, name: "Microchip PIC16", cat: "other",
+            year: 1985, name: "Microchip PIC16", cat: "other", company: "Microchip Technology",
             desc: "The PIC (Peripheral Interface Controller) microcontroller family from Microchip Technology. Extremely popular for hobbyists and commercial products alike due to low cost, wide availability, and simple architecture.",
             specs: { "Bits": "8-bit", "ROM": "Up to 14 KB", "RAM": "Up to 368 bytes", "Clock": "Up to 20 MHz", "Arch": "Harvard, RISC" },
             img: ""
         },
         {
-            year: 1991, name: "MIPS R4000", cat: "other",
+            year: 1991, name: "MIPS R4000", cat: "other", company: "MIPS Technologies",
             desc: "First 64-bit microprocessor. Used in SGI workstations and was a major RISC milestone. Featured superpipelining and a 64-bit architecture.",
             specs: { "Bits": "64-bit", "Transistors": "1.35 million", "Clock": "100 MHz", "Process": "0.8 \u00b5m", "First": "First 64-bit CPU" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/R4000_die.jpg/280px-R4000_die.jpg"
@@ -125,14 +125,14 @@
             diff: "vs Pentium: In-order \u2192 out-of-order execution; speculative execution & branch prediction; micro-ops architecture (CISC decoded to RISC); on-package L2 cache (256\u2013512 KB); 36-bit address bus"
         },
         {
-            year: 1996, name: "ARM7TDMI", cat: "arm",
+            year: 1996, name: "ARM7TDMI", cat: "arm", company: "ARM",
             desc: "One of the most widely licensed processor cores in history. Used in early smartphones, iPods, Game Boy Advance, and countless embedded systems. Shipped billions of units.",
             specs: { "Bits": "32-bit", "Transistors": "~70,000", "Clock": "~80 MHz", "Power": "Very low", "Used in": "GBA, iPod, Nokia" },
             img: "",
             diff: "vs ARM1: 25K \u2192 70K transistors; added Thumb (16-bit compressed) instruction set; hardware multiply; on-chip debug (JTAG); much faster clocks (~80 MHz vs 8 MHz); von Neumann architecture"
         },
         {
-            year: 1996, name: "Atmel AVR (ATmega)", cat: "other",
+            year: 1996, name: "Atmel AVR (ATmega)", cat: "other", company: "Atmel (now Microchip)",
             desc: "The AVR family of 8-bit RISC microcontrollers by Atmel (now Microchip). The ATmega328P became famous as the heart of the Arduino Uno, sparking the maker/hobbyist revolution.",
             specs: { "Bits": "8-bit", "Flash": "1\u2013256 KB", "RAM": "Up to 16 KB", "Clock": "Up to 20 MHz", "Arch": "Modified Harvard, RISC" },
             img: "",
@@ -194,21 +194,21 @@
             diff: "vs Core 2 Duo: Integrated memory controller (was in chipset); QPI replaces FSB; Hyper-Threading returns; 4 cores standard; Turbo Boost; 45 nm vs 65 nm; 731M vs 291M transistors"
         },
         {
-            year: 2004, name: "ARM Cortex-M3", cat: "arm",
+            year: 2004, name: "ARM Cortex-M3", cat: "arm", company: "ARM",
             desc: "The ARM Cortex-M series brought 32-bit ARM processing to the microcontroller world. The M3 became the basis for STM32 and many other popular MCU families, replacing 8-bit controllers in many applications.",
             specs: { "Bits": "32-bit", "Arch": "ARMv7-M (Thumb-2)", "Pipeline": "3-stage", "Features": "NVIC, SysTick, MPU", "Power": "Very low" },
             img: "",
             diff: "vs AVR/PIC: 8-bit \u2192 32-bit; Thumb-2 instruction set (compact + powerful); hardware divide; nested vectored interrupts (NVIC); standardized debug (SWD/JTAG); CMSIS ecosystem"
         },
         {
-            year: 2007, name: "STM32", cat: "other",
+            year: 2007, name: "STM32", cat: "other", company: "STMicroelectronics",
             desc: "STMicroelectronics' ARM Cortex-M microcontroller family. Became the dominant 32-bit MCU platform for embedded development with a huge ecosystem (STM32CubeIDE, HAL libraries, Nucleo boards).",
             specs: { "Bits": "32-bit", "Cores": "Cortex-M0/M3/M4/M7", "Flash": "16 KB\u20132 MB", "Clock": "Up to 480 MHz", "I/O": "Rich peripherals" },
             img: "",
             diff: "vs Atmel AVR: 8-bit \u2192 32-bit ARM core; much faster (up to 480 MHz vs 20 MHz); DMA, USB, Ethernet, CAN built-in; FPU on M4/M7; enormous product range; industrial-grade"
         },
         {
-            year: 2008, name: "ARM Cortex-A8", cat: "arm",
+            year: 2008, name: "ARM Cortex-A8", cat: "arm", company: "ARM",
             desc: "First ARM processor to reach 1 GHz. Powered the original iPhone 3GS and many early Android phones. The beginning of ARM's dominance in mobile computing.",
             specs: { "Bits": "32-bit", "Clock": "600 MHz\u20131 GHz", "Arch": "ARMv7-A", "Used in": "iPhone 3GS, TI OMAP3" },
             img: "",
@@ -222,14 +222,14 @@
             diff: "vs Nehalem: GPU integrated on-die; AVX (256-bit SIMD); ring bus interconnect; ~20% IPC gain; unified LLC shared with GPU; improved Turbo Boost 2.0; 32 nm vs 45 nm"
         },
         {
-            year: 2013, name: "Apple A7", cat: "arm",
+            year: 2013, name: "Apple A7", cat: "arm", company: "Apple",
             desc: "First 64-bit ARM mobile processor (ARMv8). Debuted in iPhone 5s and caught the industry by surprise. Apple's custom Cyclone cores showed ARM could be high-performance.",
             specs: { "Bits": "64-bit", "Transistors": "1 billion", "Clock": "1.3 GHz", "Process": "28 nm", "First": "First 64-bit mobile" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Apple_A7_chip.jpg/280px-Apple_A7_chip.jpg",
             diff: "vs Cortex-A8: 32-bit \u2192 64-bit (ARMv8); Apple custom Cyclone cores (not ARM reference); 1 billion transistors; desktop-class wide decode (6-wide); M7 motion coprocessor; Secure Enclave"
         },
         {
-            year: 2014, name: "ESP8266", cat: "other",
+            year: 2014, name: "ESP8266", cat: "other", company: "Espressif Systems",
             desc: "Low-cost Wi-Fi microcontroller by Espressif Systems that revolutionized IoT development. Initially a cheap Wi-Fi-to-serial module, it became a standalone MCU platform. Followed by the ESP32 (2016) with dual-core, Bluetooth, and more.",
             specs: { "Bits": "32-bit", "Core": "Tensilica L106", "Clock": "80\u2013160 MHz", "Wi-Fi": "802.11 b/g/n", "Cost": "~$2" },
             img: "",
@@ -257,7 +257,7 @@
             diff: "vs Sandy Bridge: 10 nm SuperFin vs 32 nm; Willow Cove cores with ~20% IPC over Sunny Cove; Xe LP GPU (up to 96 EUs); Thunderbolt 4; PCIe 4.0; AI-accelerated DL Boost"
         },
         {
-            year: 2020, name: "Apple M1", cat: "arm",
+            year: 2020, name: "Apple M1", cat: "arm", company: "Apple",
             desc: "Apple's first custom ARM-based Mac processor. Shocked the industry with performance matching or exceeding Intel's laptop chips at a fraction of the power. Marked Apple's transition away from x86.",
             specs: { "Bits": "64-bit", "Transistors": "16 billion", "Clock": "3.2 GHz", "Process": "5 nm (TSMC)", "Cores": "8 (4P+4E)" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Apple_M1_chip_%28no_background%29.png/280px-Apple_M1_chip_%28no_background%29.png",
@@ -278,7 +278,7 @@
             diff: "vs Ryzen 3000 (Zen 2): 7 nm \u2192 5 nm; ~13% IPC gain; DDR5 & PCIe 5.0; integrated RDNA 2 iGPU in every SKU; new AM5 (LGA) socket; AVX-512; up to 5.7 GHz boost"
         },
         {
-            year: 2023, name: "Apple M3", cat: "arm",
+            year: 2023, name: "Apple M3", cat: "arm", company: "Apple",
             desc: "First consumer processor built on 3nm process technology (TSMC N3B). Hardware-accelerated ray tracing in GPU. Dynamic caching for GPU memory.",
             specs: { "Bits": "64-bit", "Transistors": "25 billion", "Clock": "Up to 4.05 GHz", "Process": "3 nm (TSMC)", "New": "Ray tracing, 3nm" },
             img: "",
@@ -292,7 +292,7 @@
             diff: "vs Alder Lake: Disaggregated tile/chiplet design (Foveros 3D); dedicated NPU for AI; Intel 4 process; mixed foundry (Intel + TSMC); ARC GPU on-die replaces legacy iGPU; improved power efficiency"
         },
         {
-            year: 2021, name: "RP2040", cat: "other",
+            year: 2021, name: "RP2040", cat: "other", company: "Raspberry Pi",
             desc: "Raspberry Pi's first custom microcontroller. Dual-core ARM Cortex-M0+ at 133 MHz for just $1. Features programmable I/O (PIO) state machines \u2014 a unique feature for bit-banging custom protocols.",
             specs: { "Bits": "32-bit", "Cores": "2\u00d7 Cortex-M0+", "Clock": "133 MHz", "RAM": "264 KB", "Cost": "$1", "Special": "PIO state machines" },
             img: "",
@@ -496,9 +496,12 @@
         timeline.appendChild(eventEl);
     });
 
+    var CAT_COMPANY = { intel: "Intel", amd: "AMD", arm: "ARM / Apple", other: "" };
+
     function showTooltip(ev, e) {
         document.getElementById('mptTooltipTitle').textContent = ev.name;
-        document.getElementById('mptTooltipYear').textContent = ev.year;
+        var company = ev.company || CAT_COMPANY[ev.cat] || '';
+        document.getElementById('mptTooltipYear').textContent = ev.year + (company ? ' \u00b7 ' + company : '');
         document.getElementById('mptTooltipDesc').textContent = ev.desc;
 
         var img = document.getElementById('mptTooltipImg');
