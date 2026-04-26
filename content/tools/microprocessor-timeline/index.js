@@ -41,7 +41,7 @@
         {
             year: 1978, name: "Intel 8086", cat: "intel",
             desc: "The chip that started the x86 architecture \u2014 still the foundation of most PCs today. Source-code compatible successor to the 8080. Used in early IBM PC clones.",
-            specs: { "Bits": "16-bit", "Transistors": "29,000", "Clock": "5\u201310 MHz", "Process": "3 \u00b5m", "Address": "1 MB" },
+            specs: { "Bits": "16-bit", "Transistors": "29,000", "Clock": "5\u201310 MHz", "Process": "3 \u00b5m", "Address": "1 MB", "Chipset": "8288 bus controller + 8259 PIC + 8237 DMA + 8253 PIT" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Intel_C8086.jpg/280px-Intel_C8086.jpg",
             diff: "vs 8080: 8-bit \u2192 16-bit data; 1 MB address space vs 64 KB; 5\u201310 MHz vs 2 MHz; 29K transistors vs 6K; segment-based memory model; new x86 instruction set"
         },
@@ -67,14 +67,14 @@
         {
             year: 1982, name: "Intel 80286", cat: "intel",
             desc: "Introduced protected mode for multitasking. Used in the IBM PC/AT. Could address up to 16 MB of memory. First Intel processor with memory management.",
-            specs: { "Bits": "16-bit", "Transistors": "134,000", "Clock": "6\u201325 MHz", "Process": "1.5 \u00b5m", "Address": "16 MB" },
+            specs: { "Bits": "16-bit", "Transistors": "134,000", "Clock": "6\u201325 MHz", "Process": "1.5 \u00b5m", "Address": "16 MB", "Chipset": "Intel 82284 / Intel 82288 (IBM PC/AT chipset)" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/KL_Intel_i286.jpg/280px-KL_Intel_i286.jpg",
             diff: "vs 8086: Added protected mode for multitasking; 16 MB address space vs 1 MB; hardware memory management unit (MMU); 134K transistors vs 29K; up to 25 MHz vs 10 MHz"
         },
         {
             year: 1985, name: "Intel 80386", cat: "intel",
             desc: "First 32-bit x86 processor. Introduced virtual 8086 mode, paging, and a flat memory model. The architecture that modern x86 backward compatibility traces to.",
-            specs: { "Bits": "32-bit", "Transistors": "275,000", "Clock": "12\u201340 MHz", "Process": "1.5\u20131 \u00b5m", "Address": "4 GB" },
+            specs: { "Bits": "32-bit", "Transistors": "275,000", "Clock": "12\u201340 MHz", "Process": "1.5\u20131 \u00b5m", "Address": "4 GB", "Chipset": "Intel 82350 EISA / 82350DT" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/KL_Intel_i386DX.jpg/280px-KL_Intel_i386DX.jpg",
             diff: "vs 80286: 16-bit \u2192 32-bit; 4 GB address space vs 16 MB; paging and virtual memory; virtual 8086 mode; flat memory model; 275K transistors vs 134K"
         },
@@ -87,7 +87,7 @@
         {
             year: 1989, name: "Intel 80486", cat: "intel",
             desc: "Integrated FPU and 8 KB L1 cache on-die for the first time. Five-stage pipeline doubled performance per clock vs. the 386. Reached 100 MHz in DX4 variant.",
-            specs: { "Bits": "32-bit", "Transistors": "1.2 million", "Clock": "25\u2013100 MHz", "Process": "1\u20130.6 \u00b5m", "Cache": "8 KB L1" },
+            specs: { "Bits": "32-bit", "Transistors": "1.2 million", "Clock": "25\u2013100 MHz", "Process": "1\u20130.6 \u00b5m", "Cache": "8 KB L1", "Chipset": "Intel 420TX / 420ZX / 430FX (Triton)" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/KL_Intel_i486DX.jpg/280px-KL_Intel_i486DX.jpg",
             diff: "vs 80386: On-die FPU (was separate 387 chip); 8 KB L1 cache on-die; 5-stage pipeline (2\u00d7 IPC); 1.2M transistors vs 275K; up to 100 MHz vs 40 MHz"
         },
@@ -106,14 +106,14 @@
         {
             year: 1993, name: "Intel Pentium", cat: "intel",
             desc: "Superscalar architecture with dual pipelines. The name 'Pentium' was adopted because numbers (586) couldn't be trademarked. Introduced the FDIV bug controversy.",
-            specs: { "Bits": "32-bit", "Transistors": "3.1 million", "Clock": "60\u2013300 MHz", "Process": "0.8\u20130.35 \u00b5m", "Arch": "P5 superscalar" },
+            specs: { "Bits": "32-bit", "Transistors": "3.1 million", "Clock": "60\u2013300 MHz", "Process": "0.8\u20130.35 \u00b5m", "Arch": "P5 superscalar", "Chipset": "Intel 430FX (Triton) / 430HX / 430VX / 430TX" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/KL_Intel_Pentium_A80501.jpg/280px-KL_Intel_Pentium_A80501.jpg",
             diff: "vs 80486: Superscalar (2 pipelines, can execute 2 instructions/cycle); 64-bit data bus; separate code/data caches (8 KB each); branch prediction; 3.1M transistors vs 1.2M"
         },
         {
             year: 1995, name: "Intel Pentium Pro", cat: "intel",
             desc: "Revolutionary P6 microarchitecture with out-of-order execution, speculative execution, and integrated L2 cache. Foundation for all subsequent Intel designs until Core.",
-            specs: { "Bits": "32-bit", "Transistors": "5.5 million", "Clock": "150\u2013200 MHz", "Process": "0.5\u20130.35 \u00b5m", "Arch": "P6 (OoO)" },
+            specs: { "Bits": "32-bit", "Transistors": "5.5 million", "Clock": "150\u2013200 MHz", "Process": "0.5\u20130.35 \u00b5m", "Arch": "P6 (OoO)", "Chipset": "Intel 440FX (Natoma)" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/KL_Intel_Pentium_Pro.jpg/280px-KL_Intel_Pentium_Pro.jpg",
             diff: "vs Pentium: In-order \u2192 out-of-order execution; speculative execution & branch prediction; micro-ops architecture (CISC decoded to RISC); on-package L2 cache (256\u2013512 KB); 36-bit address bus"
         },
@@ -134,55 +134,55 @@
         {
             year: 1997, name: "Intel Pentium II", cat: "intel",
             desc: "P6 architecture with MMX instructions. Introduced the Slot 1 cartridge form factor. Combined with the 440BX chipset, it became the standard for Windows 98 era PCs.",
-            specs: { "Bits": "32-bit", "Transistors": "7.5 million", "Clock": "233\u2013450 MHz", "Process": "0.35\u20130.25 \u00b5m", "New": "MMX, Slot 1" },
+            specs: { "Bits": "32-bit", "Transistors": "7.5 million", "Clock": "233\u2013450 MHz", "Process": "0.35\u20130.25 \u00b5m", "New": "MMX, Slot 1", "Chipset": "Intel 440BX (most popular) / 440LX / 440EX" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Pentium_II.jpg/280px-Pentium_II.jpg",
             diff: "vs Pentium Pro: Added MMX (57 SIMD integer instructions); Slot 1 cartridge form factor; improved 16-bit code performance; higher clocks (up to 450 MHz vs 200 MHz); 0.25 \u00b5m process"
         },
         {
             year: 1999, name: "AMD Athlon", cat: "amd",
             desc: "AMD's breakthrough processor. First x86 chip to reach 1 GHz (March 2000). Competitive with and often faster than Intel's Pentium III. Used the EV6 bus from Alpha.",
-            specs: { "Bits": "32-bit", "Transistors": "22 million", "Clock": "500 MHz\u20131.4 GHz", "Process": "250\u2013180 nm", "Arch": "K7" },
+            specs: { "Bits": "32-bit", "Transistors": "22 million", "Clock": "500 MHz\u20131.4 GHz", "Process": "250\u2013180 nm", "Arch": "K7", "Chipset": "AMD 750 / VIA KT133 / nForce" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/AMD_Athlon_Processor_Logo.svg/280px-AMD_Athlon_Processor_Logo.svg.png"
         },
         {
             year: 1999, name: "Intel Pentium III", cat: "intel",
             desc: "Added SSE (Streaming SIMD Extensions) for floating-point performance. Available in both Slot 1 and Socket 370. Popular in the Windows 2000/XP era.",
-            specs: { "Bits": "32-bit", "Transistors": "9.5\u201328 million", "Clock": "450 MHz\u20131.4 GHz", "Process": "250\u2013130 nm", "New": "SSE" },
+            specs: { "Bits": "32-bit", "Transistors": "9.5\u201328 million", "Clock": "450 MHz\u20131.4 GHz", "Process": "250\u2013130 nm", "New": "SSE", "Chipset": "Intel 440BX / 815 (Solano) / 820 (Camino)" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/KL_Intel_Pentium_III_Coppermine.jpg/280px-KL_Intel_Pentium_III_Coppermine.jpg",
             diff: "vs Pentium II: Added SSE (70 new floating-point SIMD instructions); on-die L2 cache (Coppermine); up to 1.4 GHz vs 450 MHz; 130 nm process; processor serial number"
         },
         {
             year: 2000, name: "Intel Pentium 4", cat: "intel",
             desc: "NetBurst architecture prioritized high clock speeds. Reached 3.8 GHz but at the cost of high power consumption. Introduced Hyper-Threading and SSE2.",
-            specs: { "Bits": "32-bit", "Transistors": "42\u2013169 million", "Clock": "1.3\u20133.8 GHz", "Process": "180\u201365 nm", "New": "HT, SSE2" },
+            specs: { "Bits": "32-bit", "Transistors": "42\u2013169 million", "Clock": "1.3\u20133.8 GHz", "Process": "180\u201365 nm", "New": "HT, SSE2", "Chipset": "Intel 850 (Tehama) / 865 / 875 / 915 / 945 / 975X" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/KL_Intel_Pentium_4_Northwood.jpg/280px-KL_Intel_Pentium_4_Northwood.jpg",
             diff: "vs Pentium III: Entirely new NetBurst architecture (deep 20-stage pipeline); SSE2 (144 new instructions); Hyper-Threading; much higher clocks (3.8 GHz vs 1.4 GHz) but lower IPC; Rambus RDRAM then DDR"
         },
         {
             year: 2003, name: "AMD Athlon 64", cat: "amd",
             desc: "First x86 desktop processor with 64-bit extensions (AMD64/x86-64). This architecture was so successful that Intel had to adopt it, and it remains the standard today.",
-            specs: { "Bits": "64-bit", "Transistors": "105.9 million", "Clock": "1.8\u20132.6 GHz", "Process": "130\u201390 nm", "First": "First x86-64 desktop" },
+            specs: { "Bits": "64-bit", "Transistors": "105.9 million", "Clock": "1.8\u20132.6 GHz", "Process": "130\u201390 nm", "First": "First x86-64 desktop", "Chipset": "nForce3 / VIA K8T800 / ATI Xpress 200" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/AMD_Athlon_64_3200%2B.jpg/280px-AMD_Athlon_64_3200%2B.jpg",
             diff: "vs Athlon (K7): 32-bit \u2192 64-bit (AMD64/x86-64); integrated memory controller (was in chipset); HyperTransport bus; K8 architecture; NX bit; Cool'n'Quiet power management"
         },
         {
             year: 2005, name: "AMD Athlon 64 X2", cat: "amd",
             desc: "First native dual-core x86 desktop processor. Two full cores on a single die, marking the beginning of the multi-core era for consumer PCs.",
-            specs: { "Bits": "64-bit", "Transistors": "233 million", "Clock": "2.0\u20132.6 GHz", "Process": "90 nm", "Cores": "2 (native)" },
+            specs: { "Bits": "64-bit", "Transistors": "233 million", "Clock": "2.0\u20132.6 GHz", "Process": "90 nm", "Cores": "2 (native)", "Chipset": "nForce4 / ATI CrossFire Xpress 3200" },
             img: "",
             diff: "vs Athlon 64: 1 core \u2192 2 native cores on single die; 233M vs 106M transistors; shared crossbar switch for inter-core communication; DDR2 support; 90 nm process"
         },
         {
             year: 2006, name: "Intel Core 2 Duo", cat: "intel",
             desc: "Abandoned the hot NetBurst architecture in favor of the efficient Core microarchitecture. Dramatic improvement in performance-per-watt. Restored Intel's performance leadership.",
-            specs: { "Bits": "64-bit", "Transistors": "291 million", "Clock": "1.06\u20133.33 GHz", "Process": "65 nm", "Arch": "Core (Merom)" },
+            specs: { "Bits": "64-bit", "Transistors": "291 million", "Clock": "1.06\u20133.33 GHz", "Process": "65 nm", "Arch": "Core (Merom)", "Chipset": "Intel 965 (Broadwater) / P35 (Bearlake) / X38" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Intel_Core2_Duo_E6300_die.jpg/280px-Intel_Core2_Duo_E6300_die.jpg",
             diff: "vs Pentium 4: Abandoned deep-pipeline NetBurst for efficient Core arch; much better perf/watt; native 64-bit; dual cores; 4 MB shared L2 cache; wide 4-issue execution; 65 nm vs 90\u201365 nm"
         },
         {
             year: 2008, name: "Intel Core i7 (Nehalem)", cat: "intel",
             desc: "Introduced integrated memory controller, QuickPath Interconnect (QPI), and Hyper-Threading. First Intel processor with on-die memory controller.",
-            specs: { "Bits": "64-bit", "Transistors": "731 million", "Clock": "2.66\u20133.33 GHz", "Process": "45 nm", "Cores": "4 + HT" },
+            specs: { "Bits": "64-bit", "Transistors": "731 million", "Clock": "2.66\u20133.33 GHz", "Process": "45 nm", "Cores": "4 + HT", "Chipset": "Intel X58 (Tylersburg)" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Intel_Core_i7-920_CPU.jpg/280px-Intel_Core_i7-920_CPU.jpg",
             diff: "vs Core 2 Duo: Integrated memory controller (was in chipset); QPI replaces FSB; Hyper-Threading returns; 4 cores standard; Turbo Boost; 45 nm vs 65 nm; 731M vs 291M transistors"
         },
@@ -210,7 +210,7 @@
         {
             year: 2011, name: "Intel Sandy Bridge", cat: "intel",
             desc: "Integrated CPU and GPU on the same die. Introduced AVX instruction set and ring bus architecture. Massive IPC improvement. Considered one of Intel's best generations.",
-            specs: { "Bits": "64-bit", "Transistors": "1.16 billion", "Clock": "2.3\u20133.5 GHz", "Process": "32 nm", "New": "AVX, iGPU" },
+            specs: { "Bits": "64-bit", "Transistors": "1.16 billion", "Clock": "2.3\u20133.5 GHz", "Process": "32 nm", "New": "AVX, iGPU", "Chipset": "Intel Z68 / P67 / H67 / H61 (Cougar Point)" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Sandy_Bridge_arch.jpg/280px-Sandy_Bridge_arch.jpg",
             diff: "vs Nehalem: GPU integrated on-die; AVX (256-bit SIMD); ring bus interconnect; ~20% IPC gain; unified LLC shared with GPU; improved Turbo Boost 2.0; 32 nm vs 45 nm"
         },
@@ -231,16 +231,23 @@
         {
             year: 2017, name: "AMD Ryzen (Zen)", cat: "amd",
             desc: "AMD's dramatic comeback. The Zen architecture closed the massive IPC gap with Intel and offered more cores at lower prices. Ryzen 7 1800X had 8 cores vs Intel's mainstream 4.",
-            specs: { "Bits": "64-bit", "Transistors": "4.8 billion", "Clock": "3.0\u20133.6 GHz", "Process": "14 nm", "Cores": "Up to 8" },
+            specs: { "Bits": "64-bit", "Transistors": "4.8 billion", "Clock": "3.0\u20133.6 GHz", "Process": "14 nm", "Cores": "Up to 8", "Chipset": "AMD X370 / B350 / A320 (AM4)" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/AMD_Ryzen_5_1600_Processor.jpg/280px-AMD_Ryzen_5_1600_Processor.jpg",
             diff: "vs Athlon 64 X2: Entirely new Zen architecture; ~52% IPC gain over Excavator; SMT (2 threads/core); up to 8 cores vs 2; CCX design (4-core complexes); 14 nm FinFET; AM4 platform; Precision Boost"
         },
         {
             year: 2019, name: "AMD Ryzen 3000 (Zen 2)", cat: "amd",
             desc: "First x86 processors on 7nm. Chiplet design with separate I/O die. Up to 16 cores for desktop. Took the performance crown from Intel for the first time in over a decade.",
-            specs: { "Bits": "64-bit", "Clock": "3.6\u20134.7 GHz", "Process": "7 nm (TSMC)", "Cores": "Up to 16", "Arch": "Zen 2 chiplet" },
+            specs: { "Bits": "64-bit", "Clock": "3.6\u20134.7 GHz", "Process": "7 nm (TSMC)", "Cores": "Up to 16", "Arch": "Zen 2 chiplet", "Chipset": "AMD X570 / B550 (AM4)" },
             img: "",
             diff: "vs Ryzen (Zen 1): 14 nm \u2192 7 nm; chiplet design (CCD + IOD); ~15% IPC gain; doubled L3 cache (32 MB/CCD); up to 16 cores vs 8; PCIe 4.0; higher clocks (4.7 vs 3.6 GHz boost)"
+        },
+        {
+            year: 2020, name: "Intel Tiger Lake (11th Gen)", cat: "intel",
+            desc: "Intel's first processor with Willow Cove cores and integrated Xe LP graphics. Built on 10nm SuperFin process. Brought major GPU improvements with Intel Iris Xe, competitive with entry-level discrete GPUs for the first time.",
+            specs: { "Bits": "64-bit", "Transistors": "Up to 2.3 billion", "Clock": "Up to 4.8 GHz", "Process": "10 nm SuperFin", "Cores": "Up to 4 (8T)", "New": "Xe GPU, TB4, PCIe 4.0", "Chipset": "Intel 500 series (Z590, B560, H570)" },
+            img: "",
+            diff: "vs Sandy Bridge: 10 nm SuperFin vs 32 nm; Willow Cove cores with ~20% IPC over Sunny Cove; Xe LP GPU (up to 96 EUs); Thunderbolt 4; PCIe 4.0; AI-accelerated DL Boost"
         },
         {
             year: 2020, name: "Apple M1", cat: "arm",
@@ -252,14 +259,14 @@
         {
             year: 2021, name: "Intel Alder Lake (12th Gen)", cat: "intel",
             desc: "Intel's first hybrid architecture with Performance (P) and Efficiency (E) cores. Returned Intel to competitiveness with AMD. Introduced DDR5 and PCIe 5.0 support.",
-            specs: { "Bits": "64-bit", "Clock": "Up to 5.2 GHz", "Process": "Intel 7 (10 nm)", "Cores": "Up to 16 (8P+8E)", "New": "Hybrid, DDR5" },
+            specs: { "Bits": "64-bit", "Clock": "Up to 5.2 GHz", "Process": "Intel 7 (10 nm)", "Cores": "Up to 16 (8P+8E)", "New": "Hybrid, DDR5", "Chipset": "Intel Z690 / B660 / H670 / H610 (LGA 1700)" },
             img: "",
-            diff: "vs Sandy Bridge: Hybrid big.LITTLE design (P+E cores); DDR5 & PCIe 5.0; Intel 7 (10 nm) vs 32 nm; Thread Director for OS scheduling; up to 16 cores vs 4; 5.2 GHz vs 3.5 GHz"
+            diff: "vs Tiger Lake: Hybrid big.LITTLE design (P+E cores); DDR5 & PCIe 5.0; Intel 7 (10 nm ESF) vs 10 nm SuperFin; Thread Director for OS scheduling; up to 16 cores vs 4; 5.2 GHz vs 4.8 GHz"
         },
         {
             year: 2022, name: "AMD Ryzen 7000 (Zen 4)", cat: "amd",
             desc: "First AMD desktop processors on 5nm with AM5 socket. Integrated RDNA 2 graphics in every chip. Support for DDR5 and PCIe 5.0.",
-            specs: { "Bits": "64-bit", "Clock": "Up to 5.7 GHz", "Process": "5 nm (TSMC)", "Cores": "Up to 16", "New": "AM5, DDR5, iGPU" },
+            specs: { "Bits": "64-bit", "Clock": "Up to 5.7 GHz", "Process": "5 nm (TSMC)", "Cores": "Up to 16", "New": "AM5, DDR5, iGPU", "Chipset": "AMD X670E / X670 / B650E / B650 (AM5)" },
             img: "",
             diff: "vs Ryzen 3000 (Zen 2): 7 nm \u2192 5 nm; ~13% IPC gain; DDR5 & PCIe 5.0; integrated RDNA 2 iGPU in every SKU; new AM5 (LGA) socket; AVX-512; up to 5.7 GHz boost"
         },
@@ -273,7 +280,7 @@
         {
             year: 2024, name: "Intel Core Ultra (Meteor Lake)", cat: "intel",
             desc: "Intel's disaggregated tile architecture using Foveros 3D packaging. Features a dedicated NPU (Neural Processing Unit) for AI workloads. First Intel processor with chiplet design.",
-            specs: { "Bits": "64-bit", "Process": "Intel 4 + TSMC N5/N6", "Cores": "Up to 16", "New": "NPU, Foveros 3D", "Arch": "Disaggregated tiles" },
+            specs: { "Bits": "64-bit", "Process": "Intel 4 + TSMC N5/N6", "Cores": "Up to 16", "New": "NPU, Foveros 3D", "Arch": "Disaggregated tiles", "Chipset": "Integrated SoC (no separate PCH for mobile)" },
             img: "",
             diff: "vs Alder Lake: Disaggregated tile/chiplet design (Foveros 3D); dedicated NPU for AI; Intel 4 process; mixed foundry (Intel + TSMC); ARC GPU on-die replaces legacy iGPU; improved power efficiency"
         },
@@ -285,16 +292,30 @@
             diff: "vs ESP8266: Dual-core vs single; unique PIO (programmable I/O) state machines; no built-in Wi-Fi (add-on via Pico W); $1 vs ~$2; USB host/device; 264 KB RAM; Raspberry Pi ecosystem"
         },
         {
+            year: 2024, name: "Intel Core Ultra 200V (Lunar Lake)", cat: "intel",
+            desc: "Ultra-efficient mobile processor with on-package LPDDR5X memory (a first for x86). Uses Lion Cove P-cores and Skymont E-cores. Features a significantly enhanced NPU (48 TOPS) for AI workloads. No Hyper-Threading — focuses on efficiency.",
+            specs: { "Bits": "64-bit", "Process": "Intel 4 + TSMC N3B", "Cores": "Up to 8 (4P+4E)", "NPU": "48 TOPS", "New": "On-package memory, Lion Cove", "Chipset": "Fully integrated SoC" },
+            img: "",
+            diff: "vs Meteor Lake: On-package LPDDR5X (no DIMM slots); Lion Cove P-cores + Skymont E-cores; 48 TOPS NPU vs 10 TOPS; TSMC N3B tiles vs N5; no Hyper-Threading; much better battery life"
+        },
+        {
             year: 2024, name: "AMD Ryzen 9000 (Zen 5)", cat: "amd",
             desc: "Latest Zen 5 architecture with significant IPC improvements. Uses TSMC 4nm process for CCD and 6nm for IOD.",
-            specs: { "Bits": "64-bit", "Clock": "Up to 5.7 GHz", "Process": "4 nm (TSMC)", "Cores": "Up to 16", "Arch": "Zen 5" },
+            specs: { "Bits": "64-bit", "Clock": "Up to 5.7 GHz", "Process": "4 nm (TSMC)", "Cores": "Up to 16", "Arch": "Zen 5", "Chipset": "AMD X870E / X870 / B850 / B840 (AM5)" },
             img: "",
             diff: "vs Ryzen 7000 (Zen 4): ~16% average IPC gain; wider front-end (2\u00d7 dispatch); improved branch prediction; 4 nm vs 5 nm CCD; better power efficiency; dual-pipe FP/AI workloads"
+        },
+        {
+            year: 2025, name: "Intel Panther Lake", cat: "intel",
+            desc: "Intel's next-generation mobile processor expected to be the first built on Intel 18A process (1.8 nm class). Combines Intel's own 18A manufacturing with advanced packaging. Aims to reclaim process leadership.",
+            specs: { "Bits": "64-bit", "Process": "Intel 18A (1.8 nm class)", "New": "Intel 18A process, next-gen NPU", "Arch": "Next-gen cores", "Chipset": "Integrated SoC" },
+            img: "",
+            diff: "vs Lunar Lake: Intel 18A (1.8 nm) vs Intel 4 + TSMC N3B; first processor on Intel's own leading-edge node; expected IPC and efficiency gains; likely desktop and mobile variants"
         }
     ];
 
     var YEAR_MIN = 1970;
-    var YEAR_MAX = 2025;
+    var YEAR_MAX = 2026;
     var DEFAULT_PX_PER_YEAR = 90;
     var PX_PER_YEAR = DEFAULT_PX_PER_YEAR;
     var MIN_PX = 30;
@@ -363,7 +384,8 @@
         eventEls.forEach(function(el) {
             var idx = parseInt(el.getAttribute('data-idx'), 10);
             var ev = EVENTS[idx];
-            el.style.left = yearToX(ev.year) + 'px';
+            var hOffset = parseInt(el.getAttribute('data-hoffset') || '0', 10);
+            el.style.left = (yearToX(ev.year) + hOffset) + 'px';
         });
         updateZoomUI();
     }
@@ -405,27 +427,43 @@
     // Track occupied slots to alternate above/below
     var slotMap = {};
 
+    // Slot classes: cycle through above, below, above-high, below-low
+    var slotClasses = ['mpt-event-above', 'mpt-event-below', 'mpt-event-above-high', 'mpt-event-below-low'];
+    var HORIZONTAL_OFFSET = 40; // px offset for same-year events
+
     EVENTS.forEach(function (ev, idx) {
         var x = yearToX(ev.year);
 
-        // Decide above or below to avoid overlap
+        // Decide position to avoid overlap
         var key = ev.year;
         if (!slotMap[key]) slotMap[key] = 0;
         var slotIdx = slotMap[key]++;
-        var isAbove = slotIdx % 2 === 0;
+        var posClass = slotClasses[slotIdx % slotClasses.length];
+
+        // Horizontal offset for 2nd+ event in same year
+        var hOffset = 0;
+        if (slotIdx > 0) {
+            hOffset = Math.ceil(slotIdx / 2) * HORIZONTAL_OFFSET * (slotIdx % 2 === 0 ? 1 : -1);
+        }
 
         var eventEl = document.createElement('div');
-        eventEl.className = 'mpt-event ' + (isAbove ? 'mpt-event-above' : 'mpt-event-below');
-        eventEl.style.left = x + 'px';
+        eventEl.className = 'mpt-event ' + posClass;
+        eventEl.style.left = (x + hOffset) + 'px';
         eventEl.setAttribute('data-cat', ev.cat);
         eventEl.setAttribute('data-idx', idx);
+        eventEl.setAttribute('data-hoffset', hOffset);
 
         var dotWrapper = document.createElement('div');
         dotWrapper.className = 'mpt-dot-wrapper';
 
         var label = document.createElement('div');
         label.className = 'mpt-label';
-        label.innerHTML = ev.name + '<br><span class="mpt-year-tag">' + ev.year + '</span>';
+        var chipsetHtml = '';
+        if (ev.specs && ev.specs.Chipset) {
+            var shortChipset = ev.specs.Chipset.split('/')[0].split('(')[0].trim();
+            chipsetHtml = '<span class="mpt-chipset-tag">' + shortChipset + '</span>';
+        }
+        label.innerHTML = ev.name + chipsetHtml;
 
         var stem = document.createElement('div');
         stem.className = 'mpt-stem';

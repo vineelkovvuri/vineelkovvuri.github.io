@@ -1,5 +1,5 @@
 ﻿---
-title: "ðŸ”¬ Microprocessor Timeline"
+title: "🔬 Microprocessor Timeline"
 tags: ["Tools"]
 category: "Dev Tools"
 ---
@@ -66,14 +66,14 @@ category: "Dev Tools"
 
     .mpt-timeline {
         position: relative;
-        height: 340px;
+        height: 420px;
         min-width: 5000px;
         padding: 0 40px;
     }
 
     .mpt-axis {
         position: absolute;
-        top: 170px;
+        top: 210px;
         left: 0;
         right: 0;
         height: 3px;
@@ -83,7 +83,7 @@ category: "Dev Tools"
 
     .mpt-year-marker {
         position: absolute;
-        top: 170px;
+        top: 210px;
         width: 1px;
         height: 16px;
         background: #ced4da;
@@ -91,7 +91,7 @@ category: "Dev Tools"
 
     .mpt-year-label {
         position: absolute;
-        top: 190px;
+        top: 230px;
         font-size: 11px;
         color: #7f8c8d;
         transform: translateX(-50%);
@@ -106,20 +106,30 @@ category: "Dev Tools"
     }
 
     .mpt-event-above {
-        top: 45px;
+        top: 85px;
+    }
+
+    .mpt-event-above-high {
+        top: 30px;
     }
 
     .mpt-event-below {
-        top: 195px;
+        top: 235px;
     }
 
-    .mpt-event-above .mpt-dot-wrapper {
+    .mpt-event-below-low {
+        top: 235px;
+    }
+
+    .mpt-event-above .mpt-dot-wrapper,
+    .mpt-event-above-high .mpt-dot-wrapper {
         display: flex;
         flex-direction: column;
         align-items: center;
     }
 
-    .mpt-event-below .mpt-dot-wrapper {
+    .mpt-event-below .mpt-dot-wrapper,
+    .mpt-event-below-low .mpt-dot-wrapper {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -136,8 +146,18 @@ category: "Dev Tools"
         order: 2;
     }
 
+    .mpt-event-above-high .mpt-stem {
+        height: 115px;
+        order: 2;
+    }
+
     .mpt-event-below .mpt-stem {
         height: 70px;
+        order: -1;
+    }
+
+    .mpt-event-below-low .mpt-stem {
+        height: 115px;
         order: -1;
     }
 
@@ -164,7 +184,15 @@ category: "Dev Tools"
         order: 3;
     }
 
+    .mpt-event-above-high .mpt-dot {
+        order: 3;
+    }
+
     .mpt-event-below .mpt-dot {
+        order: 0;
+    }
+
+    .mpt-event-below-low .mpt-dot {
         order: 0;
     }
 
@@ -183,7 +211,17 @@ category: "Dev Tools"
         margin-bottom: 4px;
     }
 
+    .mpt-event-above-high .mpt-label {
+        order: 1;
+        margin-bottom: 4px;
+    }
+
     .mpt-event-below .mpt-label {
+        order: 1;
+        margin-top: 4px;
+    }
+
+    .mpt-event-below-low .mpt-label {
         order: 1;
         margin-top: 4px;
     }
@@ -192,6 +230,17 @@ category: "Dev Tools"
         font-size: 10px;
         color: #7f8c8d;
         font-weight: 400;
+    }
+
+    .mpt-chipset-tag {
+        font-size: 9px;
+        color: #5a9fd4;
+        font-weight: 400;
+        display: block;
+        max-width: 120px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     /* Tooltip */

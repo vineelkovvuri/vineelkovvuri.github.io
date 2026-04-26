@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>ðŸ”¬ Microprocessor Timeline | Vineel Kovvuri</title>
+    <title>🔬 Microprocessor Timeline | Vineel Kovvuri</title>
     
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
@@ -36,7 +36,7 @@
     </nav>
 
 <div class="article-meta">
-<h1><span class="title">ðŸ”¬ Microprocessor Timeline</span></h1>
+<h1><span class="title">🔬 Microprocessor Timeline</span></h1>
 
 
 </div>
@@ -107,14 +107,14 @@
 
     .mpt-timeline {
         position: relative;
-        height: 340px;
+        height: 420px;
         min-width: 5000px;
         padding: 0 40px;
     }
 
     .mpt-axis {
         position: absolute;
-        top: 170px;
+        top: 210px;
         left: 0;
         right: 0;
         height: 3px;
@@ -124,7 +124,7 @@
 
     .mpt-year-marker {
         position: absolute;
-        top: 170px;
+        top: 210px;
         width: 1px;
         height: 16px;
         background: #ced4da;
@@ -132,7 +132,7 @@
 
     .mpt-year-label {
         position: absolute;
-        top: 190px;
+        top: 230px;
         font-size: 11px;
         color: #7f8c8d;
         transform: translateX(-50%);
@@ -147,20 +147,30 @@
     }
 
     .mpt-event-above {
-        top: 45px;
+        top: 85px;
+    }
+
+    .mpt-event-above-high {
+        top: 30px;
     }
 
     .mpt-event-below {
-        top: 195px;
+        top: 235px;
     }
 
-    .mpt-event-above .mpt-dot-wrapper {
+    .mpt-event-below-low {
+        top: 235px;
+    }
+
+    .mpt-event-above .mpt-dot-wrapper,
+    .mpt-event-above-high .mpt-dot-wrapper {
         display: flex;
         flex-direction: column;
         align-items: center;
     }
 
-    .mpt-event-below .mpt-dot-wrapper {
+    .mpt-event-below .mpt-dot-wrapper,
+    .mpt-event-below-low .mpt-dot-wrapper {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -177,8 +187,18 @@
         order: 2;
     }
 
+    .mpt-event-above-high .mpt-stem {
+        height: 115px;
+        order: 2;
+    }
+
     .mpt-event-below .mpt-stem {
         height: 70px;
+        order: -1;
+    }
+
+    .mpt-event-below-low .mpt-stem {
+        height: 115px;
         order: -1;
     }
 
@@ -205,7 +225,15 @@
         order: 3;
     }
 
+    .mpt-event-above-high .mpt-dot {
+        order: 3;
+    }
+
     .mpt-event-below .mpt-dot {
+        order: 0;
+    }
+
+    .mpt-event-below-low .mpt-dot {
         order: 0;
     }
 
@@ -224,7 +252,17 @@
         margin-bottom: 4px;
     }
 
+    .mpt-event-above-high .mpt-label {
+        order: 1;
+        margin-bottom: 4px;
+    }
+
     .mpt-event-below .mpt-label {
+        order: 1;
+        margin-top: 4px;
+    }
+
+    .mpt-event-below-low .mpt-label {
         order: 1;
         margin-top: 4px;
     }
@@ -233,6 +271,17 @@
         font-size: 10px;
         color: #7f8c8d;
         font-weight: 400;
+    }
+
+    .mpt-chipset-tag {
+        font-size: 9px;
+        color: #5a9fd4;
+        font-weight: 400;
+        display: block;
+        max-width: 120px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     /* Tooltip */
