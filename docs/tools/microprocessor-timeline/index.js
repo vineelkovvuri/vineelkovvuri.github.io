@@ -3,20 +3,27 @@
         {
             year: 1971, name: "Intel 4004", cat: "intel",
             desc: "The world's first commercially available single-chip microprocessor. Designed by Federico Faggin, Ted Hoff, Stanley Mazor, and Masatoshi Shima for Busicom calculators.",
-            specs: { "Bits": "4-bit", "Transistors": "2,300", "Clock": "740 kHz", "Process": "10 \u00b5m", "Pins": "16-pin DIP" },
+            specs: { "Bits": "4-bit", "Transistors": "2,300", "Clock": "740 kHz", "Process": "10 \u00b5m", "Pins": "16-pin DIP", "Chipset": "MCS-4 (4001 ROM, 4002 RAM, 4003 shift register)" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Intel_C4004.jpg/280px-Intel_C4004.jpg"
         },
         {
             year: 1972, name: "Intel 8008", cat: "intel",
             desc: "Intel's first 8-bit microprocessor. Designed for Computer Terminal Corporation's Datapoint 2200 terminal. Used in the first personal computers: SCELBI and Micral N.",
-            specs: { "Bits": "8-bit", "Transistors": "3,500", "Clock": "0.5\u20130.8 MHz", "Process": "10 \u00b5m", "Address": "16 KB" },
+            specs: { "Bits": "8-bit", "Transistors": "3,500", "Clock": "0.5\u20130.8 MHz", "Process": "10 \u00b5m", "Address": "16 KB", "Chipset": "MCS-8 (8008 CPU + support logic)" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Intel_C8008-1.jpg/280px-Intel_C8008-1.jpg",
             diff: "vs 4004: 4-bit \u2192 8-bit data width; 14-bit address bus (16 KB vs 640 bytes); 48 instructions vs 46; 18-pin DIP vs 16-pin"
         },
         {
+            year: 1974, name: "Intel 4040", cat: "intel",
+            desc: "Enhanced successor to the 4004 in the MCS-40 family. Added interrupt support, extra registers, 14 new instructions, and an expanded stack. Backward-compatible with 4004 software.",
+            specs: { "Bits": "4-bit", "Transistors": "3,000", "Clock": "740 kHz", "Process": "10 \u00b5m", "New": "Interrupts, 14 extra instructions", "Chipset": "MCS-40 (4008/4009 I/O, 4289 memory interface)" },
+            img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Intel_C4040.jpg/280px-Intel_C4040.jpg",
+            diff: "vs 4004: Added interrupt support; 24 index registers vs 16; 14 new instructions (60 total); hardware halt; expanded 7-level stack vs 3-level; MCS-40 support chips"
+        },
+        {
             year: 1974, name: "Intel 8080", cat: "intel",
             desc: "The processor that launched the microcomputer revolution. Ran CP/M operating system and powered the Altair 8800. Its architecture is the ancestor of x86.",
-            specs: { "Bits": "8-bit", "Transistors": "4,500\u20136,000", "Clock": "2 MHz", "Process": "6 \u00b5m", "Address": "64 KB" },
+            specs: { "Bits": "8-bit", "Transistors": "4,500\u20136,000", "Clock": "2 MHz", "Process": "6 \u00b5m", "Address": "64 KB", "Chipset": "MCS-80 (8224 clock, 8228 controller, 8251 USART, 8253 PIT, 8255 PPI, 8257 DMA, 8259 PIC)" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Intel_C8080A.jpg/280px-Intel_C8080A.jpg",
             diff: "vs 8008: 4\u00d7 clock speed (2 MHz vs 0.5 MHz); 64 KB address space vs 16 KB; 40-pin DIP with separate address/data bus; 6 \u00b5m vs 10 \u00b5m process; stack moved to external RAM"
         },
