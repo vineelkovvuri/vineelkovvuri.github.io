@@ -9,7 +9,7 @@
         {
             year: 1972, name: "Intel 8008", cat: "intel",
             desc: "Intel's first 8-bit microprocessor. Designed for Computer Terminal Corporation's Datapoint 2200 terminal. Used in the first personal computers: SCELBI and Micral N.",
-            specs: { "Bits": "8-bit", "Transistors": "3,500", "Clock": "0.5\u20130.8 MHz", "Process": "10 \u00b5m", "Address": "16 KB", "Chipset": "MCS-8 (8008 CPU + support logic)" },
+            specs: { "Bits": "8-bit", "Transistors": "3,500", "Clock": "0.5\u20130.8 MHz", "Process": "10 \u00b5m", "Address": "16 KB", "Chipset": "MCS-8 (8008 CPU + support logic)", "SKUs": "8008, 8008-1 (0.8 MHz)" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Intel_C8008-1.jpg/280px-Intel_C8008-1.jpg",
             diff: "vs 4004: 4-bit \u2192 8-bit data width; 14-bit address bus (16 KB vs 640 bytes); 48 instructions vs 46; 18-pin DIP vs 16-pin"
         },
@@ -23,65 +23,65 @@
         {
             year: 1974, name: "Intel 8080", cat: "intel",
             desc: "The processor that launched the microcomputer revolution. Ran CP/M operating system and powered the Altair 8800. Its architecture is the ancestor of x86.",
-            specs: { "Bits": "8-bit", "Transistors": "4,500\u20136,000", "Clock": "2 MHz", "Process": "6 \u00b5m", "Address": "64 KB", "Chipset": "MCS-80 (8224 clock, 8228 controller, 8251 USART, 8253 PIT, 8255 PPI, 8257 DMA, 8259 PIC)" },
+            specs: { "Bits": "8-bit", "Transistors": "4,500\u20136,000", "Clock": "2 MHz", "Process": "6 \u00b5m", "Address": "64 KB", "Chipset": "MCS-80 (8224 clock, 8228 controller, 8251 USART, 8253 PIT, 8255 PPI, 8257 DMA, 8259 PIC)", "SKUs": "8080, 8080A, 8085 (5V single-supply successor)" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Intel_C8080A.jpg/280px-Intel_C8080A.jpg",
             diff: "vs 8008: 4\u00d7 clock speed (2 MHz vs 0.5 MHz); 64 KB address space vs 16 KB; 40-pin DIP with separate address/data bus; 6 \u00b5m vs 10 \u00b5m process; stack moved to external RAM"
         },
         {
             year: 1975, name: "MOS 6502", cat: "other", company: "MOS Technology",
             desc: "Extremely low-cost ($25) 8-bit processor that democratized computing. Powered the Apple I, Apple II, Commodore 64, BBC Micro, Atari 2600, and NES.",
-            specs: { "Bits": "8-bit", "Transistors": "3,510", "Clock": "1\u20133 MHz", "Process": "8 \u00b5m", "Cost": "$25" },
+            specs: { "Bits": "8-bit", "Transistors": "3,510", "Clock": "1\u20133 MHz", "Process": "8 \u00b5m", "Cost": "$25", "SKUs": "6502, 6507 (Atari 2600), 6510 (C64), 65C02 (CMOS), 65C816 (16-bit, SNES)" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/MOS_6502AD_4585_top.jpg/280px-MOS_6502AD_4585_top.jpg"
         },
         {
             year: 1976, name: "Intel 8048", cat: "intel",
             desc: "Intel's first microcontroller \u2014 a CPU, RAM, ROM, and I/O ports on a single chip. Used in the IBM PC keyboard controller and numerous embedded systems. Spawned the MCS-48 family.",
-            specs: { "Bits": "8-bit", "ROM": "1\u20134 KB", "RAM": "64\u2013256 bytes", "Clock": "6\u201311 MHz", "I/O": "27 I/O lines" },
+            specs: { "Bits": "8-bit", "ROM": "1\u20134 KB", "RAM": "64\u2013256 bytes", "Clock": "6\u201311 MHz", "I/O": "27 I/O lines", "SKUs": "8048, 8035 (ROM-less), 8748 (EPROM), 8049 (2 KB ROM), 8039" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Intel_P8048H.jpg/280px-Intel_P8048H.jpg"
         },
         {
             year: 1976, name: "Zilog Z80", cat: "other", company: "Zilog",
             desc: "Binary-compatible with the 8080 but with many improvements. Dominated the CP/M era. Used in Sinclair ZX Spectrum, TRS-80, and TI graphing calculators. Discontinued in 2024 after 48 years.",
-            specs: { "Bits": "8-bit", "Transistors": "8,500", "Clock": "2.5\u201320 MHz", "Process": "4 \u00b5m", "Lifespan": "1976\u20132024" },
+            specs: { "Bits": "8-bit", "Transistors": "8,500", "Clock": "2.5\u201320 MHz", "Process": "4 \u00b5m", "Lifespan": "1976\u20132024", "SKUs": "Z80, Z80A (4 MHz), Z80B (6 MHz), Z80H (8 MHz), Z180, Z380 (32-bit), eZ80 (24-bit)" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Z80-Z0840004PSC-HD.jpg/280px-Z80-Z0840004PSC-HD.jpg"
         },
         {
             year: 1978, name: "Intel 8086", cat: "intel",
             desc: "The chip that started the x86 architecture \u2014 still the foundation of most PCs today. Source-code compatible successor to the 8080. Used in early IBM PC clones.",
-            specs: { "Bits": "16-bit", "Transistors": "29,000", "Clock": "5\u201310 MHz", "Process": "3 \u00b5m", "Address": "1 MB", "Chipset": "8288 bus controller + 8259 PIC + 8237 DMA + 8253 PIT" },
+            specs: { "Bits": "16-bit", "Transistors": "29,000", "Clock": "5\u201310 MHz", "Process": "3 \u00b5m", "Address": "1 MB", "Chipset": "8288 bus controller + 8259 PIC + 8237 DMA + 8253 PIT", "SKUs": "8086 (16-bit bus), 8088 (8-bit bus, used in IBM PC)" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Intel_C8086.jpg/280px-Intel_C8086.jpg",
             diff: "vs 8080: 8-bit \u2192 16-bit data; 1 MB address space vs 64 KB; 5\u201310 MHz vs 2 MHz; 29K transistors vs 6K; segment-based memory model; new x86 instruction set"
         },
         {
             year: 1978, name: "Intel 8087", cat: "intel",
             desc: "The first math coprocessor for the x86 family. Added hardware floating-point (80-bit extended precision) to the 8086/8088. Its instruction set became the basis for all x87 FPU instructions still used today.",
-            specs: { "Type": "Math coprocessor", "Transistors": "45,000", "Clock": "5\u201310 MHz", "Process": "3 \u00b5m", "Precision": "80-bit extended" },
+            specs: { "Type": "Math coprocessor", "Transistors": "45,000", "Clock": "5\u201310 MHz", "Process": "3 \u00b5m", "Precision": "80-bit extended", "SKUs": "8087, 80287, 80387 (for 286/386)" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/KL_Intel_i8087.jpg/280px-KL_Intel_i8087.jpg"
         },
         {
             year: 1979, name: "Motorola 68000", cat: "other", company: "Motorola",
             desc: "Elegant 16/32-bit processor with clean architecture. Powered the original Apple Macintosh, Commodore Amiga, Atari ST, and Sega Genesis.",
-            specs: { "Bits": "16/32-bit", "Transistors": "68,000", "Clock": "8\u201316.67 MHz", "Process": "3.5 \u00b5m", "Address": "16 MB" },
+            specs: { "Bits": "16/32-bit", "Transistors": "68,000", "Clock": "8\u201316.67 MHz", "Process": "3.5 \u00b5m", "Address": "16 MB", "SKUs": "68000, 68008 (8-bit bus), 68010, 68020 (full 32-bit), 68030, 68040, 68060" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/KL_Motorola_MC68000.jpg/280px-KL_Motorola_MC68000.jpg"
         },
         {
             year: 1980, name: "Intel 8051", cat: "intel",
             desc: "One of the most popular microcontroller families ever made. An 8-bit MCU with on-chip RAM, ROM, timers, serial port, and I/O. Still manufactured by dozens of vendors decades later and used in billions of embedded devices.",
-            specs: { "Bits": "8-bit", "ROM": "4 KB", "RAM": "128 bytes", "Clock": "12 MHz", "I/O": "32 I/O lines, UART, timers" },
+            specs: { "Bits": "8-bit", "ROM": "4 KB", "RAM": "128 bytes", "Clock": "12 MHz", "I/O": "32 I/O lines, UART, timers", "SKUs": "8051, 8031 (ROM-less), 8751 (EPROM), 8052 (256B RAM, 3 timers), 80C51 (CMOS)" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/KL_Intel_D8051AH.jpg/280px-KL_Intel_D8051AH.jpg",
             diff: "vs 8048: 4 KB ROM vs 1 KB; 128 bytes RAM vs 64; hardware UART; 2 timers/counters; Boolean processor (bit-addressable); interrupt system with 5 sources; Harvard architecture"
         },
         {
             year: 1982, name: "Intel 80286", cat: "intel",
             desc: "Introduced protected mode for multitasking. Used in the IBM PC/AT. Could address up to 16 MB of memory. First Intel processor with memory management.",
-            specs: { "Bits": "16-bit", "Transistors": "134,000", "Clock": "6\u201325 MHz", "Process": "1.5 \u00b5m", "Address": "16 MB", "Chipset": "Intel 82284 / Intel 82288 (IBM PC/AT chipset)" },
+            specs: { "Bits": "16-bit", "Transistors": "134,000", "Clock": "6\u201325 MHz", "Process": "1.5 \u00b5m", "Address": "16 MB", "Chipset": "Intel 82284 / Intel 82288 (IBM PC/AT chipset)", "SKUs": "286-6, 286-8, 286-10, 286-12, 286-16, 286-20, 286-25" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/KL_Intel_i286.jpg/280px-KL_Intel_i286.jpg",
             diff: "vs 8086: Added protected mode for multitasking; 16 MB address space vs 1 MB; hardware memory management unit (MMU); 134K transistors vs 29K; up to 25 MHz vs 10 MHz"
         },
         {
             year: 1985, name: "Intel 80386", cat: "intel",
             desc: "First 32-bit x86 processor. Introduced virtual 8086 mode, paging, and a flat memory model. The architecture that modern x86 backward compatibility traces to.",
-            specs: { "Bits": "32-bit", "Transistors": "275,000", "Clock": "12\u201340 MHz", "Process": "1.5\u20131 \u00b5m", "Address": "4 GB", "Chipset": "Intel 82350 EISA / 82350DT" },
+            specs: { "Bits": "32-bit", "Transistors": "275,000", "Clock": "12\u201340 MHz", "Process": "1.5\u20131 \u00b5m", "Address": "4 GB", "Chipset": "Intel 82350 EISA / 82350DT", "SKUs": "386DX (full 32-bit), 386SX (16-bit bus), 386SL (low-power laptop)" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/KL_Intel_i386DX.jpg/280px-KL_Intel_i386DX.jpg",
             diff: "vs 80286: 16-bit \u2192 32-bit; 4 GB address space vs 16 MB; paging and virtual memory; virtual 8086 mode; flat memory model; 275K transistors vs 134K"
         },
@@ -94,7 +94,7 @@
         {
             year: 1989, name: "Intel 80486", cat: "intel",
             desc: "Integrated FPU and 8 KB L1 cache on-die for the first time. Five-stage pipeline doubled performance per clock vs. the 386. Reached 100 MHz in DX4 variant.",
-            specs: { "Bits": "32-bit", "Transistors": "1.2 million", "Clock": "25\u2013100 MHz", "Process": "1\u20130.6 \u00b5m", "Cache": "8 KB L1", "Chipset": "Intel 420TX / 420ZX / 430FX (Triton)" },
+            specs: { "Bits": "32-bit", "Transistors": "1.2 million", "Clock": "25\u2013100 MHz", "Process": "1\u20130.6 \u00b5m", "Cache": "8 KB L1", "Chipset": "Intel 420TX / 420ZX / 430FX (Triton)", "SKUs": "486DX (with FPU), 486SX (no FPU), 486DX2 (clock-doubled), 486DX4 (clock-tripled, 100 MHz), 486SL (low-power)" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/KL_Intel_i486DX.jpg/280px-KL_Intel_i486DX.jpg",
             diff: "vs 80386: On-die FPU (was separate 387 chip); 8 KB L1 cache on-die; 5-stage pipeline (2\u00d7 IPC); 1.2M transistors vs 275K; up to 100 MHz vs 40 MHz"
         },
@@ -113,7 +113,7 @@
         {
             year: 1993, name: "Intel Pentium", cat: "intel",
             desc: "Superscalar architecture with dual pipelines. The name 'Pentium' was adopted because numbers (586) couldn't be trademarked. Introduced the FDIV bug controversy.",
-            specs: { "Bits": "32-bit", "Transistors": "3.1 million", "Clock": "60\u2013300 MHz", "Process": "0.8\u20130.35 \u00b5m", "Arch": "P5 superscalar", "Chipset": "Intel 430FX (Triton) / 430HX / 430VX / 430TX" },
+            specs: { "Bits": "32-bit", "Transistors": "3.1 million", "Clock": "60\u2013300 MHz", "Process": "0.8\u20130.35 \u00b5m", "Arch": "P5 superscalar", "Chipset": "Intel 430FX (Triton) / 430HX / 430VX / 430TX", "SKUs": "Pentium (P5/P54C), Pentium MMX (P55C), Pentium OverDrive" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/KL_Intel_Pentium_A80501.jpg/280px-KL_Intel_Pentium_A80501.jpg",
             diff: "vs 80486: Superscalar (2 pipelines, can execute 2 instructions/cycle); 64-bit data bus; separate code/data caches (8 KB each); branch prediction; 3.1M transistors vs 1.2M"
         },
@@ -141,34 +141,34 @@
         {
             year: 1997, name: "Intel Pentium II", cat: "intel",
             desc: "P6 architecture with MMX instructions. Introduced the Slot 1 cartridge form factor. Combined with the 440BX chipset, it became the standard for Windows 98 era PCs.",
-            specs: { "Bits": "32-bit", "Transistors": "7.5 million", "Clock": "233\u2013450 MHz", "Process": "0.35\u20130.25 \u00b5m", "New": "MMX, Slot 1", "Chipset": "Intel 440BX (most popular) / 440LX / 440EX" },
+            specs: { "Bits": "32-bit", "Transistors": "7.5 million", "Clock": "233\u2013450 MHz", "Process": "0.35\u20130.25 \u00b5m", "New": "MMX, Slot 1", "Chipset": "Intel 440BX (most popular) / 440LX / 440EX", "SKUs": "Pentium II (Klamath/Deschutes), Celeron (budget), Xeon (server)" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Pentium_II.jpg/280px-Pentium_II.jpg",
             diff: "vs Pentium Pro: Added MMX (57 SIMD integer instructions); Slot 1 cartridge form factor; improved 16-bit code performance; higher clocks (up to 450 MHz vs 200 MHz); 0.25 \u00b5m process"
         },
         {
             year: 1999, name: "AMD Athlon", cat: "amd",
             desc: "AMD's breakthrough processor. First x86 chip to reach 1 GHz (March 2000). Competitive with and often faster than Intel's Pentium III. Used the EV6 bus from Alpha.",
-            specs: { "Bits": "32-bit", "Transistors": "22 million", "Clock": "500 MHz\u20131.4 GHz", "Process": "250\u2013180 nm", "Arch": "K7", "Chipset": "AMD 750 / VIA KT133 / nForce" },
+            specs: { "Bits": "32-bit", "Transistors": "22 million", "Clock": "500 MHz\u20131.4 GHz", "Process": "250\u2013180 nm", "Arch": "K7", "Chipset": "AMD 750 / VIA KT133 / nForce", "SKUs": "Athlon (Slot A/Socket A), Athlon XP (Palomino/Thoroughbred/Barton), Duron (budget), Athlon MP (server)" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/AMD_Athlon_Processor_Logo.svg/280px-AMD_Athlon_Processor_Logo.svg.png"
         },
         {
             year: 1999, name: "Intel Pentium III", cat: "intel",
             desc: "Added SSE (Streaming SIMD Extensions) for floating-point performance. Available in both Slot 1 and Socket 370. Popular in the Windows 2000/XP era.",
-            specs: { "Bits": "32-bit", "Transistors": "9.5\u201328 million", "Clock": "450 MHz\u20131.4 GHz", "Process": "250\u2013130 nm", "New": "SSE", "Chipset": "Intel 440BX / 815 (Solano) / 820 (Camino)" },
+            specs: { "Bits": "32-bit", "Transistors": "9.5\u201328 million", "Clock": "450 MHz\u20131.4 GHz", "Process": "250\u2013130 nm", "New": "SSE", "Chipset": "Intel 440BX / 815 (Solano) / 820 (Camino)", "SKUs": "Pentium III (Katmai/Coppermine/Tualatin), Celeron (budget), Xeon (server), Pentium III-S (server)" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/KL_Intel_Pentium_III_Coppermine.jpg/280px-KL_Intel_Pentium_III_Coppermine.jpg",
             diff: "vs Pentium II: Added SSE (70 new floating-point SIMD instructions); on-die L2 cache (Coppermine); up to 1.4 GHz vs 450 MHz; 130 nm process; processor serial number"
         },
         {
             year: 2000, name: "Intel Pentium 4", cat: "intel",
             desc: "NetBurst architecture prioritized high clock speeds. Reached 3.8 GHz but at the cost of high power consumption. Introduced Hyper-Threading and SSE2.",
-            specs: { "Bits": "32-bit", "Transistors": "42\u2013169 million", "Clock": "1.3\u20133.8 GHz", "Process": "180\u201365 nm", "New": "HT, SSE2", "Chipset": "Intel 850 (Tehama) / 865 / 875 / 915 / 945 / 975X" },
+            specs: { "Bits": "32-bit", "Transistors": "42\u2013169 million", "Clock": "1.3\u20133.8 GHz", "Process": "180\u201365 nm", "New": "HT, SSE2", "Chipset": "Intel 850 (Tehama) / 865 / 875 / 915 / 945 / 975X", "SKUs": "Pentium 4 (Willamette/Northwood/Prescott), Celeron D, Pentium 4 EE (Extreme Edition), Pentium D (dual-core), Xeon" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/KL_Intel_Pentium_4_Northwood.jpg/280px-KL_Intel_Pentium_4_Northwood.jpg",
             diff: "vs Pentium III: Entirely new NetBurst architecture (deep 20-stage pipeline); SSE2 (144 new instructions); Hyper-Threading; much higher clocks (3.8 GHz vs 1.4 GHz) but lower IPC; Rambus RDRAM then DDR"
         },
         {
             year: 2003, name: "AMD Athlon 64", cat: "amd",
             desc: "First x86 desktop processor with 64-bit extensions (AMD64/x86-64). This architecture was so successful that Intel had to adopt it, and it remains the standard today.",
-            specs: { "Bits": "64-bit", "Transistors": "105.9 million", "Clock": "1.8\u20132.6 GHz", "Process": "130\u201390 nm", "First": "First x86-64 desktop", "Chipset": "nForce3 / VIA K8T800 / ATI Xpress 200" },
+            specs: { "Bits": "64-bit", "Transistors": "105.9 million", "Clock": "1.8\u20132.6 GHz", "Process": "130\u201390 nm", "First": "First x86-64 desktop", "Chipset": "nForce3 / VIA K8T800 / ATI Xpress 200", "SKUs": "Athlon 64, Athlon 64 FX (enthusiast), Opteron (server), Sempron (budget), Turion (mobile)" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/AMD_Athlon_64_3200%2B.jpg/280px-AMD_Athlon_64_3200%2B.jpg",
             diff: "vs Athlon (K7): 32-bit \u2192 64-bit (AMD64/x86-64); integrated memory controller (was in chipset); HyperTransport bus; K8 architecture; NX bit; Cool'n'Quiet power management"
         },
@@ -182,14 +182,14 @@
         {
             year: 2006, name: "Intel Core 2 Duo", cat: "intel",
             desc: "Abandoned the hot NetBurst architecture in favor of the efficient Core microarchitecture. Dramatic improvement in performance-per-watt. Restored Intel's performance leadership.",
-            specs: { "Bits": "64-bit", "Transistors": "291 million", "Clock": "1.06\u20133.33 GHz", "Process": "65 nm", "Arch": "Core (Merom)", "Chipset": "Intel 965 (Broadwater) / P35 (Bearlake) / X38" },
+            specs: { "Bits": "64-bit", "Transistors": "291 million", "Clock": "1.06\u20133.33 GHz", "Process": "65 nm", "Arch": "Core (Merom)", "Chipset": "Intel 965 (Broadwater) / P35 (Bearlake) / X38", "SKUs": "Core 2 Duo, Core 2 Quad, Core 2 Extreme, Celeron (budget), Pentium Dual-Core, Xeon 5100/5300" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Intel_Core2_Duo_E6300_die.jpg/280px-Intel_Core2_Duo_E6300_die.jpg",
             diff: "vs Pentium 4: Abandoned deep-pipeline NetBurst for efficient Core arch; much better perf/watt; native 64-bit; dual cores; 4 MB shared L2 cache; wide 4-issue execution; 65 nm vs 90\u201365 nm"
         },
         {
             year: 2008, name: "Intel Core i7 (Nehalem)", cat: "intel",
             desc: "Introduced integrated memory controller, QuickPath Interconnect (QPI), and Hyper-Threading. First Intel processor with on-die memory controller.",
-            specs: { "Bits": "64-bit", "Transistors": "731 million", "Clock": "2.66\u20133.33 GHz", "Process": "45 nm", "Cores": "4 + HT", "Chipset": "Intel X58 (Tylersburg)" },
+            specs: { "Bits": "64-bit", "Transistors": "731 million", "Clock": "2.66\u20133.33 GHz", "Process": "45 nm", "Cores": "4 + HT", "Chipset": "Intel X58 (Tylersburg)", "SKUs": "Core i7-920/940/965, Core i5, Core i3, Xeon W/X (Bloomfield/Lynnfield/Clarkdale)" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Intel_Core_i7-920_CPU.jpg/280px-Intel_Core_i7-920_CPU.jpg",
             diff: "vs Core 2 Duo: Integrated memory controller (was in chipset); QPI replaces FSB; Hyper-Threading returns; 4 cores standard; Turbo Boost; 45 nm vs 65 nm; 731M vs 291M transistors"
         },
@@ -238,14 +238,14 @@
         {
             year: 2017, name: "AMD Ryzen (Zen)", cat: "amd",
             desc: "AMD's dramatic comeback. The Zen architecture closed the massive IPC gap with Intel and offered more cores at lower prices. Ryzen 7 1800X had 8 cores vs Intel's mainstream 4.",
-            specs: { "Bits": "64-bit", "Transistors": "4.8 billion", "Clock": "3.0\u20133.6 GHz", "Process": "14 nm", "Cores": "Up to 8", "Chipset": "AMD X370 / B350 / A320 (AM4)" },
+            specs: { "Bits": "64-bit", "Transistors": "4.8 billion", "Clock": "3.0\u20133.6 GHz", "Process": "14 nm", "Cores": "Up to 8", "Chipset": "AMD X370 / B350 / A320 (AM4)", "SKUs": "Ryzen 3/5/7 (desktop), Threadripper (HEDT), EPYC (server)" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/AMD_Ryzen_5_1600_Processor.jpg/280px-AMD_Ryzen_5_1600_Processor.jpg",
             diff: "vs Athlon 64 X2: Entirely new Zen architecture; ~52% IPC gain over Excavator; SMT (2 threads/core); up to 8 cores vs 2; CCX design (4-core complexes); 14 nm FinFET; AM4 platform; Precision Boost"
         },
         {
             year: 2019, name: "AMD Ryzen 3000 (Zen 2)", cat: "amd",
             desc: "First x86 processors on 7nm. Chiplet design with separate I/O die. Up to 16 cores for desktop. Took the performance crown from Intel for the first time in over a decade.",
-            specs: { "Bits": "64-bit", "Clock": "3.6\u20134.7 GHz", "Process": "7 nm (TSMC)", "Cores": "Up to 16", "Arch": "Zen 2 chiplet", "Chipset": "AMD X570 / B550 (AM4)" },
+            specs: { "Bits": "64-bit", "Clock": "3.6\u20134.7 GHz", "Process": "7 nm (TSMC)", "Cores": "Up to 16", "Arch": "Zen 2 chiplet", "Chipset": "AMD X570 / B550 (AM4)", "SKUs": "Ryzen 5 3600/3600X, Ryzen 7 3700X/3800X, Ryzen 9 3900X/3950X, Threadripper 3960X/3970X/3990X (64C)" },
             img: "",
             diff: "vs Ryzen (Zen 1): 14 nm \u2192 7 nm; chiplet design (CCD + IOD); ~15% IPC gain; doubled L3 cache (32 MB/CCD); up to 16 cores vs 8; PCIe 4.0; higher clocks (4.7 vs 3.6 GHz boost)"
         },
@@ -259,7 +259,7 @@
         {
             year: 2020, name: "Apple M1", cat: "arm", company: "Apple",
             desc: "Apple's first custom ARM-based Mac processor. Shocked the industry with performance matching or exceeding Intel's laptop chips at a fraction of the power. Marked Apple's transition away from x86.",
-            specs: { "Bits": "64-bit", "Transistors": "16 billion", "Clock": "3.2 GHz", "Process": "5 nm (TSMC)", "Cores": "8 (4P+4E)" },
+            specs: { "Bits": "64-bit", "Transistors": "16 billion", "Clock": "3.2 GHz", "Process": "5 nm (TSMC)", "Cores": "8 (4P+4E)", "SKUs": "M1, M1 Pro (10-core), M1 Max (10-core, 32 GPU), M1 Ultra (20-core, 64 GPU)" },
             img: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Apple_M1_chip_%28no_background%29.png/280px-Apple_M1_chip_%28no_background%29.png",
             diff: "vs Apple A7: Mobile \u2192 desktop/laptop SoC; 1B \u2192 16B transistors; 5 nm vs 28 nm; 8 cores (4P+4E) vs 2; unified memory architecture; 16-core Neural Engine; 7/8-core GPU on-die; Thunderbolt/USB4"
         },
@@ -280,7 +280,7 @@
         {
             year: 2023, name: "Apple M3", cat: "arm", company: "Apple",
             desc: "First consumer processor built on 3nm process technology (TSMC N3B). Hardware-accelerated ray tracing in GPU. Dynamic caching for GPU memory.",
-            specs: { "Bits": "64-bit", "Transistors": "25 billion", "Clock": "Up to 4.05 GHz", "Process": "3 nm (TSMC)", "New": "Ray tracing, 3nm" },
+            specs: { "Bits": "64-bit", "Transistors": "25 billion", "Clock": "Up to 4.05 GHz", "Process": "3 nm (TSMC)", "New": "Ray tracing, 3nm", "SKUs": "M3, M3 Pro (12-core), M3 Max (16-core, 40 GPU), M3 Ultra (32-core, 80 GPU)" },
             img: "",
             diff: "vs Apple M1: 5 nm \u2192 3 nm; 16B \u2192 25B transistors; hardware ray tracing in GPU; dynamic caching for GPU memory; up to 4.05 GHz vs 3.2 GHz; faster Neural Engine; AV1 decode"
         },
