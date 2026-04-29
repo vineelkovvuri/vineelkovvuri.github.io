@@ -47,18 +47,17 @@
 
 <style>
 .tv-wrap * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+#tv-editor, #tv-editor * { font-family: revert; box-sizing: revert; }
 .tv-wrap {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
     padding: 8px 0;
-    user-select: none;
 }
 .tv-toolbar {
     display: flex;
     gap: 8px;
     align-items: center;
-    flex-wrap: wrap;
 }
 .tv-btn {
     padding: 6px 14px;
@@ -74,62 +73,56 @@
 }
 .tv-btn:hover  { border-color: #5a9fd4; background: #f0f7ff; }
 .tv-btn:active { background: #e4f0fb; }
-.tv-btn-danger { color: #e74c3c; border-color: #f5c6cb; }
-.tv-btn-danger:hover { border-color: #e74c3c; background: #fff5f5; }
+.tv-btn-draw { color: #1a6fb3; border-color: #b3d1f0; }
+.tv-btn-draw:hover { border-color: #1a6fb3; background: #e8f3fd; }
 .tv-btn-export { color: #27ae60; border-color: #c3e6cb; }
 .tv-btn-export:hover { border-color: #27ae60; background: #f0fff4; }
-.tv-status {
+.tv-hint {
     font-size: 12px;
     color: #7f8c8d;
     margin-left: auto;
-    padding: 4px 10px;
-    background: #f8f9fb;
-    border: 1px solid #e9ecef;
-    border-radius: 4px;
-    max-width: 240px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
-.tv-status.tv-sel { color: #27ae60; background: #f0fff4; border-color: #c3e6cb; }
+#tv-editor {
+    height: 160px;
+    border: 1.5px solid #d0d5dd;
+    border-radius: 8px;
+    overflow: hidden;
+}
 .tv-canvas-wrap {
     position: relative;
     border: 1.5px solid #d0d5dd;
     border-radius: 8px;
-    height: 580px;
+    height: 500px;
     overflow: hidden;
     background-color: #f5f7fa;
     background-image: radial-gradient(circle, #c9d0db 1px, transparent 1px);
     background-size: 24px 24px;
     cursor: grab;
+    user-select: none;
 }
 .tv-canvas-wrap.tv-panning { cursor: grabbing; }
 #tv-svg { width: 100%; height: 100%; display: block; }
-#tv-edit-input {
-    position: fixed;
-    border: 2px solid #5a9fd4;
-    border-radius: 6px;
-    background: rgba(255,255,255,0.97);
-    padding: 0 8px;
-    outline: none;
-    text-align: center;
-    color: #2c3e50;
-    z-index: 200;
-    box-shadow: 0 2px 10px rgba(90,159,212,0.35);
-    display: none;
+#tv-resize-handle {
+    height: 6px;
+    cursor: ns-resize;
+    background: #d0d5dd;
+    border-radius: 3px;
+    flex-shrink: 0;
+    transition: background 0.15s;
 }
+#tv-resize-handle:hover { background: #5a9fd4; }
+#tv-resize-handle.tv-resizing { background: #1a6fb3; }
 </style>
 
 <div class="tv-wrap">
     <div class="tv-toolbar">
-        <button class="tv-btn" id="tv-btn-add">＋ Add Node</button>
-        <button class="tv-btn" id="tv-btn-child">⤵ Add Child</button>
-        <button class="tv-btn tv-btn-danger" id="tv-btn-delete">✕ Delete</button>
-        <button class="tv-btn" id="tv-btn-realign">⟳ Realign</button>
-        <button class="tv-btn tv-btn-export" id="tv-btn-export">↓ Export PNG</button>
-        <span class="tv-status" id="tv-status">No node selected</span>
+        <button class="tv-btn tv-btn-draw" id="tv-btn-draw">&#9654; Draw</button>
+        <button class="tv-btn tv-btn-export" id="tv-btn-export">&#8595; Export PNG</button>
+        <span class="tv-hint">Ctrl+Enter to draw &nbsp;|&nbsp; Scroll to zoom &nbsp;|&nbsp; Drag background to pan</span>
     </div>
-    <div class="tv-canvas-wrap" id="tv-canvas-wrap" tabindex="0" style="outline:none;">
+    <div id="tv-editor"></div>
+    <div id="tv-resize-handle"></div>
+    <div class="tv-canvas-wrap" id="tv-canvas-wrap">
         <svg id="tv-svg">
             <defs>
                 <filter id="tv-shadow" x="-25%" y="-25%" width="150%" height="150%">
@@ -145,30 +138,26 @@
     </div>
 </div>
 
-<input id="tv-edit-input" type="text" autocomplete="off" spellcheck="false"/>
-
 <script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs/loader.js"></script>
 <script src="./index.js"></script>
 
-
 <div style="font-size: 13px; color: #7f8c8d; line-height: 2; margin-top: 8px;">
+    <b style="color: #2c3e50;">How it works</b><br>
+    Type your tree using indentation (spaces or tabs) to define parent&ndash;child relationships, then click <b>Draw</b> or press <b>Ctrl+Enter</b>:
+    <pre style="margin:4px 0 8px; padding:8px 12px; background:#f0f0f0; border-radius:6px; font-size:12px; line-height:1.6;">Root
+    Node 1
+        Child A
+        Child B
+    Node 2</pre>
     <b style="color: #2c3e50;">Features</b><br>
-    &bull; <b>Add Node</b> — creates a free-standing node at the center of the current view<br>
-    &bull; <b>Add Child</b> — adds a child node connected to the selected node with a smooth curved arrow<br>
-    &bull; <b>Delete</b> — removes the selected node and all of its descendants<br>
-    &bull; <b>Realign</b> — re-applies the automatic tree layout to all nodes with a smooth animation<br>
-    &bull; <b>Export PNG</b> — saves the current canvas view as a PNG image<br>
-    &bull; <b>Click</b> a node to select it (highlighted in green); <b>drag</b> to reposition it freely<br>
-    &bull; <b>Tab</b> / <b>Shift+Tab</b> to cycle through nodes level-by-level (BFS order)<br>
-    &bull; <b>Ctrl+↓</b> — add a child to the selected node<br>
-    &bull; <b>↑</b> \u2014 move selection to parent &nbsp;|&nbsp; <b>↓</b> \u2014 move to first child &nbsp;|&nbsp; <b>←</b> / <b>→</b> \u2014 move to previous/next sibling<br>
-    &bull; <b>Ctrl+←</b> / <b>Ctrl+→</b> — create a left/right sibling of the selected node<br>
-    &bull; <b>Double-click</b> a node to edit its label inline; press <b>Enter</b> or click away to confirm, <b>Escape</b> to cancel<br>
-    &bull; <b>F2</b> — rename the selected node<br>
-    &bull; <b>Del</b> — delete the selected node and all its descendants<br>
-    &bull; <b>Scroll</b> to zoom in/out; <b>drag the background</b> to pan the canvas<br>
+    &bull; Any indent unit works &mdash; 2 spaces, 4 spaces, tabs, mixed<br>
+    &bull; <b>Draw</b> / <b>Ctrl+Enter</b> &mdash; parse the text and redraw the tree with animation<br>
+    &bull; <b>Export PNG</b> &mdash; exports the full tree at 100% zoom with a tight bounding box<br>
+    &bull; <b>Click</b> a node to highlight it; <b>drag</b> to reposition manually<br>
+    &bull; <b>Scroll</b> to zoom; <b>drag the background</b> to pan<br>
+    &bull; Use Monaco multi-cursor, find&amp;replace, and all editor shortcuts to edit the tree text<br>
 </div>
-
 </main>
 
 <hr/>
