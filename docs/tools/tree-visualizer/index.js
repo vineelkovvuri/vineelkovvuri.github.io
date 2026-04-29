@@ -274,7 +274,7 @@
             wordWrap:              'off',
             renderLineHighlight:   'none',
             renderWhitespace:      'all',
-            occurrencesHighlight:  'off',
+            occurrencesHighlight:  'on',
             selectionHighlight:    false,
             overviewRulerLanes:    0,
             hideCursorInOverviewRuler: true,
