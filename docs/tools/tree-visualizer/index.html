@@ -129,7 +129,7 @@
         <button class="tv-btn tv-btn-export" id="tv-btn-export">↓ Export PNG</button>
         <span class="tv-status" id="tv-status">No node selected</span>
     </div>
-    <div class="tv-canvas-wrap" id="tv-canvas-wrap">
+    <div class="tv-canvas-wrap" id="tv-canvas-wrap" tabindex="0" style="outline:none;">
         <svg id="tv-svg">
             <defs>
                 <filter id="tv-shadow" x="-25%" y="-25%" width="150%" height="150%">
@@ -159,7 +159,13 @@
     &bull; <b>Realign</b> — re-applies the automatic tree layout to all nodes with a smooth animation<br>
     &bull; <b>Export PNG</b> — saves the current canvas view as a PNG image<br>
     &bull; <b>Click</b> a node to select it (highlighted in green); <b>drag</b> to reposition it freely<br>
+    &bull; <b>Tab</b> / <b>Shift+Tab</b> to cycle through nodes level-by-level (BFS order)<br>
+    &bull; <b>Ctrl+↓</b> — add a child to the selected node<br>
+    &bull; <b>↑</b> \u2014 move selection to parent &nbsp;|&nbsp; <b>↓</b> \u2014 move to first child &nbsp;|&nbsp; <b>←</b> / <b>→</b> \u2014 move to previous/next sibling<br>
+    &bull; <b>Ctrl+←</b> / <b>Ctrl+→</b> — create a left/right sibling of the selected node<br>
     &bull; <b>Double-click</b> a node to edit its label inline; press <b>Enter</b> or click away to confirm, <b>Escape</b> to cancel<br>
+    &bull; <b>F2</b> — rename the selected node<br>
+    &bull; <b>Del</b> — delete the selected node and all its descendants<br>
     &bull; <b>Scroll</b> to zoom in/out; <b>drag the background</b> to pan the canvas<br>
 </div>
 
