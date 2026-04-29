@@ -1,0 +1,123 @@
+---
+title: "🌳 Tree Visualizer"
+tags: ["Tools"]
+category: "Utility Tools"
+---
+
+<style>
+.tv-wrap * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+.tv-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 8px 0;
+    user-select: none;
+}
+.tv-toolbar {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.tv-btn {
+    padding: 6px 14px;
+    border: 1.5px solid #d0d5dd;
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: #2c3e50;
+    transition: border-color 0.15s, background 0.15s;
+    line-height: 1.5;
+}
+.tv-btn:hover  { border-color: #5a9fd4; background: #f0f7ff; }
+.tv-btn:active { background: #e4f0fb; }
+.tv-btn-danger { color: #e74c3c; border-color: #f5c6cb; }
+.tv-btn-danger:hover { border-color: #e74c3c; background: #fff5f5; }
+.tv-btn-export { color: #27ae60; border-color: #c3e6cb; }
+.tv-btn-export:hover { border-color: #27ae60; background: #f0fff4; }
+.tv-status {
+    font-size: 12px;
+    color: #7f8c8d;
+    margin-left: auto;
+    padding: 4px 10px;
+    background: #f8f9fb;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    max-width: 240px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.tv-status.tv-sel { color: #27ae60; background: #f0fff4; border-color: #c3e6cb; }
+.tv-canvas-wrap {
+    position: relative;
+    border: 1.5px solid #d0d5dd;
+    border-radius: 8px;
+    height: 580px;
+    overflow: hidden;
+    background-color: #f5f7fa;
+    background-image: radial-gradient(circle, #c9d0db 1px, transparent 1px);
+    background-size: 24px 24px;
+    cursor: grab;
+}
+.tv-canvas-wrap.tv-panning { cursor: grabbing; }
+#tv-svg { width: 100%; height: 100%; display: block; }
+#tv-edit-input {
+    position: fixed;
+    border: 2px solid #5a9fd4;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.97);
+    padding: 0 8px;
+    outline: none;
+    text-align: center;
+    color: #2c3e50;
+    z-index: 200;
+    box-shadow: 0 2px 10px rgba(90,159,212,0.35);
+    display: none;
+}
+</style>
+
+<div class="tv-wrap">
+    <div class="tv-toolbar">
+        <button class="tv-btn" id="tv-btn-add">＋ Add Node</button>
+        <button class="tv-btn" id="tv-btn-child">⤵ Add Child</button>
+        <button class="tv-btn tv-btn-danger" id="tv-btn-delete">✕ Delete</button>
+        <button class="tv-btn" id="tv-btn-realign">⟳ Realign</button>
+        <button class="tv-btn tv-btn-export" id="tv-btn-export">↓ Export PNG</button>
+        <span class="tv-status" id="tv-status">No node selected</span>
+    </div>
+    <div class="tv-canvas-wrap" id="tv-canvas-wrap">
+        <svg id="tv-svg">
+            <defs>
+                <filter id="tv-shadow" x="-25%" y="-25%" width="150%" height="150%">
+                    <feDropShadow dx="1" dy="2" stdDeviation="3"
+                                  flood-color="rgba(0,0,0,0.10)"/>
+                </filter>
+            </defs>
+            <g id="tv-main">
+                <g id="tv-links"></g>
+                <g id="tv-nodes"></g>
+            </g>
+        </svg>
+    </div>
+</div>
+
+<input id="tv-edit-input" type="text" autocomplete="off" spellcheck="false"/>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="./index.js"></script>
+
+
+<div style="font-size: 13px; color: #7f8c8d; line-height: 2; margin-top: 8px;">
+    <b style="color: #2c3e50;">Features</b><br>
+    &bull; <b>Add Node</b> — creates a free-standing node at the center of the current view<br>
+    &bull; <b>Add Child</b> — adds a child node connected to the selected node with a smooth curved arrow<br>
+    &bull; <b>Delete</b> — removes the selected node and all of its descendants<br>
+    &bull; <b>Realign</b> — re-applies the automatic tree layout to all nodes with a smooth animation<br>
+    &bull; <b>Export PNG</b> — saves the current canvas view as a PNG image<br>
+    &bull; <b>Click</b> a node to select it (highlighted in green); <b>drag</b> to reposition it freely<br>
+    &bull; <b>Double-click</b> a node to edit its label inline; press <b>Enter</b> or click away to confirm, <b>Escape</b> to cancel<br>
+    &bull; <b>Scroll</b> to zoom in/out; <b>drag the background</b> to pan the canvas<br>
+</div>
