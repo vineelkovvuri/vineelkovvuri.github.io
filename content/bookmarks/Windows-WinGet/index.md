@@ -24,6 +24,7 @@ tags: ['WindowsSetup']
 # Essentials
 winget install "voidtools.Everything"
 winget install "WinsiderSS.SystemInformer"
+winget install "chrisant996.Clink"
 winget install --id "Microsoft.VisualStudioCode" --override "/VERYSILENT /SP- /MERGETASKS='!runcode,!desktopicon,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath'"
 winget install --id "SublimeHQ.SublimeText.4" --override  "/VERYSILENT /SP- /MERGETASKS=contextentry"
 winget install "SublimeHQ.SublimeMerge"
@@ -45,7 +46,6 @@ winget install "FastStone.Capture"
 winget install "FastStone.Viewer"
 winget install "Daum.PotPlayer"
 winget install "VideoLAN.VLC"
-winget install "chrisant996.Clink"
 
 # Compilers
 winget install "NASM.NASM"
