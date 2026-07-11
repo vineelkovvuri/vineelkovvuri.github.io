@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>📊 UEFI Build Report Explorer | Vineel Kovvuri</title>
+    
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/copy-button.css" />
+    <link rel="stylesheet" href="/css/forms.css" />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <meta name="description" content="Build Report: Drop BUILD_REPORT.txt here or click to browse… Name Library PCD Aa ab Aa ab ▲ ▼ Copy UEFI Build Report Explorer Load an EDK2 BUILD_REPORT.txt …" />
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/projects/">Projects</a></li>
+      
+      <li><a href="/tools/">Toolsᴬᴵ</a></li>
+      
+      <li><a href="/games/">Gamesᴬᴵ</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">📊 UEFI Build Report Explorer</span></h1>
+
+
+</div>
+
+
+
+<main>
+
+    <style>
+      /* Toolbar */
+      .br-toolbar {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        padding: 0.4rem 0;
+        flex-wrap: wrap;
+      }
+      .br-toolbar label { white-space: nowrap; margin: 0; font-weight: bold; }
+      #brDropZone {
+        flex: 1;
+        min-width: 240px;
+        max-width: 480px;
+        padding: 0.375rem 0.75rem;
+        border: 1px dashed #0d6efd;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.85rem;
+        color: #0d6efd;
+        background: rgba(13, 110, 253, 0.04);
+        text-align: center;
+        user-select: none;
+      }
+      #brDropZone.dragover { background: rgba(13, 110, 253, 0.12); border-color: #0a58ca; }
+      #brFileInfo { font-family: Consolas, 'Courier New', monospace; font-size: 0.82rem; color: #666; }
+
+      /* Main container: tree + detail */
+      .br-container {
+        display: flex;
+        height: calc(100vh - 90px);
+        border: 1px solid #ced4da;
+        border-radius: 0.375rem;
+        overflow: hidden;
+        background: #fff;
+      }
+
+      /* Left tree panel */
+      .br-tree-panel {
+        width: 340px;
+        min-width: 200px;
+        border-right: 1px solid #ced4da;
+        display: flex;
+        flex-direction: column;
+        background: #f8f9fa;
+        flex-shrink: 0;
+      }
+      .br-tree-search {
+        padding: 6px;
+        border-bottom: 1px solid #ced4da;
+        flex-shrink: 0;
+        background: #f1f3f5;
+      }
+      .br-filter-row { display: flex; gap: 4px; }
+      .br-tree-search input {
+        flex: 1;
+        min-width: 0;
+        box-sizing: border-box;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.8rem;
+        padding: 4px 8px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        background: #fff;
+      }
+      .br-tree-search select {
+        flex-shrink: 0;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.78rem;
+        padding: 3px 4px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        background: #fff;
+        cursor: pointer;
+      }
+      .br-tree-search input:focus,
+      .br-tree-search select:focus { border-color: #86b7fe; outline: 0; box-shadow: 0 0 0 2px rgba(13,110,253,.15); }
+
+      /* VS Code style match-case / whole-word toggles */
+      .br-toggle {
+        flex-shrink: 0;
+        min-width: 24px;
+        height: 24px;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        font-size: 0.72rem;
+        font-weight: bold;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        background: transparent;
+        color: #57606a;
+        cursor: pointer;
+        line-height: 1;
+        padding: 0 3px;
+        user-select: none;
+      }
+      .br-toggle:hover { background: #dde1e6; }
+      .br-toggle.active { background: #cfe4ff; border-color: #86b7fe; color: #0d4a8f; }
+      .br-toggle .br-tg-word { text-decoration: underline; }
+      .br-tree-scroll { flex: 1; overflow: auto; padding: 0.25rem 0; }
+
+      /* Resizer handle */
+      .br-resizer { width: 4px; cursor: col-resize; background: #ced4da; flex-shrink: 0; }
+      .br-resizer:hover { background: #86b7fe; }
+
+      /* Right panel */
+      .br-detail-panel { flex: 1; min-width: 0; display: flex; flex-direction: column; overflow: hidden; background: #fff; }
+      .br-detail-header {
+        padding: 8px 12px;
+        background: linear-gradient(135deg, #f0f4ff 0%, #e8f5e9 100%);
+        border-bottom: 2px solid #3182ce;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.9rem;
+        font-weight: bold;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .br-detail-header .br-crumb { color: #666; font-weight: normal; font-size: 0.8rem; }
+      .br-detail-tools { margin-left: auto; display: flex; align-items: center; gap: 6px; font-weight: normal; }
+      .br-detail-tools input {
+        width: 150px;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.78rem;
+        padding: 2px 6px;
+        border: 1px solid #ced4da;
+        border-radius: 3px;
+      }
+      .br-detail-tools input:focus { border-color: #86b7fe; outline: 0; box-shadow: 0 0 0 2px rgba(13,110,253,.15); }
+      .br-detail-tools button {
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.75rem;
+        padding: 2px 8px;
+        border: 1px solid #ced4da;
+        border-radius: 3px;
+        background: #fff;
+        cursor: pointer;
+      }
+      .br-detail-tools button:hover { background: #e2e6ea; }
+      .br-detail-tools .br-count { font-size: 0.72rem; color: #666; min-width: 42px; }
+
+      .br-detail-body { flex: 1; min-height: 0; overflow: auto; padding: 0; }
+
+      /* Content rendering */
+      .br-pre {
+        margin: 0;
+        padding: 10px 14px;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.82rem;
+        line-height: 1.5;
+        white-space: pre;
+        color: #24292e;
+        tab-size: 4;
+      }
+      .br-tok-guid { color: #6f42c1; font-weight: bold; }
+      .br-tok-key { color: #005cc5; }
+      .br-tok-hex { color: #b5330b; }
+      .br-tok-type { color: #22863a; font-weight: bold; }
+      .br-tok-flag { color: #d73a49; font-weight: bold; }
+      .br-tok-num { color: #6a737d; }
+      .br-tok-path { color: #032f62; }
+      .br-tok-sep { color: #d0d5dd; }
+      mark.br-hl { background: #ffe27a; color: #000; padding: 0 1px; border-radius: 2px; }
+      mark.br-hl.active { background: #ff9632; }
+
+      /* Overview table for group/parent nodes */
+      .br-overview { padding: 10px 14px; font-family: Consolas, 'Courier New', monospace; font-size: 0.82rem; }
+      .br-overview table { width: 100%; border-collapse: collapse; }
+      .br-overview th {
+        text-align: left; background: #e9ecef; border-bottom: 2px solid #ced4da;
+        padding: 5px 8px; position: sticky; top: 0;
+      }
+      .br-overview td { padding: 4px 8px; border-bottom: 1px solid #eee; word-break: break-word; }
+      .br-overview tr:nth-child(even) td { background: #f8f9fa; }
+      .br-overview a { color: #0d6efd; cursor: pointer; text-decoration: none; }
+      .br-overview a:hover { text-decoration: underline; }
+
+      /* Key/value summary */
+      .br-kv { padding: 10px 14px; font-family: Consolas, 'Courier New', monospace; font-size: 0.84rem; }
+      .br-kv table { border-collapse: collapse; }
+      .br-kv td { padding: 3px 10px 3px 0; vertical-align: top; }
+      .br-kv td.k { color: #005cc5; white-space: nowrap; font-weight: bold; }
+      .br-kv td.v { color: #24292e; word-break: break-all; }
+
+      /* Tree view */
+      .br-tree { list-style: none; margin: 0; padding: 0 0 0 0.25rem; font-family: Consolas, 'Courier New', monospace; font-size: 0.82rem; }
+      .br-tree ul { list-style: none; margin: 0; padding: 0 0 0 0.9rem; }
+      .br-tree li { user-select: none; }
+      .br-tree-label {
+        display: flex; align-items: center; padding: 2px 6px; cursor: pointer;
+        white-space: nowrap; border-radius: 3px;
+      }
+      .br-tree-label:hover { background: #e2e6ea; }
+      .br-tree-label.selected { background: #0d6efd; color: #fff; }
+      .br-tree-label.selected .br-tree-badge { background: rgba(255,255,255,0.25); color: #fff; }
+      .br-tree-arrow {
+        display: inline-block; width: 14px; text-align: center; font-size: 0.7em;
+        flex-shrink: 0; margin-right: 2px; transition: transform 0.12s;
+      }
+      .br-tree-arrow.expanded { transform: rotate(90deg); }
+      .br-tree-arrow.leaf { visibility: hidden; }
+      .br-tree-text { overflow: hidden; text-overflow: ellipsis; }
+      .br-tree-badge {
+        margin-left: 6px; font-size: 0.68rem; background: #dfe3e8; color: #555;
+        padding: 0 5px; border-radius: 8px; flex-shrink: 0;
+      }
+      .br-tree-children { display: none; }
+      .br-tree-children.open { display: block; }
+
+      /* PCD override flag legend */
+      .br-legend {
+        margin: 4px 14px 16px;
+        padding: 8px 12px;
+        background: #f6f8fa;
+        border: 1px solid #e1e4e8;
+        border-left: 3px solid #3182ce;
+        border-radius: 4px;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.78rem;
+        line-height: 1.7;
+        color: #444;
+      }
+      .br-legend .br-legend-title { font-weight: bold; color: #24292e; margin-bottom: 4px; }
+      .br-legend code { background: #eef1f4; padding: 0 4px; border-radius: 3px; color: #d73a49; font-weight: bold; }
+
+      .br-welcome { padding: 2rem; color: #444; font-family: Consolas, 'Courier New', monospace; font-size: 0.85rem; line-height: 1.8; }
+      .br-welcome h2 { color: #333; margin-top: 0; }
+      .br-placeholder { padding: 2rem; color: #999; text-align: center; font-family: Consolas, 'Courier New', monospace; }
+    </style>
+      <!-- Toolbar -->
+      <div class="br-toolbar">
+        <label>Build Report:</label>
+        <div id="brDropZone">Drop BUILD_REPORT.txt here or click to browse&hellip;</div>
+        <input type="file" id="brFileInput" accept=".txt,.log,.report,text/plain" style="display:none;" />
+        <span id="brFileInfo"></span>
+      </div>
+
+      <!-- Split view -->
+      <div class="br-container">
+        <div class="br-tree-panel" id="brTreePanel">
+          <div class="br-tree-search">
+            <div class="br-filter-row">
+              <select id="brFilterMode" title="Filter mode">
+                <option value="name">Name</option>
+                <option value="library">Library</option>
+                <option value="pcd">PCD</option>
+              </select>
+              <input type="text" id="brTreeFilter" placeholder="Filter tree (e.g. module name)&hellip;" spellcheck="false" />
+              <button type="button" class="br-toggle" id="brTreeCase" title="Match Case" aria-pressed="false">Aa</button>
+              <button type="button" class="br-toggle" id="brTreeWord" title="Match Whole Word" aria-pressed="false"><span class="br-tg-word">ab</span></button>
+            </div>
+          </div>
+          <div class="br-tree-scroll" id="brTreeScroll">
+            <ul class="br-tree" id="brTree"></ul>
+          </div>
+        </div>
+        <div class="br-resizer" id="brResizer"></div>
+        <div class="br-detail-panel">
+          <div class="br-detail-header" id="brDetailHeader" style="display:none;">
+            <span id="brDetailTitle"></span>
+            <span class="br-crumb" id="brCrumb"></span>
+            <span class="br-detail-tools">
+              <input type="text" id="brContentSearch" placeholder="Find in content&hellip;" spellcheck="false" />
+              <button type="button" class="br-toggle" id="brSearchCase" title="Match Case" aria-pressed="false">Aa</button>
+              <button type="button" class="br-toggle" id="brSearchWord" title="Match Whole Word" aria-pressed="false"><span class="br-tg-word">ab</span></button>
+              <span class="br-count" id="brSearchCount"></span>
+              <button id="brSearchPrev" title="Previous match">&#9650;</button>
+              <button id="brSearchNext" title="Next match">&#9660;</button>
+              <button id="brCopyBtn" title="Copy content">Copy</button>
+            </span>
+          </div>
+          <div class="br-detail-body" id="brDetailBody">
+            <div class="br-welcome" id="brWelcome">
+              <h2>UEFI Build Report Explorer</h2>
+              <p>Load an EDK2 <b>BUILD_REPORT.txt</b> (generated with <code>build -Y PCD -Y LIBRARY -Y FLASH -Y DEPEX -Y BUILD_FLAGS</code>) to explore it as a navigable tree.</p>
+              <p>
+                <strong>Features</strong><br>
+                &bull; Left tree groups content into <b>Platform Summary</b>, <b>Platform PCDs</b>, <b>Firmware Devices</b>, and <b>Modules</b><br>
+                &bull; Each module expands into its <b>PCD</b>, <b>Library</b>, <b>DEPEX</b>, and <b>Build Flags</b> sub-sections<br>
+                &bull; Firmware Devices expand into their <b>FD / Nested FV regions</b><br>
+                &bull; Right pane shows the raw section content with light syntax highlighting<br>
+                &bull; <b>Filter tree</b> box narrows the tree by module/section name<br>
+                &bull; Switch the filter mode to <b>Library</b> or <b>PCD</b> to list only modules that use a given library or PCD<br>
+                &bull; Toggle <b>Aa</b> (match case) and <b>ab</b> (whole word) on either search box, just like VS Code<br>
+                &bull; <b>Find in content</b> box highlights and jumps between matches (<b>Enter</b> / <b>Shift+Enter</b>)<br>
+                &bull; Everything runs locally in your browser &mdash; no upload<br>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <hr/>
+    <div style="font-size: 13px; color: #7f8c8d; line-height: 2; margin-top: 8px;">
+      <b style="color: #2c3e50;">How it works</b><br>
+      &bull; The parser splits the report on its <code>&gt;===&lt;</code> section and <code>&gt;---&lt;</code> sub-section markers<br>
+      &bull; Sections titled <code>Module Summary</code> are grouped under <b>Modules</b>; <code>Firmware Device (FD)</code> under <b>Firmware Devices</b><br>
+      <br>
+      <b style="color: #2c3e50;">Features</b><br>
+      &bull; Tree navigation on the left, section content on the right<br>
+      &bull; Syntax highlighting for GUIDs, PCD types, override flags (<code>*B *P *F *M</code>) and hex values<br>
+      &bull; <b>Ctrl+Click</b> the tree filter to clear it quickly, or press <b>Esc</b> in either search box<br>
+      &bull; Drag a resizer between panes to adjust the tree width<br>
+    </div>
+
+    <script src="./index.js"></script>
+
+</main>
+
+<hr/>
+
+<section id="comments" class="giscus">
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
+
+  <footer>
+  <script defer src="/js/center-img.js"></script>
+<script defer src="/js/pre-tag.js"></script>
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2026 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+

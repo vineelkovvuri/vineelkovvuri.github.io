@@ -1,0 +1,172 @@
+---
+title: "🧮 Hex to Memory Offsets"
+tags: ["Tools"]
+category: "Dev Tools"
+order: 7
+---
+
+  <style>
+    .hm-section {
+      border: 1px solid #d0d5dd;
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 14px;
+      position: relative;
+      background: #f8f9fb;
+      transition: box-shadow 0.2s ease;
+    }
+    .hm-section:hover {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+    .hm-section .hm-close {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      background: none;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      color: #7f8c8d;
+      line-height: 1;
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .hm-section .hm-close:hover {
+      color: #e74c3c;
+      background: rgba(231, 76, 60, 0.1);
+    }
+    .hm-section label {
+      color: #2c3e50;
+      font-weight: 600;
+      font-size: 0.9em;
+    }
+    .hm-section input[type="text"] {
+      border: 1px solid #b0c4de;
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.95em;
+      color: #2c3e50;
+      background: #fff;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 450px;
+    }
+    .hm-section input[type="text"]:focus {
+      outline: none;
+      border-color: #5a9fd4;
+      box-shadow: 0 0 0 3px rgba(90, 159, 212, 0.15);
+    }
+    .hm-section .hm-result {
+      margin: 8px 0 0;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.92em;
+      color: #2c3e50;
+      background: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 12px;
+      line-height: 1.5;
+    }
+    .hm-section .hm-result .hm-row {
+      display: flex;
+      gap: 10px;
+    }
+    .hm-section .hm-result .hm-label {
+      flex: 0 0 70px;
+      color: #7f8c8d;
+      font-weight: 600;
+      text-align: right;
+      user-select: none;
+    }
+    .hm-section .hm-result .hm-value {
+      flex: 1;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    #hm-add-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+      border: 1px solid #b0c4de;
+      border-radius: 8px;
+      background: #fff;
+      color: #5a9fd4;
+      vertical-align: middle;
+      margin-left: 8px;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    #hm-add-btn:hover {
+      background: #5a9fd4;
+      color: #fff;
+      border-color: #5a9fd4;
+    }
+    .hm-heading {
+      display: inline;
+      color: #2c3e50;
+      vertical-align: middle;
+    }
+    .hm-examples {
+      margin: 10px 0;
+      color: #7f8c8d;
+      font-size: 0.88em;
+      background: #f8f9fb;
+      border: 1px solid #e0e4e8;
+      border-radius: 8px;
+      padding: 12px 16px;
+      line-height: 1.6;
+    }
+    .hm-divider {
+      border: none;
+      border-top: 1px solid #d0d5dd;
+      margin: 20px 0;
+    }
+  </style>
+
+  <h3 class="hm-heading">Hexadecimal to Memory Offsets</h3>
+  <button id="hm-add-btn" title="Add another calculator section">+</button>
+  <div id="sections-container"></div>
+
+  <pre class="hm-examples">Examples:
+  0x100000000                  Hex value
+  0xFFFF FFFF FFFF FFFF        Hex with spaces
+  0x1000_0000                  Hex with underscores
+  0FFh, 1234h, DEADBEEFh       Hex with trailing 'h'
+  0xFFFE8000 + 0x00018000      Addition of hex values
+  0x100000000 - 0x1000         Subtraction of hex values
+  0xFEC00000 + 64K + 2MB       Mix of hex and size units
+  4GB - 16KB                   Subtraction with size units
+  4GB                          Size unit alone
+  64K, 2M, 1G, 3T, 512B        Short suffixes
+  64KB, 2MB, 1GB, 3TB          Long suffixes
+  4K * 8 * 32 * 256             Multiplication
+  0x1000 * 4 + 2MB              Mixed multiply and add
+  2^16, 2^32, 2^10             Power operator
+  2^16 - 1                     Power in expressions
+  ~0xFFF                       Bitwise NOT (64-bit complement)
+  ~0xFFF + 1                   Complement in expressions
+  ~(0x100000 - 1)              Parentheses grouping
+  (0x1000 + 0x800) * 2         Nested expressions</pre>
+
+  <script src="index.js"></script>
+
+<div style="font-size: 13px; color: #7f8c8d; line-height: 2; margin-top: 8px;">
+    <b style="color: #2c3e50;">Features</b><br>
+    &bull; Parse hex values with <b>0x</b> prefix or trailing <b>h</b>, plus spaces and underscores (e.g. <code>0xFFFF_FFFF</code>, <code>DEADBEEFh</code>)<br>
+    &bull; Arithmetic expressions with <b>+</b> and <b>-</b> operators (e.g. <code>0xFEC00000 + 0x18000</code>)<br>
+    &bull; Size unit support: <b>B, KB, MB, GB, TB</b> and short forms <b>K, M, G, T</b><br>
+    &bull; Mix hex values and size units in expressions (e.g. <code>4GB - 16KB</code>)<br>
+    &bull; Multiplication with <b>*</b> operator (e.g. <code>4K * 8 * 32</code>)<br>
+    &bull; Power with <b>^</b> operator (e.g. <code>2^16</code>, <code>2^32 - 1</code>)<br>
+    &bull; Bitwise NOT with <b>~</b> operator, 64-bit complement (e.g. <code>~0xFFF</code> &rarr; <code>0xFFFFFFFFFFFFF000</code>)<br>
+    &bull; Parentheses for grouping and nested expressions (e.g. <code>~(0x100000 - 1)</code>, <code>(0x1000 + 0x800) * 2</code>)<br>
+    &bull; Size breakdown into TB, GB, MB, KB, and Bytes<br>
+    &bull; Distance to next power of 2<br>
+    &bull; Signed interpretation for 8, 16, 32, and 64-bit widths<br>
+    &bull; Multiple calculator sections &mdash; click <b>+</b> to add more<br>
+</div>

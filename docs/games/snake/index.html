@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>🐍 Snake | Vineel Kovvuri</title>
+    
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/copy-button.css" />
+    <link rel="stylesheet" href="/css/forms.css" />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <meta name="description" content="🐍 Snake Eat the apples to grow longer. Don&#39;t hit the walls or your own tail!" />
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/projects/">Projects</a></li>
+      
+      <li><a href="/tools/">Toolsᴬᴵ</a></li>
+      
+      <li><a href="/games/">Gamesᴬᴵ</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">🐍 Snake</span></h1>
+
+
+</div>
+
+
+
+<main>
+
+<style>
+    .snk {
+        --bg: #f8f9fb;
+        --card: #ffffff;
+        --ink: #2c3e50;
+        --muted: #7f8c8d;
+        --border: #d0d5dd;
+        --orange: #f5a623;
+        --green: #6ab04c;
+        --red: #e74c3c;
+        --blue: #5a9fd4;
+        --grid: #eef1f6;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        max-width: 640px;
+        margin: 0 auto;
+        color: var(--ink);
+        user-select: none;
+    }
+
+    .snk * { box-sizing: border-box; }
+
+    .snk-layout { display: flex; gap: 16px; align-items: flex-start; }
+    .snk-stage { position: relative; flex: 0 0 auto; }
+
+    .snk-board {
+        display: block;
+        background: var(--grid);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        touch-action: none;
+    }
+
+    .snk-side {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        min-width: 140px;
+    }
+
+    .snk-panel {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 12px 14px;
+    }
+
+    .snk-panel .label {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 4px;
+    }
+
+    .snk-panel .value {
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--ink);
+        font-family: Consolas, 'Courier New', monospace;
+    }
+
+    .snk-panel.rec .value { color: var(--orange); }
+
+    .snk-btn {
+        background: var(--blue);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 11px;
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        transition: background 0.15s, transform 0.05s;
+        width: 100%;
+    }
+
+    .snk-btn:hover { background: #4a8fc4; }
+    .snk-btn:active { transform: translateY(1px); }
+    .snk-btn.ghost { background: #eef1f6; color: var(--ink); }
+    .snk-btn.ghost:hover { background: #e2e7f0; }
+
+    .snk-touch {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 16px;
+        max-width: 240px;
+    }
+
+    .snk-touch button {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 16px 0;
+        font-size: 22px;
+        cursor: pointer;
+        transition: background 0.12s, transform 0.05s;
+    }
+
+    .snk-touch button:hover { background: #f2f8fd; border-color: var(--blue); }
+    .snk-touch button:active { transform: scale(0.94); }
+    .snk-touch .spacer { visibility: hidden; }
+    .snk-up { grid-column: 2; grid-row: 1; }
+    .snk-left { grid-column: 1; grid-row: 2; }
+    .snk-down { grid-column: 2; grid-row: 2; }
+    .snk-right { grid-column: 3; grid-row: 2; }
+
+    .snk-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(248, 249, 251, 0.96);
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        text-align: center;
+        padding: 24px;
+        z-index: 5;
+    }
+
+    .snk-overlay h2 { margin: 0; font-size: 26px; color: var(--ink); }
+    .snk-overlay p { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.6; }
+    .snk-hidden { display: none !important; }
+
+    .snk-medal {
+        display: inline-block;
+        font-size: 56px;
+        line-height: 1;
+        animation: snk-pop 0.5s cubic-bezier(0.18, 1.5, 0.6, 1) both;
+    }
+
+    @keyframes snk-pop {
+        0% { transform: scale(0) rotate(-25deg); }
+        100% { transform: scale(1) rotate(0); }
+    }
+
+    .snk-scoreboard {
+        width: 100%;
+        max-width: 240px;
+        margin: 2px auto;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        animation: snk-fade 0.6s ease 0.2s both;
+    }
+
+    .snk-score-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 8px 14px;
+        font-size: 14px;
+        color: var(--ink);
+    }
+
+    .snk-score-row b { font-size: 16px; color: var(--blue); }
+
+    @keyframes snk-fade {
+        0% { opacity: 0; transform: translateY(10px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .snk-confetti {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        border-radius: 12px;
+    }
+
+    .snk-confetti-piece {
+        position: absolute;
+        top: -14px;
+        width: 9px;
+        height: 14px;
+        opacity: 0.9;
+        animation-name: snk-fall;
+        animation-timing-function: linear;
+        animation-iteration-count: 1;
+    }
+
+    @keyframes snk-fall {
+        0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+        100% { transform: translateY(560px) rotate(540deg); opacity: 0; }
+    }
+
+    .snk-help {
+        font-size: 13px;
+        color: #7f8c8d;
+        line-height: 2;
+        margin-top: 20px;
+    }
+
+    .snk-help b { color: #2c3e50; }
+
+    .snk-help kbd {
+        font-family: Consolas, 'Courier New', monospace;
+        background: #f1f3f5;
+        border: 1px solid #d0d5dd;
+        border-bottom-width: 2px;
+        border-radius: 4px;
+        padding: 1px 6px;
+        font-size: 12px;
+        color: #2c3e50;
+    }
+
+    @media (max-width: 520px) {
+        .snk-side .snk-panel .value { font-size: 20px; }
+    }
+</style>
+
+<div class="snk">
+    <div class="snk-layout">
+        <div class="snk-stage">
+            <canvas class="snk-board" id="snkBoard" width="420" height="420"></canvas>
+
+            <div class="snk-overlay" id="snkOverlay">
+                <h2 id="snkOverTitle">🐍 Snake</h2>
+                <p id="snkOverText">Eat the apples to grow longer.<br>Don't hit the walls or your own tail!</p>
+                <button class="snk-btn" id="snkStart" style="width:auto;padding:13px 40px;">START</button>
+            </div>
+        </div>
+
+        <div class="snk-side">
+            <div class="snk-panel"><div class="label">Score</div><div class="value" id="snkScore">0</div></div>
+            <div class="snk-panel"><div class="label">Length</div><div class="value" id="snkLength">3</div></div>
+            <div class="snk-panel"><div class="label">Level</div><div class="value" id="snkLevel">1</div></div>
+            <div class="snk-panel rec"><div class="label">Record</div><div class="value" id="snkRecord">0</div></div>
+            <button class="snk-btn ghost" id="snkPause">PAUSE</button>
+        </div>
+    </div>
+
+    <div class="snk-touch">
+        <button class="snk-up" id="snkUp" aria-label="Up">🔼</button>
+        <button class="snk-left" id="snkLeft" aria-label="Left">◀️</button>
+        <button class="snk-down" id="snkDown" aria-label="Down">🔽</button>
+        <button class="snk-right" id="snkRight" aria-label="Right">▶️</button>
+    </div>
+
+    <div class="snk-help">
+        <b>How to play</b><br>
+        &bull; Steer the snake with <kbd>←</kbd> <kbd>↑</kbd> <kbd>→</kbd> <kbd>↓</kbd>, pause with <kbd>P</kbd>.<br>
+        &bull; On touch screens use the arrow buttons below the board.<br>
+        &bull; Eat the red <b>apple</b> to grow and score points.<br>
+        &bull; You <b>cannot</b> reverse straight back into yourself.<br>
+        &bull; The snake speeds up every few apples (level up).<br>
+        &bull; Crashing into a wall or your tail ends the game. Your best score is saved as your <b>Record</b>.<br>
+    </div>
+</div>
+
+<script src="./index.js"></script>
+
+</main>
+
+<hr/>
+
+<section id="comments" class="giscus">
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
+
+  <footer>
+  <script defer src="/js/center-img.js"></script>
+<script defer src="/js/pre-tag.js"></script>
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2026 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+

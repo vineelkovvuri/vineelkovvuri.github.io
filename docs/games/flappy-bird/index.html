@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>🐤 Flappy Bird | Vineel Kovvuri</title>
+    
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/copy-button.css" />
+    <link rel="stylesheet" href="/css/forms.css" />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <meta name="description" content="🐤 Flappy Bird Tap, click or press Space to flap. Fly through the gaps in the pipes!" />
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/projects/">Projects</a></li>
+      
+      <li><a href="/tools/">Toolsᴬᴵ</a></li>
+      
+      <li><a href="/games/">Gamesᴬᴵ</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">🐤 Flappy Bird</span></h1>
+
+
+</div>
+
+
+
+<main>
+
+<style>
+    .fby {
+        --bg: #f8f9fb;
+        --card: #ffffff;
+        --ink: #2c3e50;
+        --muted: #7f8c8d;
+        --border: #d0d5dd;
+        --orange: #f5a623;
+        --green: #6ab04c;
+        --red: #e74c3c;
+        --blue: #5a9fd4;
+        --sky: #dff0f7;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        max-width: 640px;
+        margin: 0 auto;
+        color: var(--ink);
+        user-select: none;
+    }
+
+    .fby * { box-sizing: border-box; }
+
+    .fby-layout { display: flex; gap: 16px; align-items: flex-start; }
+    .fby-stage { position: relative; flex: 0 0 auto; }
+
+    .fby-board {
+        display: block;
+        background: var(--sky);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        touch-action: none;
+        cursor: pointer;
+    }
+
+    .fby-side {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        min-width: 140px;
+    }
+
+    .fby-panel {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 12px 14px;
+    }
+
+    .fby-panel .label {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 4px;
+    }
+
+    .fby-panel .value {
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--ink);
+        font-family: Consolas, 'Courier New', monospace;
+    }
+
+    .fby-panel.rec .value { color: var(--orange); }
+
+    .fby-btn {
+        background: var(--blue);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 11px;
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        transition: background 0.15s, transform 0.05s;
+        width: 100%;
+    }
+
+    .fby-btn:hover { background: #4a8fc4; }
+    .fby-btn:active { transform: translateY(1px); }
+    .fby-btn.ghost { background: #eef1f6; color: var(--ink); }
+    .fby-btn.ghost:hover { background: #e2e7f0; }
+
+    .fby-flap {
+        margin-top: 16px;
+        width: 100%;
+        max-width: 360px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 20px 0;
+        font-size: 26px;
+        cursor: pointer;
+        transition: background 0.12s, transform 0.05s;
+    }
+
+    .fby-flap:hover { background: #f2f8fd; border-color: var(--blue); }
+    .fby-flap:active { transform: scale(0.97); }
+
+    .fby-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(248, 249, 251, 0.94);
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        text-align: center;
+        padding: 24px;
+        z-index: 5;
+    }
+
+    .fby-overlay h2 { margin: 0; font-size: 26px; color: var(--ink); }
+    .fby-overlay p { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.6; }
+    .fby-hidden { display: none !important; }
+
+    .fby-medal {
+        display: inline-block;
+        font-size: 56px;
+        line-height: 1;
+        animation: fby-pop 0.5s cubic-bezier(0.18, 1.5, 0.6, 1) both;
+    }
+
+    @keyframes fby-pop {
+        0% { transform: scale(0) rotate(-25deg); }
+        100% { transform: scale(1) rotate(0); }
+    }
+
+    .fby-scoreboard {
+        width: 100%;
+        max-width: 240px;
+        margin: 2px auto;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        animation: fby-fade 0.6s ease 0.2s both;
+    }
+
+    .fby-score-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 8px 14px;
+        font-size: 14px;
+        color: var(--ink);
+    }
+
+    .fby-score-row b { font-size: 16px; color: var(--blue); }
+
+    @keyframes fby-fade {
+        0% { opacity: 0; transform: translateY(10px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .fby-confetti {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        border-radius: 12px;
+    }
+
+    .fby-confetti-piece {
+        position: absolute;
+        top: -14px;
+        width: 9px;
+        height: 14px;
+        opacity: 0.9;
+        animation-name: fby-fall;
+        animation-timing-function: linear;
+        animation-iteration-count: 1;
+    }
+
+    @keyframes fby-fall {
+        0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+        100% { transform: translateY(560px) rotate(540deg); opacity: 0; }
+    }
+
+    .fby-help {
+        font-size: 13px;
+        color: #7f8c8d;
+        line-height: 2;
+        margin-top: 20px;
+    }
+
+    .fby-help b { color: #2c3e50; }
+
+    .fby-help kbd {
+        font-family: Consolas, 'Courier New', monospace;
+        background: #f1f3f5;
+        border: 1px solid #d0d5dd;
+        border-bottom-width: 2px;
+        border-radius: 4px;
+        padding: 1px 6px;
+        font-size: 12px;
+        color: #2c3e50;
+    }
+
+    @media (max-width: 520px) {
+        .fby-side .fby-panel .value { font-size: 20px; }
+    }
+</style>
+
+<div class="fby">
+    <div class="fby-layout">
+        <div class="fby-stage">
+            <canvas class="fby-board" id="fbyBoard" width="360" height="480"></canvas>
+
+            <div class="fby-overlay" id="fbyOverlay">
+                <h2 id="fbyOverTitle">🐤 Flappy Bird</h2>
+                <p id="fbyOverText">Tap, click or press Space to flap.<br>Fly through the gaps in the pipes!</p>
+                <button class="fby-btn" id="fbyStart" style="width:auto;padding:13px 40px;">START</button>
+            </div>
+        </div>
+
+        <div class="fby-side">
+            <div class="fby-panel"><div class="label">Score</div><div class="value" id="fbyScore">0</div></div>
+            <div class="fby-panel rec"><div class="label">Record</div><div class="value" id="fbyRecord">0</div></div>
+            <button class="fby-btn ghost" id="fbyPause">PAUSE</button>
+        </div>
+    </div>
+
+    <button class="fby-flap" id="fbyFlap" aria-label="Flap">🐤 FLAP</button>
+
+    <div class="fby-help">
+        <b>How to play</b><br>
+        &bull; <b>Tap</b> the board, click <b>FLAP</b>, or press <kbd>Space</kbd> / <kbd>↑</kbd> to flap upward.<br>
+        &bull; Pause with <kbd>P</kbd>.<br>
+        &bull; Each flap gives the bird a little lift; gravity always pulls it down.<br>
+        &bull; Steer through the <b>gaps</b> between the green pipes.<br>
+        &bull; Score <b>1 point</b> for every pipe you pass.<br>
+        &bull; Touching a pipe, the ground or the ceiling ends the game. Your best score is saved as your <b>Record</b>.<br>
+    </div>
+</div>
+
+<script src="./index.js"></script>
+
+</main>
+
+<hr/>
+
+<section id="comments" class="giscus">
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
+
+  <footer>
+  <script defer src="/js/center-img.js"></script>
+<script defer src="/js/pre-tag.js"></script>
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2026 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+

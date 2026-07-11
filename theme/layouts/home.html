@@ -1,0 +1,26 @@
+{{/* This page is for rendering home page */}}
+
+{{ partial "header.html" . }}
+
+{{ .Content }}
+
+<hr>
+
+<h1>Blog</h1>
+<ul style="list-style: none;">
+  {{ $pages := .Pages }}
+  {{ if .IsHome }}{{ $pages = .Site.RegularPages }}{{ end }}
+  {{ range first 20 (where $pages "Section" "!=" "") }}
+    {{if eq .Section "blog"}}
+    <li>
+      <span class="date">{{ .Date.Format "2006/01/02" }}</span>
+      <a href="{{ .RelPermalink }}">{{ .Title | markdownify }}</a>
+    </li>
+    {{ end }}
+  {{ end }}
+  <li>
+    <a href="/blog">more...</a>
+  </li>
+</ul>
+
+{{ partial "footer.html" . }}

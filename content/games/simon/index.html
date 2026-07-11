@@ -1,0 +1,279 @@
+---
+title: "🎵 Simon"
+tags: ["Games"]
+category: "Kids Games"
+---
+
+<style>
+    .sim {
+        --bg: #f8f9fb;
+        --card: #ffffff;
+        --ink: #2c3e50;
+        --muted: #7f8c8d;
+        --border: #d0d5dd;
+        --orange: #f5a623;
+        --green: #6ab04c;
+        --red: #e74c3c;
+        --blue: #5a9fd4;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        max-width: 480px;
+        margin: 0 auto;
+        color: var(--ink);
+        user-select: none;
+    }
+
+    .sim * { box-sizing: border-box; }
+
+    .sim-top {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 16px;
+        align-items: stretch;
+    }
+
+    .sim-panel {
+        flex: 1;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 10px 14px;
+        text-align: center;
+    }
+
+    .sim-panel .label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 2px;
+    }
+
+    .sim-panel .value {
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--ink);
+        font-family: Consolas, 'Courier New', monospace;
+    }
+
+    .sim-panel.rec .value { color: var(--orange); }
+
+    .sim-stage { position: relative; }
+
+    .sim-pad {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        border-radius: 50%;
+        background: #2c3e50;
+        padding: 14px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        gap: 14px;
+    }
+
+    .sim-quad {
+        cursor: pointer;
+        opacity: 0.55;
+        transition: opacity 0.1s;
+        border: none;
+    }
+
+    .sim-quad.lit { opacity: 1; box-shadow: 0 0 30px rgba(255,255,255,0.7) inset; }
+    .sim-quad:disabled { cursor: default; }
+
+    .sim-green { background: #2ecc71; border-radius: 100% 0 0 0; }
+    .sim-red { background: #e74c3c; border-radius: 0 100% 0 0; }
+    .sim-yellow { background: #f1c40f; border-radius: 0 0 0 100%; }
+    .sim-blue { background: #3498db; border-radius: 0 0 100% 0; }
+
+    .sim-center {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 34%;
+        height: 34%;
+        border-radius: 50%;
+        background: var(--card);
+        border: 4px solid #2c3e50;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .sim-center .lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); font-weight: 700; }
+    .sim-center .lvl { font-size: 30px; font-weight: 800; font-family: Consolas, 'Courier New', monospace; }
+
+    .sim-controls {
+        display: flex;
+        gap: 12px;
+        margin-top: 16px;
+    }
+
+    .sim-btn {
+        background: var(--blue);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 12px 20px;
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        transition: background 0.15s, transform 0.05s;
+        flex: 1;
+    }
+
+    .sim-btn:hover { background: #4a8fc4; }
+    .sim-btn:active { transform: translateY(1px); }
+    .sim-btn.ghost { background: #eef1f6; color: var(--ink); }
+    .sim-btn.ghost:hover { background: #e2e7f0; }
+    .sim-btn.active { background: var(--orange); }
+
+    .sim-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(248, 249, 251, 0.92);
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        text-align: center;
+        padding: 24px;
+        z-index: 5;
+    }
+
+    .sim-overlay h2 { margin: 0; font-size: 24px; color: var(--ink); }
+    .sim-overlay p { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.6; }
+    .sim-hidden { display: none !important; }
+
+    .sim-medal {
+        display: inline-block;
+        font-size: 52px;
+        line-height: 1;
+        animation: sim-pop 0.5s cubic-bezier(0.18, 1.5, 0.6, 1) both;
+    }
+
+    @keyframes sim-pop {
+        0% { transform: scale(0) rotate(-25deg); }
+        100% { transform: scale(1) rotate(0); }
+    }
+
+    .sim-scoreboard {
+        width: 100%;
+        max-width: 200px;
+        margin: 2px auto;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        animation: sim-fade 0.6s ease 0.2s both;
+    }
+
+    .sim-score-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 7px 12px;
+        font-size: 13px;
+        color: var(--ink);
+    }
+
+    .sim-score-row b { font-size: 15px; color: var(--blue); }
+
+    @keyframes sim-fade {
+        0% { opacity: 0; transform: translateY(10px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .sim-confetti {
+        position: absolute;
+        inset: -40px;
+        overflow: hidden;
+        pointer-events: none;
+    }
+
+    .sim-confetti-piece {
+        position: absolute;
+        top: -14px;
+        width: 9px;
+        height: 14px;
+        opacity: 0.9;
+        animation-name: sim-fall;
+        animation-timing-function: linear;
+        animation-iteration-count: 1;
+    }
+
+    @keyframes sim-fall {
+        0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+        100% { transform: translateY(520px) rotate(540deg); opacity: 0; }
+    }
+
+    .sim-status {
+        text-align: center;
+        margin-top: 14px;
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--ink);
+        min-height: 22px;
+    }
+
+    .sim-help {
+        font-size: 13px;
+        color: #7f8c8d;
+        line-height: 2;
+        margin-top: 18px;
+    }
+
+    .sim-help b { color: #2c3e50; }
+</style>
+
+<div class="sim">
+    <div class="sim-top">
+        <div class="sim-panel"><div class="label">Round</div><div class="value" id="simRound">0</div></div>
+        <div class="sim-panel"><div class="label">Best Round</div><div class="value" id="simBest">0</div></div>
+        <div class="sim-panel rec"><div class="label">Record</div><div class="value" id="simRecord">0</div></div>
+    </div>
+
+    <div class="sim-stage">
+        <div class="sim-pad" id="simPad">
+            <button class="sim-quad sim-green" data-color="0" aria-label="Green"></button>
+            <button class="sim-quad sim-red" data-color="1" aria-label="Red"></button>
+            <button class="sim-quad sim-yellow" data-color="2" aria-label="Yellow"></button>
+            <button class="sim-quad sim-blue" data-color="3" aria-label="Blue"></button>
+            <div class="sim-center"><span class="lbl">Round</span><span class="lvl" id="simCenter">0</span></div>
+        </div>
+
+        <div class="sim-overlay" id="simOverlay">
+            <h2 id="simOverTitle">🎵 Simon</h2>
+            <p id="simOverText">Watch the sequence,<br>then repeat it!</p>
+            <button class="sim-btn" id="simStart" style="flex:0 0 auto;padding:12px 36px;">START</button>
+        </div>
+    </div>
+
+    <div class="sim-status" id="simStatus"></div>
+
+    <div class="sim-controls">
+        <button class="sim-btn ghost" id="simRestart">RESTART</button>
+        <button class="sim-btn ghost" id="simStrict">Strict: OFF</button>
+    </div>
+
+    <div class="sim-help">
+        <b>How to play</b><br>
+        &bull; Press <b>Start</b>. Simon lights up a color &mdash; watch carefully.<br>
+        &bull; Repeat the sequence by <b>tapping</b> the colored pads in the same order.<br>
+        &bull; Each round adds <b>one more</b> color to remember.<br>
+        &bull; In <b>Strict</b> mode a single mistake ends the game; otherwise you get to retry the round.<br>
+        &bull; How many rounds can you memorize? Your best round is saved as your <b>Record</b>.<br>
+    </div>
+</div>
+
+<script src="./index.js"></script>

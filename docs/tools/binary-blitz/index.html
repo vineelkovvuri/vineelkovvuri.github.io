@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>⚡ Binary Blitz | Vineel Kovvuri</title>
+    
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/copy-button.css" />
+    <link rel="stylesheet" href="/css/forms.css" />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <meta name="description" content="Convert to binary -- Press Start your byte 0 0000 0000 SCORE0 LEVEL1 STREAK0 BEST0 START END GAME BINARY BLITZ A decimal number appears — flip the 8 bits to …" />
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/projects/">Projects</a></li>
+      
+      <li><a href="/tools/">Toolsᴬᴵ</a></li>
+      
+      <li><a href="/games/">Gamesᴬᴵ</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">⚡ Binary Blitz</span></h1>
+
+
+</div>
+
+
+
+<main>
+
+<style>
+    .bblitz {
+        --bg: #0c5a73;
+        --bg2: #0a4d63;
+        --cyan: #2bb3d6;
+        --cyan-dark: #1c92b3;
+        --orange: #f5a623;
+        --orange-dark: #d98e10;
+        --green: #6ab04c;
+        --ink: #08303d;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        max-width: 760px;
+        margin: 0 auto;
+        color: #eaf6fb;
+        user-select: none;
+    }
+
+    .bblitz * { box-sizing: border-box; }
+
+    .bblitz-board {
+        display: grid;
+        grid-template-columns: 1fr 150px;
+        gap: 10px;
+    }
+
+    .bblitz-main {
+        background: var(--bg);
+        border-radius: 10px;
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    /* place-value header */
+    .bblitz-places {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        gap: 6px;
+    }
+
+    .bblitz-place {
+        background: var(--cyan);
+        color: #03313f;
+        text-align: center;
+        font-weight: 700;
+        font-size: 13px;
+        padding: 6px 0;
+        border-radius: 4px;
+        font-family: Consolas, 'Courier New', monospace;
+    }
+
+    /* target prompt */
+    .bblitz-prompt {
+        background: var(--bg2);
+        border-radius: 10px;
+        text-align: center;
+        padding: 18px 12px;
+    }
+
+    .bblitz-prompt-label {
+        font-size: 12px;
+        letter-spacing: 2px;
+        color: #a9dcea;
+        text-transform: uppercase;
+    }
+
+    .bblitz-target {
+        font-size: 64px;
+        font-weight: 800;
+        line-height: 1.05;
+        color: #fff;
+        font-family: Consolas, 'Courier New', monospace;
+        text-shadow: 0 3px 0 rgba(0, 0, 0, 0.25);
+    }
+
+    .bblitz-sub {
+        font-size: 13px;
+        color: #cdeaf3;
+        font-family: Consolas, 'Courier New', monospace;
+        min-height: 16px;
+    }
+
+    /* bit cells */
+    .bblitz-bits {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        gap: 6px;
+    }
+
+    .bblitz-bit {
+        aspect-ratio: 1 / 1;
+        border: 2px solid var(--cyan);
+        background: var(--bg2);
+        color: var(--orange);
+        border-radius: 8px;
+        font-size: clamp(18px, 5vw, 30px);
+        font-weight: 800;
+        font-family: Consolas, 'Courier New', monospace;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.1s, transform 0.05s, color 0.1s;
+    }
+
+    .bblitz-bit:hover { border-color: #fff; }
+    .bblitz-bit:active { transform: scale(0.94); }
+
+    .bblitz-bit.on {
+        background: var(--orange);
+        color: #fff;
+        border-color: var(--orange-dark);
+    }
+
+    .bblitz-bit.correct {
+        animation: bblitz-pop 0.3s ease;
+    }
+
+    @keyframes bblitz-pop {
+        0% { transform: scale(1); }
+        45% { transform: scale(1.18); box-shadow: 0 0 14px rgba(106, 176, 76, 0.9); }
+        100% { transform: scale(1); }
+    }
+
+    .bblitz-bit.wrong {
+        animation: bblitz-shake 0.3s ease;
+    }
+
+    @keyframes bblitz-shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
+
+    /* live readout */
+    .bblitz-readout {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        font-family: Consolas, 'Courier New', monospace;
+        background: var(--bg2);
+        border-radius: 10px;
+        padding: 10px;
+        font-size: 18px;
+    }
+
+    .bblitz-readout b { color: var(--orange); font-size: 24px; }
+
+    /* sidebar */
+    .bblitz-side {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .bblitz-stat {
+        background: var(--green);
+        color: #08300a;
+        border-radius: 6px;
+        padding: 8px 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+
+    .bblitz-stat span:last-child {
+        font-size: 18px;
+        font-family: Consolas, 'Courier New', monospace;
+    }
+
+    .bblitz-side .spacer { flex: 1; }
+
+    .bblitz-btn {
+        background: var(--orange);
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 10px;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: background 0.15s, transform 0.05s;
+    }
+
+    .bblitz-btn:hover { background: var(--orange-dark); }
+    .bblitz-btn:active { transform: translateY(1px); }
+    .bblitz-btn.green { background: var(--green); }
+    .bblitz-btn.green:hover { background: #599a3f; }
+
+    /* overlay */
+    .bblitz-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(4, 30, 40, 0.88);
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .bblitz-overlay h2 {
+        margin: 0;
+        font-size: 32px;
+        color: var(--orange);
+    }
+
+    .bblitz-overlay p { margin: 0; font-size: 15px; color: #cdeaf3; }
+
+    .bblitz-stage { position: relative; }
+
+    .bblitz-hidden { display: none !important; }
+
+    .bblitz-help {
+        font-size: 13px;
+        color: #7f8c8d;
+        line-height: 2;
+        margin-top: 16px;
+    }
+
+    .bblitz-help b { color: #2c3e50; }
+
+    .bblitz-help kbd {
+        font-family: Consolas, 'Courier New', monospace;
+        background: #f1f3f5;
+        border: 1px solid #d0d5dd;
+        border-bottom-width: 2px;
+        border-radius: 4px;
+        padding: 1px 6px;
+        font-size: 12px;
+        color: #2c3e50;
+    }
+
+    @media (max-width: 560px) {
+        .bblitz-board { grid-template-columns: 1fr; }
+        .bblitz-side { flex-direction: row; flex-wrap: wrap; }
+        .bblitz-side .spacer { display: none; }
+        .bblitz-stat { flex: 1; }
+        .bblitz-target { font-size: 48px; }
+    }
+</style>
+
+<div class="bblitz">
+    <div class="bblitz-stage">
+        <div class="bblitz-board">
+            <div class="bblitz-main">
+                <div class="bblitz-places" id="bbPlaces"></div>
+
+                <div class="bblitz-prompt">
+                    <div class="bblitz-prompt-label">Convert to binary</div>
+                    <div class="bblitz-target" id="bbTarget">--</div>
+                    <div class="bblitz-sub" id="bbSub">Press Start</div>
+                </div>
+
+                <div class="bblitz-bits" id="bbBits"></div>
+
+                <div class="bblitz-readout">
+                    your byte <b id="bbValue">0</b>
+                    <span id="bbBinary" style="color:#a9dcea;">0000 0000</span>
+                </div>
+            </div>
+
+            <div class="bblitz-side">
+                <div class="bblitz-stat"><span>SCORE</span><span id="bbScore">0</span></div>
+                <div class="bblitz-stat"><span>LEVEL</span><span id="bbLevel">1</span></div>
+                <div class="bblitz-stat"><span>STREAK</span><span id="bbStreak">0</span></div>
+                <div class="bblitz-stat"><span>BEST</span><span id="bbBest">0</span></div>
+                <div class="spacer"></div>
+                <button class="bblitz-btn green" id="bbStart">START</button>
+                <button class="bblitz-btn" id="bbEnd">END GAME</button>
+            </div>
+        </div>
+
+        <div class="bblitz-overlay" id="bbOverlay">
+            <h2 id="bbOverTitle">BINARY BLITZ</h2>
+            <p id="bbOverText">A decimal number appears — flip the 8 bits to match it.</p>
+            <button class="bblitz-btn green" id="bbOverlayBtn">START</button>
+        </div>
+    </div>
+
+    <div class="bblitz-help">
+        <b>How it works</b><br>
+        &bull; A random <b>decimal (0–255)</b> appears. Flip the 8 bits so your byte equals it.<br>
+        &bull; Bits run <b>MSB → LSB</b> (left = 128, right = 1). Example: <code>37</code> → <code>0010 0101</code>.<br>
+        &bull; Match the number to score and a new one appears.<br>
+        &bull; Longer <b>streaks</b> earn bonus points.<br>
+        &bull; Every few rounds the <b>level</b> rises.<br>
+        <br>
+        <b>Controls</b><br>
+        &bull; <b>Click / tap</b> a cell to toggle it.<br>
+        &bull; Keys <kbd>1</kbd>–<kbd>8</kbd> toggle bits left → right.<br>
+        &bull; <kbd>Backspace</kbd> clears all bits, <kbd>Space</kbd> starts the game.<br>
+        <br>
+        <b>Goal</b> — practice fast <b>decimal → binary</b> conversion.
+    </div>
+</div>
+
+<script src="./index.js"></script>
+
+</main>
+
+<hr/>
+
+<section id="comments" class="giscus">
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
+
+  <footer>
+  <script defer src="/js/center-img.js"></script>
+<script defer src="/js/pre-tag.js"></script>
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2026 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+

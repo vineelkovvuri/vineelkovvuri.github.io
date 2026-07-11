@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SSH Config to Use Multiple GitHub Accounts with SSH Keys on a Single Computer | Vineel Kovvuri</title>
+    
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/copy-button.css" />
+    <link rel="stylesheet" href="/css/forms.css" />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <meta name="description" content="# This should be copied as ~/.ssh/config Host 192.168.1.22 HostName 192.168.1.22 User vineelko ForwardAgent yes # For Account 1 (vineelkovvuri) # when cloning a …" />
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/projects/">Projects</a></li>
+      
+      <li><a href="/tools/">Toolsᴬᴵ</a></li>
+      
+      <li><a href="/games/">Gamesᴬᴵ</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">SSH Config to Use Multiple GitHub Accounts with SSH Keys on a Single Computer</span></h1>
+
+
+</div>
+
+<main>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ini" data-lang="ini"><span style="display:flex;"><span><span style="color:#888"># This should be copied as ~/.ssh/config</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#369">Host 192.168.1.22</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#369">HostName 192.168.1.22</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#369">User vineelko</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#369">ForwardAgent yes</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># For Account 1 (vineelkovvuri)</span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># when cloning a repo we should use</span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># git clone git@github-vineelkovvuri:vineelkovvuri/vin-pro.git instead of below</span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># git clone git@github.com:vineelkovvuri/vin-pro.git</span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># git config user.name &#34;Vineel Kovvuri&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># git config user.email &#34;vineelkovvuri@gmail.com&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">Host github-vineelkovvuri</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">HostName github.com</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">User git</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">IdentityFile ~/.ssh/id_rsa_vineelkovvuri_github</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888"># For Account 2 (vineelko)</span>
+</span></span><span style="display:flex;"><span><span style="color:#369">Host github-vineelko</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">HostName github.com</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">User git</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#369">IdentityFile ~/.ssh/id_rsa_vineelko_github</span>
+</span></span></code></pre></div>
+</main>
+
+  <footer>
+  <script defer src="/js/center-img.js"></script>
+<script defer src="/js/pre-tag.js"></script>
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2026 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+

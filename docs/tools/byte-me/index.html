@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>� Byte Me | Vineel Kovvuri</title>
+    
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/copy-button.css" />
+    <link rel="stylesheet" href="/css/forms.css" />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <meta name="description" content="What memory size is this? 0x0000_1000   SCORE0 LEVEL1 STREAK0 LIVES♥♥♥ BEST0 START END GAME BYTE ME A hex value appears — pick the memory size it represents. …" />
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/projects/">Projects</a></li>
+      
+      <li><a href="/tools/">Toolsᴬᴵ</a></li>
+      
+      <li><a href="/games/">Gamesᴬᴵ</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">� Byte Me</span></h1>
+
+
+</div>
+
+
+
+<main>
+
+<style>
+    .hsq {
+        --bg: #15324a;
+        --bg2: #102739;
+        --panel: #1b3d59;
+        --cyan: #2bb3d6;
+        --orange: #f5a623;
+        --orange-dark: #d98e10;
+        --green: #6ab04c;
+        --red: #e74c3c;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        max-width: 760px;
+        margin: 0 auto;
+        color: #eaf6fb;
+        user-select: none;
+    }
+
+    .hsq * { box-sizing: border-box; }
+
+    .hsq-board {
+        display: grid;
+        grid-template-columns: 1fr 150px;
+        gap: 10px;
+    }
+
+    .hsq-panel {
+        background: var(--bg);
+        border-radius: 12px;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .hsq-prompt {
+        background: var(--bg2);
+        border-radius: 10px;
+        text-align: center;
+        padding: 22px 12px 18px;
+    }
+
+    .hsq-prompt-label {
+        font-size: 12px;
+        letter-spacing: 2px;
+        color: #9fd3ff;
+        text-transform: uppercase;
+    }
+
+    .hsq-hex {
+        font-size: clamp(28px, 7vw, 52px);
+        font-weight: 800;
+        color: #fff;
+        font-family: Consolas, 'Courier New', monospace;
+        margin-top: 6px;
+        letter-spacing: 1px;
+        word-break: break-all;
+        text-shadow: 0 3px 0 rgba(0, 0, 0, 0.25);
+    }
+
+    .hsq-sub {
+        font-size: 13px;
+        color: #adeacb;
+        font-family: Consolas, 'Courier New', monospace;
+        min-height: 18px;
+        margin-top: 8px;
+    }
+
+    .hsq-options {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .hsq-opt {
+        background: var(--panel);
+        border: 2px solid var(--cyan);
+        color: #fff;
+        border-radius: 10px;
+        padding: 18px 10px;
+        font-size: clamp(18px, 4.5vw, 26px);
+        font-weight: 800;
+        font-family: Consolas, 'Courier New', monospace;
+        cursor: pointer;
+        transition: background 0.12s, transform 0.05s, border-color 0.12s;
+    }
+
+    .hsq-opt:hover:not(:disabled) { background: #24506f; border-color: #fff; }
+    .hsq-opt:active:not(:disabled) { transform: scale(0.97); }
+    .hsq-opt:disabled { cursor: default; }
+
+    .hsq-opt .k {
+        display: inline-block;
+        color: #9fd3ff;
+        font-size: 13px;
+        margin-right: 8px;
+        opacity: 0.8;
+    }
+
+    .hsq-opt.correct {
+        background: var(--green);
+        border-color: #4e8a37;
+        color: #08300a;
+    }
+
+    .hsq-opt.wrong {
+        background: var(--red);
+        border-color: #b83227;
+    }
+
+    .hsq-side {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .hsq-stat {
+        background: var(--green);
+        color: #08300a;
+        border-radius: 6px;
+        padding: 8px 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+
+    .hsq-stat span:last-child {
+        font-size: 18px;
+        font-family: Consolas, 'Courier New', monospace;
+    }
+
+    .hsq-lives { color: var(--red); letter-spacing: 2px; }
+
+    .hsq-side .spacer { flex: 1; }
+
+    .hsq-btn {
+        background: var(--orange);
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 10px;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: background 0.15s, transform 0.05s;
+    }
+
+    .hsq-btn:hover { background: var(--orange-dark); }
+    .hsq-btn:active { transform: translateY(1px); }
+    .hsq-btn.green { background: var(--green); }
+    .hsq-btn.green:hover { background: #599a3f; }
+
+    .hsq-stage { position: relative; }
+
+    .hsq-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(6, 24, 36, 0.9);
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        text-align: center;
+        padding: 24px;
+    }
+
+    .hsq-overlay h2 { margin: 0; font-size: 32px; color: var(--orange); }
+    .hsq-overlay p { margin: 0; font-size: 15px; color: #cdeaf3; line-height: 1.5; }
+    .hsq-hidden { display: none !important; }
+
+    .hsq-help {
+        font-size: 13px;
+        color: #7f8c8d;
+        line-height: 2;
+        margin-top: 16px;
+    }
+
+    .hsq-help b { color: #2c3e50; }
+
+    .hsq-help kbd {
+        font-family: Consolas, 'Courier New', monospace;
+        background: #f1f3f5;
+        border: 1px solid #d0d5dd;
+        border-bottom-width: 2px;
+        border-radius: 4px;
+        padding: 1px 6px;
+        font-size: 12px;
+        color: #2c3e50;
+    }
+
+    .hsq-help code {
+        font-family: Consolas, 'Courier New', monospace;
+        background: #f1f3f5;
+        padding: 1px 5px;
+        border-radius: 4px;
+        color: #2c3e50;
+    }
+
+    @media (max-width: 560px) {
+        .hsq-board { grid-template-columns: 1fr; }
+        .hsq-side { flex-direction: row; flex-wrap: wrap; }
+        .hsq-side .spacer { display: none; }
+        .hsq-stat { flex: 1 1 45%; }
+    }
+</style>
+
+<div class="hsq">
+    <div class="hsq-stage">
+        <div class="hsq-board">
+            <div class="hsq-panel">
+                <div class="hsq-prompt">
+                    <div class="hsq-prompt-label">What memory size is this?</div>
+                    <div class="hsq-hex" id="hsqHex">0x0000_1000</div>
+                    <div class="hsq-sub" id="hsqSub">&nbsp;</div>
+                </div>
+
+                <div class="hsq-options" id="hsqOptions"></div>
+            </div>
+
+            <div class="hsq-side">
+                <div class="hsq-stat"><span>SCORE</span><span id="hsqScore">0</span></div>
+                <div class="hsq-stat"><span>LEVEL</span><span id="hsqLevel">1</span></div>
+                <div class="hsq-stat"><span>STREAK</span><span id="hsqStreak">0</span></div>
+                <div class="hsq-stat"><span>LIVES</span><span class="hsq-lives" id="hsqLives">&hearts;&hearts;&hearts;</span></div>
+                <div class="hsq-stat"><span>BEST</span><span id="hsqBest">0</span></div>
+                <div class="spacer"></div>
+                <button class="hsq-btn green" id="hsqStart">START</button>
+                <button class="hsq-btn" id="hsqEnd">END GAME</button>
+            </div>
+        </div>
+
+        <div class="hsq-overlay" id="hsqOverlay">
+            <h2 id="hsqOverTitle">BYTE ME</h2>
+            <p id="hsqOverText">A hex value appears — pick the memory size it represents.<br>Builds from <b>KB</b> up to <b>TB</b> as you level up.</p>
+            <button class="hsq-btn green" id="hsqOverlayBtn">START</button>
+        </div>
+    </div>
+
+    <div class="hsq-help">
+        <b>How it works</b><br>
+        &bull; A hex value (up to 64-bit) is shown. Pick the <b>memory size</b> it equals.<br>
+        &bull; Sizes are <b>binary</b>: 1&nbsp;KB = 1024 B, 1&nbsp;MB = 1024&nbsp;KB, and so on.<br>
+        &bull; Handy anchors: <code>0x400</code> = 1&nbsp;KB, <code>0x1000</code> = 4&nbsp;KB, <code>0x100000</code> = 1&nbsp;MB, <code>0x40000000</code> = 1&nbsp;GB.<br>
+        &bull; Correct answers score points — longer <b>streaks</b> earn bonuses.<br>
+        &bull; Every 5 correct, the <b>level</b> rises: bigger units (MB → GB → TB).<br>
+        &bull; A wrong pick costs a life. <b>3 lives</b>, then game over.<br>
+        &bull; After each answer the <b>breakdown</b> is shown to reinforce the conversion.<br>
+        <br>
+        <b>Controls</b><br>
+        &bull; <b>Click / tap</b> an option, or press <kbd>1</kbd>–<kbd>4</kbd>.<br>
+        &bull; <kbd>Space</kbd> starts the game.<br>
+        <br>
+        <b>Goal</b> — build fluency reading hex values as real memory sizes.
+    </div>
+</div>
+
+<script src="./index.js"></script>
+
+</main>
+
+<hr/>
+
+<section id="comments" class="giscus">
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
+
+  <footer>
+  <script defer src="/js/center-img.js"></script>
+<script defer src="/js/pre-tag.js"></script>
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2026 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+

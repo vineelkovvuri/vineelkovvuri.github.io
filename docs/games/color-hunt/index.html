@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>🌈 Color Hunt | Vineel Kovvuri</title>
+    
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/copy-button.css" />
+    <link rel="stylesheet" href="/css/forms.css" />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <meta name="description" content="Level1 Score0 Record0 Find the different color 1 One square has a slightly different shade. Tap it as fast as you can! 10 rounds — each one gets trickier." />
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/projects/">Projects</a></li>
+      
+      <li><a href="/tools/">Toolsᴬᴵ</a></li>
+      
+      <li><a href="/games/">Gamesᴬᴵ</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">🌈 Color Hunt</span></h1>
+
+
+</div>
+
+
+
+<main>
+
+<style>
+    .clr {
+        --bg: #f8f9fb;
+        --card: #ffffff;
+        --ink: #2c3e50;
+        --muted: #7f8c8d;
+        --border: #d0d5dd;
+        --orange: #f5a623;
+        --teal: #2bb3d6;
+        --green: #6ab04c;
+        --green-dark: #4e8a37;
+        --red: #e74c3c;
+        --blue: #5a9fd4;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        max-width: 640px;
+        margin: 0 auto;
+        color: var(--ink);
+        user-select: none;
+    }
+
+    .clr * { box-sizing: border-box; }
+
+    /* Header stats */
+    .clr-head {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 18px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 14px 20px;
+        margin-bottom: 16px;
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--muted);
+    }
+
+    .clr-head .val { font-weight: 800; margin-left: 6px; }
+    .clr-head .lvl .val { color: var(--blue); }
+    .clr-head .scr .val { color: var(--blue); }
+    .clr-head .rec .val { color: var(--orange); }
+    .clr-head .sep { width: 1px; align-self: stretch; background: var(--border); }
+
+    /* Prompt + progress */
+    .clr-prompt {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 16px 20px;
+        margin-bottom: 16px;
+    }
+
+    .clr-prompt-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .clr-prompt-label {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--ink);
+    }
+
+    .clr-round-pill {
+        background: var(--blue);
+        color: #fff;
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: 700;
+        padding: 3px 14px;
+        min-width: 38px;
+        text-align: center;
+        transition: background 0.2s;
+    }
+
+    .clr-round-pill.warn { background: var(--orange); }
+    .clr-round-pill.danger { background: var(--red); }
+
+    .clr-bar {
+        height: 6px;
+        background: #e4e7ec;
+        border-radius: 999px;
+        overflow: hidden;
+    }
+
+    .clr-bar-fill {
+        height: 100%;
+        width: 0%;
+        border-radius: 999px;
+        background: var(--teal);
+        transition: width 0.35s ease;
+    }
+
+    /* Grid */
+    .clr-stage { position: relative; }
+
+    .clr-grid-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        box-shadow: 0 4px 24px rgba(31, 41, 55, 0.08);
+        padding: 22px;
+    }
+
+    .clr-grid {
+        display: grid;
+        gap: 14px;
+        aspect-ratio: 1 / 1;
+    }
+
+    .clr-tile {
+        border: none;
+        border-radius: 14px;
+        cursor: pointer;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.08s, box-shadow 0.15s;
+        box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0);
+    }
+
+    .clr-tile:hover:not(:disabled) { transform: scale(1.03); }
+    .clr-tile:active:not(:disabled) { transform: scale(0.97); }
+
+    .clr-tile.hit {
+        box-shadow: 0 0 0 5px var(--green), 0 6px 18px rgba(0, 0, 0, 0.15);
+        animation: clr-pulse 0.4s ease;
+    }
+
+    .clr-tile.miss {
+        box-shadow: 0 0 0 5px var(--red);
+    }
+
+    @keyframes clr-pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.08); }
+        100% { transform: scale(1); }
+    }
+
+    /* Overlay + scoreboard (shared look with Flag Frenzy) */
+    .clr-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(248, 249, 251, 0.96);
+        border-radius: 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        text-align: center;
+        padding: 28px;
+        z-index: 5;
+    }
+
+    .clr-overlay h2 { margin: 0; font-size: 30px; color: var(--ink); }
+    .clr-overlay p { margin: 0; font-size: 15px; color: var(--muted); line-height: 1.6; }
+    .clr-hidden { display: none !important; }
+
+    .clr-medal {
+        display: inline-block;
+        font-size: 68px;
+        line-height: 1;
+        animation: clr-pop 0.5s cubic-bezier(0.18, 1.5, 0.6, 1) both;
+    }
+
+    @keyframes clr-pop {
+        0% { transform: scale(0) rotate(-25deg); }
+        100% { transform: scale(1) rotate(0); }
+    }
+
+    .clr-stars {
+        font-size: 30px;
+        letter-spacing: 4px;
+        margin-bottom: 4px;
+        animation: clr-fade 0.6s ease 0.2s both;
+    }
+
+    .clr-scoreboard {
+        width: 100%;
+        max-width: 300px;
+        margin: 4px auto 2px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        animation: clr-fade 0.6s ease 0.3s both;
+    }
+
+    .clr-score-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 9px 14px;
+        font-size: 15px;
+        color: var(--ink);
+    }
+
+    .clr-score-row b { font-size: 17px; color: var(--blue); }
+
+    .clr-cheer {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--ink);
+        line-height: 1.5;
+        max-width: 320px;
+        animation: clr-fade 0.6s ease 0.45s both;
+    }
+
+    @keyframes clr-fade {
+        0% { opacity: 0; transform: translateY(10px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .clr-btn {
+        background: var(--blue);
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        padding: 13px 40px;
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        transition: background 0.15s, transform 0.05s;
+    }
+
+    .clr-btn:hover { background: #4a8fc4; }
+    .clr-btn:active { transform: translateY(1px); }
+
+    /* Confetti */
+    .clr-confetti {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        border-radius: 16px;
+    }
+
+    .clr-confetti-piece {
+        position: absolute;
+        top: -14px;
+        width: 9px;
+        height: 14px;
+        opacity: 0.9;
+        animation-name: clr-fall;
+        animation-timing-function: linear;
+        animation-iteration-count: 1;
+    }
+
+    @keyframes clr-fall {
+        0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+        100% { transform: translateY(520px) rotate(540deg); opacity: 0; }
+    }
+
+    /* Help */
+    .clr-help {
+        font-size: 13px;
+        color: #7f8c8d;
+        line-height: 2;
+        margin-top: 20px;
+    }
+
+    .clr-help b { color: #2c3e50; }
+
+    @media (max-width: 480px) {
+        .clr-head { gap: 10px; font-size: 14px; padding: 12px; }
+        .clr-grid { gap: 10px; }
+    }
+</style>
+
+<div class="clr">
+    <div class="clr-head">
+        <div class="lvl">Level<span class="val" id="clrLevel">1</span></div>
+        <div class="sep"></div>
+        <div class="scr">Score<span class="val" id="clrScore">0</span></div>
+        <div class="sep"></div>
+        <div class="rec">Record<span class="val" id="clrRecord">0</span></div>
+    </div>
+
+    <div class="clr-prompt">
+        <div class="clr-prompt-top">
+            <span class="clr-prompt-label">Find the different color</span>
+            <span class="clr-round-pill" id="clrRoundPill">1</span>
+        </div>
+        <div class="clr-bar"><div class="clr-bar-fill" id="clrProgress"></div></div>
+    </div>
+
+    <div class="clr-stage">
+        <div class="clr-grid-card">
+            <div class="clr-grid" id="clrGrid"></div>
+        </div>
+
+        <div class="clr-overlay" id="clrOverlay">
+            <h2 id="clrOverTitle" class="clr-hidden"></h2>
+            <p id="clrOverText">One square has a <b>slightly different shade</b>.<br>Tap it as fast as you can!<br><b>10 rounds</b> — each one gets trickier.</p>
+            <button class="clr-btn" id="clrStart">START</button>
+        </div>
+    </div>
+
+    <div class="clr-help">
+        <b>How it works</b><br>
+        &bull; Every square is the same color — except <b>one</b>, which is a slightly different shade.<br>
+        &bull; Tap the odd square to score a point and move to the next round.<br>
+        &bull; Each round the <b>grid grows</b> and the shade difference gets <b>smaller</b>, so it gets harder.<br>
+        &bull; Play <b>10 rounds</b>, then see your medal, stars and score.<br>
+        &bull; Your best score is saved as your <b>Record</b> on this device.<br>
+    </div>
+</div>
+
+<script src="./index.js"></script>
+
+</main>
+
+<hr/>
+
+<section id="comments" class="giscus">
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
+
+  <footer>
+  <script defer src="/js/center-img.js"></script>
+<script defer src="/js/pre-tag.js"></script>
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2026 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+

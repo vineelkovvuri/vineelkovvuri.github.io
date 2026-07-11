@@ -1,0 +1,344 @@
+---
+title: "🖼️ Grid Painter"
+tags: ["Tools"]
+category: "Utility Tools"
+---
+
+<style>
+    .gp-wrap * {
+        box-sizing: border-box;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+
+    .gp-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding: 8px 0;
+        color: #2c3e50;
+    }
+
+    .gp-panel {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 18px;
+        padding: 14px 16px;
+        border: 1px solid #d0d5dd;
+        border-radius: 12px;
+        background: #f8f9fb;
+    }
+
+    .gp-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        min-width: 0;
+    }
+
+    .gp-group > label,
+    .gp-fieldset > legend {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #7f8c8d;
+    }
+
+    .gp-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .gp-wrap select,
+    .gp-wrap input[type="number"],
+    .gp-wrap input[type="text"] {
+        padding: 6px 8px;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        background: #fff;
+        font-size: 13px;
+        color: #2c3e50;
+    }
+
+    .gp-wrap input[type="number"] {
+        width: 78px;
+    }
+
+    .gp-wrap select:focus,
+    .gp-wrap input:focus {
+        outline: none;
+        border-color: #5a9fd4;
+        box-shadow: 0 0 0 2px rgba(90, 159, 212, 0.25);
+    }
+
+    .gp-wrap label.gp-inline {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        font-weight: 500;
+        color: #2c3e50;
+        cursor: pointer;
+        text-transform: none;
+        letter-spacing: 0;
+    }
+
+    .gp-wrap input[type="range"] {
+        width: 120px;
+        cursor: pointer;
+    }
+
+    .gp-btn {
+        padding: 8px 16px;
+        border: 1px solid #d0d5dd;
+        border-radius: 8px;
+        background: #fff;
+        color: #2c3e50;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .gp-btn:hover {
+        border-color: #98a2b3;
+        background: #f1f3f5;
+    }
+
+    .gp-btn.gp-primary {
+        border-color: #0d6efd;
+        background: #0d6efd;
+        color: #fff;
+    }
+
+    .gp-btn.gp-primary:hover {
+        background: #0b5ed7;
+    }
+
+    .gp-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .gp-fieldset {
+        border: 1px dashed #d0d5dd;
+        border-radius: 10px;
+        padding: 10px 12px;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .gp-fieldset legend {
+        padding: 0 6px;
+    }
+
+    .gp-hint {
+        font-size: 12px;
+        color: #7f8c8d;
+    }
+
+    /* Canvas stage */
+    .gp-stage {
+        display: flex;
+        justify-content: center;
+        padding: 20px;
+        border: 1px solid #d0d5dd;
+        border-radius: 12px;
+        background:
+            repeating-conic-gradient(#eef1f4 0% 25%, #f8f9fb 0% 50%) 50% / 22px 22px;
+        overflow: auto;
+    }
+
+    .gp-canvas-frame {
+        background: #fff;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+    }
+
+    .gp-stage canvas {
+        display: block;
+        max-width: 100%;
+        height: auto;
+    }
+
+    .gp-segmented {
+        display: inline-flex;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+    .gp-segmented button {
+        border: none;
+        background: #fff;
+        padding: 6px 12px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #586069;
+        cursor: pointer;
+    }
+
+    .gp-segmented button.active {
+        background: #0d6efd;
+        color: #fff;
+    }
+
+    .gp-color {
+        width: 34px;
+        height: 30px;
+        padding: 2px;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        background: #fff;
+        cursor: pointer;
+    }
+
+    .gp-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+</style>
+
+<div class="gp-wrap">
+
+    <!-- Paper + image controls -->
+    <div class="gp-panel">
+        <div class="gp-group">
+            <label for="gp-paper">Paper Size</label>
+            <select id="gp-paper">
+                <option value="A2">A2 (420 × 594 mm)</option>
+                <option value="A3">A3 (297 × 420 mm)</option>
+                <option value="A4" selected>A4 (210 × 297 mm)</option>
+                <option value="A5">A5 (148 × 210 mm)</option>
+                <option value="Letter">Letter (216 × 279 mm)</option>
+                <option value="Legal">Legal (216 × 356 mm)</option>
+                <option value="custom">Custom…</option>
+            </select>
+        </div>
+
+        <div class="gp-group" id="gp-custom-size" style="display:none;">
+            <label>Custom (mm)</label>
+            <div class="gp-row">
+                <input type="number" id="gp-custom-w" min="10" max="2000" value="210" title="Width (mm)">
+                <span class="gp-hint">×</span>
+                <input type="number" id="gp-custom-h" min="10" max="2000" value="297" title="Height (mm)">
+            </div>
+        </div>
+
+        <div class="gp-group">
+            <label>Orientation</label>
+            <div class="gp-segmented" id="gp-orient">
+                <button data-orient="portrait" class="active">Portrait</button>
+                <button data-orient="landscape">Landscape</button>
+            </div>
+        </div>
+
+        <div class="gp-group">
+            <label>Image</label>
+            <div class="gp-row">
+                <button class="gp-btn" id="gp-upload-btn">Upload Image…</button>
+                <button class="gp-btn" id="gp-clear-img" disabled>Remove</button>
+                <input type="file" id="gp-file" accept="image/*" style="display:none;">
+            </div>
+        </div>
+
+        <div class="gp-group">
+            <label for="gp-fit">Image Fit</label>
+            <select id="gp-fit">
+                <option value="contain">Fit (keep ratio)</option>
+                <option value="cover">Cover (crop to fill)</option>
+                <option value="stretch">Stretch (fill exactly)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Grid controls -->
+    <div class="gp-panel">
+        <div class="gp-fieldset">
+            <legend>Grid</legend>
+            <div class="gp-row">
+                <div class="gp-segmented" id="gp-grid-mode">
+                    <button data-mode="cell" class="active">By Cell Size</button>
+                    <button data-mode="count">By Count</button>
+                </div>
+            </div>
+
+            <div class="gp-row" id="gp-mode-cell">
+                <label class="gp-inline">Cell size
+                    <input type="number" id="gp-cell" min="2" max="200" value="20"> mm
+                </label>
+            </div>
+
+            <div class="gp-row" id="gp-mode-count" style="display:none;">
+                <label class="gp-inline">Columns
+                    <input type="number" id="gp-cols" min="1" max="200" value="10">
+                </label>
+                <label class="gp-inline">Rows
+                    <input type="number" id="gp-rows" min="1" max="200" value="14">
+                </label>
+                <label class="gp-inline">
+                    <input type="checkbox" id="gp-square" checked> Square cells
+                </label>
+            </div>
+
+            <div class="gp-hint" id="gp-grid-info"></div>
+        </div>
+
+        <div class="gp-fieldset">
+            <legend>Grid Style</legend>
+            <div class="gp-row">
+                <label class="gp-inline">Color
+                    <input type="color" id="gp-line-color" class="gp-color" value="#ff0000">
+                </label>
+                <label class="gp-inline">Line
+                    <input type="range" id="gp-line-width" min="0.2" max="4" step="0.1" value="0.8">
+                </label>
+                <label class="gp-inline">Opacity
+                    <input type="range" id="gp-line-opacity" min="0.1" max="1" step="0.05" value="0.9">
+                </label>
+            </div>
+            <div class="gp-row">
+                <label class="gp-inline">
+                    <input type="checkbox" id="gp-labels"> Row/column ruler (top &amp; side)
+                </label>
+                <label class="gp-inline">
+                    <input type="checkbox" id="gp-margin"> Page border
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="gp-actions">
+        <button class="gp-btn gp-primary" id="gp-save">⬇ Save PNG (300 DPI)</button>
+        <button class="gp-btn" id="gp-print">🖨 Print</button>
+        <span class="gp-hint" id="gp-dim-info"></span>
+    </div>
+
+    <!-- Canvas -->
+    <div class="gp-stage">
+        <div class="gp-canvas-frame">
+            <canvas id="gp-canvas"></canvas>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #7f8c8d; line-height: 2; margin-top: 8px;">
+        <b style="color: #2c3e50;">How it works</b><br>
+        &bull; Pick a paper size, drop an image onto the canvas, and overlay a measured grid.<br>
+        &bull; Print or save the result, then reproduce each cell on your own gridded paper — the classic <b>grid method</b> for scaling up a reference image by hand.<br>
+        <br>
+        <b style="color: #2c3e50;">Features</b><br>
+        &bull; <b>Paper sizes</b> — A2, A3, A4, A5, US Letter/Legal, or a fully <b>Custom</b> size in millimetres, in portrait or landscape.<br>
+        &bull; <b>Grid by cell size</b> — set a real-world cell size (e.g. <code>20 mm</code>) and columns/rows are computed to match the paper.<br>
+        &bull; <b>Grid by count</b> — set exact <b>Columns</b> and <b>Rows</b>; enable <b>Square cells</b> to keep cells proportional.<br>
+        &bull; <b>Image fit</b> — <b>Fit</b> keeps the aspect ratio, <b>Cover</b> crops to fill, <b>Stretch</b> forces an exact fill.<br>
+        &bull; <b>Grid style</b> — adjustable line <b>color</b>, <b>thickness</b>, and <b>opacity</b>, an optional <b>row/column ruler</b> with numbers across the top and down the side, and a <b>page border</b>.<br>
+        &bull; <b>Export</b> — <b>Save PNG</b> renders at 300 DPI for crisp printing; <b>Print</b> sends the page straight to your printer.<br>
+    </div>
+</div>
+
+<script src="./index.js"></script>

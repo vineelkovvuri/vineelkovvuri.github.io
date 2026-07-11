@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rust: A Deep Dive into Box and Manual Heap Ownership | Vineel Kovvuri</title>
+    
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/copy-button.css" />
+    <link rel="stylesheet" href="/css/forms.css" />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <meta name="description" content="Rust: A Deep Dive into Box and Manual Heap Ownership This article explains how objects can be moved from the Stack to the Heap in Rust. We’ll use the simple …" />
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/projects/">Projects</a></li>
+      
+      <li><a href="/tools/">Toolsᴬᴵ</a></li>
+      
+      <li><a href="/games/">Gamesᴬᴵ</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Rust: A Deep Dive into Box and Manual Heap Ownership</span></h1>
+
+
+<h3 class="date">
+    2026/07/19
+    
+        |
+        <a href="/tags/rust">Rust</a>
+        
+    
+</h3>
+
+</div>
+
+
+    
+        <aside class="toc">
+            <h2>Table of Contents</h2>
+            <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#rust-a-deep-dive-into-box-and-manual-heap-ownership">Rust: A Deep Dive into Box and Manual Heap Ownership</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+        </aside>
+    
+
+
+<main>
+<h2 id="rust-a-deep-dive-into-box-and-manual-heap-ownership">Rust: A Deep Dive into Box and Manual Heap Ownership</h2>
+<p>This article explains how objects can be moved from the Stack to the Heap in
+Rust. We&rsquo;ll use the simple <code>Book</code> struct below as our running example. It also
+implements the <code>Drop</code> trait so we can clearly observe when each object is
+destructed.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">use</span><span style="color:#bbb"> </span>std::io;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">use</span><span style="color:#bbb"> </span>std::mem;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">struct</span> <span style="color:#b06;font-weight:bold">Book</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>name: <span style="color:#038">String</span>,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>price: <span style="color:#888;font-weight:bold">u32</span>,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span><span style="color:#038">Drop</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span>Book<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">drop</span>(&amp;<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span><span style="color:#038">self</span>)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;Dropping Book: </span><span style="color:#33b;background-color:#fff0f0">{}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span><span style="color:#038">self</span>.name);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><p>When we create an object the usual way, as shown below, it is allocated on the
+stack.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">main</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// Allocated on the stack, will be dropped when it goes out of scope
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>book<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>Book<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>name: <span style="color:#d20;background-color:#fff0f0">&#34;The Rust Programming Language 1&#34;</span>.to_string(),<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>price: <span style="color:#00d;font-weight:bold">39</span>,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>};<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><p><img src="1.png" alt="alt text"></p>
+<p>To move an object from the Stack to the Heap, we use the <code>Box</code> type from the
+<code>std::boxed</code> module.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>box_book<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#038">Box</span>::new(book);<span style="color:#bbb">
+</span></span></span></code></pre></div><p>The statement above moves the object from <code>book</code> onto the Heap. After this
+point, the object no longer exists on the Stack, and ownership is transferred to
+<code>box_book</code>.</p>
+<p><img src="2.png" alt="alt text"></p>
+<p>An important point to remember is that in both cases, whether the object lives on
+the Stack or on the Heap inside a <code>Box</code>, the destructor of the <code>Book</code> object is
+called automatically once the owning variable goes out of scope. In the first
+case, the lifetime is governed by the <code>book</code> variable. In the second case, it is
+governed by the <code>box_book</code> variable. Since ownership has already been transferred
+to the <code>Box</code>, the destructor runs only when <code>box_book</code> goes out of scope, so we
+see just a single line printed:
+<code>Dropping Book: The Rust Programming Language 1</code></p>
+<p>Now let&rsquo;s explore a couple of useful methods available on the <code>Box</code> type.</p>
+<ol>
+<li><code>pub fn into_raw(b: Box&lt;T&gt;) -&gt; *mut T</code></li>
+<li><code>pub unsafe fn from_raw(raw: *mut T) -&gt; Box&lt;T&gt;</code></li>
+<li><code>pub fn leak&lt;'a&gt;(b: Box&lt;T, A&gt;) -&gt; &amp;'a mut T</code></li>
+</ol>
+<p><code>Box::into_raw()</code> unwraps the Box and returns a mutable raw pointer to the
+underlying object on the heap.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>into_raw_ptr<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#038">Box</span>::into_raw(box_book);<span style="color:#bbb"> </span><span style="color:#888">// returns *mut Book
+</span></span></span></code></pre></div><p><img src="3.png" alt="alt text"></p>
+<p>An important thing to note here is that <code>into_raw_ptr</code> is just a raw pointer to
+the object on the Heap. The problem is that a raw pointer cannot call the
+object&rsquo;s destructor when it goes out of scope, so the memory would leak.</p>
+<p><code>Box::from_raw()</code> wraps the object pointed to by the mutable pointer back into a
+<code>Box</code>.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>box_book<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">unsafe</span><span style="color:#bbb"> </span>{<span style="color:#bbb"> </span><span style="color:#038">Box</span>::from_raw(into_raw_ptr)<span style="color:#bbb"> </span>};<span style="color:#bbb">
+</span></span></span></code></pre></div><p><img src="4.png" alt="alt text"></p>
+<p>Now, once again, when <code>box_book</code> goes out of scope it automatically calls the
+destructor on the Box, and in turn on the underlying <code>Book</code> object.</p>
+<p>The reason this function is considered dangerous, and therefore marked unsafe, is
+that the caller must ensure the pointer actually points to an object that was
+previously allocated by a <code>Box</code>; in other words, it must already live on the
+heap. To illustrate, let&rsquo;s take the example below, where we deliberately pass a
+mutable raw pointer to a stack-allocated object into <code>from_raw()</code>.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>book<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>Book<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>name: <span style="color:#d20;background-color:#fff0f0">&#34;The Rust Programming Language 2&#34;</span>.to_string(),<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>price: <span style="color:#00d;font-weight:bold">39</span>,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>};<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>mut_book_ptr<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>&amp;<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>book<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>Book;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>box_book<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">unsafe</span><span style="color:#bbb"> </span>{<span style="color:#bbb"> </span><span style="color:#038">Box</span>::from_raw(mut_book_ptr)<span style="color:#bbb"> </span>};<span style="color:#bbb">
+</span></span></span></code></pre></div><p><img src="5.png" alt="alt text"></p>
+<p>This is how it is laid out in memory. We now have two owners of the same object,
+one via <code>box_book</code> and the other via the original <code>book</code>. When the scope ends,
+both variables try to destruct the same object, causing memory corruption or an
+access violation. In fact, if we run it on Windows, we get:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Dropping Book: The Rust Programming Language 2   &lt;-- one destructor already called
+</span></span><span style="display:flex;"><span>error: process didn&#39;t exit successfully: `target\debug\practice.exe` (exit code: 0xc0000374, STATUS_HEAP_CORRUPTION)
+</span></span></code></pre></div><p>Finally, let&rsquo;s look at the <code>leak()</code> method. It unwraps a <code>Box</code> and returns a
+mutable reference to the underlying object, which still lives on the heap. This
+gives us exclusive access to an object that now has no owner. It is dangerous as
+well, because we have effectively leaked the object forever. The only way to
+have its destructor run again is either by converting the raw pointer back into
+a <code>Box</code> with <code>Box::from_raw()</code>, or by calling <code>std::ptr::drop_in_place()</code>.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>mut_book_ref<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#038">Box</span>::leak(<span style="color:#038">Box</span>::new(book));<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// convert back to a Box to cause the drop
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>mut_book_ptr<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>mut_book_ref<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>Book;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>box_book<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">unsafe</span><span style="color:#bbb"> </span>{<span style="color:#bbb"> </span><span style="color:#038">Box</span>::from_raw(mut_book_ptr)<span style="color:#bbb"> </span>};<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// or explicitly drop the memory using `drop_in_place()`.
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>mut_book_ptr<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>mut_book_ref<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>Book;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">unsafe</span><span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>std::ptr::drop_in_place(mut_book_ptr)<span style="color:#bbb"> </span>};<span style="color:#bbb">
+</span></span></span></code></pre></div><p>Here is the full example:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#c00;font-weight:bold">#![allow(unused, unused_variables, unused_imports, dead_code)]</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">use</span><span style="color:#bbb"> </span>std::io;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">use</span><span style="color:#bbb"> </span>std::mem;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">struct</span> <span style="color:#b06;font-weight:bold">Book</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>name: <span style="color:#038">String</span>,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>price: <span style="color:#888;font-weight:bold">u32</span>,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">impl</span><span style="color:#bbb"> </span><span style="color:#038">Drop</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">for</span><span style="color:#bbb"> </span>Book<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">drop</span>(&amp;<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span><span style="color:#038">self</span>)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#06b;font-weight:bold">println!</span>(<span style="color:#d20;background-color:#fff0f0">&#34;Dropping Book: </span><span style="color:#33b;background-color:#fff0f0">{}</span><span style="color:#d20;background-color:#fff0f0">&#34;</span>,<span style="color:#bbb"> </span><span style="color:#038">self</span>.name);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#080;font-weight:bold">fn</span> <span style="color:#06b;font-weight:bold">main</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// // Allocated on the stack, will be dropped when it goes out of scope
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// let mut book = Book {
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">//     name: &#34;The Rust Programming Language 1&#34;.to_string(),
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">//     price: 39,
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// };
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// // Moves the book into a Box, meaning there is nothing on the stack now.
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// // When box goes out of scope, the book will be dropped.
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// let box_book = Box::new(book);
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// // Hand over a pointer to the heap memory to the object inside the Box and
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// // the original Box no more the owner of Book. This will not drop the
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// // memory(no destructor will be called).
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// let into_raw_ptr = Box::into_raw(box_book);
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// // Because the pointer is now on the heap, we can safely convert it back
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// // into a Box. Which can be dropped when the box goes out of the current
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// // scope
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// let box_book = unsafe { Box::from_raw(into_raw_ptr) };
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// // ----------------------- DONE -----------------------
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// // allocates the book on the stack, meaning it will be dropped when it goes
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// // out of scope
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// let mut book = Book {
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">//     name: &#34;The Rust Programming Language 2&#34;.to_string(),
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">//     price: 39,
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// };
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// let mut_book_ptr = &amp;mut book as *mut Book;
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// // we are trying to box the book from a raw pointer. this is unsafe if the
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// // that raw pointer is living on the stack because when the function ends,
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// // both the stack and the heap will try to drop the same book, leading to a
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// // double free error.
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// let box_book = unsafe { Box::from_raw(mut_book_ptr) };
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// ----------------------- DONE -----------------------
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>book<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>Book<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>name: <span style="color:#d20;background-color:#fff0f0">&#34;The Rust Programming Language 3&#34;</span>.to_string(),<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>price: <span style="color:#00d;font-weight:bold">39</span>,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>};<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// This is similar to from_raw() but here we are given back the not a raw
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// pointer but a reference to the heap memory. Which also means we are not
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#888">// the owner and we cannot drop the memory.
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>mut_book_ref<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#038">Box</span>::leak(<span style="color:#038">Box</span>::new(book));<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// convert back to a Box to cause the drop
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>mut_book_ptr<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>mut_book_ref<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>Book;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>box_book<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">unsafe</span><span style="color:#bbb"> </span>{<span style="color:#bbb"> </span><span style="color:#038">Box</span>::from_raw(mut_book_ptr)<span style="color:#bbb"> </span>};<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// explicitly drop the memory using `drop_in_place()`.
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">let</span><span style="color:#bbb"> </span>mut_book_ptr<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>mut_book_ref<span style="color:#bbb"> </span><span style="color:#080;font-weight:bold">as</span><span style="color:#bbb"> </span>*<span style="color:#080;font-weight:bold">mut</span><span style="color:#bbb"> </span>Book;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#080;font-weight:bold">unsafe</span><span style="color:#bbb"> </span>{<span style="color:#bbb"> </span>std::ptr::drop_in_place(mut_book_ptr)<span style="color:#bbb"> </span>};<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#888">// ----------------------- DONE -----------------------
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div>
+</main>
+
+<hr/>
+
+<section id="comments" class="giscus">
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
+
+  <footer>
+  <script defer src="/js/center-img.js"></script>
+<script defer src="/js/pre-tag.js"></script>
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2026 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+

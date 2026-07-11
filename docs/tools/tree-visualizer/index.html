@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>🌳 Tree Visualizer | Vineel Kovvuri</title>
+    
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/copy-button.css" />
+    <link rel="stylesheet" href="/css/forms.css" />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <meta name="description" content="▶ Draw ↓ Export PNG Ctrl&#43;Enter to draw  |  Scroll to zoom  |  Drag background to pan How it works Type your tree using indentation (spaces or tabs) to define …" />
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/projects/">Projects</a></li>
+      
+      <li><a href="/tools/">Toolsᴬᴵ</a></li>
+      
+      <li><a href="/games/">Gamesᴬᴵ</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">🌳 Tree Visualizer</span></h1>
+
+
+</div>
+
+
+
+<main>
+
+<style>
+.tv-wrap * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+#tv-editor, #tv-editor * { font-family: revert; box-sizing: revert; }
+.tv-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px 0;
+}
+.tv-toolbar {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.tv-btn {
+    padding: 6px 14px;
+    border: 1.5px solid #d0d5dd;
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: #2c3e50;
+    transition: border-color 0.15s, background 0.15s;
+    line-height: 1.5;
+}
+.tv-btn:hover  { border-color: #5a9fd4; background: #f0f7ff; }
+.tv-btn:active { background: #e4f0fb; }
+.tv-btn-draw { color: #1a6fb3; border-color: #b3d1f0; }
+.tv-btn-draw:hover { border-color: #1a6fb3; background: #e8f3fd; }
+.tv-btn-export { color: #27ae60; border-color: #c3e6cb; }
+.tv-btn-export:hover { border-color: #27ae60; background: #f0fff4; }
+.tv-hint {
+    font-size: 12px;
+    color: #7f8c8d;
+    margin-left: auto;
+}
+#tv-editor {
+    height: 160px;
+    border: 1.5px solid #d0d5dd;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.tv-canvas-wrap {
+    position: relative;
+    border: 1.5px solid #d0d5dd;
+    border-radius: 8px;
+    height: 500px;
+    overflow: hidden;
+    background-color: #f5f7fa;
+    background-image: radial-gradient(circle, #c9d0db 1px, transparent 1px);
+    background-size: 24px 24px;
+    cursor: grab;
+    user-select: none;
+}
+.tv-canvas-wrap.tv-panning { cursor: grabbing; }
+#tv-svg { width: 100%; height: 100%; display: block; }
+#tv-resize-handle {
+    height: 6px;
+    cursor: ns-resize;
+    background: #d0d5dd;
+    border-radius: 3px;
+    flex-shrink: 0;
+    transition: background 0.15s;
+}
+#tv-resize-handle:hover { background: #5a9fd4; }
+#tv-resize-handle.tv-resizing { background: #1a6fb3; }
+</style>
+
+<div class="tv-wrap">
+    <div class="tv-toolbar">
+        <button class="tv-btn tv-btn-draw" id="tv-btn-draw">&#9654; Draw</button>
+        <button class="tv-btn tv-btn-export" id="tv-btn-export">&#8595; Export PNG</button>
+        <span class="tv-hint">Ctrl+Enter to draw &nbsp;|&nbsp; Scroll to zoom &nbsp;|&nbsp; Drag background to pan</span>
+    </div>
+    <div id="tv-editor"></div>
+    <div id="tv-resize-handle"></div>
+    <div class="tv-canvas-wrap" id="tv-canvas-wrap">
+        <svg id="tv-svg">
+            <defs>
+                <filter id="tv-shadow" x="-25%" y="-25%" width="150%" height="150%">
+                    <feDropShadow dx="1" dy="2" stdDeviation="3"
+                                  flood-color="rgba(0,0,0,0.10)"/>
+                </filter>
+            </defs>
+            <g id="tv-main">
+                <g id="tv-links"></g>
+                <g id="tv-nodes"></g>
+            </g>
+        </svg>
+    </div>
+</div>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs/loader.js"></script>
+<script src="./index.js"></script>
+
+<div style="font-size: 13px; color: #7f8c8d; line-height: 2; margin-top: 8px;">
+    <b style="color: #2c3e50;">How it works</b><br>
+    Type your tree using indentation (spaces or tabs) to define parent&ndash;child relationships, then click <b>Draw</b> or press <b>Ctrl+Enter</b>:
+    <pre style="margin:4px 0 8px; padding:8px 12px; background:#f0f0f0; border-radius:6px; font-size:12px; line-height:1.6;">Root
+    Node 1
+        Child A
+        Child B
+    Node 2</pre>
+    <b style="color: #2c3e50;">Features</b><br>
+    &bull; Any indent unit works &mdash; 2 spaces, 4 spaces, tabs, mixed<br>
+    &bull; <b>Draw</b> / <b>Ctrl+Enter</b> &mdash; parse the text and redraw the tree with animation<br>
+    &bull; <b>Export PNG</b> &mdash; exports the full tree at 100% zoom with a tight bounding box<br>
+    &bull; <b>Click</b> a node to highlight it; <b>drag</b> to reposition manually<br>
+    &bull; <b>Scroll</b> to zoom; <b>drag the background</b> to pan<br>
+    &bull; Use Monaco multi-cursor, find&amp;replace, and all editor shortcuts to edit the tree text<br>
+</div>
+</main>
+
+<hr/>
+
+<section id="comments" class="giscus">
+  <script src="https://giscus.app/client.js"
+    data-repo="vineelkovvuri/vineelkovvuri.github.io"
+    data-repo-id="R_kgDOLIbzLw"
+    data-category="General"
+    data-category-id="DIC_kwDOLIbzL84CwjtF"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
+
+  <footer>
+  <script defer src="/js/center-img.js"></script>
+<script defer src="/js/pre-tag.js"></script>
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2026 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+

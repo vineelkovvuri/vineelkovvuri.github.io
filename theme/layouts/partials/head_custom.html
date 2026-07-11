@@ -1,0 +1,1 @@
+<meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ with .Summary }}{{ . | plainify | htmlUnescape | replaceRE "\\s+" " " | strings.TrimSpace | truncate 160 }}{{ else }}{{ .Site.Params.description }}{{ end }}{{ end }}" />
