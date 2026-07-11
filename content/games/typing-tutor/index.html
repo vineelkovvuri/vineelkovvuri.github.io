@@ -1,0 +1,365 @@
+---
+title: "⌨️ Typing Tutor"
+tags: ["Games"]
+category: "Kids Games"
+---
+
+<style>
+    .tt {
+        --bg-a: #f7efe3;
+        --bg-b: #f5f8ff;
+        --card: #ffffff;
+        --ink: #17324d;
+        --muted: #5b7289;
+        --line: #d8e0ea;
+        --accent: #e08a38;
+        --accent-2: #2c8a7b;
+        --good: #1f9d58;
+        --bad: #d33d3d;
+        --focus: #2a6fb5;
+        font-family: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+        max-width: 900px;
+        margin: 0 auto;
+        color: var(--ink);
+    }
+
+    .tt * { box-sizing: border-box; }
+
+    .tt-shell {
+        background:
+            radial-gradient(circle at 10% 0%, rgba(224, 138, 56, 0.18), transparent 35%),
+            radial-gradient(circle at 100% 20%, rgba(44, 138, 123, 0.2), transparent 40%),
+            linear-gradient(135deg, var(--bg-a), var(--bg-b));
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 18px;
+        box-shadow: 0 14px 28px rgba(29, 57, 86, 0.09);
+    }
+
+    .tt-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 14px;
+    }
+
+    .tt-title {
+        margin: 0;
+        font-size: clamp(24px, 3.5vw, 34px);
+        letter-spacing: 0.2px;
+    }
+
+    .tt-sub {
+        margin: 5px 0 0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .tt-badge {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--muted);
+        white-space: nowrap;
+    }
+
+    .tt-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 14px;
+    }
+
+    .tt-card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 14px;
+    }
+
+    .tt-label {
+        margin: 0 0 7px;
+        font-size: 11px;
+        letter-spacing: 0.9px;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-weight: 700;
+    }
+
+    .tt-select {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 10px;
+        font-size: 14px;
+        color: var(--ink);
+        background: #fff;
+        font-family: inherit;
+    }
+
+    .tt-meta {
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.5;
+        min-height: 40px;
+    }
+
+    .tt-levels {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .tt-level {
+        border: 1px solid var(--line);
+        background: #fff;
+        color: var(--ink);
+        border-radius: 10px;
+        padding: 10px;
+        font-weight: 700;
+        font-size: 13px;
+        cursor: pointer;
+        transition: transform 0.08s ease, background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .tt-level:hover {
+        background: #f8fbff;
+        border-color: #aac7e5;
+    }
+
+    .tt-level.active {
+        background: #e9f3ff;
+        border-color: #6ba5dd;
+        color: #114a7a;
+    }
+
+    .tt-level:active { transform: translateY(1px); }
+
+    .tt-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 12px;
+    }
+
+    .tt-btn {
+        flex: 1;
+        border: 1px solid transparent;
+        border-radius: 10px;
+        padding: 11px;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.4px;
+        cursor: pointer;
+        transition: transform 0.08s ease, background 0.14s ease;
+        font-family: inherit;
+    }
+
+    .tt-btn:active { transform: translateY(1px); }
+
+    .tt-btn.start {
+        background: var(--accent-2);
+        color: #fff;
+        border-color: #1f6b60;
+    }
+
+    .tt-btn.start:hover { background: #257a6e; }
+
+    .tt-btn.reset {
+        background: #eef2f8;
+        color: var(--ink);
+        border-color: var(--line);
+    }
+
+    .tt-btn.reset:hover { background: #e2e8f2; }
+
+    .tt-lesson {
+        margin-top: 14px;
+        background: #0d2237;
+        color: #f5f9ff;
+        border-radius: 14px;
+        padding: 14px;
+    }
+
+    .tt-progress {
+        width: 100%;
+        height: 9px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 999px;
+        overflow: hidden;
+        margin-bottom: 12px;
+    }
+
+    .tt-progress > span {
+        display: block;
+        width: 0%;
+        height: 100%;
+        background: linear-gradient(90deg, #f8b159, #ffe07b);
+        transition: width 0.12s linear;
+    }
+
+    .tt-text {
+        min-height: 150px;
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 12px;
+        padding: 12px;
+        line-height: 1.7;
+        font-size: clamp(16px, 2.4vw, 19px);
+        font-family: "Source Code Pro", Consolas, "Courier New", monospace;
+        white-space: pre-wrap;
+        letter-spacing: 0.2px;
+    }
+
+    .tt-char.ok { color: #9ef0c2; }
+    .tt-char.bad { color: #ffd1d1; background: rgba(211, 61, 61, 0.42); border-radius: 3px; }
+    .tt-char.current { background: rgba(248, 177, 89, 0.35); border-radius: 3px; }
+
+    .tt-input {
+        width: 100%;
+        margin-top: 10px;
+        border-radius: 10px;
+        border: 1px solid #c8d5e3;
+        min-height: 95px;
+        resize: vertical;
+        padding: 11px;
+        font-size: 16px;
+        line-height: 1.5;
+        font-family: "Source Code Pro", Consolas, "Courier New", monospace;
+    }
+
+    .tt-input:focus {
+        outline: none;
+        border-color: var(--focus);
+        box-shadow: 0 0 0 3px rgba(42, 111, 181, 0.22);
+    }
+
+    .tt-input[disabled] {
+        background: #eef2f7;
+        color: #5b7289;
+        cursor: not-allowed;
+    }
+
+    .tt-stats {
+        margin-top: 12px;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+    }
+
+    .tt-kpi {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 8px;
+        background: #fff;
+        text-align: center;
+    }
+
+    .tt-kpi b {
+        display: block;
+        font-size: 22px;
+        line-height: 1.15;
+        color: #103357;
+    }
+
+    .tt-kpi span {
+        font-size: 12px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.7px;
+    }
+
+    .tt-result {
+        margin-top: 12px;
+        border: 1px dashed #9fc2e5;
+        border-radius: 12px;
+        padding: 10px 12px;
+        background: #f6fbff;
+        color: #114a7a;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .tt-hidden { display: none; }
+
+    .tt-help {
+        font-size: 13px;
+        color: #5b7289;
+        line-height: 2;
+        margin-top: 16px;
+    }
+
+    .tt-help b { color: #17324d; }
+
+    @media (max-width: 820px) {
+        .tt-grid { grid-template-columns: 1fr; }
+        .tt-stats { grid-template-columns: repeat(2, 1fr); }
+    }
+</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+
+<div class="tt">
+    <div class="tt-shell">
+        <div class="tt-head">
+            <div>
+                <h2 class="tt-title">Typing Tutor Arena</h2>
+                <p class="tt-sub">Choose a lesson, pick your level, and improve speed + accuracy with live feedback.</p>
+            </div>
+            <div class="tt-badge" id="ttBestBadge">Best: --</div>
+        </div>
+
+        <div class="tt-grid">
+            <div class="tt-card">
+                <p class="tt-label">Lesson</p>
+                <select id="ttLesson" class="tt-select" aria-label="Choose typing lesson"></select>
+                <div id="ttLessonMeta" class="tt-meta"></div>
+
+                <p class="tt-label" style="margin-top:12px;">Level</p>
+                <div class="tt-levels" id="ttLevels">
+                    <button class="tt-level active" data-level="beginner" type="button">Beginner</button>
+                    <button class="tt-level" data-level="intermediate" type="button">Intermediate</button>
+                    <button class="tt-level" data-level="advanced" type="button">Advanced</button>
+                    <button class="tt-level" data-level="expert" type="button">Expert</button>
+                </div>
+
+                <div class="tt-actions">
+                    <button class="tt-btn start" id="ttStart" type="button">Start Lesson</button>
+                    <button class="tt-btn reset" id="ttReset" type="button">Reset</button>
+                </div>
+            </div>
+
+            <div class="tt-card">
+                <p class="tt-label">Live Stats</p>
+                <div class="tt-stats">
+                    <div class="tt-kpi"><b id="ttWpm">0</b><span>WPM</span></div>
+                    <div class="tt-kpi"><b id="ttAcc">100%</b><span>Accuracy</span></div>
+                    <div class="tt-kpi"><b id="ttErr">0</b><span>Errors</span></div>
+                    <div class="tt-kpi"><b id="ttTime">0.0s</b><span>Time</span></div>
+                </div>
+                <div id="ttResult" class="tt-result tt-hidden" aria-live="polite"></div>
+            </div>
+        </div>
+
+        <div class="tt-lesson">
+            <div class="tt-progress"><span id="ttBar"></span></div>
+            <div id="ttText" class="tt-text" aria-live="polite"></div>
+            <textarea id="ttInput" class="tt-input" placeholder="Press Start Lesson, then begin typing..." autocomplete="off" spellcheck="false" disabled></textarea>
+        </div>
+    </div>
+
+    <div class="tt-help">
+        <b>How to play</b><br>
+        &bull; Pick any <b>lesson</b> and <b>level</b>, then press <b>Start Lesson</b>.<br>
+        &bull; Type the shown paragraph exactly; mistakes are highlighted in red as you type.<br>
+        &bull; Track <b>WPM</b>, <b>accuracy</b>, errors, and elapsed time in real time.<br>
+        &bull; Your best score is saved per <b>lesson + level</b> on this browser.<br>
+    </div>
+</div>
+
+<script src="./index.js"></script>

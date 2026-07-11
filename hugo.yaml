@@ -1,0 +1,68 @@
+baseurl: "/"
+languageCode: "en-us"
+title: "Vineel Kovvuri"
+themesDir: "."
+theme: "theme"
+googleAnalytics: ""
+disqusShortname: ""
+footnotereturnlinkcontents: "↩"
+publishDir: docs
+# disableKinds: ["taxonomy", "term"] # disable tags
+
+menu:
+  main:
+    - name: Home
+      url: ""
+      weight: 1
+    - name: Blog
+      url: "blog/"
+      weight: 2
+    - name: Projects
+      url: "projects/"
+      weight: 3
+    - name: Toolsᴬᴵ
+      url: "tools/"
+      weight: 4
+    - name: Gamesᴬᴵ
+      url: "games/"
+      weight: 5
+    - name: Bookmarks
+      url: "bookmarks/"
+      weight: 6
+    # - name: Subscribe
+    #   url: "index.xml"
+
+params:
+  description: "Personal site of Vineel Kovvuri — notes on systems programming, Rust, debugging, reverse engineering, and hand built developer tools."
+  footer: "&copy; Vineel Kumar Reddy Kovvuri 2017 -- {Year} ❤️ [Hugo Xmin](https://xmin.yihui.org/)"
+
+# We are using hugo supported default syntax highlighter.
+markup:
+  tableOfContents:
+    endLevel: 3
+    ordered: false
+    startLevel: 1
+  highlight:
+    codeFences: true
+    lineNos: false   # enabling this will cause code not wrap
+    guessSyntax : true
+    pygmentsUseClasses : true
+    pygmentsCodefences : true
+    style : pastie
+  goldmark:
+    renderer:
+      unsafe: true
+    extensions:
+          extras:
+            delete:
+              enable: true
+            insert:
+              enable: true
+            mark:
+              enable: true
+            subscript:
+              enable: true
+            superscript:
+              enable: true
+          strikethrough: false
+enableEmoji: true

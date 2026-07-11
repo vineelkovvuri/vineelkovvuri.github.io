@@ -1,0 +1,121 @@
+---
+title: "👾 Hex Invaders"
+tags: ["Tools"]
+category: "Learning Tools"
+---
+
+<style>
+    .hexg-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+        padding: 12px 0 4px;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+
+    .hexg-stage {
+        position: relative;
+        width: 100%;
+        max-width: 480px;
+    }
+
+    .hexg-canvas {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        background: #0b1a2b;
+        touch-action: manipulation;
+        cursor: pointer;
+    }
+
+    .hexg-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .hexg-btn {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        background: #5a9fd4;
+        color: #fff;
+        transition: background 0.2s, transform 0.1s;
+    }
+
+    .hexg-btn:hover { background: #4a8fc4; }
+    .hexg-btn:active { transform: translateY(1px); }
+    .hexg-btn.secondary { background: #e9ecef; color: #2c3e50; }
+    .hexg-btn.secondary:hover { background: #dde1e6; }
+
+    .hexg-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: #586069;
+        user-select: none;
+    }
+
+    .hexg-help {
+        font-size: 13px;
+        color: #7f8c8d;
+        line-height: 2;
+        margin-top: 8px;
+        max-width: 480px;
+        width: 100%;
+    }
+
+    .hexg-help b { color: #2c3e50; }
+
+    .hexg-help kbd {
+        font-family: Consolas, 'Courier New', monospace;
+        background: #f1f3f5;
+        border: 1px solid #d0d5dd;
+        border-bottom-width: 2px;
+        border-radius: 4px;
+        padding: 1px 6px;
+        font-size: 12px;
+        color: #2c3e50;
+    }
+</style>
+
+<div class="hexg-wrap">
+    <div class="hexg-toolbar">
+        <button id="hexgStart" class="hexg-btn">Start Game</button>
+        <button id="hexgReset" class="hexg-btn secondary">Reset</button>
+        <label class="hexg-label">
+            <input type="checkbox" id="hexgHints" checked> Show place values (128…1)
+        </label>
+    </div>
+
+    <div class="hexg-stage">
+        <canvas id="hexgCanvas" class="hexg-canvas" width="480" height="760"></canvas>
+    </div>
+
+    <div class="hexg-help">
+        <b>How it works</b><br>
+        &bull; Two-digit <b>hex numbers</b> drop from the top as invaders.<br>
+        &bull; Flip the <b>8 bits</b> at the bottom so the byte equals an invader's value — it explodes and you score.<br>
+        &bull; Bits are <b>MSB → LSB</b> (left = 128, right = 1). Convert <code>0xA3</code> → <code>1010 0011</code>.<br>
+        &bull; If any invader reaches the bit row you lose a life. <b>3 lives</b>, then game over.<br>
+        &bull; Invaders fall faster and spawn more often as your score climbs.<br>
+        <br>
+        <b>Controls</b><br>
+        &bull; <b>Click / tap</b> a bit cell to toggle it.<br>
+        &bull; Keys <kbd>1</kbd>–<kbd>8</kbd> toggle bits left → right.<br>
+        &bull; <kbd>Backspace</kbd> clears all bits, <kbd>Space</kbd> starts / restarts.<br>
+        <br>
+        <b>Goal</b> — practice fast <b>hex → binary</b> conversion under pressure.
+    </div>
+</div>
+
+<script src="./index.js"></script>

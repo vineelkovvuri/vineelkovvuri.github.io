@@ -1,0 +1,115 @@
+---
+title: "🔵 Sets Visualizer"
+tags: ["Tools"]
+category: "Utility Tools"
+---
+
+<style>
+.sv-wrap * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+#sv-editor, #sv-editor * { font-family: revert; box-sizing: revert; }
+.sv-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px 0;
+}
+.sv-toolbar {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.sv-btn {
+    padding: 6px 14px;
+    border: 1.5px solid #d0d5dd;
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: #2c3e50;
+    transition: border-color 0.15s, background 0.15s;
+    line-height: 1.5;
+}
+.sv-btn:hover  { border-color: #5a9fd4; background: #f0f7ff; }
+.sv-btn:active { background: #e4f0fb; }
+.sv-btn-draw { color: #1a6fb3; border-color: #b3d1f0; }
+.sv-btn-draw:hover { border-color: #1a6fb3; background: #e8f3fd; }
+.sv-btn-export { color: #27ae60; border-color: #c3e6cb; }
+.sv-btn-export:hover { border-color: #27ae60; background: #f0fff4; }
+.sv-hint {
+    font-size: 12px;
+    color: #7f8c8d;
+    margin-left: auto;
+}
+#sv-editor {
+    height: 160px;
+    border: 1.5px solid #d0d5dd;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.sv-canvas-wrap {
+    position: relative;
+    border: 1.5px solid #d0d5dd;
+    border-radius: 8px;
+    height: 500px;
+    overflow: hidden;
+    background-color: #f5f7fa;
+    background-image: radial-gradient(circle, #c9d0db 1px, transparent 1px);
+    background-size: 24px 24px;
+    cursor: grab;
+    user-select: none;
+}
+.sv-canvas-wrap.sv-panning { cursor: grabbing; }
+#sv-svg { width: 100%; height: 100%; display: block; }
+#sv-resize-handle {
+    height: 6px;
+    cursor: ns-resize;
+    background: #d0d5dd;
+    border-radius: 3px;
+    flex-shrink: 0;
+    transition: background 0.15s;
+}
+#sv-resize-handle:hover { background: #5a9fd4; }
+#sv-resize-handle.sv-resizing { background: #1a6fb3; }
+</style>
+
+<div class="sv-wrap">
+    <div class="sv-toolbar">
+        <button class="sv-btn sv-btn-draw" id="sv-btn-draw">&#9654; Draw</button>
+        <button class="sv-btn sv-btn-export" id="sv-btn-export">&#8595; Export PNG</button>
+        <span class="sv-hint">Ctrl+Enter to draw &nbsp;|&nbsp; Scroll to zoom &nbsp;|&nbsp; Drag background to pan</span>
+    </div>
+    <div id="sv-editor"></div>
+    <div id="sv-resize-handle"></div>
+    <div class="sv-canvas-wrap" id="sv-canvas-wrap">
+        <svg id="sv-svg">
+            <defs>
+                <filter id="sv-shadow" x="-25%" y="-25%" width="150%" height="150%">
+                    <feDropShadow dx="1" dy="2" stdDeviation="3"
+                                  flood-color="rgba(0,0,0,0.10)"/>
+                </filter>
+            </defs>
+            <g id="sv-main"></g>
+        </svg>
+    </div>
+</div>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs/loader.js"></script>
+<script src="./index.js"></script>
+
+<div style="font-size: 13px; color: #7f8c8d; line-height: 2; margin-top: 8px;">
+    <b style="color: #2c3e50;">How it works</b><br>
+    Type each set on its own line as <code>SET_NAME: item1, item2, item3</code>, then click <b>Draw</b> or press <b>Ctrl+Enter</b>:
+    <pre style="margin:4px 0 8px; padding:8px 12px; background:#f0f0f0; border-radius:6px; font-size:12px; line-height:1.6;">TINY_SHA: SHA1, SHA256, SHA384
+MINIMAL_SHA_SM3: HMACSHA256, SHA1, SHA256, SHA384, SHA512, SM3
+SMALL_SHA_RSA: HMACSHA256, SHA1, SHA256, SHA384, SHA512, SM3, RSA</pre>
+    <b style="color: #2c3e50;">Features</b><br>
+    &bull; Sets are drawn as nested/overlapping regions &mdash; elements unique to a set are shown inside it<br>
+    &bull; Elements shared across multiple sets are shown in the overlap zones<br>
+    &bull; <b>Draw</b> / <b>Ctrl+Enter</b> &mdash; parse the text and redraw the diagram with animation<br>
+    &bull; <b>Export PNG</b> &mdash; exports the full diagram with a tight bounding box<br>
+    &bull; <b>Click</b> a set or element to highlight it; <b>drag</b> to reposition<br>
+    &bull; <b>Scroll</b> to zoom; <b>drag the background</b> to pan<br>
+    &bull; Use Monaco multi-cursor, find&amp;replace, and all editor shortcuts<br>
+</div>

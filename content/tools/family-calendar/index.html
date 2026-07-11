@@ -1,0 +1,394 @@
+---
+title: "🗓️ Family Calendar"
+tags: ["Tools"]
+category: "Utility Tools"
+---
+
+<style>
+    .fc, .fc * {
+        box-sizing: border-box;
+    }
+
+    .fc {
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        color: #2c3e50;
+    }
+
+    /* ---- Top toolbar ---- */
+    .fc-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 0 16px;
+        border-bottom: 1px solid #e9ecef;
+        margin-bottom: 16px;
+    }
+
+    .fc-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 14px;
+        border: 1px solid #d0d5dd;
+        border-radius: 8px;
+        background: #f8f9fb;
+        color: #2c3e50;
+        font-size: 13px;
+        font-family: inherit;
+        cursor: pointer;
+        transition: background 0.15s, border-color 0.15s;
+    }
+
+    .fc-btn:hover:not(:disabled) {
+        background: #e9ecef;
+        border-color: #b0c4de;
+    }
+
+    .fc-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .fc-btn.primary {
+        background: #0d6efd;
+        border-color: #0d6efd;
+        color: #fff;
+    }
+
+    .fc-btn.primary:hover:not(:disabled) {
+        background: #0b5ed7;
+        border-color: #0b5ed7;
+    }
+
+    .fc-btn.danger {
+        color: #e74c3c;
+        border-color: #f1b0aa;
+    }
+
+    .fc-btn.danger:hover:not(:disabled) {
+        background: #fdecea;
+    }
+
+    .fc-spacer {
+        flex: 1;
+    }
+
+    .fc-account {
+        font-size: 12px;
+        color: #7f8c8d;
+        white-space: nowrap;
+    }
+
+    .fc-status {
+        font-size: 12px;
+        color: #7f8c8d;
+        padding: 4px 0;
+        min-height: 20px;
+    }
+
+    .fc-status.error {
+        color: #e74c3c;
+    }
+
+    .fc-status.ok {
+        color: #2e7d32;
+    }
+
+    /* ---- Panels ---- */
+    .fc-panel {
+        border: 1px solid #e9ecef;
+        border-radius: 12px;
+        padding: 20px;
+        background: #fff;
+        margin-bottom: 16px;
+    }
+
+    .fc-panel h3 {
+        margin: 0 0 12px;
+        font-size: 15px;
+        color: #2c3e50;
+    }
+
+    .fc-hidden {
+        display: none !important;
+    }
+
+    .fc-field {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        margin-bottom: 12px;
+    }
+
+    .fc-field label {
+        font-size: 12px;
+        font-weight: 600;
+        color: #586069;
+    }
+
+    .fc-input, .fc-select {
+        padding: 9px 12px;
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        font-size: 14px;
+        font-family: inherit;
+        outline: none;
+        transition: border-color 0.15s;
+        background: #fff;
+        color: #2c3e50;
+    }
+
+    .fc-input:focus, .fc-select:focus {
+        border-color: #5a9fd4;
+    }
+
+    /* ---- Weekly grid ---- */
+    .fc-week {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 10px;
+    }
+
+    @media (max-width: 760px) {
+        .fc-week {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .fc-day {
+        border: 1px solid #e9ecef;
+        border-radius: 10px;
+        background: #f8f9fb;
+        min-height: 120px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .fc-day-head {
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #586069;
+        padding: 8px 10px;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .fc-day.today .fc-day-head {
+        color: #0d6efd;
+    }
+
+    .fc-day.today {
+        border-color: #b6d4fe;
+        box-shadow: 0 0 0 1px #b6d4fe inset;
+    }
+
+    .fc-day-body {
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        flex: 1;
+    }
+
+    .fc-event {
+        border-left: 4px solid #5a9fd4;
+        background: #fff;
+        border-radius: 6px;
+        padding: 6px 8px;
+        font-size: 12px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        cursor: default;
+    }
+
+    .fc-event .fc-ev-time {
+        font-weight: 700;
+        color: #2c3e50;
+        font-family: Consolas, 'Courier New', monospace;
+    }
+
+    .fc-event .fc-ev-title {
+        color: #2c3e50;
+    }
+
+    .fc-event .fc-ev-meta {
+        color: #7f8c8d;
+        font-size: 11px;
+    }
+
+    .fc-event .fc-ev-actions {
+        margin-top: 4px;
+        display: flex;
+        gap: 8px;
+    }
+
+    .fc-ev-link {
+        font-size: 11px;
+        color: #0d6efd;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    .fc-ev-link.del {
+        color: #e74c3c;
+    }
+
+    .fc-empty {
+        color: #b0b8c0;
+        font-size: 11px;
+        font-style: italic;
+        padding: 4px;
+    }
+
+    /* ---- Kid legend / chips ---- */
+    .fc-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+
+    .fc-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        color: #586069;
+        cursor: pointer;
+    }
+
+    .fc-filter {
+        margin: 0;
+        cursor: pointer;
+    }
+
+    .fc-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    .fc-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .fc-row .fc-field {
+        flex: 1;
+        min-width: 130px;
+    }
+</style>
+
+<div class="fc">
+    <div class="fc-toolbar">
+        <button id="fcSignIn" class="fc-btn primary">🔐 Sign in to OneDrive</button>
+        <button id="fcSignOut" class="fc-btn fc-hidden">Sign out</button>
+        <button id="fcReload" class="fc-btn fc-hidden" disabled>↻ Reload</button>
+        <div class="fc-spacer"></div>
+        <span id="fcAccount" class="fc-account"></span>
+    </div>
+
+    <div id="fcStatus" class="fc-status"></div>
+
+    <!-- Calendar view -->
+    <div id="fcApp" class="fc-hidden">
+        <div class="fc-toolbar" style="border-bottom:none; padding-bottom:0;">
+            <button id="fcAddBtn" class="fc-btn primary">＋ Add entry</button>
+            <button id="fcManageKids" class="fc-btn">👥 Manage people</button>
+            <button id="fcRemindBtn" class="fc-btn">🔔 Reminders: Off</button>
+            <button id="fcSaveBtn" class="fc-btn" disabled>💾 Save to OneDrive</button>
+            <button id="fcExportBtn" class="fc-btn">⬇️ Export</button>
+            <button id="fcImportBtn" class="fc-btn">⬆️ Import</button>
+            <input type="file" id="fcImportFile" accept="application/json,.json" style="display:none;">
+        </div>
+
+        <div id="fcLegend" class="fc-legend"></div>
+
+        <!-- Add / edit form -->
+        <div id="fcForm" class="fc-panel fc-hidden">
+            <h3 id="fcFormTitle">Add entry</h3>
+            <div class="fc-row">
+                <div class="fc-field">
+                    <label for="fcKid">Person</label>
+                    <select id="fcKid" class="fc-select"></select>
+                </div>
+                <div class="fc-field">
+                    <label for="fcDay">Day</label>
+                    <select id="fcDay" class="fc-select">
+                        <option value="Mon">Monday</option>
+                        <option value="Tue">Tuesday</option>
+                        <option value="Wed">Wednesday</option>
+                        <option value="Thu">Thursday</option>
+                        <option value="Fri">Friday</option>
+                        <option value="Sat">Saturday</option>
+                        <option value="Sun">Sunday</option>
+                    </select>
+                </div>
+            </div>
+            <div class="fc-row">
+                <div class="fc-field">
+                    <label for="fcStart">Start</label>
+                    <input type="time" id="fcStart" class="fc-input">
+                </div>
+                <div class="fc-field">
+                    <label for="fcEnd">End</label>
+                    <input type="time" id="fcEnd" class="fc-input">
+                </div>
+            </div>
+            <div class="fc-field">
+                <label for="fcTitle">Activity</label>
+                <input type="text" id="fcTitle" class="fc-input" placeholder="e.g. Soccer practice">
+            </div>
+            <div class="fc-field">
+                <label for="fcLocation">Location (optional)</label>
+                <input type="text" id="fcLocation" class="fc-input" placeholder="e.g. Field 3">
+            </div>
+            <div class="fc-field">
+                <label for="fcNotes">Notes (optional)</label>
+                <input type="text" id="fcNotes" class="fc-input" placeholder="e.g. Bring water bottle">
+            </div>
+            <div class="fc-row">
+                <button id="fcFormSave" class="fc-btn primary">Save entry</button>
+                <button id="fcFormCancel" class="fc-btn">Cancel</button>
+            </div>
+        </div>
+
+        <!-- Manage people -->
+        <div id="fcKidsPanel" class="fc-panel fc-hidden">
+            <h3>Manage people</h3>
+            <div id="fcKidsList"></div>
+            <div class="fc-row" style="margin-top:8px;">
+                <div class="fc-field" style="flex:1;">
+                    <label for="fcNewKid">Add a person</label>
+                    <input type="text" id="fcNewKid" class="fc-input" placeholder="Name">
+                </div>
+                <button id="fcAddKid" class="fc-btn primary" style="align-self:flex-end;">Add</button>
+            </div>
+            <button id="fcKidsDone" class="fc-btn" style="margin-top:12px;">Done</button>
+        </div>
+
+        <div id="fcWeek" class="fc-week"></div>
+    </div>
+
+    <!-- Help / features -->
+    <div style="font-size: 13px; color: #7f8c8d; line-height: 2; margin-top: 24px;">
+        <b style="color: #2c3e50;">How it works</b><br>
+        &bull; Data is stored as a <b>plain JSON file</b> in your own OneDrive app folder (<code>/Apps/Family Calendar/schedule.json</code>).<br>
+        &bull; You <b>sign in to OneDrive</b> (Microsoft login) to sync — only your account can read or write the file.<br>
+        &bull; Edit from <b>any device</b> — sign in, add/edit entries, then <b>Save to OneDrive</b>.<br>
+        &bull; <b>Export</b> downloads a JSON backup; <b>Import</b> loads one back in.<br>
+        <br>
+        <b style="color: #2c3e50;">Features</b><br>
+        &bull; Weekly grid grouped by day, color-coded per kid<br>
+        &bull; <b>Add / edit / delete</b> entries with time, activity, location and notes<br>
+        &bull; <b>Manage people</b> — add or remove family members and their color<br>
+        &bull; <b>Reminders</b> — while the tab is open, get a notification &amp; beep 15 min before each activity<br>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@azure/msal-browser@2.38.4/lib/msal-browser.min.js" crossorigin="anonymous"></script>
+<script src="./index.js"></script>

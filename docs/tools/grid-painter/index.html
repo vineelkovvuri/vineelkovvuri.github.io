@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>🖼️ Grid Painter | Vineel Kovvuri</title>
+    
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/copy-button.css" />
+    <link rel="stylesheet" href="/css/forms.css" />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <meta name="description" content="Page Mode Same size Different sizes Print and draw on the same paper size. The grid is measured on that single page — set cells by real-world size or by count. …" />
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/projects/">Projects</a></li>
+      
+      <li><a href="/tools/">Toolsᴬᴵ</a></li>
+      
+      <li><a href="/games/">Gamesᴬᴵ</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">🖼️ Grid Painter</span></h1>
+
+
+</div>
+
+
+
+<main>
+
+<style>
+    .gp-wrap * {
+        box-sizing: border-box;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+
+    .gp-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding: 8px 0;
+        color: #2c3e50;
+    }
+
+    .gp-panel {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 18px;
+        padding: 14px 16px;
+        border: 1px solid #d0d5dd;
+        border-radius: 12px;
+        background: #f8f9fb;
+    }
+
+    .gp-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        min-width: 0;
+    }
+
+    .gp-group > label,
+    .gp-fieldset > legend {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #7f8c8d;
+    }
+
+    .gp-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .gp-wrap select,
+    .gp-wrap input[type="number"],
+    .gp-wrap input[type="text"] {
+        padding: 6px 8px;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        background: #fff;
+        font-size: 13px;
+        color: #2c3e50;
+    }
+
+    .gp-wrap input[type="number"] {
+        width: 78px;
+    }
+
+    .gp-wrap select:focus,
+    .gp-wrap input:focus {
+        outline: none;
+        border-color: #5a9fd4;
+        box-shadow: 0 0 0 2px rgba(90, 159, 212, 0.25);
+    }
+
+    .gp-wrap label.gp-inline {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        font-weight: 500;
+        color: #2c3e50;
+        cursor: pointer;
+        text-transform: none;
+        letter-spacing: 0;
+    }
+
+    .gp-wrap input[type="range"] {
+        width: 120px;
+        cursor: pointer;
+    }
+
+    .gp-btn {
+        padding: 8px 16px;
+        border: 1px solid #d0d5dd;
+        border-radius: 8px;
+        background: #fff;
+        color: #2c3e50;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .gp-btn:hover {
+        border-color: #98a2b3;
+        background: #f1f3f5;
+    }
+
+    .gp-btn.gp-primary {
+        border-color: #0d6efd;
+        background: #0d6efd;
+        color: #fff;
+    }
+
+    .gp-btn.gp-primary:hover {
+        background: #0b5ed7;
+    }
+
+    .gp-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .gp-fieldset {
+        border: 1px dashed #d0d5dd;
+        border-radius: 10px;
+        padding: 10px 12px;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .gp-fieldset legend {
+        padding: 0 6px;
+    }
+
+    .gp-hint {
+        font-size: 12px;
+        color: #7f8c8d;
+    }
+
+    /* Canvas stage */
+    .gp-stage {
+        position: relative;
+        border: 1px solid #d0d5dd;
+        border-radius: 12px;
+        background:
+            repeating-conic-gradient(#eef1f4 0% 25%, #f8f9fb 0% 50%) 50% / 22px 22px;
+        overflow: hidden;
+        height: 70vh;
+        min-height: 360px;
+        touch-action: none;
+        cursor: grab;
+        user-select: none;
+    }
+
+    .gp-stage.gp-grabbing {
+        cursor: grabbing;
+    }
+
+    .gp-canvas-frame {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform-origin: 0 0;
+        background: transparent;
+    }
+
+    .gp-stage canvas {
+        display: block;
+    }
+
+    .gp-segmented {
+        display: inline-flex;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+    .gp-segmented button {
+        border: none;
+        background: #fff;
+        padding: 6px 12px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #586069;
+        cursor: pointer;
+    }
+
+    .gp-segmented button.active {
+        background: #0d6efd;
+        color: #fff;
+    }
+
+    .gp-color {
+        width: 34px;
+        height: 30px;
+        padding: 2px;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        background: #fff;
+        cursor: pointer;
+    }
+
+    .gp-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .gp-zoombar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .gp-zoombar .gp-btn {
+        padding: 4px 10px;
+        min-width: 34px;
+    }
+
+    .gp-zoombar #gp-zoom-level {
+        min-width: 52px;
+        text-align: center;
+        font-size: 13px;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+</style>
+
+<div class="gp-wrap">
+
+    <!-- Page mode -->
+    <div class="gp-panel">
+        <div class="gp-group">
+            <label>Page Mode</label>
+            <div class="gp-segmented" id="gp-page-mode">
+                <button data-page="same" class="active">Same size</button>
+                <button data-page="diff">Different sizes</button>
+            </div>
+        </div>
+        <div class="gp-hint" id="gp-page-mode-hint" style="align-self:center; max-width:420px;">
+            Print and draw on the <b>same</b> paper size. The grid is measured on that single page — set cells by real-world <b>size</b> or by <b>count</b>.
+        </div>
+    </div>
+
+    <!-- Paper + image controls -->
+    <div class="gp-panel">
+        <div class="gp-group">
+            <label for="gp-paper" id="gp-paper-label">Paper Size</label>
+            <select id="gp-paper">
+                <option value="A2">A2 (420 × 594 mm)</option>
+                <option value="A3">A3 (297 × 420 mm)</option>
+                <option value="A4" selected>A4 (210 × 297 mm)</option>
+                <option value="A5">A5 (148 × 210 mm)</option>
+                <option value="Letter">Letter (216 × 279 mm)</option>
+                <option value="Legal">Legal (216 × 356 mm)</option>
+                <option value="custom">Custom…</option>
+            </select>
+        </div>
+
+        <div class="gp-group" id="gp-custom-size" style="display:none;">
+            <label>Custom (mm)</label>
+            <div class="gp-row">
+                <input type="number" id="gp-custom-w" min="10" max="2000" value="210" title="Width (mm)">
+                <span class="gp-hint">×</span>
+                <input type="number" id="gp-custom-h" min="10" max="2000" value="297" title="Height (mm)">
+            </div>
+        </div>
+
+        <div class="gp-group">
+            <label>Orientation</label>
+            <div class="gp-segmented" id="gp-orient">
+                <button data-orient="portrait" class="active">Portrait</button>
+                <button data-orient="landscape">Landscape</button>
+            </div>
+        </div>
+
+        <div class="gp-group">
+            <label>Image</label>
+            <div class="gp-row">
+                <button class="gp-btn" id="gp-upload-btn">Upload Image…</button>
+                <button class="gp-btn" id="gp-clear-img" disabled>Remove</button>
+                <input type="file" id="gp-file" accept="image/*" style="display:none;">
+            </div>
+        </div>
+
+        <div class="gp-group">
+            <label for="gp-fit">Image Fit</label>
+            <select id="gp-fit">
+                <option value="contain">Fit (keep ratio)</option>
+                <option value="cover">Cover (crop to fill)</option>
+                <option value="stretch">Stretch (fill exactly)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Destination (drawing) paper — dual mode only -->
+    <div class="gp-panel" id="gp-dst-panel" style="display:none;">
+        <div class="gp-group">
+            <label for="gp-dst-paper">Destination paper (drawing)</label>
+            <select id="gp-dst-paper">
+                <option value="A2">A2 (420 × 594 mm)</option>
+                <option value="A3" selected>A3 (297 × 420 mm)</option>
+                <option value="A4">A4 (210 × 297 mm)</option>
+                <option value="A5">A5 (148 × 210 mm)</option>
+                <option value="Letter">Letter (216 × 279 mm)</option>
+                <option value="Legal">Legal (216 × 356 mm)</option>
+                <option value="custom">Custom…</option>
+            </select>
+        </div>
+
+        <div class="gp-group" id="gp-dst-custom-size" style="display:none;">
+            <label>Custom (mm)</label>
+            <div class="gp-row">
+                <input type="number" id="gp-dst-custom-w" min="10" max="2000" value="297" title="Width (mm)">
+                <span class="gp-hint">×</span>
+                <input type="number" id="gp-dst-custom-h" min="10" max="2000" value="420" title="Height (mm)">
+            </div>
+        </div>
+    </div>
+
+    <!-- Grid controls -->
+    <div class="gp-panel">
+        <div class="gp-fieldset">
+            <legend>Grid</legend>
+            <div class="gp-row">
+                <div class="gp-segmented" id="gp-grid-mode">
+                    <button data-mode="cell" class="active">By Cell Size</button>
+                    <button data-mode="count">By Count</button>
+                </div>
+            </div>
+
+            <div class="gp-row" id="gp-mode-cell">
+                <label class="gp-inline">Cell size
+                    <input type="number" id="gp-cell" min="2" max="200" value="20"> mm
+                </label>
+            </div>
+
+            <div class="gp-row" id="gp-mode-count" style="display:none;">
+                <label class="gp-inline">Columns
+                    <input type="number" id="gp-cols" min="1" max="200" value="10">
+                </label>
+                <label class="gp-inline">Rows
+                    <input type="number" id="gp-rows" min="1" max="200" value="14">
+                </label>
+                <label class="gp-inline">
+                    <input type="checkbox" id="gp-square" checked> Square cells
+                </label>
+            </div>
+
+            <div class="gp-hint" id="gp-grid-info"></div>
+        </div>
+
+        <div class="gp-fieldset">
+            <legend>Grid Style</legend>
+            <div class="gp-row">
+                <label class="gp-inline">Color
+                    <input type="color" id="gp-line-color" class="gp-color" value="#ff0000">
+                </label>
+                <label class="gp-inline">Line
+                    <input type="range" id="gp-line-width" min="0.2" max="4" step="0.1" value="0.8">
+                </label>
+                <label class="gp-inline">Opacity
+                    <input type="range" id="gp-line-opacity" min="0.1" max="1" step="0.05" value="0.9">
+                </label>
+            </div>
+            <div class="gp-row">
+                <label class="gp-inline">
+                    <input type="checkbox" id="gp-labels"> Row/column ruler (top &amp; side)
+                </label>
+                <label class="gp-inline">
+                    <input type="checkbox" id="gp-margin"> Page border
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="gp-actions">
+        <button class="gp-btn gp-primary" id="gp-save">⬇ Save PNG (300 DPI)</button>
+        <button class="gp-btn" id="gp-print">🖨 Print</button>
+        <button class="gp-btn gp-primary" id="gp-save-dst" style="display:none;">⬇ Save Drawing PNG</button>
+        <button class="gp-btn" id="gp-print-dst" style="display:none;">🖨 Print Drawing</button>
+        <span class="gp-hint" id="gp-dim-info"></span>
+    </div>
+
+    <!-- Canvas -->
+    <div class="gp-zoombar">
+        <button class="gp-btn" id="gp-zoom-out" title="Zoom out">−</button>
+        <span id="gp-zoom-level">100%</span>
+        <button class="gp-btn" id="gp-zoom-in" title="Zoom in">+</button>
+        <button class="gp-btn" id="gp-zoom-reset">Reset</button>
+        <span class="gp-hint">Drag to pan · scroll or pinch to zoom</span>
+    </div>
+    <div class="gp-stage">
+        <div class="gp-canvas-frame" id="gp-frame">
+            <canvas id="gp-canvas"></canvas>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #7f8c8d; line-height: 2; margin-top: 8px;">
+        <b style="color: #2c3e50;">How it works</b><br>
+        &bull; Pick a paper size, drop an image onto the canvas, and overlay a measured grid.<br>
+        &bull; Print or save the result, then reproduce each cell on your own gridded paper — the classic <b>grid method</b> for scaling up a reference image by hand.<br>
+        <br>
+        <b style="color: #2c3e50;">Features</b><br>
+        &bull; <b>Different print &amp; drawing sizes</b> — switch <b>Page Mode</b> to <b>Different sizes</b> to print on one paper (e.g. A4) and draw on another (e.g. A3). Both pages are shown side by side at true relative scale, sharing the same grid <b>count</b>.<br>
+        &bull; <b>Paper sizes</b> — A2, A3, A4, A5, US Letter/Legal, or a fully <b>Custom</b> size in millimetres, in portrait or landscape.<br>
+        &bull; <b>Grid by cell size</b> — set a real-world cell size (e.g. <code>20 mm</code>) and columns/rows are computed to match the paper.<br>
+        &bull; <b>Grid by count</b> — set exact <b>Columns</b> and <b>Rows</b>; enable <b>Square cells</b> to keep cells proportional.<br>
+        &bull; <b>Image fit</b> — <b>Fit</b> keeps the aspect ratio, <b>Cover</b> crops to fill, <b>Stretch</b> forces an exact fill.<br>
+        &bull; <b>Grid style</b> — adjustable line <b>color</b>, <b>thickness</b>, and <b>opacity</b>, an optional <b>row/column ruler</b> with numbers across the top and down the side, and a <b>page border</b>.<br>
+        &bull; <b>Export</b> — <b>Save PNG</b> renders at 300 DPI for crisp printing; <b>Print</b> sends the page straight to your printer.<br>
+    </div>
+</div>
+
+<script src="./index.js"></script>
+
+</main>
+
+  <footer>
+  <script defer src="/js/center-img.js"></script>
+<script defer src="/js/pre-tag.js"></script>
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2026 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+
