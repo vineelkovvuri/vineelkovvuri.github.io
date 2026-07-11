@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Linux ZFS RAIDZ1 Pool Setup | Vineel Kovvuri</title>
+    
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/copy-button.css" />
+    <link rel="stylesheet" href="/css/forms.css" />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <meta name="description" content="Identify the Disks Use the model and serial numbers to match each block device to its persistent /dev/disk/by-id/ path: lsblk -e7 -o …" />
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/projects/">Projects</a></li>
+      
+      <li><a href="/tools/">Toolsᴬᴵ</a></li>
+      
+      <li><a href="/bookmarks/">Bookmarks</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Linux ZFS RAIDZ1 Pool Setup</span></h1>
+
+
+</div>
+
+<main>
+<h2 id="identify-the-disks">Identify the Disks</h2>
+<p>Use the model and serial numbers to match each block device to its persistent
+<code>/dev/disk/by-id/</code> path:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>lsblk -e7 -o NAME,SIZE,MODEL,SERIAL,FSTYPE,LABEL,MOUNTPOINTS
+</span></span><span style="display:flex;"><span>ls -l /dev/disk/by-id/
+</span></span></code></pre></div><p>This confirms the three intended storage disks and shows exactly why persistent
+IDs matter: after the hardware change, the Samsung moved from <code>sdc</code> to <code>sdd</code>.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>sda = Micron   16161254C0DF
+</span></span><span style="display:flex;"><span>sdc = Crucial  13420C0DE89F
+</span></span><span style="display:flex;"><span>sdd = Samsung  S151NYAF308945
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sdb = Ubuntu system disk, do not use
+</span></span></code></pre></div><h2 id="1-final-read-only-checks">1. Final Read-Only Checks</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo wipefs -n /dev/disk/by-id/ata-MTFDDAK512MBF-1AN1ZABHA_16161254C0DF
+</span></span><span style="display:flex;"><span>sudo wipefs -n /dev/disk/by-id/ata-Crucial_CT512M550SSD1_13420C0DE89F
+</span></span><span style="display:flex;"><span>sudo wipefs -n /dev/disk/by-id/ata-SAMSUNG_MZ7TD512HAGM-000L1_S151NYAF308945
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sudo zpool import
+</span></span><span style="display:flex;"><span>sudo zpool status -P
+</span></span></code></pre></div><p>Check exact capacities:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>lsblk -b -e7 -o NAME,SIZE,MODEL,SERIAL
+</span></span></code></pre></div><p>Check health:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo smartctl -H -A /dev/disk/by-id/ata-MTFDDAK512MBF-1AN1ZABHA_16161254C0DF
+</span></span><span style="display:flex;"><span>sudo smartctl -H -A /dev/disk/by-id/ata-Crucial_CT512M550SSD1_13420C0DE89F
+</span></span><span style="display:flex;"><span>sudo smartctl -H -A /dev/disk/by-id/ata-SAMSUNG_MZ7TD512HAGM-000L1_S151NYAF308945
+</span></span></code></pre></div><p>Proceed only if:</p>
+<ul>
+<li>The three disks contain no required data.</li>
+<li>SMART does not report failure or serious errors.</li>
+<li><code>zpool import</code> does not reveal an old pool you need.</li>
+<li>The selected IDs do not resolve to <code>sdb</code>.</li>
+</ul>
+<h2 id="2-preview-the-pool-creation">2. Preview the Pool Creation</h2>
+<p>The <code>-n</code> flag performs a dry run and does not create the pool:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo zpool create -n <span style="color:#04d;background-color:#fff0f0">\
+</span></span></span><span style="display:flex;"><span><span style="color:#04d;background-color:#fff0f0"></span>  -o <span style="color:#369">ashift</span>=<span style="color:#00d;font-weight:bold">12</span> <span style="color:#04d;background-color:#fff0f0">\
+</span></span></span><span style="display:flex;"><span><span style="color:#04d;background-color:#fff0f0"></span>  -o <span style="color:#369">autotrim</span>=on <span style="color:#04d;background-color:#fff0f0">\
+</span></span></span><span style="display:flex;"><span><span style="color:#04d;background-color:#fff0f0"></span>  -O <span style="color:#369">compression</span>=zstd <span style="color:#04d;background-color:#fff0f0">\
+</span></span></span><span style="display:flex;"><span><span style="color:#04d;background-color:#fff0f0"></span>  -O <span style="color:#369">atime</span>=off <span style="color:#04d;background-color:#fff0f0">\
+</span></span></span><span style="display:flex;"><span><span style="color:#04d;background-color:#fff0f0"></span>  -O <span style="color:#369">xattr</span>=sa <span style="color:#04d;background-color:#fff0f0">\
+</span></span></span><span style="display:flex;"><span><span style="color:#04d;background-color:#fff0f0"></span>  -O <span style="color:#369">acltype</span>=posixacl <span style="color:#04d;background-color:#fff0f0">\
+</span></span></span><span style="display:flex;"><span><span style="color:#04d;background-color:#fff0f0"></span>  -O <span style="color:#369">mountpoint</span>=none <span style="color:#04d;background-color:#fff0f0">\
+</span></span></span><span style="display:flex;"><span><span style="color:#04d;background-color:#fff0f0"></span>  tank raidz1 <span style="color:#04d;background-color:#fff0f0">\
+</span></span></span><span style="display:flex;"><span><span style="color:#04d;background-color:#fff0f0"></span>  /dev/disk/by-id/ata-MTFDDAK512MBF-1AN1ZABHA_16161254C0DF <span style="color:#04d;background-color:#fff0f0">\
+</span></span></span><span style="display:flex;"><span><span style="color:#04d;background-color:#fff0f0"></span>  /dev/disk/by-id/ata-Crucial_CT512M550SSD1_13420C0DE89F <span style="color:#04d;background-color:#fff0f0">\
+</span></span></span><span style="display:flex;"><span><span style="color:#04d;background-color:#fff0f0"></span>  /dev/disk/by-id/ata-SAMSUNG_MZ7TD512HAGM-000L1_S151NYAF308945
+</span></span></code></pre></div><p>Confirm the preview contains exactly one <code>raidz1</code> VDEV with those three disks.</p>
+<h2 id="3-create-the-pool">3. Create the Pool</h2>
+<p>This is the destructive step:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo zpool create <span style="color:#04d;background-color:#fff0f0">\
+</span></span></span><span style="display:flex;"><span><span style="color:#04d;background-color:#fff0f0"></span>  -o <span style="color:#369">ashift</span>=<span style="color:#00d;font-weight:bold">12</span> <span style="color:#04d;background-color:#fff0f0">\
+</span></span></span><span style="display:flex;"><span><span style="color:#04d;background-color:#fff0f0"></span>  -o <span style="color:#369">autotrim</span>=on <span style="color:#04d;background-color:#fff0f0">\
+</span></span></span><span style="display:flex;"><span><span style="color:#04d;background-color:#fff0f0"></span>  -O <span style="color:#369">compression</span>=zstd <span style="color:#04d;background-color:#fff0f0">\
+</span></span></span><span style="display:flex;"><span><span style="color:#04d;background-color:#fff0f0"></span>  -O <span style="color:#369">atime</span>=off <span style="color:#04d;background-color:#fff0f0">\
+</span></span></span><span style="display:flex;"><span><span style="color:#04d;background-color:#fff0f0"></span>  -O <span style="color:#369">xattr</span>=sa <span style="color:#04d;background-color:#fff0f0">\
+</span></span></span><span style="display:flex;"><span><span style="color:#04d;background-color:#fff0f0"></span>  -O <span style="color:#369">acltype</span>=posixacl <span style="color:#04d;background-color:#fff0f0">\
+</span></span></span><span style="display:flex;"><span><span style="color:#04d;background-color:#fff0f0"></span>  -O <span style="color:#369">mountpoint</span>=none <span style="color:#04d;background-color:#fff0f0">\
+</span></span></span><span style="display:flex;"><span><span style="color:#04d;background-color:#fff0f0"></span>  tank raidz1 <span style="color:#04d;background-color:#fff0f0">\
+</span></span></span><span style="display:flex;"><span><span style="color:#04d;background-color:#fff0f0"></span>  /dev/disk/by-id/ata-MTFDDAK512MBF-1AN1ZABHA_16161254C0DF <span style="color:#04d;background-color:#fff0f0">\
+</span></span></span><span style="display:flex;"><span><span style="color:#04d;background-color:#fff0f0"></span>  /dev/disk/by-id/ata-Crucial_CT512M550SSD1_13420C0DE89F <span style="color:#04d;background-color:#fff0f0">\
+</span></span></span><span style="display:flex;"><span><span style="color:#04d;background-color:#fff0f0"></span>  /dev/disk/by-id/ata-SAMSUNG_MZ7TD512HAGM-000L1_S151NYAF308945
+</span></span></code></pre></div><p>Do not add <code>-f</code> if it refuses. Capture the error first; an existing signature may indicate old data.</p>
+<h2 id="4-verify-immediately">4. Verify Immediately</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo zpool status -P tank
+</span></span><span style="display:flex;"><span>sudo zpool list tank
+</span></span><span style="display:flex;"><span>sudo zpool get ashift,autotrim tank
+</span></span></code></pre></div><p>Expected shape:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>tank
+</span></span><span style="display:flex;"><span>  raidz1-0
+</span></span><span style="display:flex;"><span>    Micron   ONLINE
+</span></span><span style="display:flex;"><span>    Crucial  ONLINE
+</span></span><span style="display:flex;"><span>    Samsung  ONLINE
+</span></span></code></pre></div><p>ZFS may display automatically created <code>-part1</code> paths. That is normal when whole disks are supplied.</p>
+<h2 id="5-create-the-main-dataset">5. Create the Main Dataset</h2>
+<p>Start simply; more datasets can be added later:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo zfs create -o <span style="color:#369">mountpoint</span>=/srv/storage tank/storage
+</span></span><span style="display:flex;"><span>sudo chown vineel:vineel /srv/storage
+</span></span><span style="display:flex;"><span>sudo zfs list -r tank
+</span></span><span style="display:flex;"><span>df -h /srv/storage
+</span></span></code></pre></div><p>Test it:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#038">echo</span> <span style="color:#d20;background-color:#fff0f0">&#34;ZFS test&#34;</span> &gt; /srv/storage/test.txt
+</span></span><span style="display:flex;"><span>cat /srv/storage/test.txt
+</span></span><span style="display:flex;"><span>sudo zpool status tank
+</span></span></code></pre></div><p>Your RAIDZ1 pool will tolerate failure of any one of these three SSDs, but it
+will be vulnerable to a second failure while degraded or resilvering. Keep
+irreplaceable data backed up outside <code>tank</code>.</p>
+
+</main>
+
+  <footer>
+  <script defer src="/js/center-img.js"></script>
+<script defer src="/js/pre-tag.js"></script>
+
+  
+  <hr/>
+  © Vineel Kumar Reddy Kovvuri 2017 &ndash; 2026 ❤️ <a href="https://xmin.yihui.org/">Hugo Xmin</a>
+  
+  </footer>
+  </body>
+</html>
+

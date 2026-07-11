@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ZFS on Vineel Kovvuri</title>
+    <link>/tags/zfs/</link>
+    <description>Recent content in ZFS on Vineel Kovvuri</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <atom:link href="/tags/zfs/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Linux ZFS RAIDZ1 Pool Setup</title>
+      <link>/bookmarks/linux-zfs-raidz1-pool-setup/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/bookmarks/linux-zfs-raidz1-pool-setup/</guid>
+      <description>&lt;h2 id=&#34;identify-the-disks&#34;&gt;Identify the Disks&lt;/h2&gt;&#xA;&lt;p&gt;Use the model and serial numbers to match each block device to its persistent&#xA;&lt;code&gt;/dev/disk/by-id/&lt;/code&gt; path:&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;lsblk -e7 -o NAME,SIZE,MODEL,SERIAL,FSTYPE,LABEL,MOUNTPOINTS&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ls -l /dev/disk/by-id/&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This confirms the three intended storage disks and shows exactly why persistent&#xA;IDs matter: after the hardware change, the Samsung moved from &lt;code&gt;sdc&lt;/code&gt; to &lt;code&gt;sdd&lt;/code&gt;.&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sda = Micron   16161254C0DF&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sdc = Crucial  13420C0DE89F&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sdd = Samsung  S151NYAF308945&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sdb = Ubuntu system disk, do not use&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;1-final-read-only-checks&#34;&gt;1. Final Read-Only Checks&lt;/h2&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo wipefs -n /dev/disk/by-id/ata-MTFDDAK512MBF-1AN1ZABHA_16161254C0DF&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo wipefs -n /dev/disk/by-id/ata-Crucial_CT512M550SSD1_13420C0DE89F&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo wipefs -n /dev/disk/by-id/ata-SAMSUNG_MZ7TD512HAGM-000L1_S151NYAF308945&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo zpool import&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo zpool status -P&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Check exact capacities:&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

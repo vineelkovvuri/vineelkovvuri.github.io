@@ -1,0 +1,258 @@
+---
+title: "🧱 Breakout"
+tags: ["Games"]
+category: "Kids Games"
+---
+
+<style>
+    .brk {
+        --bg: #f8f9fb;
+        --card: #ffffff;
+        --ink: #2c3e50;
+        --muted: #7f8c8d;
+        --border: #d0d5dd;
+        --orange: #f5a623;
+        --green: #6ab04c;
+        --red: #e74c3c;
+        --blue: #5a9fd4;
+        --grid: #eef1f6;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        max-width: 640px;
+        margin: 0 auto;
+        color: var(--ink);
+        user-select: none;
+    }
+
+    .brk * { box-sizing: border-box; }
+
+    .brk-layout { display: flex; gap: 16px; align-items: flex-start; }
+    .brk-stage { position: relative; flex: 0 0 auto; }
+
+    .brk-board {
+        display: block;
+        background: var(--grid);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        touch-action: none;
+    }
+
+    .brk-side {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        min-width: 140px;
+    }
+
+    .brk-panel {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 12px 14px;
+    }
+
+    .brk-panel .label {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 4px;
+    }
+
+    .brk-panel .value {
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--ink);
+        font-family: Consolas, 'Courier New', monospace;
+    }
+
+    .brk-panel.rec .value { color: var(--orange); }
+
+    .brk-btn {
+        background: var(--blue);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 11px;
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        transition: background 0.15s, transform 0.05s;
+        width: 100%;
+    }
+
+    .brk-btn:hover { background: #4a8fc4; }
+    .brk-btn:active { transform: translateY(1px); }
+    .brk-btn.ghost { background: #eef1f6; color: var(--ink); }
+    .brk-btn.ghost:hover { background: #e2e7f0; }
+
+    .brk-touch {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-top: 16px;
+        max-width: 320px;
+    }
+
+    .brk-touch button {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 18px 0;
+        font-size: 24px;
+        cursor: pointer;
+        transition: background 0.12s, transform 0.05s;
+    }
+
+    .brk-touch button:hover { background: #f2f8fd; border-color: var(--blue); }
+    .brk-touch button:active { transform: scale(0.94); }
+
+    .brk-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(248, 249, 251, 0.96);
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        text-align: center;
+        padding: 24px;
+        z-index: 5;
+    }
+
+    .brk-overlay h2 { margin: 0; font-size: 26px; color: var(--ink); }
+    .brk-overlay p { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.6; }
+    .brk-hidden { display: none !important; }
+
+    .brk-medal {
+        display: inline-block;
+        font-size: 56px;
+        line-height: 1;
+        animation: brk-pop 0.5s cubic-bezier(0.18, 1.5, 0.6, 1) both;
+    }
+
+    @keyframes brk-pop {
+        0% { transform: scale(0) rotate(-25deg); }
+        100% { transform: scale(1) rotate(0); }
+    }
+
+    .brk-scoreboard {
+        width: 100%;
+        max-width: 240px;
+        margin: 2px auto;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        animation: brk-fade 0.6s ease 0.2s both;
+    }
+
+    .brk-score-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 8px 14px;
+        font-size: 14px;
+        color: var(--ink);
+    }
+
+    .brk-score-row b { font-size: 16px; color: var(--blue); }
+
+    @keyframes brk-fade {
+        0% { opacity: 0; transform: translateY(10px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .brk-confetti {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        border-radius: 12px;
+    }
+
+    .brk-confetti-piece {
+        position: absolute;
+        top: -14px;
+        width: 9px;
+        height: 14px;
+        opacity: 0.9;
+        animation-name: brk-fall;
+        animation-timing-function: linear;
+        animation-iteration-count: 1;
+    }
+
+    @keyframes brk-fall {
+        0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+        100% { transform: translateY(520px) rotate(540deg); opacity: 0; }
+    }
+
+    .brk-help {
+        font-size: 13px;
+        color: #7f8c8d;
+        line-height: 2;
+        margin-top: 20px;
+    }
+
+    .brk-help b { color: #2c3e50; }
+
+    .brk-help kbd {
+        font-family: Consolas, 'Courier New', monospace;
+        background: #f1f3f5;
+        border: 1px solid #d0d5dd;
+        border-bottom-width: 2px;
+        border-radius: 4px;
+        padding: 1px 6px;
+        font-size: 12px;
+        color: #2c3e50;
+    }
+
+    @media (max-width: 520px) {
+        .brk-side .brk-panel .value { font-size: 20px; }
+    }
+</style>
+
+<div class="brk">
+    <div class="brk-layout">
+        <div class="brk-stage">
+            <canvas class="brk-board" id="brkBoard" width="420" height="480"></canvas>
+
+            <div class="brk-overlay" id="brkOverlay">
+                <h2 id="brkOverTitle">🧱 Breakout</h2>
+                <p id="brkOverText">Bounce the ball with your paddle<br>and smash all the bricks!</p>
+                <button class="brk-btn" id="brkStart" style="width:auto;padding:13px 40px;">START</button>
+            </div>
+        </div>
+
+        <div class="brk-side">
+            <div class="brk-panel"><div class="label">Score</div><div class="value" id="brkScore">0</div></div>
+            <div class="brk-panel"><div class="label">Lives</div><div class="value" id="brkLives">3</div></div>
+            <div class="brk-panel"><div class="label">Level</div><div class="value" id="brkLevel">1</div></div>
+            <div class="brk-panel rec"><div class="label">Record</div><div class="value" id="brkRecord">0</div></div>
+            <button class="brk-btn ghost" id="brkPause">PAUSE</button>
+        </div>
+    </div>
+
+    <div class="brk-touch">
+        <button id="brkLeft" aria-label="Move left">◀️</button>
+        <button id="brkRight" aria-label="Move right">▶️</button>
+    </div>
+
+    <div class="brk-help">
+        <b>How to play</b><br>
+        &bull; Move the paddle with <kbd>←</kbd> <kbd>→</kbd> or the <b>mouse</b>, pause with <kbd>P</kbd>.<br>
+        &bull; On touch screens drag on the board or use the buttons below.<br>
+        &bull; Keep the ball in play &mdash; it bounces off walls, the paddle and bricks.<br>
+        &bull; Break <b>every brick</b> to clear the level; harder bricks take more hits.<br>
+        &bull; You have <b>3 lives</b>; lose one each time the ball falls past the paddle.<br>
+        &bull; Your best score is saved as your <b>Record</b>.<br>
+    </div>
+</div>
+
+<script src="./index.js"></script>

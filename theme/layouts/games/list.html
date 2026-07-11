@@ -1,0 +1,18 @@
+{{ partial "header.html" . }}
+
+{{ .Content }}
+
+<h1>Games</h1>
+
+{{ range .Pages.GroupByParam "category" }}
+<h2>{{ if .Key }}{{ .Key }}{{ else }}Other Games{{ end }}</h2>
+<ul style="list-style: none;">
+  {{ range .Pages }}
+  <li>
+    <a href="{{ .RelPermalink }}">{{ .Title | markdownify }}</a>
+  </li>
+  {{ end }}
+</ul>
+{{ end }}
+
+{{ partial "footer.html" . }}

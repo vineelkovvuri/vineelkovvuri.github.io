@@ -1,0 +1,273 @@
+---
+title: "📄 Diff Tool"
+tags: ["Tools"]
+category: "Utility Tools"
+---
+
+<style>
+    #diff-container {
+        width: 100%;
+        height: 80vh;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    #toolbar {
+        display: flex;
+        gap: 8px;
+        padding: 8px 4px;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        font-size: 13px;
+        align-items: center;
+    }
+
+    #toolbar button {
+        padding: 5px 14px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        background: #f5f5f5;
+        cursor: pointer;
+        font-size: 13px;
+        font-family: inherit;
+        transition: background 0.15s;
+    }
+
+    #toolbar button:hover {
+        background: #e0e0e0;
+    }
+
+    #toolbar button.active {
+        background: #4363d8;
+        color: #fff;
+        border-color: #4363d8;
+    }
+
+    #toolbar label {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .eol-lf::after {
+        content: '↵';
+        color: #b0b0b0;
+    }
+
+    .eol-crlf::after {
+        content: '␍↵';
+        color: #b0b0b0;
+    }
+
+    .eol-cr::after {
+        content: '␍';
+        color: #b0b0b0;
+    }
+</style>
+
+<div id="toolbar">
+    <button id="btn-inline" title="Toggle inline diff view">📏 Inline</button>
+    <button id="btn-clear" title="Clear both editors">🗑️ Clear</button>
+    <label title="Toggle whitespace visibility in diff">
+        <input type="checkbox" id="chk-whitespace" />
+        Whitespace
+    </label>
+    <label title="Show invisible characters (spaces, tabs, etc.)">
+        <input type="checkbox" id="chk-invisible" />
+        Invisible Chars
+    </label>
+    <label title="Toggle word wrap">
+        <input type="checkbox" id="chk-wordwrap" checked />
+        Word Wrap
+    </label>
+</div>
+<div id="diff-container"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs/loader.js"></script>
+<script>
+    require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs' } });
+
+    require(['vs/editor/editor.main'], function () {
+        // --- localStorage persistence ---
+        function lsGet(key, fallback) {
+            try {
+                var v = localStorage.getItem(key);
+                return v === null ? fallback : v;
+            } catch (e) { return fallback; }
+        }
+        function lsSet(key, value) {
+            try { localStorage.setItem(key, value); } catch (e) { /* ignore */ }
+        }
+
+        var savedInline = lsGet('webDiff.inline', 'false') === 'true';
+        var savedWhitespace = lsGet('webDiff.whitespace', 'false') === 'true';
+        var savedInvisible = lsGet('webDiff.invisible', 'false') === 'true';
+        var savedWordwrap = lsGet('webDiff.wordwrap', 'true') === 'true';
+
+        const originalModel = monaco.editor.createModel(
+            lsGet('webDiff.original', 'Paste original text here.'),
+            'plaintext'
+        );
+        const modifiedModel = monaco.editor.createModel(
+            lsGet('webDiff.modified', 'Paste modified text here.'),
+            'plaintext'
+        );
+
+        const diffEditor = monaco.editor.createDiffEditor(
+            document.getElementById('diff-container'),
+            {
+                automaticLayout: true,
+                renderSideBySide: !savedInline,
+                originalEditable: true,
+                fontSize: 14,
+                wordWrap: savedWordwrap ? 'on' : 'off',
+                diffWordWrap: savedWordwrap ? 'on' : 'off',
+                ignoreTrimWhitespace: !savedWhitespace,
+                renderWhitespace: savedInvisible ? 'all' : 'none',
+                renderControlCharacters: savedInvisible,
+                minimap: { enabled: false },
+            }
+        );
+
+        diffEditor.setModel({
+            original: originalModel,
+            modified: modifiedModel,
+        });
+
+        // Persist editor text on change
+        originalModel.onDidChangeContent(function () {
+            lsSet('webDiff.original', originalModel.getValue());
+        });
+        modifiedModel.onDidChangeContent(function () {
+            lsSet('webDiff.modified', modifiedModel.getValue());
+        });
+
+        // Inline toggle
+        const btnInline = document.getElementById('btn-inline');
+        let inline = savedInline;
+        btnInline.classList.toggle('active', inline);
+        btnInline.addEventListener('click', function () {
+            inline = !inline;
+            diffEditor.updateOptions({ renderSideBySide: !inline });
+            btnInline.classList.toggle('active', inline);
+            lsSet('webDiff.inline', String(inline));
+        });
+
+        // Clear both
+        document.getElementById('btn-clear').addEventListener('click', function () {
+            originalModel.setValue('');
+            modifiedModel.setValue('');
+        });
+
+        // Whitespace toggle
+        const chkWhitespace = document.getElementById('chk-whitespace');
+        chkWhitespace.checked = savedWhitespace;
+        chkWhitespace.addEventListener('change', function () {
+            diffEditor.updateOptions({
+                ignoreTrimWhitespace: !this.checked,
+            });
+            lsSet('webDiff.whitespace', String(this.checked));
+        });
+
+        // Word wrap toggle
+        const chkWordwrap = document.getElementById('chk-wordwrap');
+        chkWordwrap.checked = savedWordwrap;
+        chkWordwrap.addEventListener('change', function () {
+            const value = this.checked ? 'on' : 'off';
+            diffEditor.updateOptions({
+                wordWrap: value,
+                diffWordWrap: value,
+            });
+            lsSet('webDiff.wordwrap', String(this.checked));
+        });
+
+        // Line ending decorations for both editors
+        let origEolDecorations = [];
+        let modEolDecorations = [];
+
+        function getEolClassName(model) {
+            const eol = model.getEOL();
+            if (eol === '\r\n') return 'eol-crlf';
+            if (eol === '\r') return 'eol-cr';
+            return 'eol-lf';
+        }
+
+        function buildEolDecorations(model) {
+            const cls = getEolClassName(model);
+            const lineCount = model.getLineCount();
+            const decorations = [];
+            for (let i = 1; i <= lineCount; i++) {
+                const lineLen = model.getLineLength(i);
+                decorations.push({
+                    range: new monaco.Range(i, lineLen + 1, i, lineLen + 1),
+                    options: {
+                        afterContentClassName: cls,
+                    },
+                });
+            }
+            return decorations;
+        }
+
+        function applyEolDecorations() {
+            const origEditor = diffEditor.getOriginalEditor();
+            const modEditor = diffEditor.getModifiedEditor();
+            origEolDecorations = origEditor.deltaDecorations(
+                origEolDecorations,
+                buildEolDecorations(originalModel)
+            );
+            modEolDecorations = modEditor.deltaDecorations(
+                modEolDecorations,
+                buildEolDecorations(modifiedModel)
+            );
+        }
+
+        function clearEolDecorations() {
+            const origEditor = diffEditor.getOriginalEditor();
+            const modEditor = diffEditor.getModifiedEditor();
+            origEolDecorations = origEditor.deltaDecorations(origEolDecorations, []);
+            modEolDecorations = modEditor.deltaDecorations(modEolDecorations, []);
+        }
+
+        // Invisible characters toggle
+        let invisibleOn = savedInvisible;
+        const chkInvisible = document.getElementById('chk-invisible');
+        chkInvisible.checked = savedInvisible;
+
+        // Re-apply EOL decorations when content changes
+        originalModel.onDidChangeContent(function () {
+            if (invisibleOn) applyEolDecorations();
+        });
+        modifiedModel.onDidChangeContent(function () {
+            if (invisibleOn) applyEolDecorations();
+        });
+
+        chkInvisible.addEventListener('change', function () {
+            invisibleOn = this.checked;
+            const value = this.checked ? 'all' : 'none';
+            diffEditor.updateOptions({
+                renderWhitespace: value,
+                renderControlCharacters: this.checked,
+            });
+            if (this.checked) {
+                applyEolDecorations();
+            } else {
+                clearEolDecorations();
+            }
+            lsSet('webDiff.invisible', String(this.checked));
+        });
+
+        // Apply restored invisible-character decorations on load
+        if (savedInvisible) applyEolDecorations();
+    });
+</script>
+
+<div style="font-size: 13px; color: #7f8c8d; line-height: 2; margin-top: 8px;">
+    <b style="color: #2c3e50;">Features</b><br>
+    &bull; Side-by-side diff view powered by Monaco Editor<br>
+    &bull; Toggle inline diff mode for a single-column view<br>
+    &bull; Both panels are editable &mdash; paste or type text directly<br>
+    &bull; Whitespace-aware diffing (toggle to include whitespace changes)<br>
+    &bull; Invisible character rendering (spaces, tabs, line endings)<br>
+    &bull; Word wrap toggle<br>
+</div>

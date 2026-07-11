@@ -1,0 +1,292 @@
+---
+title: "🔢 Hex Editor"
+tags: ["Tools"]
+category: "Dev Tools"
+order: 3
+---
+
+    <style>
+      /* body { max-width: 100%; padding: 0.5em 1em; } */
+
+      /* Toolbar */
+      .hex-file-toolbar {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        padding: 0.4rem 0;
+      }
+
+      /* Main container */
+      .hex-container {
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 80px);
+        border: 1px solid #ced4da;
+        border-radius: 0.375rem;
+        overflow: hidden;
+        background: #fff;
+        position: relative;
+      }
+
+      /* Tab bar */
+      .hex-tab-bar {
+        display: flex;
+        background: #e9ecef;
+        border-bottom: 1px solid #ced4da;
+        overflow-x: auto;
+        flex-shrink: 0;
+        min-height: 0;
+      }
+      .hex-tab-bar:empty { display: none; }
+      .hex-tab {
+        display: flex;
+        align-items: center;
+        padding: 4px 12px;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.78rem;
+        cursor: pointer;
+        border-right: 1px solid #ced4da;
+        white-space: nowrap;
+        user-select: none;
+        background: #f8f9fa;
+        flex-shrink: 0;
+      }
+      .hex-tab:hover { background: #e2e6ea; }
+      .hex-tab.active {
+        background: #fff;
+        border-bottom: 2px solid #0d6efd;
+        font-weight: bold;
+      }
+      .hex-tab-close {
+        margin-left: 8px;
+        font-size: 0.7rem;
+        color: #999;
+        cursor: pointer;
+        line-height: 1;
+      }
+      .hex-tab-close:hover { color: #c53030; }
+
+      /* Hex header */
+      .hex-header {
+        padding: 4px 8px;
+        background: #e9ecef;
+        border-bottom: 1px solid #ced4da;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.78rem;
+        font-weight: bold;
+        flex-shrink: 0;
+        color: #555;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+      }
+      .hex-header-title { white-space: nowrap; }
+      .hex-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-weight: normal;
+        flex-wrap: wrap;
+        width: 100%;
+      }
+      .hex-toolbar label {
+        font-size: 0.75rem;
+        white-space: nowrap;
+        color: #555;
+        margin: 0;
+      }
+      .hex-toolbar input {
+        width: 100px;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.75rem;
+        padding: 1px 4px;
+        border: 1px solid #ced4da;
+        border-radius: 3px;
+        background: #fff;
+      }
+      .hex-toolbar input:focus {
+        border-color: #86b7fe;
+        outline: 0;
+        box-shadow: 0 0 0 2px rgba(13,110,253,0.15);
+      }
+      .hex-toolbar button {
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.72rem;
+        padding: 1px 6px;
+        border: 1px solid #ced4da;
+        border-radius: 3px;
+        background: #fff;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .hex-toolbar button:hover { background: #e2e6ea; }
+      .hex-toolbar .hex-sep {
+        width: 1px;
+        height: 16px;
+        background: #ced4da;
+        margin: 0 2px;
+      }
+
+      /* Hex scroll area */
+      .hex-scroll {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+        position: relative;
+        min-height: 0;
+      }
+      .hex-spacer {
+        width: 100%;
+      }
+      .hex-rows {
+        position: absolute;
+        left: 0;
+        right: 0;
+        user-select: none;
+      }
+      .hex-row {
+        height: 18px;
+        line-height: 18px;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.78rem;
+        white-space: pre;
+        padding: 0 8px;
+      }
+      .hex-row:nth-child(even) { background: #f8f9fa; }
+      .hex-offset { color: #888; }
+      .hex-ascii { color: #2e7d32; }
+      .hex-highlight { background: #cce5ff; color: #000; }
+      .hex-modified { color: #dc3545; font-weight: bold; }
+      .hex-modified.hex-highlight { background: #cce5ff; color: #dc3545; }
+      .hex-editing { outline: 2px solid #0d6efd; background: #e8f0fe; }
+      .hb, .ab { cursor: default; }
+      .hex-tab-modified { color: #dc3545; margin-left: 4px; font-size: 0.7rem; }
+
+      /* Context menu */
+      .hex-context-menu {
+        display: none;
+        position: fixed;
+        z-index: 200;
+        background: #fff;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.78rem;
+        padding: 4px 0;
+        min-width: 140px;
+      }
+      .hex-context-menu-item {
+        padding: 4px 12px;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .hex-context-menu-item:hover {
+        background: #e2e6ea;
+      }
+
+      /* Placeholder */
+      .hex-placeholder {
+        padding: 2rem;
+        color: #999;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.85rem;
+        text-align: center;
+        line-height: 1.8;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Drop overlay on main container */
+      .hex-drop-overlay {
+        display: flex;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(13,110,253,0.08);
+        border: 2px dashed #0d6efd;
+        border-radius: 0.375rem;
+        z-index: 100;
+        pointer-events: none;
+        align-items: center;
+        justify-content: center;
+      }
+      .hex-drop-overlay span {
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: #0d6efd;
+        font-family: Consolas, monospace;
+        background: rgba(255,255,255,0.9);
+        padding: 0.4rem 1rem;
+        border-radius: 0.25rem;
+      }
+    </style>
+      <!-- File drop toolbar -->
+      <div class="hex-file-toolbar">
+        <label style="white-space: nowrap; margin: 0; font-weight: bold;">File:</label>
+        <div id="fileDropZone" style="flex: 1; max-width: 500px; padding: 0.375rem 0.75rem; border: 1px dashed #0d6efd; border-radius: 0.25rem; cursor: pointer; font-family: Consolas, 'Courier New', monospace; font-size: 0.85rem; color: #0d6efd; background: rgba(13,110,253,0.04); text-align: center; user-select: none;">
+          Drop file(s) here or click to browse...
+        </div>
+        <input type="file" id="fileInput" multiple style="display: none;" />
+        <span id="fileInfo" style="font-family: Consolas, 'Courier New', monospace; font-size: 0.82rem; color: #666;"></span>
+        <button id="saveBtn" class="btn btn-primary" style="display: none; font-family: Consolas, 'Courier New', monospace; font-size: 0.82rem; padding: 4px 12px; white-space: nowrap;">Save</button>
+      </div>
+
+      <!-- Main container -->
+      <div class="hex-container">
+        <!-- Drop overlay -->
+        <div class="hex-drop-overlay" id="hexDropOverlay">
+          <span>Drop file(s) here</span>
+        </div>
+
+        <!-- Tab bar -->
+        <div class="hex-tab-bar" id="tabBar"></div>
+
+        <!-- Hex header (built by JS) -->
+        <div id="hexHeader" style="display: none;"></div>
+
+        <!-- Hex scroll area -->
+        <div class="hex-scroll" id="hexScroll" style="display: none;">
+          <div class="hex-spacer" id="hexSpacer"></div>
+          <div class="hex-rows" id="hexRows"></div>
+        </div>
+
+        <!-- Placeholder -->
+        <div class="hex-placeholder" id="hexPlaceholder">
+          <div style="text-align: left; line-height: 2;">
+            Drop a file above to view its hex dump.<br><br>
+            <b>Features</b><br>
+            &bull; Open multiple files in tabs<br>
+            &bull; Drag &amp; drop files anywhere on this view or use the drop zone above<br>
+            &bull; Virtual-scrolling hex view with offset, hex bytes, and ASCII columns<br>
+            &bull; Click a byte to select it; click-and-drag to select a range<br>
+            &bull; Inline byte editing &mdash; type hex digits to overwrite (modified bytes shown in red)<br>
+            &bull; Goto offset, Find (hex bytes or ASCII text), Find &amp; Replace<br>
+            &bull; Undo / Redo for all edits<br>
+            &bull; Save modified file locally<br><br>
+            <b>Keyboard Shortcuts</b><br>
+            &bull; <b>Ctrl+G</b> &mdash; Goto offset<br>
+            &bull; <b>Ctrl+F</b> &mdash; Find<br>
+            &bull; <b>Ctrl+H</b> &mdash; Replace<br>
+            &bull; <b>Ctrl+S</b> &mdash; Save file<br>
+            &bull; <b>Ctrl+Z</b> &mdash; Undo<br>
+            &bull; <b>Ctrl+Y</b> &mdash; Redo<br>
+            &bull; <b>Ctrl+[</b> / <b>Ctrl+]</b> &mdash; Previous / next tab<br>
+            &bull; <b>Arrow keys</b> &mdash; Navigate bytes<br>
+            &bull; <b>Tab</b> / <b>Shift+Tab</b> &mdash; Next / previous byte<br>
+            &bull; <b>Escape</b> &mdash; Exit editing mode
+          </div>
+        </div>
+      </div>
+
+    <hr/>
+    <div class="hex-context-menu" id="hexContextMenu">
+      <div class="hex-context-menu-item" id="hexContextCopy">Copy</div>
+    </div>
+    <script src="./index.js"></script>

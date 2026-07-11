@@ -1,0 +1,18 @@
+{{ partial "header.html" . }}
+
+{{ .Content }}
+
+<h1>Tools</h1>
+
+{{ range .Pages.GroupByParam "category" }}
+<h2>{{ if .Key }}{{ .Key }}{{ else }}Other Tools{{ end }}</h2>
+<ul style="list-style: none;">
+  {{ range .Pages.ByParam "order" }}
+  <li>
+    <a href="{{ .RelPermalink }}">{{ .Title | markdownify }}</a>
+  </li>
+  {{ end }}
+</ul>
+{{ end }}
+
+{{ partial "footer.html" . }}
